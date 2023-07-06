@@ -3,24 +3,39 @@ import { Loading } from 'src/components/Loading/Loading';
 import { apiClient } from 'src/utils/apiClient';
 
 const Home = () => {
-  const [key, setKey] = useState('');
+  const [playerX, setPlayerX] = useState(0);
+  const [playerY, setPlayerY] = useState(0);
   // useEffect(() => {}, []);
   const hoge = true;
-  const textarea = document.getElementById('input');
 
-  const keydown = async (e: KeyboardEvent) => {
-    const returnedKey = await apiClient.handler.$post({ body: { key: e.key } });
-    setKey(returnedKey);
+  const keydown = async (e: React.KeyboardEvent<HTMLDivElement>) => {
+    console.log(e);
+    console.log(e.code);
+    const playerPos = await apiClient.handler.$post({
+      body: { x: playerX, y: playerY, key: e.code },
+    });
+    setPlayerX(playerPos.x);
+    setPlayerY(playerPos.y);
   };
 
-  textarea?.addEventListener('keydown', keydown);
+  const click = async (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    console.log(e);
+  };
 
   if (!hoge) return <Loading visible />;
 
   return (
     <>
-      <textarea placeholder="ここ" id="input" />
-      <div id="key">Return{key}</div>
+      <div
+        className="container"
+        onKeyDown={keydown}
+        style={{ border: 'solid' }}
+        onClick={click}
+        tabIndex={0}
+      >
+        <div id="key">X:{playerX}</div>
+        <div id="key">Y:{playerY}</div>
+      </div>
     </>
   );
 };
