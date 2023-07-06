@@ -8,7 +8,7 @@
 
 ローカルマシンに直接インストールする
 
-hogehoge
+hogehogea
 
 https://nodejs.org/ja/ の左ボタン、LTS をダウンロードしてインストール
 
