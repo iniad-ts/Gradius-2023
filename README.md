@@ -18,6 +18,7 @@ https://nodejs.org/ja/ の左ボタン、LTS をダウンロードしてイン�
 $ npm i
 $ npm i --prefix server
 ```
+ここらへんってこと？byみがわり
 
 ### 環境変数ファイルの作成
 
