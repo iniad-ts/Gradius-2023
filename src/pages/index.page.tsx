@@ -36,6 +36,17 @@ const Home = () => {
         <div id="key">X:{playerX}</div>
         <div id="key">Y:{playerY}</div>
       </div>
+      <div
+        id="player"
+        style={{
+          position: 'absolute',
+          left: `${playerX}px`,
+          top: `${playerY}px`,
+          backgroundColor: 'red',
+          width: '10px',
+          height: '10px',
+        }}
+      />
     </>
   );
 };
