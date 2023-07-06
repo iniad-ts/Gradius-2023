@@ -65,4 +65,4 @@ $ cd server
 $ npx prisma studio
 ```
 
-s1f10230181/test
+abc
