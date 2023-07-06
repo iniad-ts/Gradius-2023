@@ -26,7 +26,7 @@ $ cp .env.example .env
 $ cp server/.env.example server/.env
 $ cp docker/dev/.env.example docker/dev/.env
 $ cp server/prisma/.env.example server/prisma/.env
-```
+```haruki
 
 ### ミドルウェアのセットアップ
 
