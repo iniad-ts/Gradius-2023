@@ -27,33 +27,37 @@ const Home = () => {
     if (key === 'ArrowUp') {
       const a = await apiClient.control.post({ body: { x: nowkey[0], y: nowkey[1], a: 1 } });
       setNowkey([a.body.x, a.body.y]);
-      board[a.body.x][a.body.y] = 1;
-      setBoard(board);
-      console.table(board);
+      const p = board.map((row) => row.map(() => 0));
+      p[a.body.x][a.body.y] = 1;
+      setBoard(p);
+      console.table(p);
     }
 
     if (key === 'ArrowDown') {
       const a = await apiClient.control.post({ body: { x: nowkey[0], y: nowkey[1], a: 2 } });
       setNowkey([a.body.x, a.body.y]);
-      board[a.body.x][a.body.y] = 1;
-      setBoard(board);
-      console.table(board);
+      const p = board.map((row) => row.map(() => 0));
+      p[a.body.x][a.body.y] = 1;
+      setBoard(p);
+      console.table(p);
     }
 
     if (key === 'ArrowLeft') {
       const a = await apiClient.control.post({ body: { x: nowkey[0], y: nowkey[1], a: 0 } });
       setNowkey([a.body.x, a.body.y]);
-      board[a.body.x][a.body.y] = 1;
-      setBoard(board);
-      console.table(board);
+      const p = board.map((row) => row.map(() => 0));
+      p[a.body.x][a.body.y] = 1;
+      setBoard(p);
+      console.table(p);
     }
 
     if (key === 'ArrowRight') {
       const a = await apiClient.control.post({ body: { x: nowkey[0], y: nowkey[1], a: 3 } });
       setNowkey([a.body.x, a.body.y]);
-      board[a.body.x][a.body.y] = 1;
-      setBoard(board);
-      console.table(board);
+      const p = board.map((row) => row.map(() => 0));
+      p[a.body.x][a.body.y] = 1;
+      setBoard(p);
+      console.table(p);
     }
   };
 
