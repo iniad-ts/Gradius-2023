@@ -7,7 +7,7 @@
 ### Node.js のインストール
 
 ローカルマシンに直接インストールする
-
+hhii;hkh;lkhsdertyu
 https://nodejs.org/ja/ の左ボタン、LTS をダウンロードしてインストール
 
 ### リポジトリのクローンと npm モジュールのインストール
