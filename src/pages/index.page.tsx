@@ -3,6 +3,7 @@ import { useAtom } from 'jotai';
 import type { ChangeEvent, FormEvent } from 'react';
 import { useEffect, useState } from 'react';
 import { Loading } from 'src/components/Loading/Loading';
+import App from 'src/konva/konva';
 import { BasicHeader } from 'src/pages/@components/BasicHeader/BasicHeader';
 import { apiClient } from 'src/utils/apiClient';
 import { returnNull } from 'src/utils/returnNull';
@@ -71,6 +72,7 @@ const Home = () => {
           </li>
         ))}
       </ul>
+      <App />
     </>
   );
 };
