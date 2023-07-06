@@ -14,16 +14,16 @@ export const playerUsecase = {
   move: (Player: Player) => {
     switch (Player.MoveInput) {
       case 'up':
-        Player.PlayerPos.y -= 1;
+        Player.PlayerPos.y -= 10;
         break;
       case 'down':
-        Player.PlayerPos.y += 1;
+        Player.PlayerPos.y += 10;
         break;
       case 'left':
-        Player.PlayerPos.x -= 1;
+        Player.PlayerPos.x -= 10;
         break;
       case 'right':
-        Player.PlayerPos.x += 1;
+        Player.PlayerPos.x += 10;
         break;
       default:
         break;
