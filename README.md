@@ -18,7 +18,7 @@ https://nodejs.org/ja/ の左ボタン、LTS をダウンロードしてイン�
 $ npm i
 $ npm i --prefix server
 ```
-
+ごっと
 ### 環境変数ファイルの作成
 
 ```sh
@@ -64,4 +64,3 @@ http://localhost:9001/
 $ cd server
 $ npx prisma studio
 ```
-
