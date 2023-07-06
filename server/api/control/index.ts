@@ -3,7 +3,7 @@ export type Methods = {
     resBody: string;
   };
   post: {
-    resBody: number;
-    reqBody: { x: number };
+    resBody: { x: number; y: number };
+    reqBody: { x: number; y: number; a: number };
   };
 };
