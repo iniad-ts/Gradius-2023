@@ -1,54 +1,63 @@
-import type { TaskModel } from '$/commonTypesWithClient/models';
 import { useAtom } from 'jotai';
-import type { ChangeEvent, FormEvent } from 'react';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Loading } from 'src/components/Loading/Loading';
 import { BasicHeader } from 'src/pages/@components/BasicHeader/BasicHeader';
 import { apiClient } from 'src/utils/apiClient';
-import { returnNull } from 'src/utils/returnNull';
 import { userAtom } from '../atoms/user';
 import styles from './index.module.css';
 
 const Home = () => {
   const [user] = useAtom(userAtom);
-  const [tasks, setTasks] = useState<TaskModel[]>();
-  const [label, setLabel] = useState('');
   const [nowkey, setNowkey] = useState([0, 0]);
-  const inputLabel = (e: ChangeEvent<HTMLInputElement>) => {
-    setLabel(e.target.value);
-  };
-  const fetchTasks = async () => {
-    const tasks = await apiClient.tasks.$get().catch(returnNull);
+  const [board, setBoard] = useState([
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  ]);
 
-    if (tasks !== null) setTasks(tasks);
-  };
-  const createTask = async (e: FormEvent) => {
-    e.preventDefault();
-    if (!label) return;
+  const keyDownHandler = async (e: React.KeyboardEvent<HTMLDivElement>) => {
+    const key = e.code;
 
-    await apiClient.tasks.post({ body: { label } });
-    setLabel('');
-    await fetchTasks();
-  };
-  const toggleDone = async (task: TaskModel) => {
-    await apiClient.tasks._taskId(task.id).patch({ body: { done: !task.done } });
-    await fetchTasks();
-  };
-  const deleteTask = async (task: TaskModel) => {
-    await apiClient.tasks._taskId(task.id).delete();
-    await fetchTasks();
+    if (key === 'ArrowUp') {
+      const a = await apiClient.control.post({ body: { x: nowkey[0], y: nowkey[1], a: 1 } });
+      setNowkey([a.body.x, a.body.y]);
+      board[a.body.x][a.body.y] = 1;
+      setBoard(board);
+      console.table(board);
+    }
+
+    if (key === 'ArrowDown') {
+      const a = await apiClient.control.post({ body: { x: nowkey[0], y: nowkey[1], a: 2 } });
+      setNowkey([a.body.x, a.body.y]);
+      board[a.body.x][a.body.y] = 1;
+      setBoard(board);
+      console.table(board);
+    }
+
+    if (key === 'ArrowLeft') {
+      const a = await apiClient.control.post({ body: { x: nowkey[0], y: nowkey[1], a: 0 } });
+      setNowkey([a.body.x, a.body.y]);
+      board[a.body.x][a.body.y] = 1;
+      setBoard(board);
+      console.table(board);
+    }
+
+    if (key === 'ArrowRight') {
+      const a = await apiClient.control.post({ body: { x: nowkey[0], y: nowkey[1], a: 3 } });
+      setNowkey([a.body.x, a.body.y]);
+      board[a.body.x][a.body.y] = 1;
+      setBoard(board);
+      console.table(board);
+    }
   };
 
-  useEffect(() => {
-    fetchTasks();
-  }, []);
-
-  const createNum = async () => {
-    const a = await apiClient.control.post({ body: { x: 12, y: 11, a: 1 } });
-    console.log(a.body.x, a.body.y);
-    setNowkey([Number(a.body.x), Number(a.body.y)]);
-  };
-  if (!tasks || !user) return <Loading visible />;
+  if (!user) return <Loading visible />;
 
   return (
     <>
@@ -56,29 +65,14 @@ const Home = () => {
       <div className={styles.title} style={{ marginTop: '160px' }}>
         Welcome to frourio!
       </div>
-      <input onClick={createNum} />
-
-      <form style={{ textAlign: 'center', marginTop: '80px' }} onSubmit={createTask}>
-        <input value={label} type="text" onChange={inputLabel} />
-        <input type="submit" value="ADD" />
-      </form>
-      <p>{nowkey}</p>
-      <ul className={styles.tasks}>
-        {tasks.map((task) => (
-          <li key={task.id}>
-            <label>
-              <input type="checkbox" checked={task.done} onChange={() => toggleDone(task)} />
-              <span>{task.label}</span>
-            </label>
-            <input
-              type="button"
-              value="DELETE"
-              className={styles.deleteBtn}
-              onClick={() => deleteTask(task)}
-            />
-          </li>
-        ))}
-      </ul>
+      <div
+        className="container"
+        tabIndex={0}
+        onKeyDown={keyDownHandler}
+        style={{ border: 'solid' }}
+      >
+        <p>{nowkey}</p>
+      </div>
     </>
   );
 };
