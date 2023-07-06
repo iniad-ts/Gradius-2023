@@ -1,10 +1,9 @@
 import { useAtom } from 'jotai';
 import { useState } from 'react';
+import { Layer, Rect, Stage } from 'react-konva';
 import { Loading } from 'src/components/Loading/Loading';
-import { BasicHeader } from 'src/pages/@components/BasicHeader/BasicHeader';
 import { apiClient } from 'src/utils/apiClient';
 import { userAtom } from '../atoms/user';
-import styles from './index.module.css';
 
 const Home = () => {
   const [user] = useAtom(userAtom);
@@ -65,17 +64,13 @@ const Home = () => {
 
   return (
     <>
-      <BasicHeader user={user} />
-      <div className={styles.title} style={{ marginTop: '160px' }}>
-        Welcome to frourio!
-      </div>
-      <div
-        className="container"
-        tabIndex={0}
-        onKeyDown={keyDownHandler}
-        style={{ border: 'solid' }}
-      >
-        <p>{nowkey}</p>
+      <div tabIndex={0} onKeyDown={keyDownHandler} style={{ border: 'solid' }}>
+        <Stage width={1920} height={1080}>
+          <Layer>
+            <Rect fill="white" width={1920} height={1080} />
+            <Rect fill="red" x={120 * nowkey[1]} y={120 * nowkey[0]} width={120} height={120} />
+          </Layer>
+        </Stage>
       </div>
     </>
   );
