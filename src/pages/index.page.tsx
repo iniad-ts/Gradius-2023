@@ -7,6 +7,7 @@ import { BasicHeader } from 'src/pages/@components/BasicHeader/BasicHeader';
 import { apiClient } from 'src/utils/apiClient';
 import { returnNull } from 'src/utils/returnNull';
 import { userAtom } from '../atoms/user';
+import App from '../konva/konva';
 import styles from './index.module.css';
 
 const Home = () => {
@@ -50,7 +51,6 @@ const Home = () => {
       <div className={styles.title} style={{ marginTop: '160px' }}>
         Welcome to frourio!
       </div>
-
       <form style={{ textAlign: 'center', marginTop: '80px' }} onSubmit={createTask}>
         <input value={label} type="text" onChange={inputLabel} />
         <input type="submit" value="ADD" />
@@ -71,6 +71,7 @@ const Home = () => {
           </li>
         ))}
       </ul>
+      <App />
     </>
   );
 };
