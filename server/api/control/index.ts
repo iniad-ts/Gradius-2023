@@ -1,4 +1,3 @@
-import { number } from "zod";
 
 export type Methods = {
   get: {
