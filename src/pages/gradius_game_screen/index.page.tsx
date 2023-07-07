@@ -1,6 +1,8 @@
+//ここにゲーム画面をつくる
+
 import { Layer, Rect, Stage } from 'react-konva';
 
-function App() {
+const App = () => {
   return (
     <Stage width={2200} height={900}>
       <Layer>
@@ -9,6 +11,6 @@ function App() {
       </Layer>
     </Stage>
   );
-}
+};
 
 export default App;

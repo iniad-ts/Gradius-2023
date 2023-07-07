@@ -7,7 +7,6 @@ import { BasicHeader } from 'src/pages/@components/BasicHeader/BasicHeader';
 import { apiClient } from 'src/utils/apiClient';
 import { returnNull } from 'src/utils/returnNull';
 import { userAtom } from '../atoms/user';
-import App from '../konva/konva';
 import styles from './index.module.css';
 
 const Home = () => {
@@ -71,7 +70,6 @@ const Home = () => {
           </li>
         ))}
       </ul>
-      <App />
     </>
   );
 };
