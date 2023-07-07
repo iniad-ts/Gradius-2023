@@ -3,10 +3,11 @@ import { Loading } from 'src/components/Loading/Loading';
 import { apiClient } from 'src/utils/apiClient';
 
 const Home = () => {
+
+  //黒い枠の中をクリックし、矢印ボタンを押すと、数字が増減する。
   const [playerX, setPlayerX] = useState(0);
   const [playerY, setPlayerY] = useState(0);
   const hoge = true;
-
   const keydown = async (e: React.KeyboardEvent<HTMLDivElement>) => {
     console.log(e);
     console.log(e.code);
