@@ -20,3 +20,31 @@
 .deleteBtn {
   float: right;
 }
+
+.board {
+  background: white;
+  height: 0px;
+  width: 640px;
+  position: absolute; 
+  top: 20%;
+  left: 10%; 
+}
+
+.cell {
+  background: rgb(199, 209, 199);
+  height: 80px;
+  width: 80px;
+  border-style: solid;
+  float: left;
+}
+
+.stone {
+  background: rgb(236, 2, 2);
+  width: 60px;
+  height: 60px;
+  border-radius: 90%;
+  position: absolute; 
+  top: 50%;
+  left: 50%; 
+  transform: translate(-50%, -50%);
+}
