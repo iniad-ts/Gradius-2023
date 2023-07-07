@@ -1,14 +1,20 @@
 export const gameUsecase = {
-  playerMove: (x: number, y: number, key: string) => {
+  // eslint-disable-next-line complexity
+  playerMove: (x: number, y: number, key: string, board: number[][]) => {
+    console.log(board);
+    board[x][y] = 0;
+    console.log(board);
     if (key === 'ArrowUp') {
-      y -= 1;
-    } else if (key === 'ArrowDown') {
-      y += 1;
-    } else if (key === 'ArrowLeft') {
       x -= 1;
-    } else if (key === 'ArrowRight') {
+    } else if (key === 'ArrowDown') {
       x += 1;
+    } else if (key === 'ArrowLeft') {
+      y -= 1;
+    } else if (key === 'ArrowRight') {
+      y += 1;
     }
-    return { x, y };
+    board[x][y] = 1;
+
+    return { x, y, board };
   },
 };

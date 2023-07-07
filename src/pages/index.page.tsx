@@ -1,26 +1,37 @@
 import { useState } from 'react';
 import { Loading } from 'src/components/Loading/Loading';
 import { apiClient } from 'src/utils/apiClient';
+import styles from './index.module.css';
 
 const Home = () => {
-
-  //黒い枠の中をクリックし、矢印ボタンを押すと、数字が増減する。
-  const [playerX, setPlayerX] = useState(0);
+  //黒い枠の中をクリックし、矢印ボタンを押すと、赤い点が動くよー
+  const [playerX, setPlayerX] = useState(2);
   const [playerY, setPlayerY] = useState(0);
+  const [board, setBoard] = useState([
+    [0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0],
+    [1, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0],
+  ]);
   const hoge = true;
   const keydown = async (e: React.KeyboardEvent<HTMLDivElement>) => {
     console.log(e);
     console.log(e.code);
     const game = await apiClient.game.$post({
-      body: { x: playerX, y: playerY, key: e.code },
+      body: { x: playerX, y: playerY, key: e.code, board },
     });
+
     setPlayerX(game.x);
     setPlayerY(game.y);
+    setBoard(game.board);
+    console.log(game.board);
   };
 
   const click = async (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     console.log(e);
   };
+  //ここまで
 
   if (!hoge) return <Loading visible />;
 
@@ -48,6 +59,16 @@ const Home = () => {
           height: '10px',
         }}
       />
+      <div className={styles.board}>
+        {board.map((row, y) =>
+          // eslint-disable-next-line complexity
+          row.map((color, x) => (
+            <div className={styles.cell} key={`${x}-${y}`} style={{ position: 'relative' }}>
+              {color !== 0 && <div className={styles.stone} />}
+            </div>
+          ))
+        )}
+      </div>
     </>
   );
 };
