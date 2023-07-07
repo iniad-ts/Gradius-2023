@@ -12,9 +12,11 @@ const Home = () => {
   const [enemyY, setEnemyY] = useState(300);
 
   const keyDownHandler = async (e: React.KeyboardEvent<HTMLDivElement>) => {
-    const a = await apiClient.control.post({ body: { x: nowkey[0], y: nowkey[1], KeyEvent:e.code } });
+    const a = await apiClient.control.post({
+      body: { x: nowkey[0], y: nowkey[1], KeyEvent: e.code },
+    });
     setNowkey([a.body.x, a.body.y]);
-  }
+  };
 
   const updateEnemyY = async () => {
     const state = await apiClient.enemy.post({ body: { y: enemyY } });
@@ -23,18 +25,14 @@ const Home = () => {
       setEnemyY(got);
     }
   };
-  
+
   useEffect(() => {
     const cancelid = setInterval(updateEnemyY, 50);
-  
+
     return () => {
       clearInterval(cancelid);
     };
   }, [enemyY]);
-
-  
-  
-  
 
   if (!user) return <Loading visible />;
   return (
@@ -43,7 +41,7 @@ const Home = () => {
       <div
         tabIndex={0}
         onKeyDown={keyDownHandler}
-        style={{ display: 'inline-block', border: 'solid'}}
+        style={{ display: 'inline-block', border: 'solid' }}
       >
         <Stage width={1280} height={720}>
           <Layer>
@@ -54,7 +52,6 @@ const Home = () => {
       </div>
     </>
   );
-  
 };
 
 export default Home;
