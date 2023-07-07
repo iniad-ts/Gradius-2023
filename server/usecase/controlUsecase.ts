@@ -1,4 +1,6 @@
 //自分の動きをコントロールする
+// eslint-disable-line
+
 export const controlUsecase = {
   key: (x: number, y: number, KeyEvent: string) => {
     if (KeyEvent === 'ArrowUp') {
