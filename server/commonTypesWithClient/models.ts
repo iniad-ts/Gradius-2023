@@ -13,3 +13,10 @@ export type TaskModel = {
   done: boolean;
   created: number;
 };
+
+export type GameModel = {
+  name: string;
+  xyz: number[];
+  hp: number;
+  lv: number;
+};
