@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useAtom } from 'jotai';
 import { useEffect, useState } from 'react';
 import { Layer, Rect, Stage } from 'react-konva';

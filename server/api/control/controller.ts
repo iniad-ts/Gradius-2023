@@ -1,5 +1,4 @@
 import { controlUsecase } from '$/usecase/controlUsecase';
-import { enemyUsecase } from '$/usecase/enemyUsecase';
 import { defineController } from './$relay';
 
 export default defineController(() => ({
