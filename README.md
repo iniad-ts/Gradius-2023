@@ -8,7 +8,6 @@
 
 ローカルマシンに直接インストールする
 
-hogehogea
 
 https://nodejs.org/ja/ の左ボタン、LTS をダウンロードしてインストール
 
@@ -29,7 +28,6 @@ $ cp server/.env.example server/.env
 $ cp docker/dev/.env.example docker/dev/.env
 $ cp server/prisma/.env.example server/prisma/.env
 ```
-hello
 ### ミドルウェアのセットアップ
 
 ```sh
