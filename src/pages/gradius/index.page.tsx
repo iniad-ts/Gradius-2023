@@ -8,6 +8,9 @@ import styles from './gradius.module.css';
 const Home = () => {
   const [user] = useAtom(userAtom);
   if (!user) return <Loading visible />;
+
+  const a = 100;
+
   return (
     <>
       <BasicHeader user={user} />
