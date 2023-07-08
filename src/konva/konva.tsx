@@ -2,9 +2,9 @@ import { Layer, Rect, Stage } from 'react-konva';
 
 function App() {
   return (
-    <Stage width={500} height={500}>
+    <Stage width={500} height={800}>
       <Layer>
-        <Rect fill="red" width={300} height={200} />
+        <Rect fill="red" x={30} y={300} width={200} height={200} />
       </Layer>
     </Stage>
   );
