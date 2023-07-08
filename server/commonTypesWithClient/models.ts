@@ -20,3 +20,13 @@ export type GameModel = {
   hp: number;
   lv: number;
 };
+
+export type EventModel = {
+  name: string;
+  started: Date;
+  level: number;
+  kill: number;
+  damage: number;
+  damaged: number;
+  end: Date | null;
+};
