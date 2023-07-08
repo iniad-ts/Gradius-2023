@@ -1,10 +1,32 @@
+import { useCallback, useEffect, useState } from 'react';
 import { Layer, Rect, Stage } from 'react-konva';
+import { apiClient } from 'src/utils/apiClient';
+import { returnNull } from 'src/utils/returnNull';
 
 function App() {
+  const [height, setHeight] = useState(0);
+
+  const fetchBoard = useCallback(async () => {
+    const a = await apiClient.rooms.boardgradius.$get().catch(returnNull);
+
+    if (a === 1) {
+      setHeight(height + 10);
+    } else if (a === 2) {
+      setHeight(height - 10);
+    }
+  }, [height]);
+
+  useEffect(() => {
+    const cancelID = setInterval(fetchBoard, 500);
+    return () => {
+      clearInterval(cancelID);
+    };
+  }, [fetchBoard]);
+
   return (
     <Stage width={500} height={800}>
       <Layer>
-        <Rect fill="red" x={30} y={300} width={200} height={200} />
+        <Rect stroke="block" fill="red" x={30} y={300 + height} width={200} height={200} />
       </Layer>
     </Stage>
   );
