@@ -8,7 +8,7 @@ export const roomUsecase = {
     }
     return result;
   },
-  moveShatle: async ()=>{
-    if (a === 1)
-  }
+  moveShatle: async () => {
+    // if (a === 1)
+  },
 };
