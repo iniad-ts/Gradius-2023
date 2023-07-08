@@ -9,12 +9,8 @@ function App() {
   const fetchBoard = useCallback(async () => {
     const a = await apiClient.rooms.boardgradius.$get().catch(returnNull);
 
-    if (a === 1) {
-      setHeight(height + 10);
-    } else if (a === 2) {
-      setHeight(height - 10);
-    }
-  }, [height]);
+    setHeight((prevHeight) => a ?? prevHeight);
+  }, []);
 
   useEffect(() => {
     const cancelID = setInterval(fetchBoard, 500);
