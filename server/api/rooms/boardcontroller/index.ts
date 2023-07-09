@@ -1,6 +1,8 @@
+import type { MoveDirection } from '$/usecase/roomUsecase';
+
 export type Methods = {
   post: {
-    reqBody: { a: 1 | 2 };
+    reqBody: MoveDirection;
     resBody: string;
   };
 };

@@ -1,15 +1,15 @@
 import { useCallback, useEffect, useState } from 'react';
 import { Layer, Rect, Stage } from 'react-konva';
 import { apiClient } from 'src/utils/apiClient';
-import { returnNull } from 'src/utils/returnNull';
 
 function App() {
-  const [height, setHeight] = useState(0);
+  const [position, setPosition] = useState([30, 300]);
 
   const fetchBoard = useCallback(async () => {
-    const a = await apiClient.rooms.boardgradius.$get().catch(returnNull);
-
-    setHeight((prevHeight) => a ?? prevHeight);
+    {
+      const new_position = await apiClient.rooms.boardgradius.$get();
+      setPosition(new_position);
+    }
   }, []);
 
   useEffect(() => {
@@ -22,7 +22,7 @@ function App() {
   return (
     <Stage width={500} height={800}>
       <Layer>
-        <Rect stroke="block" fill="red" x={30} y={height} width={200} height={200} />
+        <Rect stroke="block" fill="red" x={position[0]} y={position[1]} width={200} height={200} />
       </Layer>
     </Stage>
   );

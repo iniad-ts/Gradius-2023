@@ -10,14 +10,12 @@ const Home = () => {
   if (!user) return <Loading visible />;
 
   const up = async () => {
-    const a = 1;
-    const res = await apiClient.rooms.boardcontroller.$post({ body: { a } });
+    const res = await apiClient.rooms.boardcontroller.$post({ body: '1' });
     console.log(res);
   };
 
   const down = async () => {
-    const a = 2;
-    const res = await apiClient.rooms.boardcontroller.$post({ body: { a } });
+    const res = await apiClient.rooms.boardcontroller.$post({ body: '2' });
     console.log(res);
   };
   return (
