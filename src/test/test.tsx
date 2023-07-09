@@ -32,18 +32,26 @@ export const App = () => {
     const getEnemyPos = setInterval(fetchEnemy, 500);
     return () => {
       clearInterval(getEnemyPos);
+
     };
   });
+
+  const [bulletX,setBulletX]=useState(playerX+100);
+  const [bulletY,setBulletY]=useState(playerY);
+  const fetchBullet=async()=>{
+    const bulletData=await apiClient.player.shoot.$post({body:{PlayerPos: {x: playerX, y: playerY}, MoveInput:"none"}})
+  }
 
   return (
     // Stage - is a div wrapper
     // Layer - is an actual 2d canvas element, so you can have several layers inside the stage
     // Rect and Circle are not DOM elements. They are 2d shapes on canvas
     <>
-      <Stage width={720} height={720}>
+      <Stage width={720} height={720} >
         <Layer>
-          <Circle x={playerX} y={playerY} stroke="black" fill="blue" radius={100} />
-          <Circle x={enemyX} y={enemyY} stroke="black" fill="red" radius={100} />
+          <Circle x={playerX} y={playerY} stroke="black" fill="blue" radius={50} />
+          <Circle x={enemyX} y={enemyY} stroke="black" fill="red" radius={75} />
+          <Circle x={bulletX} y={bulletY} stroke="black" fill="white"radius={10}/>
         </Layer>
       </Stage>
       <button
