@@ -3,7 +3,6 @@ import { useAtom } from 'jotai';
 import type { ChangeEvent, FormEvent } from 'react';
 import { useEffect, useState } from 'react';
 import { Loading } from 'src/components/Loading/Loading';
-import App from 'src/konva/konva';
 import { BasicHeader } from 'src/pages/@components/BasicHeader/BasicHeader';
 import { apiClient } from 'src/utils/apiClient';
 import { returnNull } from 'src/utils/returnNull';
@@ -51,7 +50,14 @@ const Home = () => {
       <div className={styles.title} style={{ marginTop: '160px' }}>
         Welcome to frourio!
       </div>
-
+      <div className={styles.under}>
+        <div className={styles.button}>
+          <a href="http://localhost:3000/controller/">controllerへ</a>
+        </div>
+        <div className={styles.button}>
+          <a href="http://localhost:3000/gradius/">gradiusへ</a>
+        </div>
+      </div>
       <form style={{ textAlign: 'center', marginTop: '80px' }} onSubmit={createTask}>
         <input value={label} type="text" onChange={inputLabel} />
         <input type="submit" value="ADD" />
@@ -72,7 +78,6 @@ const Home = () => {
           </li>
         ))}
       </ul>
-      <App />
     </>
   );
 };

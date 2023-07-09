@@ -1,6 +1,6 @@
 export type Methods = {
   post: {
-    reqBody: { a: number };
+    reqBody: { a: 1 | 2 };
     resBody: string;
   };
 };

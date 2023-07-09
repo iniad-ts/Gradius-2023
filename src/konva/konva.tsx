@@ -13,7 +13,7 @@ function App() {
   }, []);
 
   useEffect(() => {
-    const cancelID = setInterval(fetchBoard, 500);
+    const cancelID = setInterval(fetchBoard, 100);
     return () => {
       clearInterval(cancelID);
     };
@@ -22,7 +22,7 @@ function App() {
   return (
     <Stage width={500} height={800}>
       <Layer>
-        <Rect stroke="block" fill="red" x={30} y={300 + height} width={200} height={200} />
+        <Rect stroke="block" fill="red" x={30} y={height} width={200} height={200} />
       </Layer>
     </Stage>
   );

@@ -2,7 +2,7 @@ export const roomUsecase = (() => {
   let count = 0;
 
   return {
-    pushbutton: async (a: number): Promise<string> => {
+    pushbutton: async (a: 1 | 2): Promise<string> => {
       let result;
       if (a === 1) {
         result = 'aは1';
@@ -14,8 +14,8 @@ export const roomUsecase = (() => {
       return result;
     },
 
-    shatoleHight: async (): Promise<number> => {
-      const height = count * 50;
+    airplaneHeight: async (): Promise<number> => {
+      const height = 300 + count * 50;
       return height;
     },
   };
