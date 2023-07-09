@@ -1,6 +1,6 @@
-import { roomUsecase } from '$/usecase/roomUsecase';
+import { position } from '$/usecase/roomUsecase';
 import { defineController } from './$relay';
 
 export default defineController(() => ({
-  get: async () => ({ status: 200, body: await roomUsecase.airplaneHeight() }),
+  get: async () => ({ status: 200, body: position }),
 }));
