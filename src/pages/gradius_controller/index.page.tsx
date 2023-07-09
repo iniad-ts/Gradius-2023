@@ -11,7 +11,7 @@ import styles from './gradius_controller.module.css';
 const Home = () => {
   const [user] = useAtom(userAtom);
   const [change_count, setchange_count] = useState(0);
-  const game_state_list: string[] = ['wait_start', 'playing', 'stop'];
+  const game_state_list: string[] = ['start', 'playing', 'stop'];
   if (!user) return <Loading visible />;
 
   //移動方向serveにpost req

@@ -6,9 +6,8 @@ const game_state_list: GameState[] = ['wait_start', 'playing', 'stop'];
 export const change_state = {
   change_game_state: async (change_state: number) => {
     game_state = game_state_list[change_state];
-    return game_state
-  }, 
-  
+    return game_state;
+  },
 };
 
 export let player_now_position: number[] = [100, 300];

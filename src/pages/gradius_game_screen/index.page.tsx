@@ -5,7 +5,7 @@ import { Loading } from 'src/components/Loading/Loading';
 import { apiClient } from 'src/utils/apiClient';
 const App = () => {
   const [fight_position, setfight_position] = useState([0, 0]);
-  const [enemy_pos, setenemy_pos] = useState([0, 0]);
+
   const fetchBord = async () => {
     const new_fighter_position = await apiClient.game_screen.$get();
     setfight_position(new_fighter_position);
