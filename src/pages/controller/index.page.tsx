@@ -22,11 +22,19 @@ const Home = () => {
     <>
       <BasicHeader user={user} />
       <div className={styles.container}>
-        <div className={`${styles.button} ${styles.up}`} onClick={up}>
-          up
-        </div>
-        <div className={`${styles.button} ${styles.down}`} onClick={down}>
-          down
+        <div className={styles.board}>
+          <div className={styles.items}>
+            <div />
+            <div className={styles.switch} onClick={up} />
+            <div />
+            <div className={styles.switch} />
+            <div className={styles.switch} />
+            <div className={styles.switch} />
+            <div />
+            <div className={styles.switch} onClick={down} />
+            <div />
+          </div>
+          <div className={styles.select}>select</div>
         </div>
       </div>
     </>
