@@ -29,6 +29,7 @@
 }
 
 .button {
+  background-color: aqua;
   font-size: 40px;
   padding: 1vh 3vh;
   width: 50vh;
