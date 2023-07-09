@@ -1,25 +1,35 @@
 .container {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: center;
   justify-content: center;
+  flex-wrap: wrap;
   height: 100vh;
   min-height: 100vh;
   padding: 0 0.5rem;
   background-color: white;
 }
-.button {
+.board {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 50vh;
-  border: 1px solid black;
-  margin: 1vh 0;
-  padding: 1vh 0;
+  flex-wrap: wrap;
+  gap: 5vw;
 }
-.up {
-  background-color: aqua;
+.items {
+  display: grid;
+  width: 300px;
+  height: 300px;
+  grid-template-columns: 1fr 1fr 1fr; /*横を３等分*/
+  grid-template-rows: 1fr 1fr 1fr; /*縦を３当分*/
 }
-.down {
-  background-color: #0c0;
+
+.switch {
+  background-color: #444;
+  border: 2px solid #000;
+}
+.select {
+  background-color: #77f;
+  width: 10vh;
+  height: 10vh;
 }
