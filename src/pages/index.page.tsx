@@ -51,12 +51,12 @@ const Home = () => {
         Welcome to frourio!
       </div>
       <div className={styles.under}>
-        <div className={styles.button}>
-          <a href="http://localhost:3000/controller/">controllerへ</a>
-        </div>
-        <div className={styles.button}>
-          <a href="http://localhost:3000/gradius/">gradiusへ</a>
-        </div>
+        <button className={styles.button}>
+          <a href="http://localhost:3000/controller/">Controllerへ</a>
+        </button>
+        <button className={styles.button}>
+          <a href="http://localhost:3000/gradius/">GameScreenへ</a>
+        </button>
       </div>
       <form style={{ textAlign: 'center', marginTop: '80px' }} onSubmit={createTask}>
         <input value={label} type="text" onChange={inputLabel} />
