@@ -24,11 +24,11 @@ const Home = () => {
     <>
       <BasicHeader user={user} />
       <div className={styles.container}>
-        <div className={styles.button} onClick={up}>
-          上ボタン
+        <div className={`${styles.button} ${styles.up}`} onClick={up}>
+          up
         </div>
-        <div className={styles.button} onClick={down}>
-          下ボタン
+        <div className={`${styles.button} ${styles.down}`} onClick={down}>
+          down
         </div>
       </div>
     </>
