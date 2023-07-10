@@ -20,7 +20,7 @@ export type GameModel = {
   type: string;
   xyz: number[];
   vector: number[];
-  speed:number;
+  speed: number;
   hp: number;
   lv: number;
   started: number;
