@@ -22,6 +22,6 @@
     "types": ["vitest/importMeta"],
     "incremental": true
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "src/konva/konva.jsx", "src/konva/konva.jsx"],
   "exclude": ["node_modules", "server"]
 }
