@@ -1,4 +1,4 @@
-import type { MoveTo, Pos } from '$/usecase/controlUseCase';
+import type { MoveTo, Pos } from '$/usecase/playerUseCase';
 
 export type Methods = {
   get: {
