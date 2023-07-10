@@ -11,7 +11,7 @@ export const bulletUsecase = {
     const Bullet: Bullet = {
       x: Player.PlayerPos.x,
       y: Player.PlayerPos.y,
-      speed: 10,
+      speed: 15,
       radius: 5,
     };
 
