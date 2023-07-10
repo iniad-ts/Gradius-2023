@@ -1,0 +1,37 @@
+.container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  height: 100vh;
+  min-height: 100vh;
+  padding: 0 0.5rem;
+  background-color: white;
+}
+.board {
+  display: flex;
+  align-items: center;
+  height: 100vh;
+  width: 100vw;
+  /* justify-content: center; */
+  flex-wrap: wrap;
+  /* gap: 5vh; */
+}
+.items {
+  display: grid; /*gridについては調べてください*/
+  width: 60vh;
+  height: 60vh;
+  grid-template-columns: 1fr 1fr 1fr; /*横を３等分*/
+  grid-template-rows: 1fr 1fr 1fr; /*縦を３当分*/
+}
+
+.switch {
+  background-color: #444;
+  border: 2px solid #000;
+}
+.select {
+  background-color: #77f;
+  width: 10vh;
+  height: 10vh;
+}

@@ -50,7 +50,14 @@ const Home = () => {
       <div className={styles.title} style={{ marginTop: '160px' }}>
         Welcome to frourio!
       </div>
-
+      <div className={styles.under}>
+        <button className={styles.button}>
+          <a href="http://localhost:3000/controller/">Controllerへ</a>
+        </button>
+        <button className={styles.button}>
+          <a href="http://localhost:3000/gradius/">GameScreenへ</a>
+        </button>
+      </div>
       <form style={{ textAlign: 'center', marginTop: '80px' }} onSubmit={createTask}>
         <input value={label} type="text" onChange={inputLabel} />
         <input type="submit" value="ADD" />
