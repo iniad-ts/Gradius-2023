@@ -1,20 +1,37 @@
-const direction = [
-  [0, -1],
-  [-1, 0],
-  [1, 0],
-  [0, 1],
-];
-export const controlUsecase = {
-  key: (x: number, y: number, a: number) => {
-    let afterX = x + direction[a][0];
-    if (afterX === -1 || afterX === 9) {
-      afterX = x;
-    }
+/* eslint-disable complexity */
+/* eslint-disable max-depth */
+//自分の動きをコントロールする
+// eslint-disable-line
 
-    let afterY = y + direction[a][1];
-    if (afterY === -1 || afterY === 16) {
-      afterY = y;
+export const controlUsecase = {
+  key: (x: number, y: number, KeyEvent: string) => {
+    if (KeyEvent === 'ArrowUp') {
+      if (x === 0) {
+        return { x, y };
+      }
+      console.log('ArrowUp');
+      const newX = x - 2;
+      return { x: newX, y };
     }
-    return { x: afterX, y: afterY };
+    if (KeyEvent === 'ArrowDown') {
+      console.log('ArrowDown');
+      const newX = x + 2;
+      return { x: newX, y };
+    }
+    if (KeyEvent === 'ArrowLeft') {
+      if (y === 0) {
+        return { x, y };
+      }
+      console.log('ArrowLeft');
+      const newY = y - 2;
+      return { x, y: newY };
+    }
+    if (KeyEvent === 'ArrowRight') {
+      console.log('ArrowRight');
+      const newY = y + 2;
+      return { x, y: newY };
+    }
+    console.log(KeyEvent);
+    return { x, y };
   },
 };

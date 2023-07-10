@@ -4,6 +4,6 @@ export type Methods = {
   };
   post: {
     resBody: { x: number; y: number };
-    reqBody: { x: number; y: number; a: number };
+    reqBody: { x: number; y: number; KeyEvent: string };
   };
 };
