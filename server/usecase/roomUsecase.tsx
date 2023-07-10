@@ -1,4 +1,4 @@
-export type MoveDirection = 'up' | 'left' | 'right' | 'down';
+export type MoveDirection = 'up' | 'left' | 'right' | 'down' | 'push';
 export let position: number[] = [30, 300]; //飛行機の位置を保存
 export const roomUsecase = (() => {
   return {
@@ -16,10 +16,13 @@ export const roomUsecase = (() => {
         //飛行機が下に下がる
         result = 'RIGHT が入力されました';
         position = [position[0] + 10, position[1]];
-      } else {
+      } else if (movedirection === 'down') {
         //飛行機が下に下がる
         result = 'DOWN が入力されました';
         position = [position[0], position[1] + 50];
+      } else {
+        //飛行機が下に下がる
+        result = 'PUSH が入力されました';
       }
       return result;
     },
