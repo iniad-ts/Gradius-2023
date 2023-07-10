@@ -16,17 +16,21 @@ export type TaskModel = {
 
 export type GameModel = {
   name: string;
+  owner: string | null;
+  type: string;
   xyz: number[];
+  vector: number[];
+  speed:number;
   hp: number;
   lv: number;
+  started: number;
+  end: number | null;
 };
 
 export type EventModel = {
-  name: string;
-  started: Date;
-  level: number;
+  owner: string;
+  items: string[];
   kill: number;
   damage: number;
   damaged: number;
-  end: Date | null;
 };

@@ -1,15 +1,24 @@
 import type { EventModel, GameModel } from '$/commonTypesWithClient/models';
 
-const initGameModel = { name: null, xyz: [-5, 0, 0], hp: 100, lv: 1 };
+const initGameModel = {
+  name: null,
+  owner: null,
+  type: 'owner',
+  xyz: [-5, 0, 0],
+  vector: [0, 0, 0],
+  speed: 1,
+  hp: 100,
+  lv: 1,
+  started: null,
+  end: null,
+};
 
 const initEventModel = {
-  name: null,
-  started: null,
-  level: null,
+  owner: null,
+  items: [],
   kill: 0,
   damage: 0,
   damaged: 0,
-  end: null,
 };
 
 const gameModels: GameModel[] = [];
@@ -17,16 +26,22 @@ const gameModels: GameModel[] = [];
 const eventModels: EventModel[] = [];
 
 export const gradiusRepository = {
-  findOfName: (name: string): { game: GameModel; event: EventModel } => {
-    console.log(name);
-    const game = gameModels.filter((gameModel) => gameModel.name === name)[0];
-    const event = eventModels.filter((eventModel) => eventModel.name === name)[0];
-    console.log(game, event);
-    return {
-      game: gameModels.filter((gameModel) => gameModel.name === name)[0],
-      event: eventModels.filter((eventModel) => eventModel.name === name)[0],
-    };
+  findOfName: (name: string): { game: GameModel[]; event: EventModel } => {
+    const games = gameModels.filter((gameModel) => gameModel.name === name);
+    const event = eventModels.filter((eventModel) => eventModel.owner === name)[0];
+    if (games.length === 0) {
+      const newGameModel = { ...initGameModel, name, started: new Date().getTime() };
+      const newEventModel = { ...initEventModel, owner: name };
+      gameModels.push(newGameModel);
+      eventModels.push(newEventModel);
+    }
+    console.log(games, event);
+    return { game: games, event };
   },
+  findWithXYZ: (xyz: number[]): GameModel[] => {
+    return gameModels.filter((gameModel) => gameModel.xyz === xyz);
+  },
+  findWithtype: (type: string) => gameModels.filter((gra) => gra.type === type),
   save: (gameModel: GameModel, name: string) => {
     gameModels.forEach((oneGameModel, i) => {
       if (oneGameModel.name === name) {
@@ -34,13 +49,5 @@ export const gradiusRepository = {
       }
     });
     console.log(gameModels[0].xyz);
-  },
-  crate: (name: string, level: number) => {
-    if (gameModels.filter((gameModel) => gameModel.name === name).length === 0) {
-      const newGameModel = { ...initGameModel, name };
-      gameModels.push(newGameModel);
-      const newEventModel = { ...initEventModel, name, started: new Date(), level };
-      eventModels.push(newEventModel);
-    }
   },
 };
