@@ -5,10 +5,12 @@ import { Loading } from 'src/components/Loading/Loading';
 import { apiClient } from 'src/utils/apiClient';
 const App = () => {
   const [fight_position, setfight_position] = useState([0, 0]);
-
+  const [enemies, setenemies] = useState<number[][]>([]);
   const fetchBord = async () => {
     const new_fighter_position = await apiClient.game_screen.$get();
+    const new_enemy_pos = await apiClient.enemy.$get();
     setfight_position(new_fighter_position);
+    setenemies(new_enemy_pos);
   };
   useEffect(() => {
     const cancellid = setInterval(fetchBord, 100);
@@ -29,7 +31,17 @@ const App = () => {
           x={fight_position[0]}
           y={fight_position[1]}
         />
-        <Rect id="enemy" fill="black" width={40} height={40} x={400} y={100} />
+        {enemies.map((enemy, index) => (
+          <Rect
+            key={index}
+            id={`enemy_${index}`}
+            fill="black"
+            width={40}
+            height={40}
+            x={enemy[0]}
+            y={enemy[1]}
+          />
+        ))}
       </Layer>
     </Stage>
   );
