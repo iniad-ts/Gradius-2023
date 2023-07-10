@@ -1,4 +1,4 @@
-import { Bullet } from '$/Usecase/bulletUsecase';
+import type { Bullet } from '$/Usecase/bulletUsecase';
 import type { Enemy } from '$/Usecase/enemyUsecase';
 import type { Player } from '$/Usecase/playerUsecase';
 import { useEffect, useState } from 'react';
