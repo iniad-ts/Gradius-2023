@@ -1,5 +1,15 @@
 export type MoveDirection = 'up' | 'down' | 'left' | 'right';
 
+export type GameState = 'wait_start' | 'playing' | 'stop' | 'gameover' | 'clear';
+export let game_state: GameState = 'wait_start';
+const game_state_list: GameState[] = ['wait_start', 'playing', 'stop'];
+export const change_state = {
+  change_game_state: async (change_state: number) => {
+    game_state = game_state_list[change_state];
+    return game_state;
+  },
+};
+
 export let player_now_position: number[] = [100, 300];
 export const playerUsecase = {
   moveplayer: async (movedirection: MoveDirection) => {
