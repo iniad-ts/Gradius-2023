@@ -1,8 +1,9 @@
-import type { GameModel } from '$/commonTypesWithClient/models';
+import type { EventModel, GameModel } from '$/commonTypesWithClient/models';
 
 export type Methods = {
-  get: { resBody: GameModel };
   post: {
-    reqBody: number;
+    reqBody: string;
+    resBody: { game: GameModel[]; event: EventModel };
   };
 };
+//動かない場合はserver/api/$api.tsをいい感じに書き換える

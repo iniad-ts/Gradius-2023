@@ -1,4 +1,4 @@
-//testCode
+//testCode//ここに書くのはyosuliです。
 
 import { useState } from 'react';
 import { apiClient } from 'src/utils/apiClient';
@@ -6,8 +6,9 @@ import { apiClient } from 'src/utils/apiClient';
 const Home = () => {
   const [hoge, setHoge] = useState(1);
   const onclick = async () => {
-    await apiClient.gradius.post({ body: 1 });
-    await console.log((await apiClient.gradius.get()).body);
+    await apiClient.gradius.post({ body: 'myPlane' });
+    await apiClient.gradius.game.post({ body: 1 });
+    await console.log((await apiClient.gradius.post({ body: 'myPlane' })).body);
     setHoge(3 - hoge);
   };
   return (
