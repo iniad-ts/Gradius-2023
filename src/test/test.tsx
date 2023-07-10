@@ -35,30 +35,33 @@ export const App = () => {
       clearInterval(getEnemyPos);
     };
   });
-  const [bullets,setBullets]=useState<Bullet[]>([])
-  const fetchBullet=async()=>{
-    const newBullet=await apiClient.player.shoot.$post({body:{PlayerPos: {x: playerX, y: playerY}, MoveInput:"none"}})
-    const newBullets=[...bullets,newBullet]
-    setBullets(newBullets) 
-  
-  }
+  const [bullets, setBullets] = useState<Bullet[]>([]);
+  const fetchBullet = async () => {
+    const newBullet = await apiClient.player.shoot.$post({
+      body: { PlayerPos: { x: playerX, y: playerY }, MoveInput: 'none' },
+    });
+    const newBullets = [...bullets, newBullet];
+    setBullets(newBullets);
+  };
 
   return (
     // Stage - is a div wrapper
     // Layer - is an actual 2d canvas element, so you can have several layers inside the stage
     // Rect and Circle are not DOM elements. They are 2d shapes on canvas
     <>
-      <Stage width={720} height={720} >
+      <Stage width={720} height={720}>
         <Layer>
           <Circle x={playerX} y={playerY} stroke="black" fill="blue" radius={50} />
           <Circle x={enemyX} y={enemyY} stroke="black" fill="red" radius={75} />
-          {bullets.map((bullet)=>(
-            <Circle key={bullet.x}
-            x={bullet.x}
-            y={bullet.y}
-            stroke="black"
-            fill="green"
-            radius={bullet.radius} />
+          {bullets.map((bullet) => (
+            <Circle
+              key={bullet.x}
+              x={bullet.x}
+              y={bullet.y}
+              stroke="black"
+              fill="green"
+              radius={bullet.radius}
+            />
           ))}
         </Layer>
       </Stage>
@@ -121,5 +124,3 @@ export const App = () => {
     </>
   );
 };
-
-
