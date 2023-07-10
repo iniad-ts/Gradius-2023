@@ -16,7 +16,7 @@ export const App = () => {
   const [enemyX, setEnemyX] = useState(500);
   const [enemyY, setEnemyY] = useState(300);
   //apiに変更を送信して結果をsetしなおす関数
-  
+
   useEffect(() => {
     const fetchEnemy = async () => {
       //playerの際にボタンを押したタイミングでplayerオブジェクトを生成していましたが、エネミーではそれがないため、えらーだったみたいです。
@@ -35,7 +35,7 @@ export const App = () => {
     return () => {
       clearInterval(getEnemyPos);
     };
-  },[enemyX,enemyY]);
+  }, [enemyX, enemyY]);
   const [bullets, setBullets] = useState<Bullet[]>([]);
   const fetchBullet = async () => {
     const newBullet = await apiClient.player.shoot.$post({
@@ -45,19 +45,16 @@ export const App = () => {
     setBullets(newBullets);
   };
 
-  useEffect(()=>{
-    const moveBullet = ()=>{
-      const newBullets = bullets.map((bullet) => (
-        {...bullet,x:bullet.x+bullet.speed}
-      ))
-      setBullets(newBullets)
-        
-    }
-    const getBulletPos=setInterval(moveBullet,10);
-    return ()=>{
-      clearInterval(getBulletPos)
-    }
-  },[bullets])
+  useEffect(() => {
+    const moveBullet = () => {
+      const newBullets = bullets.map((bullet) => ({ ...bullet, x: bullet.x + bullet.speed }));
+      setBullets(newBullets);
+    };
+    const getBulletPos = setInterval(moveBullet, 10);
+    return () => {
+      clearInterval(getBulletPos);
+    };
+  }, [bullets]);
 
   return (
     // Stage - is a div wrapper
