@@ -10,30 +10,40 @@ const Home = () => {
   if (!user) return <Loading visible />;
 
   const up = async () => {
-    const res = await apiClient.rooms.boardcontroller.$post({ body: '1' });
+    const res = await apiClient.rooms.controller.$post({ body: 'up' });
     console.log(res);
   };
 
+  const left = async () => {
+    //左のボタンを押したら飛行機が左に
+  };
+
+  const right = async () => {
+    //右のボタンを押したら飛行機が右に
+  };
   const down = async () => {
-    const res = await apiClient.rooms.boardcontroller.$post({ body: '2' });
+    const res = await apiClient.rooms.controller.$post({ body: 'down' });
     console.log(res);
   };
+
   return (
     <>
       <BasicHeader user={user} />
       <div className={styles.container}>
         <div className={styles.board}>
+          {/* 十字キー */}
           <div className={styles.items}>
             <div />
             <div className={styles.switch} onClick={up} />
             <div />
+            <div className={styles.switch} onClick={left} />
             <div className={styles.switch} />
-            <div className={styles.switch} />
-            <div className={styles.switch} />
+            <div className={styles.switch} onClick={right} />
             <div />
             <div className={styles.switch} onClick={down} />
             <div />
           </div>
+          {/* selectボタン */}
           <div className={styles.select}>select</div>
         </div>
       </div>
