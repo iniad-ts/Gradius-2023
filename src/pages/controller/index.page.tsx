@@ -15,17 +15,22 @@ const Home = () => {
   };
 
   const left = async () => {
-    //左のボタンを押したら飛行機が左にka
+    const res = await apiClient.rooms.controller2.$post({ body: 'left' });
+    console.log(res);
   };
 
   const right = async () => {
-    //右のボタンを押したら飛行機が右に
+    const res = await apiClient.rooms.controller2.$post({ body: 'right' });
+    console.log(res);
   };
   const down = async () => {
     const res = await apiClient.rooms.controller2.$post({ body: 'down' });
     console.log(res);
   };
-
+  const push = async () => {
+    const res = await apiClient.rooms.controller2.$post({ body: 'push' });
+    console.log(res);
+  };
   return (
     <>
       <BasicHeader user={user} />
@@ -45,6 +50,9 @@ const Home = () => {
           </div>
           {/* selectボタン */}
           <div className={styles.select}>select</div>
+          <div className={styles.select} onClick={push}>
+            push
+          </div>
         </div>
       </div>
     </>
