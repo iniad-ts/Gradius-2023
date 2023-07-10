@@ -9,7 +9,7 @@ export const roomUsecase = (() => {
         result = 'UP が入力されました';
         position = [position[0], position[1] - 50];
       } else if (movedirection === 'left') {
-        //飛行機が下に下がる
+        //飛行機が左に移動
         result = 'LEFT が入力されました';
         position = [position[0] - 10, position[1]];
       } else if (movedirection === 'right') {
