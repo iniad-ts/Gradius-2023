@@ -10,7 +10,7 @@ const Home = () => {
   if (!user) return <Loading visible />;
 
   const up = async () => {
-    const res = await apiClient.rooms.controller.$post({ body: 'up' });
+    const res = await apiClient.rooms.controller2.$post({ body: 'up' });
     console.log(res);
   };
 
@@ -22,7 +22,7 @@ const Home = () => {
     //右のボタンを押したら飛行機が右に
   };
   const down = async () => {
-    const res = await apiClient.rooms.controller.$post({ body: 'down' });
+    const res = await apiClient.rooms.controller2.$post({ body: 'down' });
     console.log(res);
   };
 
