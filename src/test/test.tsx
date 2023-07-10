@@ -1,3 +1,4 @@
+import { Bullet } from '$/Usecase/bulletUsecase';
 import type { Enemy } from '$/Usecase/enemyUsecase';
 import type { Player } from '$/Usecase/playerUsecase';
 import { useEffect, useState } from 'react';
@@ -32,14 +33,14 @@ export const App = () => {
     const getEnemyPos = setInterval(fetchEnemy, 500);
     return () => {
       clearInterval(getEnemyPos);
-
     };
   });
-
-  const [bulletX,setBulletX]=useState(playerX+100);
-  const [bulletY,setBulletY]=useState(playerY);
+  const [bullets,setBullets]=useState<Bullet[]>([])
   const fetchBullet=async()=>{
-    const bulletData=await apiClient.player.shoot.$post({body:{PlayerPos: {x: playerX, y: playerY}, MoveInput:"none"}})
+    const newBullet=await apiClient.player.shoot.$post({body:{PlayerPos: {x: playerX, y: playerY}, MoveInput:"none"}})
+    const newBullets=[...bullets,newBullet]
+    setBullets(newBullets) 
+  
   }
 
   return (
@@ -51,7 +52,14 @@ export const App = () => {
         <Layer>
           <Circle x={playerX} y={playerY} stroke="black" fill="blue" radius={50} />
           <Circle x={enemyX} y={enemyY} stroke="black" fill="red" radius={75} />
-          <Circle x={bulletX} y={bulletY} stroke="black" fill="white"radius={10}/>
+          {bullets.map((bullet)=>(
+            <Circle key={bullet.x}
+            x={bullet.x}
+            y={bullet.y}
+            stroke="black"
+            fill="green"
+            radius={bullet.radius} />
+          ))}
         </Layer>
       </Stage>
       <button
@@ -101,6 +109,14 @@ export const App = () => {
         }}
       >
         right
+      </button>
+      <button
+        onClick={() => {
+          fetchBullet();
+          console.log(playerY);
+        }}
+      >
+        shoot
       </button>
     </>
   );
