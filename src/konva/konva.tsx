@@ -7,11 +7,12 @@ function App() {
 
   const fetchBoard = useCallback(async () => {
     {
-      const new_position = await apiClient.rooms.boardgradius.$get();
+      const new_position = await apiClient.rooms.gradius.$get();
       setPosition(new_position);
     }
   }, []);
 
+  //100ミリ秒ごとに飛行機の位置情報を取りに行く
   useEffect(() => {
     const cancelID = setInterval(fetchBoard, 100);
     return () => {
