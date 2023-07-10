@@ -17,7 +17,6 @@
   /* justify-content: center; */
   flex-wrap: wrap;
   /* gap: 5vh; */
-  background-color: #c66;
 }
 .items {
   display: grid; /*gridについては調べてください*/
