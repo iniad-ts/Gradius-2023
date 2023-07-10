@@ -1,4 +1,12 @@
-import type { TaskId, UserId } from './branded';
+import type {
+  EnemyId,
+  GameSessionId,
+  PlayerId,
+  PowerUpId,
+  SessionsEnemiesId,
+  TaskId,
+  UserId,
+} from './branded';
 
 export type UserModel = {
   id: UserId;
@@ -12,4 +20,47 @@ export type TaskModel = {
   label: string;
   done: boolean;
   created: number;
+};
+
+export type GameSessionModel = {
+  id: GameSessionId;
+  PlayerId: PlayerId;
+  stageId: string;
+  score: number;
+  startTime: Date;
+  endTime?: Date;
+};
+
+export type PlayerModel = {
+  id: PlayerId;
+  name: string;
+  x: number;
+  y: number;
+};
+
+export type PlayerPowerUpModel = {
+  playerid: PlayerId;
+  powerUpId: PowerUpId;
+};
+
+export type PowerUpModel = {
+  id: PowerUpId;
+  name: string;
+};
+
+export type SessionsEnemiesModel = {
+  id: SessionsEnemiesId;
+  session_id: GameSessionId;
+  enemy_id: EnemyId;
+  x: number;
+  y: number;
+  hit_point: number;
+  collision_radius: number;
+};
+
+export type EnemyModel = {
+  id: EnemyId;
+  name: string;
+  hit_point: number;
+  collision_radius: number;
 };
