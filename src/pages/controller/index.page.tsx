@@ -15,7 +15,7 @@ const Home = () => {
   };
 
   const left = async () => {
-    //左のボタンを押したら飛行機が左に
+    //左のボタンを押したら飛行機が左にka
   };
 
   const right = async () => {
