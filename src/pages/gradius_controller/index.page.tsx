@@ -10,8 +10,8 @@ import styles from './gradius_controller.module.css';
 
 const Home = () => {
   const [user] = useAtom(userAtom);
-  const [change_count, setchange_count] = useState(0);
-  const game_state_list: string[] = ['start', 'playing', 'stop'];
+  const [change_count, setchange_count] = useState(2);
+  const game_state_list: string[] = ['playing', 'stop', 'start'];
   if (!user) return <Loading visible />;
 
   //移動方向serveにpost req
@@ -23,7 +23,7 @@ const Home = () => {
   //game_stateの変更(start|playing|stop)
   //game_stateをserverにpost req
   const change_game_state = async (change_count: number) => {
-    const new_change_count: number = (change_count + 1) % 3;
+    const new_change_count: number = (change_count + 1) % 2;
     setchange_count(new_change_count);
     console.log('state', new_change_count);
     const changed_game_state = apiClient.cntroller.game_state.$post({ body: new_change_count });
