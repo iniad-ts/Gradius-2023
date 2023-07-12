@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-import { Layer, Line, Rect, Stage } from 'react-konva';
+import { Layer, Rect, Shape, Stage } from 'react-konva';
 
 import { Loading } from 'src/components/Loading/Loading';
 import { apiClient } from 'src/utils/apiClient';
@@ -76,8 +76,21 @@ const Home = () => {
               {color !== 0 && (
                 <Stage width={40} height={40}>
                   <Layer>
-                    <Rect fill="red" x={0} y={10} width={20} height={10} />
-                    <Line points={[20, 10, 20, 20, 40, 15, 20, 10]} stroke="white" fill="white" />
+                    <Rect fill="white" x={0} y={10} width={20} height={10} />
+                    <Shape
+                      sceneFunc={(context, shape) => {
+                        context.beginPath();
+                        context.moveTo(20, 10);
+                        context.lineTo(40, 15);
+                        context.lineTo(20, 20);
+                        context.closePath();
+                        context.stroke();
+                        context.fillStrokeShape(shape);
+                      }}
+                      fill="white"
+                      stroke="white"
+                      strokeWidth={1}
+                    />
                   </Layer>
                 </Stage>
               )}
