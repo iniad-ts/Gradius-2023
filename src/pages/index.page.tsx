@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-import { Layer, Rect, Shape, Stage } from 'react-konva';
+import { Layer, Line, Stage } from 'react-konva';
 
 import { Loading } from 'src/components/Loading/Loading';
 import { apiClient } from 'src/utils/apiClient';
@@ -76,20 +76,60 @@ const Home = () => {
               {color !== 0 && (
                 <Stage width={40} height={40}>
                   <Layer>
-                    <Rect fill="white" x={0} y={10} width={20} height={10} />
-                    <Shape
-                      sceneFunc={(context, shape) => {
-                        context.beginPath();
-                        context.moveTo(20, 10);
-                        context.lineTo(40, 15);
-                        context.lineTo(20, 20);
-                        context.closePath();
-                        context.stroke();
-                        context.fillStrokeShape(shape);
-                      }}
-                      fill="white"
-                      stroke="white"
+                    <Line
+                      x={0}
+                      y={10}
+                      points={[0, 0, 5, 5, 15, 5]}
+                      closed
                       strokeWidth={1}
+                      stroke="black"
+                      fill="white"
+                    />
+                    <Line
+                      x={5}
+                      y={15}
+                      points={[0, 0, 10, 0, 15, 2.5, 30, 2.5, 20, 7, 20, 5, 0, 5]}
+                      strokeWidth={1}
+                      closed
+                      stroke="black"
+                      fill="white"
+                    />
+                    <Line
+                      x={5}
+                      y={15}
+                      points={[0, 0, 0, 5, -3, 5, -3, 0]}
+                      strokeWidth={1}
+                      closed
+                      stroke="black"
+                      fill="white"
+                    />
+                    <Line
+                      x={5}
+                      y={15}
+                      points={[0, 0, 10, 0, 15, 2.5, 30, 2.5, 20, 7, 20, 5, 0, 5]}
+                      strokeWidth={1}
+                      closed
+                      stroke="black"
+                      fill="white"
+                    />
+                    <Line
+                      x={5}
+                      y={20}
+                      points={[0, 0, 20, 0, 20, 2, 7, 4]}
+                      strokeWidth={1}
+                      closed
+                      stroke="black"
+                      fill="white"
+                    />
+                    <Line
+                      x={15}
+                      y={12}
+                      points={[0, 0, 15, 5, 5, 5]}
+                      closed
+                      tension={0.5}
+                      strokeWidth={1}
+                      stroke="black"
+                      fill="red"
                     />
                   </Layer>
                 </Stage>
@@ -101,5 +141,14 @@ const Home = () => {
     </>
   );
 };
-
+// Rectで書いたものをメモ用に残してます(すぐ消します)
+/*<Rect
+stroke="black"
+fill="white"
+strokeWidth={1}
+x={0}
+y={10}
+width={20}
+height={10}
+/>*/
 export default Home;
