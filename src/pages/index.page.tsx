@@ -1,7 +1,5 @@
 import { useState } from 'react';
-
 import { Layer, Line, Stage } from 'react-konva';
-
 import { Loading } from 'src/components/Loading/Loading';
 import { apiClient } from 'src/utils/apiClient';
 import styles from './index.module.css';
