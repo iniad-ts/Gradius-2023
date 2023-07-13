@@ -1,18 +1,25 @@
 import { useState } from 'react';
+import { Layer, Line, Stage } from 'react-konva';
 import { Loading } from 'src/components/Loading/Loading';
 import { apiClient } from 'src/utils/apiClient';
 import styles from './index.module.css';
 
 const Home = () => {
   //黒い枠の中をクリックし、矢印ボタンを押すと、赤い点が動くよー
-  const [playerX, setPlayerX] = useState(2);
+  const [playerX, setPlayerX] = useState(5);
   const [playerY, setPlayerY] = useState(0);
   const [board, setBoard] = useState([
-    [0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0],
-    [1, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
   ]);
   const hoge = true;
   const keydown = async (e: React.KeyboardEvent<HTMLDivElement>) => {
@@ -64,7 +71,67 @@ const Home = () => {
           // eslint-disable-next-line complexity
           row.map((color, x) => (
             <div className={styles.cell} key={`${x}-${y}`} style={{ position: 'relative' }}>
-              {color !== 0 && <div className={styles.stone} />}
+              {color !== 0 && (
+                <Stage width={40} height={40}>
+                  <Layer>
+                    <Line
+                      x={0}
+                      y={10}
+                      points={[0, 0, 5, 5, 15, 5]}
+                      closed
+                      strokeWidth={1}
+                      stroke="black"
+                      fill="white"
+                    />
+                    <Line
+                      x={5}
+                      y={15}
+                      points={[0, 0, 10, 0, 15, 2.5, 30, 2.5, 20, 7, 20, 5, 0, 5]}
+                      strokeWidth={1}
+                      closed
+                      stroke="black"
+                      fill="white"
+                    />
+                    <Line
+                      x={5}
+                      y={15}
+                      points={[0, 0, 0, 5, -3, 5, -3, 0]}
+                      strokeWidth={1}
+                      closed
+                      stroke="black"
+                      fill="white"
+                    />
+                    <Line
+                      x={5}
+                      y={15}
+                      points={[0, 0, 10, 0, 15, 2.5, 30, 2.5, 20, 7, 20, 5, 0, 5]}
+                      strokeWidth={1}
+                      closed
+                      stroke="black"
+                      fill="white"
+                    />
+                    <Line
+                      x={5}
+                      y={20}
+                      points={[0, 0, 20, 0, 20, 2, 7, 4]}
+                      strokeWidth={1}
+                      closed
+                      stroke="black"
+                      fill="white"
+                    />
+                    <Line
+                      x={15}
+                      y={12}
+                      points={[0, 0, 15, 5, 5, 5]}
+                      closed
+                      tension={0.5}
+                      strokeWidth={1}
+                      stroke="black"
+                      fill="red"
+                    />
+                  </Layer>
+                </Stage>
+              )}
             </div>
           ))
         )}
@@ -73,4 +140,14 @@ const Home = () => {
   );
 };
 
+// Rectで書いたものをメモ用に残してます(すぐ消します)
+/*<Rect
+stroke="black"
+fill="white"
+strokeWidth={1}
+x={0}
+y={10}
+width={20}
+height={10}
+/>*/
 export default Home;
