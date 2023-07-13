@@ -139,6 +139,7 @@ const Home = () => {
     </>
   );
 };
+
 // Rectで書いたものをメモ用に残してます(すぐ消します)
 /*<Rect
 stroke="black"
