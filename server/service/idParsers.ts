@@ -5,10 +5,13 @@ import type {
   PowerUpId,
   SessionsEnemiesId,
   StageId,
+  UserId,
 } from '$/commonTypesWithClient/branded';
 import { z } from 'zod';
 
 export const playerIdParser: z.ZodType<PlayerId> = z.string().brand<'PlayerId'>();
+
+export const UserIdParser: z.ZodType<UserId> = z.string().brand<'UserId'>();
 
 export const gameSessionIdParser: z.ZodType<GameSessionId> = z.string().brand<'GameSessionId'>();
 
