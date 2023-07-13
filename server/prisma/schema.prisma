@@ -33,6 +33,7 @@ model Stage {
 model Enemy {
   id              String         @id
   collisionRadius Int
+  score           Int
   sessionEnemies  SessionEnemy[]
 }
 

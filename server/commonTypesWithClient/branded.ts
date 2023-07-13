@@ -15,3 +15,5 @@ export type EnemyId = Branded<'EnemyId'>;
 export type PowerUpId = Branded<'PowerUpId'>;
 
 export type SessionsEnemiesId = Branded<'SessionsEnemiesId'>;
+
+export type StageId = Branded<'StageId'>;

@@ -4,6 +4,7 @@ import type {
   PlayerId,
   PowerUpId,
   SessionsEnemiesId,
+  StageId,
   TaskId,
   UserId,
 } from './branded';
@@ -24,11 +25,11 @@ export type TaskModel = {
 
 export type GameSessionModel = {
   id: GameSessionId;
-  PlayerId: PlayerId;
-  stageId: string;
+  playerId: PlayerId;
+  stageId: StageId;
   score: number;
   startTime: Date;
-  endTime?: Date;
+  endTime?: Date | null;
 };
 
 export type PlayerModel = {
@@ -60,7 +61,6 @@ export type SessionsEnemiesModel = {
 
 export type EnemyModel = {
   id: EnemyId;
-  name: string;
-  hit_point: number;
   collision_radius: number;
+  score: number;
 };
