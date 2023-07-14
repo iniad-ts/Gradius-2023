@@ -1,0 +1,27 @@
+export type MoveDirection = 'up' | 'left' | 'right' | 'down';
+export let position: number[] = [30, 300]; //飛行機の位置を保存
+export const roomUsecase = (() => {
+  return {
+    pushbutton: async (movedirection: MoveDirection) => {
+      let result;
+      if (movedirection === 'up') {
+        //飛行機が上に上がる
+        result = 'UP が入力されました';
+        position = [position[0], position[1] - 50];
+      } else if (movedirection === 'left') {
+        //飛行機が下に下がる
+        result = 'LEFT が入力されました';
+        position = [position[0] - 10, position[1]];
+      } else if (movedirection === 'right') {
+        //飛行機が下に下がる
+        result = 'RIGHT が入力されました';
+        position = [position[0] + 10, position[1]];
+      } else {
+        //飛行機が下に下がる
+        result = 'DOWN が入力されました';
+        position = [position[0], position[1] + 50];
+      }
+      return result;
+    },
+  };
+})();
