@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "jsx": "react",
     "downlevelIteration": true,
     "esModuleInterop": true,
     "lib": ["dom"],
