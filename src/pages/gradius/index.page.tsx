@@ -13,7 +13,8 @@ const Home = () => {
     <>
       <BasicHeader user={user} />
       <div className={styles.container}>
-        <App />{/*f12で定義に飛んでください*/}
+        <App />
+        {/*f12で定義に飛んでください*/}
       </div>
     </>
   );
