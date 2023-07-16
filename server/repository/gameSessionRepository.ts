@@ -2,14 +2,15 @@ import type { GameSessionModel } from '$/commonTypesWithClient/models';
 import { gameSessionIdParser, playerIdParser, stageIdParser } from '$/service/idParsers';
 import { prismaClient } from '$/service/prismaClient';
 import type { GameSession } from '@prisma/client';
+import { z } from 'zod';
 
 const toGameSessionModel = (gameSession: GameSession): GameSessionModel => ({
   id: gameSessionIdParser.parse(gameSession.id),
   playerId: playerIdParser.parse(gameSession.playerId),
-  score: gameSession.score,
-  startTime: gameSession.startTime,
+  score: z.number().parse(gameSession.score),
+  startTime: z.date().parse(gameSession.startTime),
   stageId: stageIdParser.parse(gameSession.stageId),
-  endTime: gameSession.endTime,
+  endTime: gameSession.endTime && z.date().parse(gameSession.endTime),
 });
 
 export const gameSessionRepository = {
