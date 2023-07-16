@@ -1,5 +1,5 @@
-export type Methods = {
-  get: {
-    resBody: number[][];
-  };
-};
+// export type Methods = {
+//   get: {
+//     resBody: number[][];
+//   };
+// };
