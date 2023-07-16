@@ -15,11 +15,9 @@ export type TaskModel = {
 };
 
 export type GameModel = {
-  name: string;
-  owner: string | null;
+  user: UserId;
   type: string;
   xyz: number[];
-  vector: number[];
   speed: number;
   hp: number;
   lv: number;
