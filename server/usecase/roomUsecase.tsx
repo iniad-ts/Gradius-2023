@@ -1,6 +1,13 @@
 export type MoveDirection = 'up' | 'left' | 'right' | 'down' | 'push';
 export let position: number[] = [30, 300]; //飛行機の位置を保存
+
+export let gun = false;
+
 export const roomUsecase = (() => {
+  const resetGun = () => {
+    gun = false;
+  };
+
   return {
     pushbutton: async (movedirection: MoveDirection) => {
       let result;
@@ -23,6 +30,9 @@ export const roomUsecase = (() => {
       } else {
         //飛行機が下に下がる
         result = 'PUSH が入力されました';
+        gun = true;
+        //2秒経ったら、gunのtrueをfalseに変える。
+        setTimeout(resetGun, 5000);
       }
       return result;
     },
