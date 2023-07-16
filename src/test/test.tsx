@@ -4,7 +4,7 @@ import type { Player } from '$/Usecase/playerUsecase';
 import { useEffect, useState } from 'react';
 import { Circle, Layer, Stage } from 'react-konva';
 import { apiClient } from 'src/utils/apiClient';
-
+import styles from './index.module.css'
 export const App = () => {
   const [playerX, setPlayerX] = useState(0);
   const [playerY, setPlayerY] = useState(300);
@@ -50,9 +50,9 @@ export const App = () => {
       const newBullets = bullets.map((bullet) => ({ ...bullet, x: bullet.x + bullet.speed }));
       setBullets(newBullets);
     };
-    const getBulletPos = setInterval(moveBullet, 10);
+    const getBulletPos = requestAnimationFrame(moveBullet);
     return () => {
-      clearInterval(getBulletPos);
+      cancelAnimationFrame(getBulletPos);
     };
   }, [bullets]);
 
@@ -77,62 +77,68 @@ export const App = () => {
           ))}
         </Layer>
       </Stage>
-      <button
-        onClick={() => {
-          const player: Player = {
-            PlayerPos: { x: playerX, y: playerY },
-            MoveInput: 'down',
-          };
-          fetchPlayer(player);
-          console.log(playerY);
-        }}
-      >
-        down
-      </button>
-      <button
-        onClick={() => {
-          const player: Player = {
-            PlayerPos: { x: playerX, y: playerY },
-            MoveInput: 'up',
-          };
-          fetchPlayer(player);
-          console.log(playerY);
-        }}
-      >
-        up
-      </button>
-      <button
-        onClick={() => {
-          const player: Player = {
-            PlayerPos: { x: playerX, y: playerY },
-            MoveInput: 'left',
-          };
-          fetchPlayer(player);
-          console.log(playerY);
-        }}
-      >
-        left
-      </button>
-      <button
-        onClick={() => {
-          const player: Player = {
-            PlayerPos: { x: playerX, y: playerY },
-            MoveInput: 'right',
-          };
-          fetchPlayer(player);
-          console.log(playerY);
-        }}
-      >
-        right
-      </button>
-      <button
-        onClick={() => {
-          fetchBullet();
-          console.log(playerY);
-        }}
-      >
-        shoot
-      </button>
+      <div className={styles.board}>
+        <div className={styles.container}>
+          <div className={styles.button} />
+          <div
+            className={`${styles.button} ${styles.up}`}
+            onClick={() => {
+              const player: Player = {
+                PlayerPos: { x: playerX, y: playerY },
+                MoveInput: 'up',
+              };
+              fetchPlayer(player);
+              console.log(playerY);
+            }}
+          />
+          <div className={styles.button} />
+          <div
+            className={`${styles.button} ${styles.left}`}
+            onClick={() => {
+              const player: Player = {
+                PlayerPos: { x: playerX, y: playerY },
+                MoveInput: 'left',
+              };
+              fetchPlayer(player);
+              console.log(playerY);
+            }}
+          />
+          <div className={styles.button}>〇</div>
+          <div
+            className={`${styles.button} ${styles.right}`}
+            onClick={() => {
+              const player: Player = {
+                PlayerPos: { x: playerX, y: playerY },
+                MoveInput: 'right',
+              };
+              fetchPlayer(player);
+              console.log(playerY);
+            }}
+          />
+          <div className={styles.button} />
+          <div
+            className={`${styles.button} ${styles.down}`}
+            onClick={() => {
+              const player: Player = {
+                PlayerPos: { x: playerX, y: playerY },
+                MoveInput: 'down',
+              };
+              fetchPlayer(player);
+              console.log(playerY);
+            }}
+          />
+          <div className={styles.button} />
+        </div>
+        <div
+          className={styles.shoot}
+          onClick={() => {
+            fetchBullet();
+            console.log(playerY);
+          }}
+        >
+          shoot
+        </div>
+      </div>
     </>
   );
 };
