@@ -5,7 +5,7 @@ export default defineController(() => ({
   get: async () => {
     const enemie_pos = enemy_list;
     return {
-      status: 200,
+      status: 203,
       body: enemie_pos,
     };
   },
