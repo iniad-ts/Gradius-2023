@@ -1,15 +1,25 @@
 //testCode//ここに書くのはyosuliです。
 
-import { useState } from 'react';
+import type { EventModel, GameModel } from '$/commonTypesWithClient/models';
+import { useEffect, useState } from 'react';
 import { apiClient } from 'src/utils/apiClient';
 
 const Home = () => {
-  const [hoge, setHoge] = useState(1);
+  const [hoge, setHoge] = useState<{ games: GameModel[]; event: EventModel }>();
+
+  const fetchGradius = async () => {
+    const newHoge = (await apiClient.gradius.post()).body;
+    console.log(newHoge);
+    setHoge(newHoge);
+  };
+  useEffect(() => {
+    const cancelId = setInterval(fetchGradius, 100);
+    return () => {
+      clearInterval(cancelId);
+    };
+  });
   const onclick = async () => {
-    const newHoge = await apiClient.gradius.post();
     await apiClient.gradius.game.post({ body: 1 });
-    console.log(hoge);
-    setHoge(newHoge.body.game[0].xyz[1] % 2);
   };
 
   const onR = () => {
@@ -20,10 +30,23 @@ const Home = () => {
   };
   return (
     <div
-      style={{ width: '100vw', height: '100vh', backgroundColor: hoge === -1 ? '#800' : '#088' }}
+      style={{
+        width: '100vw',
+        height: '100vh',
+        backgroundColor:
+          hoge === null || hoge === undefined
+            ? '#080'
+            : hoge.games[0].xyz[1] % 2 === -1
+            ? '#800'
+            : '#088',
+        textAlign: 'center',
+      }}
+      key={'a'}
       onClick={() => onclick()}
       onContextMenu={() => onR()}
-    />
+    >
+      {hoge?.games[0].hp}
+    </div>
   );
 };
 

@@ -8,7 +8,7 @@ export const gradiusUaeCase = {
     } else {
       const myPlane: GameModel = await gradiusRepository
         .findOfId(user)
-        .game.filter((gra) => gra.type === 'owner')[0];
+        .games.filter((gra) => gra.type === 'owner')[0]; //ownerは1つ
       const newXYZ = myPlane.xyz;
       newXYZ[type % 3] += (Math.floor(type / 3) - 0.5) * 2;
       const newMyPlane: GameModel = { ...myPlane, xyz: newXYZ };
