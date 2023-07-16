@@ -76,3 +76,14 @@
   align-items: center;
   justify-content: center;
 }
+
+.shoot_button {
+  font-size: 20px;
+  color: black;
+  width: 110px;
+  height: 50px;
+  background-color: yellow;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

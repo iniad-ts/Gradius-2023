@@ -6,7 +6,7 @@ export default defineController(() => ({
   post: async () => {
     await make_laser.shot_laser();
     return {
-      status: 206,
+      status: 200,
     };
   },
 }));

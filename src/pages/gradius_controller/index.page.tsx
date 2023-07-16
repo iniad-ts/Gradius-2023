@@ -30,6 +30,11 @@ const Home = () => {
     console.log(changed_game_state);
   };
 
+  //発射命令をserverにpost req
+  const order_to_shoot = async () => {
+    apiClient.cntroller.laser_shot.$post({ body: [1] });
+  };
+
   return (
     <div className={styles.container}>
       <div className={styles.up_down_button_board}>
@@ -50,6 +55,7 @@ const Home = () => {
         <div className={styles.start_button} onClick={() => change_game_state(change_count)}>
           {game_state_list[change_count]}
         </div>
+        <div className={styles.shoot_button}>発射</div>
       </div>
     </div>
   );
