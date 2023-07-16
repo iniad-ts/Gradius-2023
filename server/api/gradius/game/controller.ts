@@ -7,5 +7,3 @@ export default defineController(() => ({
     body: await gradiusUaeCase.input(body, user.id),
   }),
 }));
-
-

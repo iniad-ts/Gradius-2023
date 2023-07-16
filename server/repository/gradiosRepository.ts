@@ -26,7 +26,7 @@ const gameModels: GameModel[] = [];
 const eventModels: EventModel[] = [];
 
 export const gradiusRepository = {
-  crate: (user: UserId) => {
+  create: (user: UserId) => {
     const newGameModel = { ...initGameModel, user, started: new Date().getTime() };
     const newEventModel = { ...initEventModel, owner: user };
     gameModels.push(newGameModel);
@@ -36,7 +36,7 @@ export const gradiusRepository = {
     const games = gameModels.filter((gameModel) => gameModel.user === user);
     const event = eventModels.filter((eventModel) => eventModel.owner === user)[0];
     if (games.length === 0) {
-      gradiusRepository.crate(user);
+      gradiusRepository.create(user);
     }
     console.log(games, event);
     return { game: games, event };
