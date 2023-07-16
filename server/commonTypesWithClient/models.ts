@@ -51,16 +51,16 @@ export type PowerUpModel = {
 
 export type SessionsEnemiesModel = {
   id: SessionsEnemiesId;
-  session_id: GameSessionId;
-  enemy_id: EnemyId;
+  sessionId: GameSessionId;
+  enemyId: EnemyId;
   x: number;
   y: number;
-  hit_point: number;
-  collision_radius: number;
+  hitPoint: number;
+  collisionRadius: number;
 };
 
 export type EnemyModel = {
   id: EnemyId;
-  collision_radius: number;
+  collisionRadius: number;
   score: number;
 };
