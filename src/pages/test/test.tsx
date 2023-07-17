@@ -4,7 +4,7 @@ import type { Player } from '$/Usecase/playerUsecase';
 import { useEffect, useState } from 'react';
 import { Circle, Layer, Stage } from 'react-konva';
 import { apiClient } from 'src/utils/apiClient';
-import styles from './index.module.css'
+import styles from './index.module.css';
 export const App = () => {
   const [playerX, setPlayerX] = useState(0);
   const [playerY, setPlayerY] = useState(300);
@@ -65,9 +65,9 @@ export const App = () => {
         <Layer>
           <Circle x={playerX} y={playerY} stroke="black" fill="blue" radius={50} />
           <Circle x={enemyX} y={enemyY} stroke="black" fill="red" radius={75} />
-          {bullets.map((bullet) => (
+          {bullets.map((bullet, index) => (
             <Circle
-              key={bullet.x}
+              key={index}
               x={bullet.x}
               y={bullet.y}
               stroke="black"
