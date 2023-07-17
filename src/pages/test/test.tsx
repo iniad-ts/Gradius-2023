@@ -73,8 +73,8 @@ export const App = () => {
             Bullets.splice(i, 1);
             Enemys.splice(j, 1);
             console.log('hit', Bullets.splice(i, 1), Enemys.splice(j, 1));
-            const deleteEnemy = Enemys[j];
-            //ここにAPI叩いて敵をDBから消す処理を書く
+            // const deleteEnemy = Enemys[j];
+            // //ここにAPI叩いて敵をDBから消す処理を書く
             return { Bullets, Enemys };
           }
         }
