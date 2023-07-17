@@ -55,7 +55,9 @@ const Home = () => {
         <div className={styles.start_button} onClick={() => change_game_state(change_count)}>
           {game_state_list[change_count]}
         </div>
-        <div className={styles.shoot_button}>発射</div>
+        <div className={styles.shoot_button} onClick={() => order_to_shoot()}>
+          発射
+        </div>
       </div>
     </div>
   );
