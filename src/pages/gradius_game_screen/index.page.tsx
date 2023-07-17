@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { Layer, Rect, Stage, Wedge } from 'react-konva';
 import { Loading } from 'src/components/Loading/Loading';
 import { apiClient } from 'src/utils/apiClient';
+import styles from './gradius_game_screen.module.css';
 // import enemy01 from '../../../public/images/enemy01.png';
 // import fighter from '../../../public/images/fighter.png';
 
@@ -10,6 +11,8 @@ const App = () => {
   const [fight_position, setfight_position] = useState<number[]>();
   const [enemies, setenemies] = useState<number[][]>([]);
   const [laser_pos, setlaser_pos] = useState<number[][]>([]);
+  const [background_pos, setbackground_pos] = useState(0);
+
   const fetchBord = async () => {
     const new_fighter_position = await apiClient.player.$get();
     const new_enemy_pos = await apiClient.enemy.$get();
@@ -18,6 +21,7 @@ const App = () => {
     setfight_position(new_fighter_position);
     setenemies(new_enemy_pos);
     setlaser_pos(new_laser_pos);
+    setbackground_pos((pre_background_pos) => pre_background_pos - 1);
   };
   console.log(laser_pos);
   useEffect(() => {
@@ -26,10 +30,16 @@ const App = () => {
       clearInterval(cancellid);
     };
   }, []);
+
   //localhost:3000/gradius_game_screen/
   if (!fight_position) return <Loading visible />;
   return (
-    <Stage width={1100} height={690}>
+    <Stage
+      width={1280}
+      height={780}
+      className={styles.container}
+      style={{ backgroundPosition: `${background_pos}px 0` }}
+    >
       <Layer>
         <Wedge
           id="player"
@@ -44,7 +54,7 @@ const App = () => {
           <Rect
             key={index}
             id={`enemy_${index}`}
-            fill="black"
+            fill="white"
             width={40}
             height={40}
             x={enemy[0]}
