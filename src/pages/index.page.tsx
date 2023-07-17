@@ -8,11 +8,7 @@ const Home = () => {
 
   if (!user) return <Loading visible />;
 
-  return (
-    <>
-      <App />
-    </>
-  );
+  return <></>;
 };
 
 export default Home;
