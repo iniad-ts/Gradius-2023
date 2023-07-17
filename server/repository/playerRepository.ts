@@ -24,7 +24,7 @@ export const playerRepository = {
         y: player.y,
       },
     });
-    return player && toPlayerModel(player);
+    return Boolean(player) && toPlayerModel(player);
   },
   findById: async (id: PlayerId) => {
     const player = await prismaClient.player.findUnique({
