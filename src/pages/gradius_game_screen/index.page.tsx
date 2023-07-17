@@ -18,7 +18,7 @@ const App = () => {
   };
   console.log(laser_pos);
   useEffect(() => {
-    const cancellid = setInterval(fetchBord, 100);
+    const cancellid = setInterval(fetchBord, 10);
     return () => {
       clearInterval(cancellid);
     };
