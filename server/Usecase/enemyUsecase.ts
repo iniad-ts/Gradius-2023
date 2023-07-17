@@ -5,6 +5,7 @@ export type EnemyPos = {
 
 export type Enemy = {
   EnemyPos: EnemyPos;
+  radius: number;
 };
 
 export const enemyUsecase = {

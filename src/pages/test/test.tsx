@@ -8,13 +8,16 @@ import styles from './index.module.css';
 export const App = () => {
   const [playerX, setPlayerX] = useState(0);
   const [playerY, setPlayerY] = useState(300);
+  const [enemyX, setEnemyX] = useState(500);
+  const [enemyY, setEnemyY] = useState(300);
+  const [enemys, setEnemys] = useState<Enemy[]>([]);
+  const [bullets, setBullets] = useState<Bullet[]>([]);
   const fetchPlayer = async (player: Player) => {
     const playerdata = await apiClient.player.$post({ body: player });
     setPlayerX(playerdata.PlayerPos.x);
     setPlayerY(playerdata.PlayerPos.y);
   };
-  const [enemyX, setEnemyX] = useState(500);
-  const [enemyY, setEnemyY] = useState(300);
+
   //apiに変更を送信して結果をsetしなおす関数
 
   useEffect(() => {
@@ -26,17 +29,19 @@ export const App = () => {
           x: enemyX,
           y: enemyY,
         },
+        radius: 75,
       };
       const enemyData = await apiClient.enemy.$post({ body: enemy });
       setEnemyX(enemyData.EnemyPos.x);
       setEnemyY(enemyData.EnemyPos.y);
+      const newEnemys = [...enemys, enemy];
+      setEnemys(newEnemys);
     };
     const getEnemyPos = setInterval(fetchEnemy, 500);
     return () => {
       clearInterval(getEnemyPos);
     };
-  }, [enemyX, enemyY]);
-  const [bullets, setBullets] = useState<Bullet[]>([]);
+  }, [enemyX, enemyY, enemys]);
   const fetchBullet = async () => {
     const newBullet = await apiClient.player.shoot.$post({
       body: { PlayerPos: { x: playerX, y: playerY }, MoveInput: 'none' },
@@ -56,12 +61,37 @@ export const App = () => {
     };
   }, [bullets]);
 
+  useEffect(() => {
+    function detectCollision(Bullets: Bullet[], Enemys: Enemy[]) {
+      for (let i = 0; i < Bullets.length; i++) {
+        for (let j = 0; j < Enemys.length; j++) {
+          const dx = Bullets[i].x - Enemys[j].EnemyPos.x;
+          const dy = Bullets[i].y - Enemys[j].EnemyPos.y;
+          const distance = Math.sqrt(dx * dx + dy * dy);
+          if (distance < Bullets[i].radius + Enemys[j].radius - 10) {
+            //衝突した2つの円を除いた配列を返す
+            Bullets.splice(i, 1);
+            Enemys.splice(j, 1);
+            console.log('hit', Bullets.splice(i, 1), Enemys.splice(j, 1));
+            const deleteEnemy = Enemys[j];
+            //ここにAPI叩いて敵をDBから消す処理を書く
+            return { Bullets, Enemys };
+          }
+        }
+      }
+      return { Bullets, Enemys };
+    }
+    const test = detectCollision(bullets, enemys);
+    setBullets(test.Bullets);
+    setEnemys(test.Enemys);
+  }, [bullets, enemys]);
+
   return (
     // Stage - is a div wrapper
     // Layer - is an actual 2d canvas element, so you can have several layers inside the stage
     // Rect and Circle are not DOM elements. They are 2d shapes on canvas
     <>
-      <Stage width={720} height={720} stroke="black">
+      <Stage width={1000} height={1000} stroke="black">
         <Layer>
           <Circle x={playerX} y={playerY} stroke="black" fill="blue" radius={50} />
           <Circle x={enemyX} y={enemyY} stroke="black" fill="red" radius={75} />
