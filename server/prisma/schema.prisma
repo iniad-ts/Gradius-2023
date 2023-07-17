@@ -13,3 +13,9 @@ model Task {
   done      Boolean
   createdAt DateTime
 }
+
+model game {
+  x     Int
+  y     Int
+  board Json @id
+}

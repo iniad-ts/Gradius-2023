@@ -7,24 +7,22 @@ const Home = () => {
   //黒い枠の中をクリックし、矢印ボタンを押すと、赤い点が動くよー
   const [playerX, setPlayerX] = useState(4);
   const [playerY, setPlayerY] = useState(0);
-  const [enemyX, setEnemyX] = useState(14);
-  const [enemyY, setEnemyY] = useState(5);
   const [tamaX, settamaX] = useState(0);
   const [tamaY, settamaY] = useState(2);
-  const [dx2, setDx2] = useState(1);
   const [dx, setDx] = useState(-1); // x方向の移動量
+  const dx2 = 1;
   const [dy, setDy] = useState(0); // y方向の移動量
   const [enemies, setEnemies] = useState<{ x: number; y: number }[]>([
     { x: 5, y: 2 },
     { x: 8, y: 4 },
   ]);
-  const [bullet, setbullets] = useState<{ x: number; y: number }[]>([{ x: 0, y: 0 }]);
+  const [bullet, setbullets] = useState<{ x: number; y: number }[]>([]);
   const [board, setBoard] = useState([
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -34,21 +32,21 @@ const Home = () => {
   const hoge = true;
   const keydown = async (e: React.KeyboardEvent<HTMLDivElement>) => {
     e.preventDefault();
-    console.log(e);
-    console.log(e.code);
     const game = await apiClient.game.$post({
       body: { x: playerX, y: playerY, key: e.code, board },
     });
+    console.log(game)
     setPlayerX(game.x);
     setPlayerY(game.y);
     settamaX(game.y);
     settamaY(game.x);
     setBoard(game.board);
-    console.log(game.board);
   };
   const click = async (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-    console.log(e);
-    console.log(enemies);
+    console.log('a');
+    const newGame = await apiClient.create.$post();
+    console.log('a');
+    console.log(newGame);
   };
   //ここまで
   const changeDirection = () => {
@@ -143,7 +141,6 @@ const Home = () => {
     const updatedEnemies = enemies.filter((enemy) => {
       for (const bulletObj of bullet) {
         if (Math.floor(enemy.x) === Math.floor(bulletObj.x) && enemy.y === bulletObj.y) {
-          console.log('aaaa');
           return false; // 一致したenemyは除外する
         }
       }
@@ -174,8 +171,8 @@ const Home = () => {
                 color !== 0 && (
                   <Rect
                     key={`${x}-${y}`}
-                    x={x * 100 + 50}
-                    y={y * 100 + 50}
+                    x={x * 100 + 70}
+                    y={y * 100}
                     width={100}
                     height={100}
                     fill="black"
@@ -184,13 +181,13 @@ const Home = () => {
             )
           )}
           {enemies.map((enemy, index) => (
-            <Circle key={index} x={enemy.x * 100} y={enemy.y * 100} radius={20} fill="green" />
+            <Circle key={index} x={enemy.x * 100} y={enemy.y * 100 + 50} radius={20} fill="green" />
           ))}
           {bullet.map((bullet, index) => (
             <Circle
               key={index}
               x={bullet.x * 100 + 50}
-              y={bullet.y * 100 + 100}
+              y={bullet.y * 100 + 50}
               radius={20}
               fill="red"
             />

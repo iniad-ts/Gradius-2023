@@ -13,3 +13,9 @@ export type TaskModel = {
   done: boolean;
   created: number;
 };
+
+export type RoomModel = {
+  x: number;
+  y: number;
+  board: number[][];
+};
