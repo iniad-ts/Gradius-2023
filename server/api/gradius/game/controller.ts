@@ -5,5 +5,5 @@ export default defineController(() => ({
   post: async ({ body, user }) => ({
     status: 201,
     body: await gradiusUaeCase.input(body, user.id),
-  }),
+  }), //user入力を投げつける
 }));

@@ -1,7 +1,7 @@
 //testCode//ここに書くのはyosuliです。
 
 import type { EventModel, GameModel } from '$/commonTypesWithClient/models';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { apiClient } from 'src/utils/apiClient';
 
 const Home = () => {
@@ -12,14 +12,15 @@ const Home = () => {
     console.log(newHoge);
     setHoge(newHoge);
   };
-  useEffect(() => {
-    const cancelId = setInterval(fetchGradius, 100);
-    return () => {
-      clearInterval(cancelId);
-    };
-  });
+  // useEffect(() => {
+  //   const cancelId = setInterval(fetchGradius, 100);
+  //   return () => {
+  //     clearInterval(cancelId);
+  //   };
+  // });
   const onclick = async () => {
     await apiClient.gradius.game.post({ body: 1 });
+    fetchGradius();
   };
 
   const onR = () => {

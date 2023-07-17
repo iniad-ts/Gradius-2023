@@ -38,6 +38,11 @@ const Home = () => {
     await fetchTasks();
   };
 
+  const startGradius = async () => {
+    const isStarted = await apiClient.gradius.game.start.post();
+    alert(isStarted ? 'already started' : 'create user');
+  };
+
   useEffect(() => {
     fetchTasks();
   }, []);
@@ -48,14 +53,15 @@ const Home = () => {
     <>
       <BasicHeader user={user} />
       <div className={styles.title} style={{ marginTop: '160px' }}>
-        Welcome to frourio!
+        <a href="./gradius" onClick={() => startGradius()}>
+          Click to start Gradius
+        </a>
       </div>
-
-      <form style={{ textAlign: 'center', marginTop: '80px' }} onSubmit={createTask}>
+      {/* <form style={{ textAlign: 'center', marginTop: '80px' }} onSubmit={createTask}>
         <input value={label} type="text" onChange={inputLabel} />
         <input type="submit" value="ADD" />
-      </form>
-      <ul className={styles.tasks}>
+      </form> */}
+      {/* <ul className={styles.tasks}>
         {tasks.map((task) => (
           <li key={task.id}>
             <label>
@@ -70,7 +76,7 @@ const Home = () => {
             />
           </li>
         ))}
-      </ul>
+      </ul> */}
     </>
   );
 };
