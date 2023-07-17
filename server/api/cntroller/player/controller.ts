@@ -5,7 +5,7 @@ export default defineController(() => ({
   post: async ({ body }) => {
     const result = await playerUsecase.moveplayer(body);
     return {
-      status: 200,
+      status: 202,
       body: result,
     };
   },
