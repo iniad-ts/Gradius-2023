@@ -9,6 +9,7 @@ const Home = () => {
   const [left, setLeft] = useState<boolean>(false);
   const [right, setRight] = useState<boolean>(false);
   const [down, setDown] = useState<boolean>(false);
+  const [shoot, setShoot] = useState<boolean>(false);
 
   const keyDown = (event: React.MouseEvent<HTMLDivElement>) => {
     const { id } = event.target as HTMLDivElement;
@@ -38,6 +39,22 @@ const Home = () => {
     } else console.log('error');
   };
 
+  const shootDown = (event: React.MouseEvent<HTMLDivElement>) => {
+    const { id } = event.target as HTMLDivElement;
+    console.log(`${id}down`);
+    if (id === 'shoot') {
+      setShoot(true);
+    } else console.log('error');
+  };
+
+  const shootUp = (event: React.MouseEvent<HTMLDivElement>) => {
+    const { id } = event.target as HTMLDivElement;
+    console.log(`${id}up`);
+    if (id === 'shoot') {
+      setShoot(false);
+    } else console.log('error');
+  };
+
   useEffect(() => {
     const move = () => {
       if (up) {
@@ -61,14 +78,23 @@ const Home = () => {
         });
       }
 
-      console.log(up, left, right, down);
+      console.log(up, left, right, down, shoot);
+    };
+    const attack = async () => {
+      if (shoot) {
+        const res = await apiClient.handler.$get();
+        const pos = apiClient.shoot.$post({
+          body: { x: res.x, y: res.y },
+        });
+      }
     };
 
     const interval = setInterval(() => {
       move();
+      attack();
     }, 100);
     return () => clearInterval(interval);
-  }, [up, left, right, down]);
+  }, [up, left, right, down, shoot]);
   return (
     <>
       <div onMouseDown={keyDown} onMouseUp={keyUp}>
@@ -84,6 +110,9 @@ const Home = () => {
         <div id="down" className={styles.arrowButton}>
           ↓
         </div>
+      </div>
+      <div id="shoot" className={styles.arrowButton} onMouseDown={shootDown} onMouseUp={shootUp}>
+        shoot
       </div>
     </>
   );
