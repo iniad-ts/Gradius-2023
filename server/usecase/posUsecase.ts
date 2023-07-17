@@ -1,6 +1,6 @@
 export const posUsecase = {
   x: 0,
-  y: 0,
+  y: 0;
 
   playerMove: (key: string) => {
     if (key === 'ArrowUp') {
