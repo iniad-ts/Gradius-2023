@@ -10,31 +10,6 @@ const Home = () => {
   const [right, setRight] = useState<boolean>(false);
   const [down, setDown] = useState<boolean>(false);
 
-  const move = () => {
-    if (up) {
-      apiClient.handler.$post({
-        body: { key: 'ArrowUp' },
-      });
-    }
-    if (left) {
-      apiClient.handler.$post({
-        body: { key: 'ArrowLeft' },
-      });
-    }
-    if (right) {
-      apiClient.handler.$post({
-        body: { key: 'ArrowRight' },
-      });
-    }
-    if (down) {
-      apiClient.handler.$post({
-        body: { key: 'ArrowDown' },
-      });
-    }
-
-    console.log(up, left, right, down);
-  };
-
   const keyDown = (event: React.MouseEvent<HTMLDivElement>) => {
     const { id } = event.target as HTMLDivElement;
     console.log(`${id}down`);
@@ -64,12 +39,36 @@ const Home = () => {
   };
 
   useEffect(() => {
+    const move = () => {
+      if (up) {
+        apiClient.handler.$post({
+          body: { key: 'ArrowUp' },
+        });
+      }
+      if (left) {
+        apiClient.handler.$post({
+          body: { key: 'ArrowLeft' },
+        });
+      }
+      if (right) {
+        apiClient.handler.$post({
+          body: { key: 'ArrowRight' },
+        });
+      }
+      if (down) {
+        apiClient.handler.$post({
+          body: { key: 'ArrowDown' },
+        });
+      }
+
+      console.log(up, left, right, down);
+    };
+
     const interval = setInterval(() => {
       move();
     }, 100);
     return () => clearInterval(interval);
   }, [up, left, right, down]);
-
   return (
     <>
       <div onMouseDown={keyDown} onMouseUp={keyUp}>

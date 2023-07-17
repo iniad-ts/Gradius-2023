@@ -8,19 +8,18 @@ const Home = () => {
   // useEffect(() => {}, []);
   const hoge = true;
 
-  const fetchPos = async () => {
-    const res = await apiClient.handler.$get();
-    setPlayerX(playerX + res.x);
-    setPlayerY(playerY + res.y);
-    console.log('fetchPos');
-  };
-
   useEffect(() => {
+    const fetchPos = async () => {
+      const res = await apiClient.handler.$get();
+      setPlayerX(playerX + res.x);
+      setPlayerY(playerY + res.y);
+      console.log('fetchPos');
+    };
     const interval = setInterval(() => {
       fetchPos();
     }, 10);
     return () => clearInterval(interval);
-  }, []);
+  }, [playerX, playerY]);
 
   if (!hoge) return <Loading visible />;
 
@@ -38,8 +37,8 @@ const Home = () => {
           left: `${playerX}px`,
           top: `${playerY}px`,
           backgroundColor: 'red',
-          width: '10px',
-          height: '10px',
+          width: '25px',
+          height: '25px',
         }}
       />
     </>
