@@ -1,6 +1,8 @@
+import { useAtom } from 'jotai';
 import Konva from 'konva';
 import { useCallback, useEffect, useState } from 'react';
 import { Circle, Layer, Rect, Stage } from 'react-konva';
+import { userAtom } from 'src/atoms/user';
 import { Loading } from 'src/components/Loading/Loading';
 import { apiClient } from 'src/utils/apiClient';
 const Home = () => {
@@ -9,6 +11,7 @@ const Home = () => {
   const [playerY, setPlayerY] = useState(0);
   const [tamaX, settamaX] = useState(0);
   const [tamaY, settamaY] = useState(2);
+  const [user] = useAtom(userAtom);
   const [dx, setDx] = useState(-1); // x方向の移動量
   const dx2 = 1;
   const [dy, setDy] = useState(0); // y方向の移動量
@@ -22,7 +25,7 @@ const Home = () => {
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -35,17 +38,21 @@ const Home = () => {
     const game = await apiClient.game.$post({
       body: { x: playerX, y: playerY, key: e.code, board },
     });
-    console.log(game)
+    console.log(game.x);
+    console.log(game.y);
     setPlayerX(game.x);
     setPlayerY(game.y);
     settamaX(game.y);
     settamaY(game.x);
     setBoard(game.board);
+    if (user === null) {
+      console.log('a');
+    } else {
+      console.log(user.id);
+    }
   };
   const click = async (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-    console.log('a');
     const newGame = await apiClient.create.$post();
-    console.log('a');
     console.log(newGame);
   };
   //ここまで
