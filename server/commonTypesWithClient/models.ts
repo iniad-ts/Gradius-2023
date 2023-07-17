@@ -29,7 +29,7 @@ export type GameSessionModel = {
   stageId: StageId;
   score: number;
   startTime: Date;
-  endTime?: Date | null;
+  endTime: Date | null;
 };
 
 export type PlayerModel = {

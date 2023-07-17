@@ -22,13 +22,14 @@ export const gameSessionRepository = {
         id: gameSession.id,
         score: gameSession.score,
         startTime: gameSession.startTime,
-        endTime: gameSession.endTime,
+        endTime: null,
         stageId: gameSession.stageId,
         playerId: gameSession.playerId,
       },
     });
+    return gameSession && toGameSessionModel(gameSession);
   },
-  findByPlayerId: async (playerId: string) => {
+  findLatestByPlayerId: async (playerId: string) => {
     const gameSession = await prismaClient.gameSession.findFirst({
       where: { playerId },
       orderBy: { startTime: 'desc' },

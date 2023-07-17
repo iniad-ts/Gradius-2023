@@ -18,7 +18,7 @@ export const gameSessionUsecase = {
     return gameSession;
   },
   endgame: async (playerId: PlayerId): Promise<GameSessionModel> => {
-    const gameSession = await gameSessionRepository.findByPlayerId(playerId);
+    const gameSession = await gameSessionRepository.findLatestByPlayerId(playerId);
     assert(gameSession, 'gameSession not found');
     if (gameSession.endTime === null) {
       const newGameSession: GameSessionModel = {
@@ -30,14 +30,14 @@ export const gameSessionUsecase = {
     }
     return gameSession;
   },
-  updatescore: async (playerId: PlayerId, score: number): Promise<GameSessionModel> => {
-    const gameSession = await gameSessionRepository.findByPlayerId(playerId);
+  updatescore: async (playerId: PlayerId, score: number): Promise<number> => {
+    const gameSession = await gameSessionRepository.findLatestByPlayerId(playerId);
     assert(gameSession, 'gameSession not found');
     const newGameSession: GameSessionModel = {
       ...gameSession,
       score: gameSession.score + score,
     };
     await gameSessionRepository.save(newGameSession);
-    return newGameSession;
+    return newGameSession.score;
   },
 };
