@@ -1,14 +1,23 @@
 export const posUsecase = {
-  playerMove: (x: number, y: number, key: string) => {
+  x: 0,
+  y: 0,
+
+  playerMove: (key: string) => {
     if (key === 'ArrowUp') {
-      y -= 1;
+      posUsecase.y -= 10;
     } else if (key === 'ArrowDown') {
-      y += 1;
+      posUsecase.y += 10;
     } else if (key === 'ArrowLeft') {
-      x -= 1;
+      posUsecase.x -= 10;
     } else if (key === 'ArrowRight') {
-      x += 1;
+      posUsecase.x += 10;
     }
-    return { x, y };
+    return { x: posUsecase.x, y: posUsecase.y };
+  },
+  getPosition: () => {
+    return { x: posUsecase.x, y: posUsecase.y };
   },
 };
+// shoot : (key : string) => {
+
+// },
