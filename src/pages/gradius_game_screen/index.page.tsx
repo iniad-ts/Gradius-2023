@@ -10,8 +10,6 @@ const App = () => {
   const [fight_position, setfight_position] = useState([0, 0]);
   const [enemies, setenemies] = useState<number[][]>([]);
   const [isFighterLoaded, setIsFighterLoaded] = useState(false);
-  // const fighterImg = new window.Image();
-  // fighterImg.src = '../../../public/images/fighter.png';
   const fighterImgRef = useRef(new window.Image());
 
   const fetchBord = async () => {
@@ -47,7 +45,6 @@ const App = () => {
             x={fight_position[0]}
             y={fight_position[1]}
           />
-          {/* <img src={fighter.src} width={fighter.width} height={fighter.height} /> */}
           <Image
             image={fighterImgRef.current}
             width={fighterImgRef.current.width}
