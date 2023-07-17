@@ -24,9 +24,7 @@ export const gradiusRepository = {
     console.log(games, event);
     return { games, event };
   },
-  findWithXYZ: (xyz: number[]): GameModel[] => {
-    return gameModels.filter((gameModel) => gameModel.xyz === xyz);
-  },
+  findWithXYZ: (xyz: number[]) => gameModels.filter((gameModel) => gameModel.xyz === xyz),
   findWithType: (type: string) => gameModels.filter((gra) => gra.type === type),
   save: (gameModel: GameModel, name: string) => {
     gameModels.forEach((oneGameModel, i) => {

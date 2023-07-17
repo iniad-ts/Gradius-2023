@@ -1,10 +1,11 @@
 import type { UserId } from '$/commonTypesWithClient/branded';
-import type { GameModel } from '$/commonTypesWithClient/models';
+import { InitGameModel, type GameModel } from '$/commonTypesWithClient/models';
 import { gradiusRepository } from '$/repository/gradiusRepository';
+import { randomUUID } from 'crypto';
 export const gradiusUaeCase = {
   input: async (type: number, user: UserId) => {
     if (type === 6) {
-      // gradiusUaeCase.beam();
+      gradiusUaeCase.beam(user);
     } else {
       const myPlane: GameModel = await gradiusRepository
         .findOfId(user)
@@ -15,9 +16,19 @@ export const gradiusUaeCase = {
       gradiusRepository.save(newMyPlane, 'myPlane');
     }
   },
-  // beam: () => {
-  //   gradiusRepository.
-  // },
+  beam: (user: UserId) => {
+    gradiusRepository.create(
+      {
+        ...InitGameModel,
+        user,
+        type: 'follower',
+        id: randomUUID(),
+        vector: [1, 0, 0],
+        created: new Date().getTime(),
+      },
+      null
+    );
+  },
   // clash: async () => {クラッシュむずくね？？？
   //   const ownersXYZ = gradiusRepository
   //     .findWithType('owner')
