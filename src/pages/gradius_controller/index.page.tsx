@@ -32,6 +32,8 @@ const Home = () => {
 
   //発射命令をserverにpost req
   const order_to_shoot = async () => {
+    //何も値をpostする必要がない場合の記述方法を調べる
+    //応急処置
     apiClient.cntroller.laser_shot.$post({ body: [1] });
   };
 
