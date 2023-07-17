@@ -15,6 +15,6 @@ export const enemyRepository = {
     const enemy = await prismaClient.enemy.findFirst({
       where: { id: enemyId },
     });
-    return  enemy && ToEnemyModel(enemy);
+    return enemy && ToEnemyModel(enemy);
   },
 };
