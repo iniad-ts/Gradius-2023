@@ -44,3 +44,5 @@ npm-debug.log*
 # server
 server/index.js
 server/upload/
+src/pages/backendtest.page.tsx
+src/test/konvaForBackend.tsx
