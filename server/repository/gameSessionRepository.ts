@@ -27,7 +27,7 @@ export const gameSessionRepository = {
         playerId: gameSession.playerId,
       },
     });
-    return Boolean(gameSession) && toGameSessionModel(gameSession);
+    return gameSession && toGameSessionModel(gameSession);
   },
   findLatestByPlayerId: async (playerId: string) => {
     const gameSession = await prismaClient.gameSession.findFirst({
