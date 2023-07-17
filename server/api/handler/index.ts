@@ -1,9 +1,10 @@
 export type Methods = {
   get: {
-    resBody: string;
+    resBody: { x: number; y: number };
   };
   post: {
-    reqBody: { x: number; y: number; key: string };
+    // reqBody: { x: number; y: number; key: string };
+    reqBody: { key: string };
     resBody: { x: number; y: number };
   };
 };
