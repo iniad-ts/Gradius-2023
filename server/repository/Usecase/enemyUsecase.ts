@@ -8,6 +8,9 @@
 //     move_or_delete_enemy();
 //   }, 100);
 // }
+//
+//やることリスト
+//stateの切り替えに対しての切り替え
 
 setInterval(() => {
   make_enemy();
