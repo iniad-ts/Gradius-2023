@@ -11,7 +11,6 @@ const App = () => {
     const new_fighter_position = await apiClient.player.$get();
     const new_enemy_pos = await apiClient.enemy.$get();
     const new_laser_pos = await apiClient.laser.$get();
-    // console.log(new_laser_pos);
     setfight_position(new_fighter_position);
     setenemies(new_enemy_pos);
     setlaser_pos(new_laser_pos);
@@ -23,10 +22,9 @@ const App = () => {
       clearInterval(cancellid);
     };
   }, []);
-  //localhost:3000/gradius_game_screen/
   if (!fight_position) return <Loading visible />;
   return (
-    <Stage width={1100} height={690}>
+    <Stage width={1100} height={750}>
       <Layer>
         <Wedge
           id="player"
