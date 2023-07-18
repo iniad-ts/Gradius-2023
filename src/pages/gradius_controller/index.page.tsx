@@ -16,7 +16,7 @@ const Home = () => {
 
   //移動方向serveにpost req
   const order_to_direction = async (direction: MoveDirection) => {
-    const ordered_direction = apiClient.controller.player.$post({ body: direction });
+    const ordered_direction = apiClient.controller1.player.$post({ body: direction });
     console.log(ordered_direction);
   };
 
@@ -26,7 +26,7 @@ const Home = () => {
     const new_change_count: number = (change_count + 1) % 2;
     setchange_count(new_change_count);
     console.log('state', new_change_count);
-    const changed_game_state = apiClient.controller.game_state.$post({ body: new_change_count });
+    const changed_game_state = apiClient.controller1.game_state.$post({ body: new_change_count });
     console.log(changed_game_state);
   };
 
@@ -34,7 +34,7 @@ const Home = () => {
   const order_to_shoot = async () => {
     //何も値をpostする必要がない場合の記述方法を調べる
     //応急処置
-    apiClient.controller.laser_shot.$post({ body: [1] });
+    apiClient.controller1.laser_shot.$post({ body: [1] });
   };
 
   return (
