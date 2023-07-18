@@ -4,32 +4,16 @@ import { apiClient } from 'src/utils/apiClient';
 
 function App() {
   const [position, setPosition] = useState([30, 300]);
-  const [ok, setOk] = useState(false);
-  const [count, setCount] = useState(0);
+  const [gunPosition, setGunPosition] = useState<number[][]>([]);
 
   const fetchBoard = useCallback(async () => {
     {
       const new_position = await apiClient.rooms.gradius.$get();
-      const new_ok = await apiClient.rooms.gradius2.$get();
+      const newGunPosition = await apiClient.rooms.gradius2.$get();
       setPosition(new_position);
-      setOk(new_ok);
+      setGunPosition(newGunPosition);
     }
   }, []);
-
-  //0.5秒ごとに球を20進める
-  useEffect(() => {
-    const interval = setInterval(() => {
-      if (ok) {
-        setCount((prevCount) => prevCount + 20);
-      } else {
-        setCount(0);
-      }
-    }, 500);
-
-    return () => {
-      clearInterval(interval);
-    };
-  }, [ok]);
 
   //100ミリ秒ごとに飛行機の位置情報を取りに行く
   useEffect(() => {
@@ -40,19 +24,20 @@ function App() {
   }, [fetchBoard]);
 
   return (
-    <Stage width={500} height={800}>
+    <Stage width={1500} height={800}>
       {/* ↓球 */}
       <Layer>
-        {ok && (
+        {gunPosition.map((laser, index) => (
           <Rect
-            stroke="black"
+            key={index}
+            id={`laser_${index}`}
             fill="red"
-            x={position[0] + 50 + count}
-            y={position[1] - 5}
-            width={30}
+            width={20}
             height={10}
+            x={laser[0]}
+            y={laser[1]}
           />
-        )}
+        ))}
       </Layer>
       {/* ↓飛行機 */}
       <Layer>
