@@ -28,9 +28,10 @@ const Home = () => {
     console.log(res);
   };
   const push = async () => {
-    const res = await apiClient.rooms.controller2.$post({ body: 'push' });
+    const res = await apiClient.rooms.push.$post({ body: 'push' });
     console.log(res);
   };
+
   return (
     <>
       <BasicHeader user={user} />
