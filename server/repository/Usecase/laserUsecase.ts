@@ -6,7 +6,6 @@ import { player_now_position } from './playerUsecase';
 export let laser_pos_list: number[][] = [];
 
 // 発射した玉の位置を玉位置リストに追加
-// player基準の初期玉位置は、調整がおそらく必要
 export const make_laser = {
   shot_laser: async () => {
     laser_pos_list.push([player_now_position[0], player_now_position[1] - 10]);
