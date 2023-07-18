@@ -13,7 +13,6 @@ export const make_laser = {
   },
 };
 
-//玉位置更新/0.1
 //敵の移動の関数に入れても良いかも
 
 setInterval(() => {
