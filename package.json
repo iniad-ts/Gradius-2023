@@ -28,6 +28,7 @@
   },
   "dependencies": {
     "@aspida/axios": "^1.11.0",
+    "@typescript-eslint/typescript-estree": "^6.1.0",
     "axios": "^0.27.2",
     "canvas": "^2.11.2",
     "firebase": "^9.15.0",
