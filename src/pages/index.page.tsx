@@ -23,7 +23,15 @@ const Home = () => {
     const interval = setInterval(() => {
       fetchPos();
     }, 100);
-    return () => clearInterval(interval);
+
+    const interval2 = setInterval(() => {
+      fetchShoot();
+    }, 200);
+
+    return () => {
+      clearInterval(interval);
+      clearInterval(interval2);
+    };
   }, [playerX, playerY]);
 
   if (!hoge) return <Loading visible />;

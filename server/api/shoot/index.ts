@@ -1,8 +1,8 @@
 export type Methods = {
   get: {
-    resBody: string;
+    resBody: boolean;
   };
   post: {
-    reqBody: { x: number; y: number };
+    reqBody: { x: number; y: number; isShooting: boolean };
   };
 };
