@@ -20,6 +20,27 @@ setInterval(() => {
   move_or_delete_enemy();
 }, 100);
 
+// let timerIdMakeEnemy: number;
+// let timerIdMoveOrDeleteEnemy: number;
+
+// if (game_state === 'playing') {
+//   timerIdMakeEnemy = window.setInterval(() => {
+//     if (game_state !== 'playing') {
+//       window.clearInterval(timerIdMakeEnemy);
+//     } else {
+//       make_enemy();
+//     }
+//   }, 10000);
+
+//   timerIdMoveOrDeleteEnemy = window.setInterval(() => {
+//     if (game_state !== 'playing') {
+//       window.clearInterval(timerIdMoveOrDeleteEnemy);
+//     } else {
+//       move_or_delete_enemy();
+//     }
+//   }, 100);
+// }
+
 export let enemy_list: number[][] = [];
 
 const make_enemy = () => {

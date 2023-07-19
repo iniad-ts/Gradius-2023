@@ -21,7 +21,6 @@ const App = () => {
     const new_fighter_position = await apiClient.player.$get();
     const new_enemy_pos = await apiClient.enemy.$get();
     const new_laser_pos = await apiClient.laser.$get();
-    // console.log(new_laser_pos);
     setfight_position(new_fighter_position);
     setenemies(new_enemy_pos);
     setlaser_pos(new_laser_pos);
@@ -29,7 +28,7 @@ const App = () => {
   };
   console.log(laser_pos);
   useEffect(() => {
-    const cancellid = setInterval(fetchBord, 100);
+    const cancellid = setInterval(fetchBord, 10);
     return () => {
       clearInterval(cancellid);
     };
