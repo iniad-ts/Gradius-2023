@@ -3,6 +3,7 @@ import { gameSessionIdParser, playerIdParser, stageIdParser } from '$/service/id
 import { prismaClient } from '$/service/prismaClient';
 import type { GameSession } from '@prisma/client';
 import { z } from 'zod';
+import { playerRepository } from './playerRepository';
 
 const toGameSessionModel = (gameSession: GameSession): GameSessionModel => ({
   id: gameSessionIdParser.parse(gameSession.id),
@@ -15,6 +16,10 @@ const toGameSessionModel = (gameSession: GameSession): GameSessionModel => ({
 
 export const gameSessionRepository = {
   save: async (gameSession: GameSessionModel) => {
+    const player = await playerRepository.findById(gameSession.playerId);
+    if (!player) {
+      throw new Error('player not found');
+    }
     await prismaClient.gameSession.upsert({
       where: { id: gameSession.id },
       update: { score: gameSession.score },
@@ -24,7 +29,7 @@ export const gameSessionRepository = {
         startTime: gameSession.startTime,
         endTime: null,
         stageId: gameSession.stageId,
-        playerId: gameSession.playerId,
+        playerId: player.id,
       },
     });
     return gameSession && toGameSessionModel(gameSession);
