@@ -1,7 +1,7 @@
 //やることリスト
 //stateの切り替えに対しての切り替え
 
-export type Enemies_Info = {
+export type Enemy_Info = {
   pos: { x: number; y: number };
   speed: number;
   // kind: number;
@@ -9,14 +9,15 @@ export type Enemies_Info = {
   // hp: number;
   //scole:number;
 };
+
 //仮初期値
 const enemy_first_pos_x = 1100;
 const enemy_speed = 5;
 const enemy_radius = 20;
-export const enemies_info: Enemies_Info[] = [];
+export const enemies_info: Enemy_Info[] = [];
 
 const make_enemy = () => {
-  const new_enemy_info: Enemies_Info = {
+  const new_enemy_info: Enemy_Info = {
     pos: { x: enemy_first_pos_x, y: Math.floor(Math.random() * 690) + 1 },
     speed: enemy_speed,
     radius: enemy_radius,
@@ -26,9 +27,15 @@ const make_enemy = () => {
 };
 
 const move_or_delete_enemy = () => {
-  const i = 0;
+  let i = 0;
   for (const one_enemy_info of enemies_info) {
-    one_enemy_info.pos.x - one_enemy_info.speed < 50 && enemies_info.splice(i, 1);
+    if (one_enemy_info.pos.x - one_enemy_info.speed < 50) {
+      enemies_info.splice(i, 1);
+      return false;
+    }
+    one_enemy_info.pos.x = one_enemy_info.pos.x - one_enemy_info.speed;
+
+    i++;
   }
 };
 

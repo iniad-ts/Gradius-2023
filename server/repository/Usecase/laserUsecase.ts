@@ -55,7 +55,7 @@ const check_contact = () => {
           Math.pow(one_laser_info.pos.x - one_enemy_info.pos.x, 2) +
             Math.pow(one_laser_info.pos.y - one_enemy_info.pos.y, 2)
         ) <=
-        one_laser_info.radius + 20
+        one_laser_info.radius + one_enemy_info.radius
       ) {
         laseies_info.splice(i, 1);
         enemies_info.splice(h, 1);
