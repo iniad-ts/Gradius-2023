@@ -18,7 +18,7 @@ const laser_radious = 10;
 export const add_new_laser = {
   shot_laser: () => {
     const new_laser: Laser_Info = {
-      pos: { x: player_info.pos.x, y: player_info.pos.y - 10 },
+      pos: { x: player_info.pos.x, y: player_info.pos.y },
       speed: laser_speed,
       radius: laser_radious,
     };
