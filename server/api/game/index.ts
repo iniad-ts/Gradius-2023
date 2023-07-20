@@ -1,4 +1,4 @@
-import type { RoomModel } from "$/commonTypesWithClient/models";
+import type { RoomModel } from '$/commonTypesWithClient/models';
 
 export type Methods = {
   get: {
@@ -6,6 +6,6 @@ export type Methods = {
   };
   post: {
     reqBody: { x: number; y: number; key: string; board: number[][] };
-    resBody: RoomModel
+    resBody: RoomModel;
   };
 };
