@@ -3,7 +3,6 @@ import { userAtom } from 'src/atoms/user';
 import { Loading } from 'src/components/Loading/Loading';
 import App from 'src/konva/konva';
 import { BasicHeader } from 'src/pages/@components/BasicHeader/BasicHeader';
-import styles from './gradius.module.css';
 
 const Home = () => {
   const [user] = useAtom(userAtom);
@@ -12,11 +11,9 @@ const Home = () => {
   return (
     <>
       <BasicHeader user={user} />
-      <div className={styles.container}>
-        <App />
+      <App />
 
-        {/*f12で定義に飛んでください*/}
-      </div>
+      {/*f12で定義に飛んでください*/}
     </>
   );
 };
