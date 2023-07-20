@@ -20,12 +20,12 @@ const Game = () => {
     }
   };
   useEffect(() => {
-    const cancelId = setInterval(() => {
+    const cancelId = requestAnimationFrame(() => {
       console.log('fetch');
       fetchPosition();
       fetchbulletPosition();
-    }, 100);
-    return () => clearInterval(cancelId);
+    });
+    return () => cancelAnimationFrame(cancelId);
   });
 
   return (
