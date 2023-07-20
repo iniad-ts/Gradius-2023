@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
-import { Layer, Rect, RegularPolygon, Stage } from 'react-konva';
+import { Layer, Rect, RegularPolygon, Stage, Text } from 'react-konva';
 import { apiClient } from 'src/utils/apiClient';
 
 function App() {
@@ -53,6 +53,9 @@ function App() {
           rotation={90}
           strokeWidth={1}
         />
+      </Layer>
+      <Layer>
+        <Text text={'Score:'} x={0} y={10} fontSize={30} width={500} fill="black" />
       </Layer>
     </Stage>
   );
