@@ -8,7 +8,7 @@ export type AdditionalRequest = {
 
 const options: CookieSerializeOptions = {
   httpOnly: true,
-  secure: false,
+  secure: true,
   path: '/',
   sameSite: 'none',
 };
