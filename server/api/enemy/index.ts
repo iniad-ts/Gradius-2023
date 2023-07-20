@@ -1,5 +1,7 @@
+import type { Enemy_Info } from '$/repository/Usecase/enemyUsecase';
+
 export type Methods = {
   get: {
-    resBody: number[][];
+    resBody: Enemy_Info[];
   };
 };

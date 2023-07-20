@@ -1,5 +1,7 @@
+import type { Laser_Info } from '$/repository/Usecase/laserUsecase';
+
 export type Methods = {
   get: {
-    resBody: number[][];
+    resBody: Laser_Info[];
   };
 };

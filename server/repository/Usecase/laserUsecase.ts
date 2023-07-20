@@ -1,48 +1,64 @@
-//やることリスト
-import { enemy_list } from './enemyUsecase';
-import { player_now_position } from './playerUsecase';
+import { enemies_info } from './enemyUsecase';
+import { player_info } from './playerUsecase';
+export type Laser_Info = {
+  pos: { x: number; y: number };
+  speed: number;
+  // direction: number;
+  radius: number;
+  // kind: number;
+  // userid: UserId;
+};
+export let laseies_info: Laser_Info[] = [];
 
-//コードのレファクタリング
-export let laser_pos_list: number[][] = [];
+//仮初期値
+const laser_speed = 10;
+const laser_radious = 10;
 
-// 発射した玉の位置を玉位置リストに追加
-export const make_laser = {
-  shot_laser: async () => {
-    laser_pos_list.push([player_now_position[0], player_now_position[1] - 10]);
+//そのうち、弾の種類によって情報を変更できるようにしたい
+export const add_new_laser = {
+  shot_laser: () => {
+    const new_laser: Laser_Info = {
+      pos: { x: player_info.pos.x, y: player_info.pos.y - 10 },
+      speed: laser_speed,
+      radius: laser_radious,
+    };
+    laseies_info.push(new_laser);
   },
 };
 
 //敵の移動の関数に入れても良いかも
-
 setInterval(() => {
-  move_laser();
+  move_or_delete_laser();
   check_contact();
 }, 10);
 
-//玉進める、画面外消去
-const move_laser = () => {
-  const new_laser_pos: number[][] = [];
-  for (const one_laser_pos of laser_pos_list) {
-    one_laser_pos[0] + 2 <= 1100 && new_laser_pos.push([one_laser_pos[0] + 10, one_laser_pos[1]]);
-  }
-  laser_pos_list = new_laser_pos;
-  return laser_pos_list;
+//フロント移植予定
+const move_or_delete_laser = () => {
+  laseies_info = laseies_info.filter((one_laser_info) => {
+    one_laser_info.pos.x = one_laser_info.pos.x + 10;
+    if (one_laser_info.pos.x + 2 >= 1100) {
+      return false;
+    }
+    return true;
+  });
 };
 
-//当たり判定
+//mapで書き直す
+//フロント移植予定
 const check_contact = () => {
   let i = 0;
-  for (const one_laser_pos of laser_pos_list) {
+  for (const one_laser_info of laseies_info) {
     let h = 0;
-    for (const one_enemy_pos of enemy_list) {
+    for (const one_enemy_info of enemies_info) {
       if (
         Math.sqrt(
-          Math.pow(one_laser_pos[0] - one_enemy_pos[0], 2) +
-            Math.pow(one_laser_pos[1] - one_enemy_pos[1], 2)
-        ) <= 29
+          Math.pow(one_laser_info.pos.x - one_enemy_info.pos.x, 2) +
+            Math.pow(one_laser_info.pos.y - one_enemy_info.pos.y, 2)
+        ) <=
+        one_laser_info.radius + one_enemy_info.radius
       ) {
-        laser_pos_list.splice(i, 1);
-        enemy_list.splice(h, 1);
+        laseies_info.splice(i, 1);
+        enemies_info.splice(h, 1);
       }
       h++;
     }

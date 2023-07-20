@@ -1,4 +1,7 @@
 //ここにゲーム画面をつくる
+import type { Enemy_Info } from '$/repository/Usecase/enemyUsecase';
+import type { Laser_Info } from '$/repository/Usecase/laserUsecase';
+import { player_info } from '$/repository/Usecase/playerUsecase';
 import { useEffect, useRef, useState } from 'react';
 import { Image, Layer, Rect, Stage } from 'react-konva';
 import { Loading } from 'src/components/Loading/Loading';
@@ -8,9 +11,9 @@ import styles from './gradius_game_screen.module.css';
 // import fighter from '../../../public/images/fighter.png';
 
 const App = () => {
-  const [fight_position, setfight_position] = useState([0, 0]);
-  const [enemies, setenemies] = useState<number[][]>([]);
-  const [laser_pos, setlaser_pos] = useState<number[][]>([]);
+  const [fight_position, setfight_position] = useState<number[]>();
+  const [enemieies_info, setenemieies_info] = useState<Enemy_Info[]>([]);
+  const [laseies_info, setlaseies_info] = useState<Laser_Info[]>([]);
   const [background_pos, setbackground_pos] = useState(0);
   const [isFighterLoaded, setIsFighterLoaded] = useState(false);
   const fighterImgRef = useRef(new window.Image());
@@ -19,14 +22,15 @@ const App = () => {
 
   const fetchBord = async () => {
     const new_fighter_position = await apiClient.player.$get();
-    const new_enemy_pos = await apiClient.enemy.$get();
-    const new_laser_pos = await apiClient.laser.$get();
+    const new_enemies_info = await apiClient.enemy.$get();
+    const new_laseies_info = await apiClient.laser.$get();
+
     setfight_position(new_fighter_position);
-    setenemies(new_enemy_pos);
-    setlaser_pos(new_laser_pos);
+    setenemieies_info(new_enemies_info);
+    setlaseies_info(new_laseies_info);
     setbackground_pos((pre_background_pos) => pre_background_pos - 1);
   };
-  console.log(laser_pos);
+
   useEffect(() => {
     const cancellid = setInterval(fetchBord, 10);
     return () => {
@@ -41,7 +45,7 @@ const App = () => {
     };
   }, []);
   //localhost:3000/gradius_game_screen/
-  if (!isFighterLoaded) return <Loading visible />;
+  if (!isFighterLoaded || !fight_position) return <Loading visible />;
   return (
     <Stage
       width={1280}
@@ -62,12 +66,12 @@ const App = () => {
           image={fighterImgRef.current}
           width={fighterImgRef.current.width}
           height={fighterImgRef.current.height}
-          x={fight_position[0] - fighterImgRef.current.width / 2}
-          y={fight_position[1] - fighterImgRef.current.height / 2}
+          x={player_info.pos.x - fighterImgRef.current.width / 2}
+          y={player_info.pos.y - fighterImgRef.current.height / 2}
         />
       </Layer>
       <Layer>
-        {enemies.map((enemy, index) => (
+        {enemieies_info.map((enemy, index) => (
           <Image
             image={enemyImgRef.current}
             width={enemyImgRef.current.width}
@@ -75,19 +79,19 @@ const App = () => {
             key={index}
             id={`enemy_${index}`}
             fill="black"
-            x={enemy[0]}
-            y={enemy[1]}
+            x={enemy.pos.x}
+            y={enemy.pos.y}
           />
         ))}
-        {laser_pos.map((laser, index) => (
+        {laseies_info.map((laser, index) => (
           <Rect
             key={index}
             id={`laser_${index}`}
             fill="blue"
             width={20}
             height={20}
-            x={laser[0]}
-            y={laser[1]}
+            x={laser.pos.x}
+            y={laser.pos.y}
           />
         ))}
       </Layer>

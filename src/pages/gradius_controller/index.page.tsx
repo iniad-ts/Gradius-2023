@@ -42,18 +42,30 @@ const Home = () => {
   return (
     <div className={styles.container}>
       <div className={styles.up_down_button_board}>
-        <div className={styles.up_button} onClick={() => order_to_direction('up')}>
+        <div
+          className={styles.up_button}
+          onClick={() => order_to_direction({ move: { x: 0, y: -1 } })}
+        >
           上
         </div>
-        <div className={styles.down_button} onClick={() => order_to_direction('down')}>
+        <div
+          className={styles.down_button}
+          onClick={() => order_to_direction({ move: { x: 0, y: 1 } })}
+        >
           下
         </div>
       </div>
       <div className={styles.left_right_button_board}>
-        <div className={styles.left_button} onClick={() => order_to_direction('left')}>
+        <div
+          className={styles.left_button}
+          onClick={() => order_to_direction({ move: { x: -1, y: 0 } })}
+        >
           左
         </div>
-        <div className={styles.right_button} onClick={() => order_to_direction('right')}>
+        <div
+          className={styles.right_button}
+          onClick={() => order_to_direction({ move: { x: 1, y: 0 } })}
+        >
           右
         </div>
         <div className={styles.start_button} onClick={() => change_game_state(change_count)}>
