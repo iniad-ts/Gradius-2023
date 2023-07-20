@@ -33,8 +33,8 @@ const Home = () => {
     setBoard(game.board);
   };
   const click = async (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-    const newGame = await apiClient.create.$post();
-    console.log(newGame);
+    await apiClient.create.$post();
+    console.log(e);
   };
 
   if (!hoge) return <Loading visible />;
