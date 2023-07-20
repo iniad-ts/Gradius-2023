@@ -42,8 +42,14 @@ export const player_info: Player_Info = {
 export const move_player = {
   moveplayer: async (move_direction: MoveDirection) => {
     player_info.pos = {
-      x: player_info.pos.x + move_direction.move.x * player_info.speed,
-      y: player_info.pos.y + move_direction.move.y * player_info.speed,
+      x: Math.min(
+        Math.max(player_info.pos.x + move_direction.move.x * player_info.speed, 0),
+        1800 - 250
+      ),
+      y: Math.min(
+        Math.max(player_info.pos.y + move_direction.move.y * player_info.speed, 0),
+        780 - 75
+      ),
     };
   },
 };
