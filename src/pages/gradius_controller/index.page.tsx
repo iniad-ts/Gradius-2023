@@ -38,6 +38,7 @@ const Home = () => {
     apiClient.controller1.laser_shot.$post({ body: [1] });
   }, []);
 
+  // キーボード操作
   useEffect(() => {
     // eslint-disable-next-line complexity
     window.addEventListener('keydown', (e) => {
