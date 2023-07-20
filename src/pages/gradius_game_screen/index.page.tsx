@@ -1,7 +1,6 @@
 //ここにゲーム画面をつくる
 import type { Enemy_Info } from '$/repository/Usecase/enemyUsecase';
 import type { Laser_Info } from '$/repository/Usecase/laserUsecase';
-import { player_info } from '$/repository/Usecase/playerUsecase';
 import { useEffect, useRef, useState } from 'react';
 import { Image, Layer, Rect, Stage } from 'react-konva';
 import { Loading } from 'src/components/Loading/Loading';
@@ -48,34 +47,26 @@ const App = () => {
   if (!isFighterLoaded || !fight_position) return <Loading visible />;
   return (
     <Stage
-      width={1280}
+      width={1800}
       height={780}
       className={styles.container}
       style={{ backgroundPosition: `${background_pos}px 0` }}
     >
       <Layer>
-        <Rect
-          id="player"
-          stroke="black"
-          strokeWidth={1}
-          x={fight_position[0]}
-          y={fight_position[1]}
-        />
-
         <Image
           image={fighterImgRef.current}
-          width={fighterImgRef.current.width}
-          height={fighterImgRef.current.height}
-          x={player_info.pos.x - fighterImgRef.current.width / 2}
-          y={player_info.pos.y - fighterImgRef.current.height / 2}
+          width={250}
+          height={75}
+          x={fight_position[0]}
+          y={fight_position[1]}
         />
       </Layer>
       <Layer>
         {enemieies_info.map((enemy, index) => (
           <Image
             image={enemyImgRef.current}
-            width={enemyImgRef.current.width}
-            height={enemyImgRef.current.height}
+            width={120}
+            height={40}
             key={index}
             id={`enemy_${index}`}
             fill="black"

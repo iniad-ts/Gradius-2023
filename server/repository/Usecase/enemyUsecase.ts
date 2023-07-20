@@ -11,7 +11,7 @@ export type Enemy_Info = {
 };
 
 //仮初期値
-const enemy_first_pos_x = 1100;
+const enemy_first_pos_x = 1800;
 const enemy_speed = 5;
 const enemy_radius = 20;
 export let enemies_info: Enemy_Info[] = [];

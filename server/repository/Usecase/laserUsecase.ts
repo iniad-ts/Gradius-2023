@@ -35,8 +35,8 @@ setInterval(() => {
 //フロント移植予定
 const move_or_delete_laser = () => {
   laseies_info = laseies_info.filter((one_laser_info) => {
-    one_laser_info.pos.x = one_laser_info.pos.x + 10;
-    if (one_laser_info.pos.x + 2 >= 1100) {
+    one_laser_info.pos.x = one_laser_info.pos.x + laser_speed;
+    if (one_laser_info.pos.x + 2 >= 1800) {
       return false;
     }
     return true;
