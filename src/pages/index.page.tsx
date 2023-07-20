@@ -4,7 +4,6 @@ import { Loading } from 'src/components/Loading/Loading';
 import { apiClient } from 'src/utils/apiClient';
 import styles from './index.module.css';
 const Home = () => {
-  //黒い枠の中をクリックし、矢印ボタンを押すと、赤い点が動くよー
   const [playerX, setPlayerX] = useState(5);
   const [playerY, setPlayerY] = useState(0);
   const [board, setBoard] = useState([
