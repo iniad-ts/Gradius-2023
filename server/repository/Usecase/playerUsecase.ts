@@ -1,5 +1,7 @@
 //これが必要かは微妙
-export type MoveDirection = 'up' | 'down' | 'left' | 'right';
+export type MoveDirection = {
+  move: { x: 1 | -1 | 0; y: 1 | -1 | 0 };
+};
 
 //stateは、フロントの処理をserverに移動する必要在り
 //そもそも処理自体の修正が必要
@@ -37,23 +39,11 @@ export const player_info: Player_Info = {
   scole: player_scole,
 };
 
-export const player_now_position: number[] = [100, 300];
-
-//配列を直で渡せばこの処理自体いらない,要修正
-export const playerUsecase = {
-  moveplayer: async (movedirection: MoveDirection) => {
-    if (movedirection === 'up') {
-      player_info.pos.y = player_info.pos.y - player_info.speed;
-      return;
-    } else if (movedirection === 'down') {
-      player_info.pos.y = player_info.pos.y + player_info.speed;
-      return;
-    } else if (movedirection === 'left') {
-      player_info.pos.x = player_info.pos.x - player_info.speed;
-      return;
-    } else if (movedirection === 'right') {
-      player_info.pos.x = player_info.pos.x + player_info.speed;
-      return;
-    }
+export const move_player = {
+  moveplayer: async (move_direction: MoveDirection) => {
+    player_info.pos = {
+      x: player_info.pos.x + move_direction.move.x * player_info.speed,
+      y: player_info.pos.y + move_direction.move.y * player_info.speed,
+    };
   },
 };
