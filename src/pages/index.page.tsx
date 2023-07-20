@@ -3,6 +3,7 @@ import { Layer, Line, Stage } from 'react-konva';
 import { Loading } from 'src/components/Loading/Loading';
 import { apiClient } from 'src/utils/apiClient';
 import styles from './index.module.css';
+//a
 const Home = () => {
   const [playerX, setPlayerX] = useState(5);
   const [playerY, setPlayerY] = useState(0);
