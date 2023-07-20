@@ -17,7 +17,6 @@ const initBoard = () => [
 ];
 
 export const gameUsecase = {
-  // eslint-disable-next-line complexity
   create: async (userId: string) => {
     const newRoom: RoomModel = {
       Id: userId,
