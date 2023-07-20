@@ -19,6 +19,4 @@ export type RoomModel = {
   x: number;
   y: number;
   board: number[][];
-  tekix: number;
-  tekiy: number;
 };
