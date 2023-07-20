@@ -1,13 +1,11 @@
-import type { UserId } from '$/commonTypesWithClient/branded';
+import type { MoveInput } from '$/Usecase/playerUsecaseforDB';
 import type { PlayerModel } from '$/commonTypesWithClient/models';
+
 export type Methods = {
-  get: {
-    resBody: PlayerModel | null;
-  };
   post: {
     reqBody: {
-      userid: UserId;
-      username: string;
+      player: PlayerModel;
+      MoveInput: MoveInput;
     };
     resBody: PlayerModel;
   };
