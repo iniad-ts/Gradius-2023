@@ -11,12 +11,12 @@ export const make_laser = {
 
 setInterval(() => {
   moveGun();
-}, 25);
+}, 5);
 
 const moveGun = () => {
   const newGunPosition: number[][] = [];
   for (const one_laser_pos of gunPosition) {
-    one_laser_pos[0] + 1 <= 1100 && newGunPosition.push([one_laser_pos[0] + 1, one_laser_pos[1]]);
+    one_laser_pos[0] + 1 <= 1500 && newGunPosition.push([one_laser_pos[0] + 1, one_laser_pos[1]]);
   }
   gunPosition = newGunPosition;
   return gunPosition;
