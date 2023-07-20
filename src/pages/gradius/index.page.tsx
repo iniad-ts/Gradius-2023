@@ -1,21 +1,53 @@
 //testCode//ここに書くのはyosuliです。
 
+import type { EventModel, GameModel } from '$/commonTypesWithClient/models';
 import { useState } from 'react';
 import { apiClient } from 'src/utils/apiClient';
 
 const Home = () => {
-  const [hoge, setHoge] = useState(1);
+  const [hoge, setHoge] = useState<{ games: GameModel[]; event: EventModel }>();
+
+  const fetchGradius = async () => {
+    const newHoge = (await apiClient.gradius.post()).body;
+    console.log(newHoge);
+    setHoge(newHoge);
+  };
+  // useEffect(() => {
+  //   const cancelId = setInterval(fetchGradius, 100);
+  //   return () => {
+  //     clearInterval(cancelId);
+  //   };
+  // });
   const onclick = async () => {
-    await apiClient.gradius.post({ body: 'myPlane' });
     await apiClient.gradius.game.post({ body: 1 });
-    await console.log((await apiClient.gradius.post({ body: 'myPlane' })).body);
-    setHoge(3 - hoge);
+    fetchGradius();
+  };
+
+  const onR = () => {
+    document.getElementsByTagName('html')[0].oncontextmenu = function () {
+      return false;
+    };
+    //
   };
   return (
     <div
-      style={{ width: '100vw', height: '100vh', backgroundColor: hoge === 1 ? '#800' : '#088' }}
+      style={{
+        width: '100vw',
+        height: '100vh',
+        backgroundColor:
+          hoge === null || hoge === undefined
+            ? '#080'
+            : hoge.games[0].xyz[1] % 2 === -1
+            ? '#800'
+            : '#088',
+        textAlign: 'center',
+      }}
+      key={'a'}
       onClick={() => onclick()}
-    />
+      onContextMenu={() => onR()}
+    >
+      {hoge?.games[0].hp}
+    </div>
   );
 };
 
