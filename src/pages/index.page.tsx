@@ -3,9 +3,8 @@ import { Layer, Line, Stage } from 'react-konva';
 import { Loading } from 'src/components/Loading/Loading';
 import { apiClient } from 'src/utils/apiClient';
 import styles from './index.module.css';
-
+//a
 const Home = () => {
-  //黒い枠の中をクリックし、矢印ボタンを押すと、赤い点が動くよー
   const [playerX, setPlayerX] = useState(5);
   const [playerY, setPlayerY] = useState(0);
   const [board, setBoard] = useState([
@@ -42,12 +41,12 @@ const Home = () => {
   const hoge = true;
   // const [displayShot, setDisplayShot] = useState(false);
   const keydown = async (e: React.KeyboardEvent<HTMLDivElement>) => {
-    console.log(e);
-    console.log(e.code);
+    e.preventDefault();
     const game = await apiClient.game.$post({
       body: { x: playerX, y: playerY, key: e.code, board },
     });
-
+    console.log(game.x);
+    console.log(game.y);
     setPlayerX(game.x);
     setPlayerY(game.y);
     setBoard(game.board);
@@ -56,19 +55,12 @@ const Home = () => {
     }
     console.log(game.board);
   };
-
   const click = async (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    await apiClient.create.$post();
     console.log(e);
   };
-  // const keyDownHandler = (e: React.KeyboardEvent<HTMLDivElement>) => {
-  //   const key = e.code;
-  //   if (key === 'keyZ') {
-  //     setShot(true);
-  //   }
-  // };
 
   if (!hoge) return <Loading visible />;
-
   return (
     <>
       <div
