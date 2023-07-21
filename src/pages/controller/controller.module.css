@@ -12,13 +12,16 @@
   padding-left: 5%;
   display: flex;
   align-items: center;
-  height: 80vh;
+  height: 75vh;
   width: 100vw;
   /* justify-content: center; */
   flex-wrap: wrap;
   /* gap: 5vh; */
   background-color: rgb(235, 221, 184);
   margin-top: 10%;
+  margin-left: 2%;
+  margin-right: 2%;
+  margin-bottom: 10%;
   border-radius: 50px;
 }
 .items {
@@ -106,4 +109,11 @@
   text-align: center;
   font-size: 5vh;
   margin-bottom: 10%;
+}
+
+.footer {
+  /* フォント色 */
+  padding-top: 50%;
+  color: rgb(139, 29, 29);
+  font-size: 10%;
 }

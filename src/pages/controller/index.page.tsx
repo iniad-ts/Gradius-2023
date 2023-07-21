@@ -67,7 +67,7 @@ const Home = () => {
             <div className={styles.select} onClick={push} />
           </div>
         </div>
-        <div>a</div>
+        <div className={styles.footer}>a</div>
       </div>
     </>
   );
