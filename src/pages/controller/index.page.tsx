@@ -40,13 +40,23 @@ const Home = () => {
           {/* 十字キー */}
           <div className={styles.items}>
             <div />
-            <div className={styles.switch} onClick={up} />
+            <div className={`${styles.switch} ${styles.up}`} onClick={up}>
+              <div className={styles.upArrow} />
+            </div>
             <div />
-            <div className={styles.switch} onClick={left} />
-            <div className={styles.switch} />
-            <div className={styles.switch} onClick={right} />
+            <div className={`${styles.switch} ${styles.left}`} onClick={left}>
+              <div className={styles.leftArrow} />
+            </div>
+            <div className={styles.switch}>
+              <div className={styles.center} />
+            </div>
+            <div className={`${styles.switch} ${styles.right}`} onClick={right}>
+              <div className={styles.rightArrow} />
+            </div>
             <div />
-            <div className={styles.switch} onClick={down} />
+            <div className={`${styles.switch} ${styles.down}`} onClick={down}>
+              <div className={styles.downArrow} />
+            </div>
             <div />
           </div>
           {/* selectボタン */}
