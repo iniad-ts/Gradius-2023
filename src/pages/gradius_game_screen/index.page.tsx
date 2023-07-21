@@ -17,7 +17,7 @@ const App = () => {
   const [isFighterLoaded, setIsFighterLoaded] = useState(false);
   const fighterImgRef = useRef(new window.Image());
   const enemyImgRef = useRef(new window.Image());
-  enemyImgRef.current.src = '/images/GAMIRASU.jpg';
+  enemyImgRef.current.src = '/images/enemy_spacecraft.png';
 
   const fetchBord = async () => {
     const new_fighter_position = await apiClient.player.$get();
@@ -38,7 +38,7 @@ const App = () => {
   }, []);
 
   useEffect(() => {
-    fighterImgRef.current.src = '/images/YAMATO.jpg'; // 画像ファイルの相対パスを指定
+    fighterImgRef.current.src = '/images/space_uchusen_bokan.png'; // 画像ファイルの相対パスを指定
     fighterImgRef.current.onload = () => {
       setIsFighterLoaded(true);
     };
@@ -47,29 +47,28 @@ const App = () => {
   if (!isFighterLoaded || !fight_position) return <Loading visible />;
   return (
     <Stage
-      width={1800}
-      height={780}
+      width={1200}
+      height={800}
       className={styles.container}
       style={{ backgroundPosition: `${background_pos}px 0` }}
     >
       <Layer>
         <Image
           image={fighterImgRef.current}
-          width={250}
-          height={75}
-          x={fight_position[0]}
-          y={fight_position[1]}
+          width={fighterImgRef.current.width}
+          height={fighterImgRef.current.height}
+          x={fight_position[0] - fighterImgRef.current.width / 2}
+          y={fight_position[1] - fighterImgRef.current.height / 2}
         />
       </Layer>
       <Layer>
         {enemieies_info.map((enemy, index) => (
           <Image
             image={enemyImgRef.current}
-            width={120}
-            height={40}
+            width={50}
+            height={50}
             key={index}
             id={`enemy_${index}`}
-            fill="black"
             x={enemy.pos.x}
             y={enemy.pos.y}
           />
