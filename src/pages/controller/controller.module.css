@@ -4,20 +4,22 @@
   align-items: center;
   justify-content: center;
   flex-wrap: wrap;
-  height: 100vh;
-  min-height: 100vh;
-  padding: 0 0.5rem;
-  background-color: white;
+  background-color: rgb(139, 29, 29);
+  /* padding-top: 10%; */
+  height: auto;
 }
 .board {
+  padding-left: 5%;
   display: flex;
   align-items: center;
-  height: 100vh;
+  height: 80vh;
   width: 100vw;
   /* justify-content: center; */
   flex-wrap: wrap;
   /* gap: 5vh; */
-  background-color: #c66;
+  background-color: rgb(235, 221, 184);
+  margin-top: 10%;
+  border-radius: 50px;
 }
 .items {
   display: grid; /*gridについては調べてください*/
@@ -85,8 +87,23 @@
 
 .select {
   border-radius: 50%;
-  background-color: #77f;
-  width: 10vh;
-  height: 10vh;
-  border: 4px solid black;
+  background-color: #757575;
+  width: 20vh;
+  height: 20vh;
+}
+
+.buttonA {
+  padding-left: 30%;
+}
+
+.buttonB {
+  padding-left: 5%;
+}
+
+.selectText {
+  background-color: #757575;
+  border-radius: 10px;
+  text-align: center;
+  font-size: 5vh;
+  margin-bottom: 10%;
 }

@@ -1,7 +1,6 @@
 import { useAtom } from 'jotai';
 import { userAtom } from 'src/atoms/user';
 import { Loading } from 'src/components/Loading/Loading';
-import { BasicHeader } from 'src/pages/@components/BasicHeader/BasicHeader';
 import { apiClient } from 'src/utils/apiClient';
 import styles from './controller.module.css';
 
@@ -34,7 +33,6 @@ const Home = () => {
 
   return (
     <>
-      <BasicHeader user={user} />
       <div className={styles.container}>
         <div className={styles.board}>
           {/* 十字キー */}
@@ -60,11 +58,16 @@ const Home = () => {
             <div />
           </div>
           {/* selectボタン */}
-          <div className={styles.select}>select</div>
-          <div className={styles.select} onClick={push}>
-            push
+          <div className={styles.buttonA}>
+            <div className={styles.selectText}>SELECT</div>
+            <div className={styles.select} />
+          </div>
+          <div className={styles.buttonB}>
+            <div className={styles.selectText}>SHOOT</div>
+            <div className={styles.select} onClick={push} />
           </div>
         </div>
+        <div>a</div>
       </div>
     </>
   );
