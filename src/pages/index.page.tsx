@@ -20,7 +20,26 @@ const Home = () => {
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
   ]);
+  const [isFiring, setIsFiring] = useState(false);
+  const [shotX, setShotX] = useState(0);
+  const [shotY, setShotY] = useState(0);
+  const fireShot = () => {
+    if (!isFiring) {
+      setShotX(playerX);
+      setShotY(playerY);
+      setIsFiring(true);
+
+      const shotInterval = setInterval(() => {
+        setShotX((preX) => preX + 5);
+      }, 50);
+      setTimeout(() => {
+        clearInterval(shotInterval);
+        setIsFiring(false);
+      }, 300);
+    }
+  };
   const hoge = true;
+  // const [displayShot, setDisplayShot] = useState(false);
   const keydown = async (e: React.KeyboardEvent<HTMLDivElement>) => {
     e.preventDefault();
     const game = await apiClient.game.$post({
@@ -31,6 +50,10 @@ const Home = () => {
     setPlayerX(game.x);
     setPlayerY(game.y);
     setBoard(game.board);
+    if (e.code === 'KeyZ') {
+      fireShot();
+    }
+    console.log(game.board);
   };
   const click = async (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     await apiClient.create.$post();
@@ -49,7 +72,7 @@ const Home = () => {
       >
         <div id="key">X:{playerX}</div>
         <div id="key">Y:{playerY}</div>
-        <div id="key" />
+        <div id="key">shot:{isFiring ? 'Fired' : 'Not fired'}</div>
       </div>
       <div
         id="player"
@@ -64,7 +87,6 @@ const Home = () => {
       />
       <div className={styles.board}>
         {board.map((row, y) =>
-          // eslint-disable-next-line complexity
           row.map((color, x) => (
             <div className={styles.cell} key={`${x}-${y}`} style={{ position: 'relative' }}>
               {color !== 0 && (
@@ -128,6 +150,20 @@ const Home = () => {
                   </Layer>
                 </Stage>
               )}
+              {isFiring && color !== 0 && (
+                <div
+                  id="shot"
+                  style={{
+                    position: 'absolute',
+                    left: `${shotX}px`,
+                    top: `${shotY + 8}px`,
+                    backgroundColor: 'blue',
+                    width: '20px',
+                    height: '10px',
+                    borderRadius: '50%',
+                  }}
+                />
+              )}
             </div>
           ))
         )}
@@ -136,14 +172,4 @@ const Home = () => {
   );
 };
 
-// Rectで書いたものをメモ用に残してます(すぐ消します)
-/*<Rect
-stroke="black"
-fill="white"
-strokeWidth={1}
-x={0}
-y={10}
-width={20}
-height={10}
-/>*/
 export default Home;
