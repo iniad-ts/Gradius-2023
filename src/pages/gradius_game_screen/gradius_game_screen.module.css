@@ -1,5 +1,5 @@
 .container {
-  width: 1280;
-  height: 720;
-  background: url('../../../public/images/background-image.jpg');
+  background: url('../../../public/images/background-image-combined.png');
+  background-size: cover;
+  overflow-x: visible;
 }

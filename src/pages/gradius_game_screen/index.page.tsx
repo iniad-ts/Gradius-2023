@@ -15,7 +15,7 @@ const App = () => {
   const [isFighterLoaded, setIsFighterLoaded] = useState(false);
   const fighterImgRef = useRef(new window.Image());
   const enemyImgRef = useRef(new window.Image());
-  enemyImgRef.current.src = '/images/GAMIRASU.jpg';
+  enemyImgRef.current.src = '/images/enemy_spacecraft.png';
 
   const fetchBord = async () => {
     const new_fighter_position = await apiClient.player.$get();
@@ -35,7 +35,7 @@ const App = () => {
   }, []);
 
   useEffect(() => {
-    fighterImgRef.current.src = '/images/YAMATO.jpg'; // 画像ファイルの相対パスを指定
+    fighterImgRef.current.src = '/images/space_uchusen_bokan.png'; // 画像ファイルの相対パスを指定
     fighterImgRef.current.onload = () => {
       setIsFighterLoaded(true);
     };
@@ -44,8 +44,8 @@ const App = () => {
   if (!isFighterLoaded) return <Loading visible />;
   return (
     <Stage
-      width={1280}
-      height={780}
+      width={1200}
+      height={800}
       className={styles.container}
       style={{ backgroundPosition: `${background_pos}px 0` }}
     >
@@ -57,7 +57,6 @@ const App = () => {
           x={fight_position[0]}
           y={fight_position[1]}
         />
-
         <Image
           image={fighterImgRef.current}
           width={fighterImgRef.current.width}
@@ -74,11 +73,12 @@ const App = () => {
             height={enemyImgRef.current.height}
             key={index}
             id={`enemy_${index}`}
-            fill="black"
             x={enemy[0]}
             y={enemy[1]}
           />
         ))}
+      </Layer>
+      <Layer>
         {laser_pos.map((laser, index) => (
           <Rect
             key={index}
