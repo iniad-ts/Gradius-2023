@@ -1,6 +1,8 @@
+import { randomUUID } from 'crypto';
 import { playerUseCase, type Pos } from './playerUseCase';
 
 export type Bullet = {
+  id: string;
   position: Pos;
   radius: number;
 };
@@ -17,6 +19,7 @@ export const bulletUseCase = {
   getBullets: bullets,
   addBullet: (bul: { radius: number }): Bullet => {
     const bullet: Bullet = {
+      id: randomUUID(),
       position: {
         x: playerUseCase.getPosition.x,
         y: playerUseCase.getPosition.y,
