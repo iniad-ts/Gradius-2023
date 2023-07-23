@@ -5,7 +5,7 @@ export let gunPosition: number[][] = [[]];
 
 export const make_laser = {
   shot: async () => {
-    gunPosition.push([position[0] + 50, position[1] - 5]);
+    gunPosition.push([position[0] + 150, position[1] + 35]);
   },
 };
 
