@@ -18,11 +18,13 @@ https://nodejs.org/ja/ の左ボタン、LTS をダウンロードしてイン�
 $ npm i
 $ npm i --prefix server
 ```
-ここらへんってこと？byみがわり
+
+ここらへんってこと？by みがわり
+新 PC テストです( ˘ω˘ )
 
 ### 環境変数ファイルの作成
 
-```sh
+````sh
 $ cp .env.example .env
 $ cp server/.env.example server/.env
 $ cp docker/dev/.env.example docker/dev/.env
@@ -33,7 +35,7 @@ $ cp server/prisma/.env.example server/prisma/.env
 
 ```sh
 $ docker-compose up -d
-```
+````
 
 ### 開発サーバー起動
 
