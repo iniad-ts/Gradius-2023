@@ -32,7 +32,7 @@ export const bulletsRepository = {
       where: { id },
     });
 
-    return prismaBullet && toBulletModel(prismaBullet);
+    return prismaBullet !== null ? toBulletModel(prismaBullet) : null;
   },
   save: async (bullet: BulletModel) => {
     await prismaClient.bullet.upsert({

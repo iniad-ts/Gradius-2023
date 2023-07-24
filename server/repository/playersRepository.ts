@@ -30,7 +30,7 @@ export const playersRepository = {
       where: { id },
     });
 
-    return prismaPlayer && toPlayerModel(prismaPlayer);
+    return prismaPlayer !== null ? toPlayerModel(prismaPlayer) : null;
   },
   save: async (player: PlayerModel) => {
     await prismaClient.player.upsert({
