@@ -1,0 +1,68 @@
+.box-container {
+  display: flex;
+  position: relative;
+  top: 350px;
+  margin-left: 10%;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-content: center;
+  height: 400px;
+  width: 400px;
+  position: relative;
+}
+
+.box {
+  width: 33.3%;
+  height: 33.3%;
+}
+
+.box:nth-child(2) {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translate(-50%, 0);
+  background-color: black;
+}
+
+.box:nth-child(3) {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  transform: translate(0, -50%);
+  background-color: black;
+}
+
+.box:nth-child(1) {
+  position: absolute;
+  width: 60%;
+  height: 60%;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: white;
+}
+
+.box:nth-child(4) {
+  position: absolute;
+  top: 50%;
+  right: 0;
+  transform: translate(0, -50%);
+  background-color: black;
+}
+
+.box:nth-child(5) {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translate(-50%, 0);
+  background-color: black;
+}
+
+.circle {
+  display: flex;
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  background-color: red;
+  position: absolute;
+}
