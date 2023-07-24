@@ -13,3 +13,53 @@ model Task {
   done      Boolean
   createdAt DateTime
 }
+
+model Game {
+  id        String   @id
+  createdAt DateTime
+  updatedAt DateTime
+  players   Player[]
+  bullets   Bullet[]
+  enemies   Enemy[]
+}
+
+model Player {
+  id        String   @id
+  name      String
+  createdAt DateTime
+  updatedAt DateTime
+  game      Game     @relation(fields: [gameId], references: [id])
+  gameId    String
+  posX      Int
+  posY      Int
+  health    Int
+  score     Int
+}
+
+model Bullet {
+  id          String   @id
+  createdAt   DateTime
+  updatedAt   DateTime
+  game        Game     @relation(fields: [gameId], references: [id])
+  gameId      String
+  direction   Int
+  crearedPosX Int
+  crearedPosY Int
+  speed       Int
+  exists      Boolean
+  playerId    String?
+}
+
+model Enemy {
+  id        String   @id
+  createdAt DateTime
+  updatedAt DateTime
+  game      Game     @relation(fields: [gameId], references: [id])
+  gameId    String
+  posX      Int
+  posY      Int
+  health    Int
+  speed     Int
+  direction Int
+  type      Int
+}
