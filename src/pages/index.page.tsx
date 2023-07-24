@@ -1,5 +1,6 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useAtom } from 'jotai';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Layer, Rect, Stage } from 'react-konva';
 import { Loading } from 'src/components/Loading/Loading';
 import { apiClient } from 'src/utils/apiClient';
@@ -8,67 +9,44 @@ import { userAtom } from '../atoms/user';
 const Home = () => {
   const [user] = useAtom(userAtom);
   const [nowkey, setNowkey] = useState([0, 0]);
-  const [board, setBoard] = useState([
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-  ]);
+  const [enemyY, setEnemyY] = useState(300);
 
   const keyDownHandler = async (e: React.KeyboardEvent<HTMLDivElement>) => {
-    const key = e.code;
+    const a = await apiClient.control.post({
+      body: { x: nowkey[0], y: nowkey[1], KeyEvent: e.code },
+    });
+    setNowkey([a.body.x, a.body.y]);
+  };
 
-    if (key === 'ArrowUp') {
-      const a = await apiClient.control.post({ body: { x: nowkey[0], y: nowkey[1], a: 1 } });
-      setNowkey([a.body.x, a.body.y]);
-      const p = board.map((row) => row.map(() => 0));
-      p[a.body.x][a.body.y] = 1;
-      setBoard(p);
-      console.table(p);
-    }
-
-    if (key === 'ArrowDown') {
-      const a = await apiClient.control.post({ body: { x: nowkey[0], y: nowkey[1], a: 2 } });
-      setNowkey([a.body.x, a.body.y]);
-      const p = board.map((row) => row.map(() => 0));
-      p[a.body.x][a.body.y] = 1;
-      setBoard(p);
-      console.table(p);
-    }
-
-    if (key === 'ArrowLeft') {
-      const a = await apiClient.control.post({ body: { x: nowkey[0], y: nowkey[1], a: 0 } });
-      setNowkey([a.body.x, a.body.y]);
-      const p = board.map((row) => row.map(() => 0));
-      p[a.body.x][a.body.y] = 1;
-      setBoard(p);
-      console.table(p);
-    }
-
-    if (key === 'ArrowRight') {
-      const a = await apiClient.control.post({ body: { x: nowkey[0], y: nowkey[1], a: 3 } });
-      setNowkey([a.body.x, a.body.y]);
-      const p = board.map((row) => row.map(() => 0));
-      p[a.body.x][a.body.y] = 1;
-      setBoard(p);
-      console.table(p);
+  const updateEnemyY = async () => {
+    const state = await apiClient.enemy.post({ body: { y: enemyY } });
+    const got = Number(state.body.y);
+    if (got !== enemyY) {
+      setEnemyY(got);
     }
   };
 
-  if (!user) return <Loading visible />;
+  useEffect(() => {
+    const cancelid = setInterval(updateEnemyY, 50);
 
+    return () => {
+      clearInterval(cancelid);
+    };
+  }, [enemyY]);
+
+  if (!user) return <Loading visible />;
   return (
     <>
-      <div tabIndex={0} onKeyDown={keyDownHandler} style={{ border: 'solid' }}>
-        <Stage width={1920} height={1080}>
+      <p>gradius{nowkey}</p>
+      <div
+        tabIndex={0}
+        onKeyDown={keyDownHandler}
+        style={{ display: 'inline-block', border: 'solid' }}
+      >
+        <Stage width={1280} height={720}>
           <Layer>
-            <Rect fill="white" width={1920} height={1080} />
-            <Rect fill="red" x={120 * nowkey[1]} y={120 * nowkey[0]} width={120} height={120} />
+            <Rect x={nowkey[1]} y={nowkey[0]} width={50} height={40} fill="blue" />
+            <Rect x={1100} y={enemyY} width={50} height={40} fill="red" />
           </Layer>
         </Stage>
       </div>

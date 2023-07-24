@@ -6,6 +6,6 @@
     "prisma.prisma",
     "stylelint.vscode-stylelint",
     "styled-components.vscode-styled-components",
-    "yoavbls.pretty-ts-errors"
+    "yoavbls.pretty-ts-errors",
   ]
 }
