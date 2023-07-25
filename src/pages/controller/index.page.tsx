@@ -10,7 +10,7 @@ const Controller = () => {
   }, []);
 
   const clickShootButton = () => {
-    const res = apiClient.player.bullet.$post();
+    const res = apiClient.bullet.$post();
     console.log(res);
   };
 
