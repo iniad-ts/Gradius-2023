@@ -16,6 +16,7 @@ const toBulletModel = (prismaBullet: Bullet): BulletModel => ({
     y: prismaBullet.crearedPosY,
   },
   speed: z.number().min(0).parse(prismaBullet.speed),
+  radius: z.number().min(0).parse(prismaBullet.radius),
   exists: prismaBullet.exists,
   gameId: gameIdParser.parse(prismaBullet.gameId),
   playerId: UserIdParser.parse(prismaBullet.playerId),
@@ -23,7 +24,9 @@ const toBulletModel = (prismaBullet: Bullet): BulletModel => ({
 
 export const bulletsRepository = {
   getAll: async (): Promise<BulletModel[] | null> => {
-    const prismaBullets = await prismaClient.bullet.findMany();
+    const prismaBullets = await prismaClient.bullet.findMany({
+      where: { exists: true },
+    });
 
     return prismaBullets.map(toBulletModel);
   },
@@ -47,6 +50,7 @@ export const bulletsRepository = {
         crearedPosY: bullet.createdPosition.y,
         direction: bullet.direction,
         speed: bullet.speed,
+        radius: bullet.radius,
         exists: bullet.exists,
         createdAt: new Date(bullet.createdAt),
         updatedAt: new Date(bullet.updateAt),

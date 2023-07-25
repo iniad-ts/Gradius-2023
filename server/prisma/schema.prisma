@@ -32,6 +32,8 @@ model Player {
   gameId    String
   posX      Int
   posY      Int
+  speed     Int
+  radius    Int
   health    Int
   score     Int
 }
@@ -46,6 +48,7 @@ model Bullet {
   crearedPosX Int
   crearedPosY Int
   speed       Int
+  radius      Int
   exists      Boolean
   playerId    String?
 }
@@ -60,6 +63,7 @@ model Enemy {
   posY      Int
   health    Int
   speed     Int
+  radius    Int
   direction Int
   type      Int
 }
