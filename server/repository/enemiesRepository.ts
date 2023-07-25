@@ -5,7 +5,7 @@ import type { Enemy } from '@prisma/client';
 import { z } from 'zod';
 import type { EnemyId } from './../commonTypesWithClient/branded';
 
-const toEnemyRepository = (prismaEnemy: Enemy): EnemyModel => ({
+const toEnemyModel = (prismaEnemy: Enemy): EnemyModel => ({
   id: enemyIdParser.parse(prismaEnemy.id),
   createdAt: prismaEnemy.createdAt.getTime(),
   updateAt: prismaEnemy.updatedAt.getTime(),
@@ -23,16 +23,21 @@ const toEnemyRepository = (prismaEnemy: Enemy): EnemyModel => ({
 
 export const enemiesRepository = {
   getAll: async (): Promise<EnemyModel[] | null> => {
-    const prismaEnemies = await prismaClient.enemy.findMany();
+    try {
+      const prismaEnemies = await prismaClient.enemy.findMany();
 
-    return prismaEnemies.map(toEnemyRepository);
+      return prismaEnemies.map(toEnemyModel);
+    } catch (error) {
+      console.log(error);
+      return null;
+    }
   },
   getUnique: async (id: EnemyId): Promise<EnemyModel | null> => {
     const prismaEnemy = await prismaClient.enemy.findUnique({
       where: { id },
     });
 
-    return prismaEnemy !== null ? toEnemyRepository(prismaEnemy) : null;
+    return prismaEnemy !== null ? toEnemyModel(prismaEnemy) : null;
   },
   save: async (enemy: EnemyModel) => {
     await prismaClient.enemy.upsert({
@@ -60,6 +65,11 @@ export const enemiesRepository = {
     });
   },
   delete: async (id: EnemyId) => {
+    console.log(id);
+    const enemy = await prismaClient.enemy.findUnique({
+      where: { id },
+    });
+    if (enemy === null) return;
     await prismaClient.enemy.delete({
       where: { id },
     });
