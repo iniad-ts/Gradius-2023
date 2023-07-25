@@ -23,9 +23,14 @@ const toEnemyModel = (prismaEnemy: Enemy): EnemyModel => ({
 
 export const enemiesRepository = {
   getAll: async (): Promise<EnemyModel[] | null> => {
-    const prismaEnemies = await prismaClient.enemy.findMany();
+    try {
+      const prismaEnemies = await prismaClient.enemy.findMany();
 
-    return prismaEnemies.map(toEnemyModel);
+      return prismaEnemies.map(toEnemyModel);
+    } catch (error) {
+      console.log(error);
+      return null;
+    }
   },
   getUnique: async (id: EnemyId): Promise<EnemyModel | null> => {
     const prismaEnemy = await prismaClient.enemy.findUnique({
