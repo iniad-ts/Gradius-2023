@@ -10,7 +10,7 @@ const Controller = () => {
   }, []);
 
   const clickShootButton = () => {
-    const res = apiClient.player.bullet.$post({ body: { radius: 6 } });
+    const res = apiClient.player.bullet.$post();
     console.log(res);
   };
 
