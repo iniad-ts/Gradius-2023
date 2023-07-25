@@ -50,7 +50,7 @@ const Game = () => {
               width={player.radius * 2}
               height={player.radius * 2}
               rotation={90}
-              x={player.position.x - player.radius}
+              x={player.position.x + player.radius}
               y={player.position.y - player.radius}
               key={player.id}
             />
