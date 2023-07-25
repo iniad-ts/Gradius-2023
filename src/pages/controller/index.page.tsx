@@ -1,5 +1,5 @@
 import type { MoveTo } from '$/usecase/playerUseCase';
-import { useCallback, useEffect } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { apiClient } from 'src/utils/apiClient';
 import styles from './controller.module.css';
 
@@ -8,31 +8,66 @@ const Controller = () => {
     const res = apiClient.player.$post({ body: moveTo });
     console.log(res);
   }, []);
+  const [upPush, setUpPush] = useState(false);
+  const [downPush, setDownPush] = useState(false);
+  const [leftPush, setLeftPush] = useState(false);
+  const [rightPush, setRightPush] = useState(false);
 
   const clickShootButton = () => {
     const res = apiClient.bullet.$post();
     console.log(res);
   };
 
+  const move = useCallback(() => {
+    if (upPush) {
+      clickMoveButton({ toX: 0, toY: -1 });
+    }
+    if (downPush) {
+      clickMoveButton({ toX: 0, toY: 1 });
+    }
+    if (leftPush) {
+      clickMoveButton({ toX: -1, toY: 0 });
+    }
+    if (rightPush) {
+      clickMoveButton({ toX: 1, toY: 0 });
+    }
+  }, [clickMoveButton, upPush, downPush, leftPush, rightPush]);
+
   useEffect(() => {
     window.addEventListener('keydown', (e) => {
       switch (e.key) {
         case 'ArrowUp':
-          clickMoveButton({ toX: 0, toY: -1 });
+          setUpPush(true);
           break;
         case 'ArrowDown':
-          clickMoveButton({ toX: 0, toY: 1 });
+          setDownPush(true);
           break;
         case 'ArrowLeft':
-          clickMoveButton({ toX: -1, toY: 0 });
+          setLeftPush(true);
           break;
         case 'ArrowRight':
-          clickMoveButton({ toX: 1, toY: 0 });
+          setRightPush(true);
           break;
       }
     });
-  }, [clickMoveButton]);
-
+    window.addEventListener('keyup', (e) => {
+      switch (e.key) {
+        case 'ArrowUp':
+          setUpPush(false);
+          break;
+        case 'ArrowDown':
+          setDownPush(false);
+          break;
+        case 'ArrowLeft':
+          setLeftPush(false);
+          break;
+        case 'ArrowRight':
+          setRightPush(false);
+          break;
+      }
+    });
+    move();
+  }, [upPush, downPush, leftPush, rightPush, move]);
   return (
     <div className={styles.container}>
       <div className={styles.controller}>
