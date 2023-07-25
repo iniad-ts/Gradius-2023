@@ -24,13 +24,18 @@ const toBulletModel = (prismaBullet: Bullet): BulletModel => ({
 
 export const bulletsRepository = {
   getAll: async (): Promise<BulletModel[] | null> => {
-    const prismaBullets = await prismaClient.bullet.findMany({
-      where: {
-        exists: true,
-      },
-    });
+    try {
+      const prismaBullets = await prismaClient.bullet.findMany({
+        where: {
+          exists: true,
+        },
+      });
 
-    return prismaBullets.map(toBulletModel);
+      return prismaBullets.map(toBulletModel);
+    } catch (error) {
+      console.log(error);
+      return null;
+    }
   },
   getUnique: async (id: string): Promise<BulletModel | null> => {
     const prismaBullet = await prismaClient.bullet.findUnique({
