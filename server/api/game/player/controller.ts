@@ -4,7 +4,6 @@ import { playerIdParser } from '$/service/idParsers';
 import { defineController } from './$relay';
 
 export default defineController(() => ({
-  //TODO hooks動かしたから必ず動作確認する
   get: async ({ user }) => ({
     status: 200,
     body: await playerRepository.findById(playerIdParser.parse(user.id)),

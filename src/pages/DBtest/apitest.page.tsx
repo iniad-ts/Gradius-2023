@@ -4,7 +4,7 @@ import { useAtom } from 'jotai';
 import { useEffect, useState } from 'react';
 import { Loading } from 'src/components/Loading/Loading';
 import { apiClient } from 'src/utils/apiClient';
-import { userAtom } from '../atoms/user';
+import { userAtom } from '../../atoms/user';
 
 const Home = () => {
   const [user] = useAtom(userAtom);
@@ -26,19 +26,20 @@ const Home = () => {
   //このAPIは仮置きでスコア加算してて、敵を倒した処理にスコア加算を入れるかも
   const addscore = async () => {
     if (!user) return;
-    const score = await apiClient.game.session.score.$post({
+    await apiClient.game.session.score.$post({
       body: { playerId: user.id, score: 100 },
     });
   };
 
-  const movePlayer = async () => {
-    if (!user || !player) return;
-    //"up"にMoveInput型をつけて
-    const moveup = 'up' as MoveInput;
-    const playermove = await apiClient.game.player.move.$post({
-      body: { player, MoveInput: moveup },
+  const movePlayer = async (move: string) => {
+    if (!user || !player || !['up', 'down', 'left', 'right'].includes(move)) return;
+
+    const moveInput = move as MoveInput;
+    const playerMove = await apiClient.game.player.move.$post({
+      body: { player, MoveInput: moveInput },
     });
-    setPlayer(playermove);
+
+    setPlayer(playerMove);
   };
   const createPlayer = async () => {
     if (!user) return;
@@ -95,7 +96,10 @@ const Home = () => {
         <div style={{ marginRight: '20px' }}>
           <h2>Player</h2>
           <button onClick={createPlayer}>作成</button>
-          <button onClick={movePlayer}>動かす(上)</button>
+          <button onClick={() => movePlayer('up')}>動かす(上)</button>
+          <button onClick={() => movePlayer('down')}>動かす(下)</button>
+          <button onClick={() => movePlayer('left')}>動かす(左)</button>
+          <button onClick={() => movePlayer('right')}>動かす(右)</button>
         </div>
         <div className="flex">
           <h3>プレイヤーID</h3>
@@ -107,7 +111,7 @@ const Home = () => {
           <h3>プレイヤーのY座標</h3>
           <p>{player?.y}</p>
         </div>
-      </div>
+      </div>{' '}
     </>
   );
 };
