@@ -21,6 +21,11 @@ const toPlayerModel = (prismaPlayer: Player): PlayerModel => ({
   gameId: gameIdParser.parse(prismaPlayer.gameId),
 });
 
+export type PlayerStatus = {
+  health: number;
+  score: number;
+};
+
 export const playersRepository = {
   getAll: async (): Promise<PlayerModel[] | null> => {
     const prismaPlayers = await prismaClient.player.findMany();

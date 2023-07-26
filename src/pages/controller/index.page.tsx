@@ -1,3 +1,4 @@
+import type { PlayerStatus } from '$/repository/playersRepository';
 import type { MoveTo } from '$/usecase/playerUseCase';
 import { useCallback, useEffect, useState } from 'react';
 import { apiClient } from 'src/utils/apiClient';
@@ -8,6 +9,7 @@ const Controller = () => {
     const res = apiClient.player.$post({ body: moveTo });
     console.log(res);
   }, []);
+  const [playerStatus, setPlayerStatus] = useState<PlayerStatus>();
   const [upPush, setUpPush] = useState(false);
   const [downPush, setDownPush] = useState(false);
   const [leftPush, setLeftPush] = useState(false);
@@ -68,8 +70,24 @@ const Controller = () => {
     });
     move();
   }, [upPush, downPush, leftPush, rightPush, move]);
+
+  useEffect(() => {
+    const intervalId = setInterval(async () => {
+      const res = await apiClient.player.status.$get();
+      if (res === null) return;
+      setPlayerStatus({
+        health: res.health,
+        score: res.score,
+      });
+    }, 100);
+    return () => clearInterval(intervalId);
+  }, []);
+
   return (
     <div className={styles.container}>
+      <p>
+        HP: {playerStatus?.health ?? 0} SCORE: {playerStatus?.score ?? 0}
+      </p>
       <div className={styles.controller}>
         <button onClick={() => clickMoveButton({ toX: -1, toY: -1 })}>↖</button>
         <button onClick={() => clickMoveButton({ toX: 0, toY: -1 })}>↑</button>
