@@ -64,3 +64,9 @@ export type EnemyModel = {
   collisionRadius: number;
   score: number;
 };
+
+export type StageModel = {
+  id: StageId;
+  name: string;
+  difficultyLevel: number;
+};
