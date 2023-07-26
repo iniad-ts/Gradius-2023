@@ -1,6 +1,6 @@
 import type { UserId } from '$/commonTypesWithClient/branded';
+import type { PlayerModel } from '$/commonTypesWithClient/models';
 import { playersRepository } from '$/repository/playersRepository';
-import type { PlayerModel } from './../commonTypesWithClient/models';
 import { gameUseCase } from './gameUseCase';
 
 export type MoveTo = {
@@ -28,7 +28,7 @@ export const playerUseCase = {
     await playersRepository.save(movedPlayer);
     return movedPlayer;
   },
-  get: async (userId: UserId, userName: string): Promise<PlayerModel[] | null> => {
+  create: async (userId: UserId, userName: string): Promise<PlayerModel | null> => {
     const players: PlayerModel[] = (await playersRepository.getAll()) ?? [];
     const isExist = players.some((player) => player.id === userId);
     if (!isExist) {
@@ -48,8 +48,14 @@ export const playerUseCase = {
         gameId: await gameUseCase.findGameId(),
       };
       await playersRepository.save(newPlayer);
-      return await playersRepository.getAll();
+      return newPlayer;
     }
-    return players;
+    return null;
+  },
+  getStatus: async (id: UserId, name: string): Promise<PlayerModel | null> => {
+    await playerUseCase.create(id, name);
+    const player: PlayerModel | null = await playersRepository.getUnique(id);
+    if (player === null) return null;
+    return player;
   },
 };

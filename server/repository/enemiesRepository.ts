@@ -25,7 +25,6 @@ export const enemiesRepository = {
   getAll: async (): Promise<EnemyModel[] | null> => {
     try {
       const prismaEnemies = await prismaClient.enemy.findMany();
-
       return prismaEnemies.map(toEnemyModel);
     } catch (error) {
       console.log(error);
