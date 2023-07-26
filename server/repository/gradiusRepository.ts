@@ -1,25 +1,23 @@
 import type { UserId } from '$/commonTypesWithClient/branded';
-import { type EventModel, type GameModel } from '$/commonTypesWithClient/models';
+import { type GameModel, type UserEventModel } from '$/commonTypesWithClient/models';
 
 const gameModels: GameModel[] = [];
 
-const eventModels: EventModel[] = [];
+const eventModels: UserEventModel[] = [];
 
 export const gradiusRepository = {
-  create: (game: GameModel, event: EventModel | null) => {
+  create: (game: GameModel, event: UserEventModel | null) => {
     // console.log(eventModels.filter((e) => e.owner === event?.owner).length);
     if (eventModels.filter((e) => e.owner === event?.owner).length > 0) {
       return true;
     }
-    const newGameModel = { ...game };
-    gameModels.push(newGameModel);
+    gameModels.push(game);
     if (event !== null) {
-      const newEventModel = { ...event };
-      eventModels.push(newEventModel);
+      eventModels.push(event);
     }
     return false;
   },
-  findOfUser: (user: UserId): { games: GameModel[]; event: EventModel } => {
+  findOfUser: (user: UserId): { games: GameModel[]; event: UserEventModel } => {
     const games = gameModels.filter((gameModel) => gameModel.user === user);
     const event = eventModels.filter((eventModel) => eventModel.owner === user)[0];
     // console.log(games, event);
@@ -28,7 +26,7 @@ export const gradiusRepository = {
   update: () => {
     const currentGameModel: GameModel[] = JSON.parse(JSON.stringify(gameModels));
     gameModels.map((gameModel, i) => {
-      const difference = gameModel.created - currentGameModel[i].created;
+      const difference = new Date().getTime() - currentGameModel[i].created;
       const newXYZ = gameModel.xyz.map(
         (d, j) => d + Math.round(gameModel.vector[j] * difference * 0.01)
       );
@@ -37,9 +35,10 @@ export const gradiusRepository = {
   },
   findOfXYZ: (xyz: number[]) => gameModels.filter((gameModel) => gameModel.xyz === xyz),
   findOfType: (type: string) => gameModels.filter((gra) => gra.type === type),
-  save: (gameModel: GameModel, user: UserId) => {
+  save: (gameModel: GameModel, id: string) => {
     gameModels.forEach((oneGameModel, i) => {
-      if (oneGameModel.user === user) {
+      if (oneGameModel.id === id) {
+        console.log('a');
         gameModels[i] = gameModel;
       }
     });

@@ -1,5 +1,5 @@
 import type { UserId } from '$/commonTypesWithClient/branded';
-import { InitGameModel, type GameModel } from '$/commonTypesWithClient/models';
+import { type GameModel } from '$/commonTypesWithClient/models';
 import { gradiusRepository } from '$/repository/gradiusRepository';
 import { randomUUID } from 'crypto';
 export const gradiusUaeCase = {
@@ -11,15 +11,20 @@ export const gradiusUaeCase = {
         .findOfUser(user)
         .games.filter((gra) => gra.type === 'owner')[0]; //ownerは1つ
       const newXYZ = myPlane.xyz;
+      const id = myPlane.id;
       newXYZ[type % 3] += (Math.floor(type / 3) - 0.5) * 2;
       const newMyPlane: GameModel = { ...myPlane, xyz: newXYZ };
-      gradiusRepository.save(newMyPlane, user);
+      gradiusRepository.save(newMyPlane, id);
     }
   },
   beam: (user: UserId) => {
+    const nowOwnerGameModel = gradiusRepository
+      .findOfUser(user)
+      .games.filter((game) => game.type === 'owner')[0];
+    const currentOwnerGameModel = JSON.parse(JSON.stringify(nowOwnerGameModel));
     gradiusRepository.create(
       {
-        ...InitGameModel,
+        ...currentOwnerGameModel,
         user,
         type: 'follower',
         id: randomUUID(),
