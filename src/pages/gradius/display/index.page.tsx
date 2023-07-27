@@ -1,9 +1,12 @@
+import type { EventModel, GameModel } from '$/commonTypesWithClient/models';
 import { useAtom } from 'jotai';
 import Konva from 'konva';
 import { useCallback, useEffect, useState } from 'react';
 import { Circle, Layer, Rect, Stage } from 'react-konva';
 import { userAtom } from 'src/atoms/user';
 import { Loading } from 'src/components/Loading/Loading';
+import { apiClient } from 'src/utils/apiClient';
+
 const Home = () => {
   //黒い枠の中をクリックし、矢印ボタンを押すと、赤い点が動くよー
   const [playerX, setPlayerX] = useState(4);
@@ -24,45 +27,29 @@ const Home = () => {
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
   ]);
+  const [hoge2, setHoge] = useState<{ games: GameModel[]; event: EventModel }>();
   const hoge = true;
+  //キー入力
   const keydown = async (e: React.KeyboardEvent<HTMLDivElement>) => {
     e.preventDefault();
-    // const game = await apiClient.game.$post({
-    //   body: { x: playerX, y: playerY, key: e.code, board },
+    // const game = await apiClient.?.$post({
+    //   body: { ? },
     // });
-    // console.log(game.x);
-    // console.log(game.y);
-    // setPlayerX(game.x);
-    // setPlayerY(game.y);
-    // settamaX(game.y);
-    // settamaY(game.x);
-    // setBoard(game.board);
-    if (user === null) {
-      console.log('a');
-    } else {
-      console.log(user.id);
-    }
-  };
-  const click = async (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-    // const newGame = await apiClient.create.$post();
-    // console.log(newGame);
-  };
-  //ここまで
-  const changeDirection = () => {
-    // 移動量をランダムに設定する
-    const newDx = -1;
-    const newDy = Math.floor(Math.random() * 3) - 1; // -1, 0, 1 のいずれか
-    setDx(newDx);
-    setDy(newDy);
   };
 
+  //newgame作る
+  const click = async (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    // const newGame = await apiClient.create.$post();
+  };
+
+  //敵作る
   const generateEnemy = useCallback(() => {
     const newEnemy = {
       x: 14,
@@ -73,6 +60,7 @@ const Home = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  //敵について
   useEffect(() => {
     const frame = new Konva.Animation((frame) => {
       setEnemies((prevEnemies) => {
@@ -95,7 +83,6 @@ const Home = () => {
     frame.start();
 
     const interval = setInterval(() => {
-      changeDirection();
       generateEnemy();
     }, 1200);
 
@@ -106,6 +93,7 @@ const Home = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dx, dy, generateEnemy]);
 
+  //スペースで弾出すよ(打て打つほど早くなっちゃう)
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.code === 'Space') {
@@ -143,9 +131,12 @@ const Home = () => {
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dx2, dy]);
+
+  //弾の衝突判定
   useEffect(() => {
     const updatedEnemies = enemies.filter((enemy) => {
       for (const bulletObj of bullet) {
+        // eslint-disable-next-line max-depth
         if (Math.floor(enemy.x) === Math.floor(bulletObj.x) && enemy.y === bulletObj.y) {
           return false; // 一致したenemyは除外する
         }
@@ -155,6 +146,23 @@ const Home = () => {
     setEnemies(updatedEnemies);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [bullet]);
+
+  const onclick = async () => {
+    await apiClient.gradius.game.post({ body: 1 });
+    fetchGradius();
+  };
+
+  const onR = async () => {
+    document.getElementsByTagName('html')[0].oncontextmenu = () => false;
+    await apiClient.gradius.game.post({ body: 6 });
+  };
+
+  const fetchGradius = async () => {
+    const newHoge = (await apiClient.gradius.post()).body;
+    console.log(newHoge);
+    setHoge(newHoge);
+  };
+
   if (!hoge) return <Loading visible />;
   return (
     <>
@@ -169,6 +177,24 @@ const Home = () => {
         <div id="key">Y:{playerY}</div>
         <div id="key" />
       </div>
+      {/* <div
+        style={{
+          width: '100vw',
+          height: '100vh',
+          backgroundColor:
+            hoge2 === null || hoge2 === undefined
+              ? '#080'
+              : hoge2.games[0].xyz[1] % 2 === -1
+              ? '#800'
+              : '#088',
+          textAlign: 'center',
+        }}
+        key={'a'}
+        onClick={() => onclick()}
+        onContextMenu={() => onR()}
+      >
+        {hoge2?.games[0].hp}
+      </div> */}
       <Stage width={800} height={600}>
         <Layer>
           {board.map((row, y) =>
