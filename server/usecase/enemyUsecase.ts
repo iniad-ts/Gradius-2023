@@ -1,7 +1,7 @@
 // 敵の動き方をコントロールする
 export const enemyUsecase = {
   move: (y: number) => {
-    const increment = Math.random() < 0.5 ? -15 : 15;
+    const increment = Math.random() < 0.5 ? -30 : 30;
     let newY = y + increment;
     if (newY < 0) {
       newY = 0;
