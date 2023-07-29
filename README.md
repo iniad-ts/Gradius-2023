@@ -1,8 +1,10 @@
 # Next frourio starter
+
 ララテスト
 フロントエンドは src ディレクトリの [Next.js](https://nextjs.org/) 、バックエンドは server ディレクトリの [frourio](https://frourio.com/) で構築された TypeScript で一気通貫開発が可能なモノレポサービス
 
 ## 開発手順
+
 kakinoki
 
 ### Node.js のインストール
@@ -28,7 +30,7 @@ $ cp server/.env.example server/.env
 $ cp docker/dev/.env.example docker/dev/.env
 $ cp server/prisma/.env.example server/prisma/.env
 ```
-<!-- test by eguchi -->
+
 ### ミドルウェアのセットアップ
 
 ```sh
@@ -65,6 +67,5 @@ http://localhost:9001/
 $ cd server
 $ npx prisma studio
 ```
-
 
 yuon/tEst
