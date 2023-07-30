@@ -13,3 +13,15 @@ export type TaskModel = {
   done: boolean;
   created: number;
 };
+
+export type EnemyModel = {
+  // id: EnemyId;
+  pos: { x: number; y: number };
+  radius: number;
+  speed: number;
+  score: number;
+  kinds: string;
+  hp: number;
+  // size_width: number;
+  // size_height: number;
+};
