@@ -1,11 +1,11 @@
 import type { PlayerModel } from '$/commonTypesWithClient/models';
-import { UserIdParser } from '$/service/idParsers';
+import { userIdParser } from '$/service/idParsers';
 import { prismaClient } from '$/service/prismaClient';
 import type { Player } from '@prisma/client';
 import { z } from 'zod';
 
 const toPlayerModel = (prismaPlayer: Player): PlayerModel => ({
-  id: UserIdParser.parse(prismaPlayer.id),
+  id: userIdParser.parse(prismaPlayer.id),
   name: prismaPlayer.name,
   position: z
     .object({

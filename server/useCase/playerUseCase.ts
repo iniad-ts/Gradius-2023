@@ -1,7 +1,7 @@
 import type { UserId } from '$/commonTypesWithClient/branded';
 import type { PlayerModel } from '$/commonTypesWithClient/models';
 import { playersRepository } from '$/repository/playersRepository';
-import { UserIdParser } from '$/service/idParsers';
+import { userIdParser } from '$/service/idParsers';
 import { randomUUID } from 'crypto';
 
 export type MoveTo = {
@@ -28,7 +28,7 @@ export const playerUseCase = {
   },
   create: async (userName: string): Promise<PlayerModel | null> => {
     const newPlayer: PlayerModel = {
-      id: UserIdParser.parse(randomUUID()),
+      id: userIdParser.parse(randomUUID()),
       name: userName,
       position: {
         x: 150,
