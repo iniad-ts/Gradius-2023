@@ -1,4 +1,6 @@
+import { EnemyId } from '$/commonTypesWithClient/branded';
 import type { EnemyModel } from '$/commonTypesWithClient/models';
+import { enemyRepository } from '$/repository/enemyRepository';
 
 export let enemies_info: EnemyModel[] = [];
 
@@ -15,9 +17,8 @@ const make_enemy = () => {
     pos: { x: enemy_first_pos_x, y: Math.floor(Math.random() * 690) + 1 },
     speed: enemy_speed,
     radius: enemy_radius,
-    score: enemy_score,
+
     hp: enemy_hp,
-    kinds: enemy_kinds,
   };
   enemies_info.push(new_enemy_info);
 };
@@ -39,3 +40,9 @@ setInterval(() => {
 setInterval(() => {
   move_or_delete_enemy();
 }, 100);
+
+export const enemyUsecase = {
+  moveEnemy: async(id: EnemyId ):Promise<EnemyModel> => {
+    const enemy: EnemyModel = await enemyRepository.
+  }
+}
