@@ -1,8 +1,10 @@
+import type { MoveDirection } from '$/usecase/playerUsecase';
 import { useAtom } from 'jotai';
 import React, { useState } from 'react';
 import { Joystick, JoystickShape } from 'react-joystick-component';
 import { userAtom } from 'src/atoms/user';
 import { Loading } from 'src/components/Loading/Loading';
+import { apiClient } from 'src/utils/apiClient';
 import styles from './controller.module.css';
 
 const Home = () => {
@@ -30,6 +32,12 @@ const Home = () => {
   }, [setSize]);
 
   if (!user) return <Loading visible />;
+
+  const pushButton = async (pushed: string) => {
+    const input = pushed as MoveDirection;
+    const res = await apiClient.rooms.control.$post({ body: input });
+    console.log(res);
+  };
 
   return (
     <>
