@@ -1,3 +1,4 @@
+import type { MoveDirection } from '$/usecase/playerUsecase';
 import { useAtom } from 'jotai';
 import { userAtom } from 'src/atoms/user';
 import { Loading } from 'src/components/Loading/Loading';
@@ -9,7 +10,8 @@ const Home = () => {
   if (!user) return <Loading visible />;
 
   const pushButton = async (pushed: string) => {
-    const res = await apiClient.rooms.controller.$post({ body: pushed });
+    const input = pushed as MoveDirection;
+    const res = await apiClient.rooms.control.$post({ body: input });
     console.log(res);
   };
 
