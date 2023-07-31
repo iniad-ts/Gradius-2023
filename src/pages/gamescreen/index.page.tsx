@@ -1,7 +1,7 @@
 import { useAtom } from 'jotai';
 import { userAtom } from 'src/atoms/user';
 import { Loading } from 'src/components/Loading/Loading';
-import styles from './gamescreen.module.css';
+import App from 'src/konva/konva';
 
 const Home = () => {
   const [user] = useAtom(userAtom);
@@ -9,7 +9,11 @@ const Home = () => {
 
   return (
     <>
-      <div className={styles.container}>{/*  */}</div>
+      {/* <div className={styles.container}>
+        {/* 下記は簡易的に作ったモノです。削除してもらってかまいません */}
+      {/* <h1 className={styles.word}>ここはgamescreenです</h1> */}
+      <App />
+      {/* </div> */}
     </>
   );
 };
