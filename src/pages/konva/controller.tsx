@@ -1,6 +1,6 @@
 import { Stage, Layer, Rect } from 'react-konva';
 
-function Joystick() {
+function JoystickKonva() {
   return (
     
     <Stage width={500} height={500}>
@@ -11,4 +11,4 @@ function Joystick() {
   );
 }
 
-export default Joystick;
+export default JoystickKonva;

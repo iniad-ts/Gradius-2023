@@ -19,7 +19,7 @@
 
 .joystick {
   grid-area: joystick;
-  background-color: #bbb;
+  background-color: #bbb 0.1;
 }
 
 .shoot {
