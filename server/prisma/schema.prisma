@@ -20,4 +20,5 @@ model Enemy {
   speed  Int
   hp     Int
   radius Int
+  test   Int
 }
