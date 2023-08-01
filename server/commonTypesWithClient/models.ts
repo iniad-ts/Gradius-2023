@@ -17,7 +17,4 @@ export type TaskModel = {
 export type RoomModel = {
   Id: string;
   position: { x: number; y: number };
-  // x: number;
-  // y: number;
-  // board: number[][];
 };

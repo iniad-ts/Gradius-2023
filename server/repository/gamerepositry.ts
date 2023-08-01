@@ -2,12 +2,18 @@ import type { RoomModel } from '$/commonTypesWithClient/models';
 import { UserIdParser } from '$/service/idParsers';
 import { prismaClient } from '$/service/prismaClient';
 import type { game } from '@prisma/client';
+import { z } from 'zod';
 
 const toGameModel = (prismaRoom: game): RoomModel => ({
   Id: UserIdParser.parse(prismaRoom.firebaseId),
   // x: prismaRoom.x,
   // y: prismaRoom.y,
-  position: prismaRoom.position,
+  position: z
+    .object({
+      x: z.number(),
+      y: z.number(),
+    })
+    .parse(prismaRoom.position),
 });
 
 export const gamerepository = {

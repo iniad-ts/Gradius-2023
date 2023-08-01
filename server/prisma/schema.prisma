@@ -16,7 +16,5 @@ model Task {
 
 model game {
   firebaseId String @id
-  x          Int
-  y          Int
-  board      Json
+  position   Json
 }
