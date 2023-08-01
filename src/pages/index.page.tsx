@@ -25,17 +25,17 @@ const Home = () => {
   const keydown = async (e: React.KeyboardEvent<HTMLDivElement>) => {
     e.preventDefault();
     const game = await apiClient.game.$post({
-      body: { x: playerX, y: playerY, key: e.code, board },
+      body: { position: layerPosition, key: e.code },
     });
-    console.log(game.x);
-    console.log(game.y);
-    setPlayerX(game.x);
-    setPlayerY(game.y);
-    setBoard(game.board);
+    // console.log(game.x);
+    // console.log(game.y);
+    // setPlayerX(game.x);
+    // setPlayerY(game.y);
+    setLayerPosition(game.position);
     if (e.code === 'KeyZ') {
       setIsFiring(true);
     }
-    console.log(game.board);
+    // console.log(game.position);
   };
   const click = async (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     await apiClient.create.$post();
