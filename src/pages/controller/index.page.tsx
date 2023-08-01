@@ -1,3 +1,5 @@
+// import type { MoveDirection } from '$/usecase/playerUsecase';
+
 import { useAtom } from 'jotai';
 import React, { useState } from 'react';
 import { Joystick, JoystickShape } from 'react-joystick-component';
