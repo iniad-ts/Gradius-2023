@@ -1,5 +1,5 @@
 import type { PlayerModel } from '$/commonTypesWithClient/models';
-import { UserIdParser, gameIdParser } from '$/service/idParsers';
+import { UserIdParser } from '$/service/idParsers';
 import { prismaClient } from '$/service/prismaClient';
 import type { Player } from '@prisma/client';
 import { z } from 'zod';
@@ -17,7 +17,6 @@ const toPlayerModel = (prismaPlayer: Player): PlayerModel => ({
   score: z.number().min(0).parse(prismaPlayer.score),
   team: z.enum(['red', 'blue']).parse(prismaPlayer.team),
   createdAt: prismaPlayer.createdAt.getTime(),
-  gameId: gameIdParser.parse(prismaPlayer.gameId),
 });
 
 export const playersRepository = {
@@ -39,7 +38,6 @@ export const playersRepository = {
         score: player.score,
         team: player.team,
         createdAt: new Date(player.createdAt),
-        gameId: player.gameId,
       },
     });
     return toPlayerModel(prismaPlayer);
