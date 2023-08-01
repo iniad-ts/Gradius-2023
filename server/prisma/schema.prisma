@@ -15,13 +15,9 @@ model Task {
 }
 
 model Enemy {
-  id          String @id
-  kinds       String
-  pos_x       Int
-  pos_y       Int
-  speed       Int
-  hp          Int
-  size_width  Int
-  size_height Int
-  radius      Int
+  id     String @id
+  pos    Json
+  speed  Int
+  hp     Int
+  radius Int
 }

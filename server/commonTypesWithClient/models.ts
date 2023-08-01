@@ -1,4 +1,4 @@
-import type { TaskId, UserId } from './branded';
+import type { EnemyId, TaskId, UserId } from './branded';
 
 export type UserModel = {
   id: UserId;
@@ -15,13 +15,9 @@ export type TaskModel = {
 };
 
 export type EnemyModel = {
-  // id: EnemyId;
+  id: EnemyId;
   pos: { x: number; y: number };
-  radius: number;
   speed: number;
-  score: number;
-  kinds: string;
   hp: number;
-  // size_width: number;
-  // size_height: number;
+  radius: number;
 };

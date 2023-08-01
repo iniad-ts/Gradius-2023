@@ -1,12 +1,10 @@
 // import type { MoveDirection } from '$/usecase/playerUsecase';
 
 import { useAtom } from 'jotai';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Joystick, JoystickShape } from 'react-joystick-component';
 import { userAtom } from 'src/atoms/user';
-
 import { Loading } from 'src/components/Loading/Loading';
-
 import { apiClient } from 'src/utils/apiClient';
 import styles from './controller.module.css';
 
@@ -16,7 +14,7 @@ const Home = () => {
   const [user] = useAtom(userAtom);
   const [size, setSize] = useState(0);
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (joystickRef.current !== null) {
       // joystickRef.currentがnullでないことをチェック
       const width = joystickRef.current.offsetWidth;
