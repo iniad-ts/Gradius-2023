@@ -17,7 +17,6 @@ const make_enemy = () => {
     pos: { x: enemy_first_pos_x, y: Math.floor(Math.random() * 690) + 1 },
     speed: enemy_speed,
     radius: enemy_radius,
-
     hp: enemy_hp,
   };
   enemies_info.push(new_enemy_info);
