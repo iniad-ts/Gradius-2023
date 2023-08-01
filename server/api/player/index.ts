@@ -1,12 +1,15 @@
 import type { PlayerModel } from '$/commonTypesWithClient/models';
-import type { MoveTo } from '$/usecase/playerUseCase';
+import type { MoveTo } from '$/useCase/playerUseCase';
 
 export type Methods = {
   get: {
     resBody: PlayerModel[] | null;
   };
   post: {
-    reqBody: MoveTo;
+    reqBody: {
+      name: string;
+      moveTo: MoveTo;
+    };
     resBody: PlayerModel | null;
   };
 };
