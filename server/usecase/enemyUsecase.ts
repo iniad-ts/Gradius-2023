@@ -1,6 +1,6 @@
-import type { EnemyId } from '$/commonTypesWithClient/branded';
 import type { EnemyModel } from '$/commonTypesWithClient/models';
 import { enemyRepository } from '$/repository/enemyRepository';
+import { EnemyIdParser } from '$/service/idParsers';
 import { randomUUID } from 'crypto';
 
 //敵の位置を取得する際にこれを使えば、全ての敵が配列で返されます
@@ -30,8 +30,7 @@ const enemy_hp = 10;
 
 const create_enemy = async () => {
   const new_enemy: EnemyModel = {
-    //idの生成方法が不安
-    id: randomUUID() as EnemyId,
+    id: EnemyIdParser.parse(randomUUID()),
     pos: { x: enemy_first_pos_x, y: enemy_first_pos_y },
     speed: enemy_speed,
     hp: enemy_hp,
