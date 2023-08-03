@@ -3,7 +3,7 @@ import type { MoveTo } from '$/useCase/playerUseCase';
 
 export type Methods = {
   get: {
-    resBody: PlayerModel[] | null;
+    resBody: PlayerModel[];
   };
   post: {
     reqBody: {
