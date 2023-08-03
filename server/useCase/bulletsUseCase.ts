@@ -12,13 +12,12 @@ export type MoveTo = {
 
 export const bulletUseCase = {
   create: async (id: UserId): Promise<BulletModel | null> => {
-    const currentUserStatus = await playerUseCase.getStatus(id, null);
-    const newUserStatus = JSON.parse(JSON.stringify(currentUserStatus));
-    if (newUserStatus !== null) {
+    const userStatus = await playerUseCase.getStatus(id, null);
+    if (userStatus !== null) {
       const newBullet: BulletModel = {
         id: bulletIdParser.parse(randomUUID()),
         createdPosition: {
-          ...newUserStatus?.position,
+          ...userStatus.position,
         },
         direction: 0,
         type: 0,

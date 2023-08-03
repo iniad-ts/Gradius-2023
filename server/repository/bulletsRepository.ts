@@ -33,7 +33,7 @@ export const bulletsRepository = {
     await prismaClient.bullet.delete({ where: { id } });
   },
   create: async (bullet: BulletModel) => {
-    const prismaBullet = await prismaClient.bullet.create({
+    await prismaClient.bullet.create({
       data: {
         id: bullet.id,
         createdPosition: bullet.createdPosition,
