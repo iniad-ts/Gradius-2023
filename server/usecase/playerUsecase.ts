@@ -1,18 +1,12 @@
 export type MoveDirection = 'up' | 'left' | 'right' | 'down' | 'push';
 // pushって何？forはるき＃かきのき
 
-export const position: number[][] = [
-  [30, 300],
-  [100, 400],
-];
-export let gunPosition: number[][] = [
-  [0, 0],
-  [0, 600],
-];
+export const position: number[][] = [[50, 500]];
+export let gunPosition: number[][] = [[]];
 
 export const gunShot = async () => {
   console.log('gunShot動作');
-  gunPosition.push([position[0][0] + 150, position[0][1] + 35]);
+  gunPosition.push([position[0][0] + 50, position[0][1] + 25]);
 };
 setInterval(() => {
   moveGun();
