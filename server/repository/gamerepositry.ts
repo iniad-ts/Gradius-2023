@@ -6,9 +6,14 @@ import { z } from 'zod';
 
 const toGameModel = (prismaRoom: game): RoomModel => ({
   Id: UserIdParser.parse(prismaRoom.firebaseId),
-  x: prismaRoom.x,
-  y: prismaRoom.y,
-  board: z.array(z.array(z.number())).parse(prismaRoom.board),
+  // x: prismaRoom.x,
+  // y: prismaRoom.y,
+  position: z
+    .object({
+      x: z.number(),
+      y: z.number(),
+    })
+    .parse(prismaRoom.position),
 });
 
 export const gamerepository = {
@@ -16,15 +21,17 @@ export const gamerepository = {
     await prismaClient.game.upsert({
       where: { firebaseId: game.Id },
       update: {
-        x: game.x,
-        y: game.y,
-        board: game.board,
+        // x: game.x,
+        // y: game.y,
+        position: game.position,
+        // board: game.board,
       },
       create: {
         firebaseId: game.Id,
-        x: game.x,
-        y: game.y,
-        board: game.board,
+        // x: game.x,
+        // y: game.y,
+        position: game.position,
+        // board: game.board,
       },
     });
   },
