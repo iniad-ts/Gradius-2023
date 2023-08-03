@@ -17,7 +17,7 @@ const toEnemyModel = (prismaEnemy: Enemy): EnemyModel => ({
 });
 
 export const enemiesRepository = {
-  save: async (enemy: EnemyModel): Promise<EnemyModel> => {
+  create: async (enemy: EnemyModel): Promise<EnemyModel> => {
     const prismaEnemy = await prismaClient.enemy.create({
       data: {
         id: enemy.id,
