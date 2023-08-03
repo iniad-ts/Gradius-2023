@@ -1,5 +1,6 @@
 # Next frourio starter
 
+
 テスト2
 テストピロピロ
 
@@ -67,3 +68,5 @@ http://localhost:9001/
 $ cd server
 $ npx prisma studio
 ```
+
+huji
