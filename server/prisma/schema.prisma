@@ -18,9 +18,6 @@ model Game {
   id            String   @id
   createdAt     DateTime
   displayNumber Int
-  Players       Player[]
-  Enemies       Enemy[]
-  Bullets       Bullet[]
 }
 
 model Player {
@@ -31,8 +28,6 @@ model Player {
   health    Int
   score     Int
   team      String
-  Game      Game     @relation(fields: [gameId], references: [id])
-  gameId    String
 }
 
 model Enemy {
@@ -40,8 +35,6 @@ model Enemy {
   createdAt       DateTime
   createdPosition Json
   type            Int
-  Game            Game     @relation(fields: [gameId], references: [id])
-  gameId          String
 }
 
 model Bullet {
@@ -51,6 +44,4 @@ model Bullet {
   direction       Float
   type            Int
   playerId        String?
-  Game            Game     @relation(fields: [gameId], references: [id])
-  gameId          String
 }
