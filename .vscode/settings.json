@@ -14,5 +14,19 @@
   "files.eol": "\n",
   "editor.tabSize": 2,
   "prettier.prettierPath": "node_modules/prettier",
-  "stylelint.validate": ["css", "less", "postcss", "typescriptreact"]
+  "stylelint.validate": ["css", "less", "postcss", "typescriptreact"],
+  "cSpell.words": [
+    "aspida",
+    "createonly",
+    "fastify",
+    "frourio",
+    "Inited",
+    "konva",
+    "notios",
+    "pathpida",
+    "predev",
+    "pretypecheck",
+    "stylelint",
+    "typecheck"
+  ]
 }
