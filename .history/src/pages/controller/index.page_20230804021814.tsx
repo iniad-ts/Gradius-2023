@@ -12,26 +12,37 @@ const Home = () => {
   console.log(joystickRef);
 
   const [user] = useAtom(userAtom);
-  const [size, setSize] = useState<number>(0);
+  const [size, setSize] = useState<number | null>(null);
   const [moveIntervalId, setMoveIntervalId] = useState<NodeJS.Timeout | null>(null);
   const moveDirection = useRef<{ x: number; y: number }>({ x: 0, y: 0 });
+  // for (let x = 0; x < 2; x += 1) {
+  //   if (joystickRef.current !== null) {
+  //     const width=
+  //   }
+  // }
+  // const Load=()=>{
+  //   const getDisplay = setInterval(, 2500);
+  // return () => {
+  //   clearInterval(getHuge);
+  // };
+  // }
 
-  const getsize = () => {
-    if (joystickRef.current !== null) {
-      // joystickRef.currentがnullでないことをチェック
-      const width = joystickRef.current.offsetWidth;
-      setSize(width);
-    }
-  };
-
-  // useEffectフックをトップレベルに配置します
+  // joystickRef.currentの大きさが変わった時にsizeを更新する
   useEffect(() => {
-    const cance = setInterval(getsize, 100);
-    return () => {
-      console.log('AAAAAAAAAAAAAAAAAAAAAA');
-      clearInterval(cance);
-    };
-  }, []); // 依存性配列は空にします。getsizeが変更されるとタイマーはリセットされません
+    if (joystickRef.current !== null) {
+      const width = joystickRef.current.offsetWidth;
+      if (width !== size) {
+        setSize(width);
+        console.log('Joystick div width: ', width);
+      }
+    }
+  }, [joystickRef]); // joystickRefの変更を監視します
+
+  // sizeが変わった時に何かをする
+  useEffect(() => {
+    // sizeが変わった時に実行する何かの処理
+  }, [size]); // sizeの変更を監視します
+  // 一時的にコメントアウト
   if (!user) return <Loading visible />;
   // const isValidInput = (pushed: string): pushed is 'up' | 'left' | 'right' | 'down' | 'push' => {
   //   return ['up', 'left', 'right', 'down', 'push'].includes(pushed);

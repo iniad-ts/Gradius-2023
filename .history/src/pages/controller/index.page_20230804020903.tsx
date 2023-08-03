@@ -1,6 +1,6 @@
 // import type { MoveDirection } from '$/usecase/playerUsecase';
 import { useAtom } from 'jotai';
-import { useEffect, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import { Joystick, JoystickShape } from 'react-joystick-component';
 import type { IJoystickUpdateEvent } from 'react-joystick-component/build/lib/Joystick';
 import { userAtom } from 'src/atoms/user';
@@ -12,26 +12,34 @@ const Home = () => {
   console.log(joystickRef);
 
   const [user] = useAtom(userAtom);
-  const [size, setSize] = useState<number>(0);
+  const [size, setSize] = useState<number | null>(null);
   const [moveIntervalId, setMoveIntervalId] = useState<NodeJS.Timeout | null>(null);
   const moveDirection = useRef<{ x: number; y: number }>({ x: 0, y: 0 });
+  // for (let x = 0; x < 2; x += 1) {
+  //   if (joystickRef.current !== null) {
+  //     const width=
+  //   }
+  // }
+  // const Load=()=>{
+  //   const getDisplay = setInterval(, 2500);
+  // return () => {
+  //   clearInterval(getHuge);
+  // };
+  // }
 
-  const getsize = () => {
+  useEffect(() => {
     if (joystickRef.current !== null) {
       // joystickRef.currentがnullでないことをチェック
       const width = joystickRef.current.offsetWidth;
-      setSize(width);
-    }
-  };
+      const height = joystickRef.current.offsetHeight;
 
-  // useEffectフックをトップレベルに配置します
-  useEffect(() => {
-    const cance = setInterval(getsize, 100);
-    return () => {
-      console.log('AAAAAAAAAAAAAAAAAAAAAA');
-      clearInterval(cance);
-    };
-  }, []); // 依存性配列は空にします。getsizeが変更されるとタイマーはリセットされません
+      setSize(width);
+      // useEffectに問題あり。後日直しますきっと(´;ω;｀)。
+      console.log('Joystick div width: ', width);
+      console.log('Joystick div height: ', height);
+    }
+  }, [size]);
+  // 一時的にコメントアウト
   if (!user) return <Loading visible />;
   // const isValidInput = (pushed: string): pushed is 'up' | 'left' | 'right' | 'down' | 'push' => {
   //   return ['up', 'left', 'right', 'down', 'push'].includes(pushed);

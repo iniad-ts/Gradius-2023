@@ -9,29 +9,31 @@ import styles from './controller.module.css';
 
 const Home = () => {
   const joystickRef = useRef<HTMLDivElement>(null);
-  console.log(joystickRef);
 
   const [user] = useAtom(userAtom);
-  const [size, setSize] = useState<number>(0);
+  const [size, setSize] = useState(0);
   const [moveIntervalId, setMoveIntervalId] = useState<NodeJS.Timeout | null>(null);
   const moveDirection = useRef<{ x: number; y: number }>({ x: 0, y: 0 });
+  const width = joystickRef.current.offsetWidth;
+  const height = joystickRef.current.offsetHeight;
+  // const Load=()=>{
+  //   const getDisplay = setInterval(, 2500);
+  // return () => {
+  //   clearInterval(getHuge);
+  // };
+  // }
 
-  const getsize = () => {
+  useEffect(() => {
     if (joystickRef.current !== null) {
       // joystickRef.currentがnullでないことをチェック
-      const width = joystickRef.current.offsetWidth;
-      setSize(width);
-    }
-  };
 
-  // useEffectフックをトップレベルに配置します
-  useEffect(() => {
-    const cance = setInterval(getsize, 100);
-    return () => {
-      console.log('AAAAAAAAAAAAAAAAAAAAAA');
-      clearInterval(cance);
-    };
-  }, []); // 依存性配列は空にします。getsizeが変更されるとタイマーはリセットされません
+      setSize(width);
+// useEffectに問題あり。後日直しますきっと(´;ω;｀)。
+      console.log('Joystick div width: ', width);
+      console.log('Joystick div height: ', height);
+    }
+  }, [size]);
+  // 一時的にコメントアウト
   if (!user) return <Loading visible />;
   // const isValidInput = (pushed: string): pushed is 'up' | 'left' | 'right' | 'down' | 'push' => {
   //   return ['up', 'left', 'right', 'down', 'push'].includes(pushed);
