@@ -31,7 +31,6 @@ export type PlayerModel = {
   score: number;
   team: string;
   createdAt: number;
-  gameId: GameId;
 };
 
 export type EnemyModel = {
@@ -42,7 +41,6 @@ export type EnemyModel = {
   };
   type: number;
   createdAt: number;
-  gameId: GameId;
 };
 
 export type BulletModel = {
@@ -55,5 +53,4 @@ export type BulletModel = {
   type: number;
   playerId?: UserId;
   createdAt: number;
-  gameId: GameId;
 };
