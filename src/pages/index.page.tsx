@@ -1,3 +1,5 @@
+import { Rect } from 'react-konva';
+
 const Home = () => {
   const windowWidth = Number(window.innerWidth);
   /*   const [playerPosition, setplayerPosition] = useState([0, 0]);
@@ -44,7 +46,7 @@ const Home = () => {
     /*     let player = players.map((player) => {
     }) */
     <>
-      <rect x={0} y={0} width={windowWidth} height={windowWidth} fill="black" />
+      <Rect x={0} y={0} width={windowWidth} height={windowWidth} fill="black" />
 
       {/*       <Stage width={windowWidth} height={windowHeight}>
         <Layer>
