@@ -32,4 +32,16 @@ export const bulletsRepository = {
   delete: async (id: string): Promise<void> => {
     await prismaClient.bullet.delete({ where: { id } });
   },
+  create: async (bullet: BulletModel) => {
+    const prismaBullet = await prismaClient.bullet.create({
+      data: {
+        id: bullet.id,
+        createdPosition: bullet.createdPosition,
+        direction: bullet.direction,
+        type: bullet.type,
+        playerId: bullet.playerId,
+        createdAt: new Date(bullet.createdAt),
+      },
+    });
+  },
 };
