@@ -5,8 +5,6 @@ import { bulletIdParser } from '$/service/idParsers';
 import { randomUUID } from 'crypto';
 import { playerUseCase } from './playerUseCase';
 
-
-
 export const bulletUseCase = {
   create: async (id: UserId): Promise<BulletModel | null> => {
     const userStatus = await playerUseCase.getStatus(id, null);
@@ -27,5 +25,4 @@ export const bulletUseCase = {
     }
     return null;
   },
-  
 };
