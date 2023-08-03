@@ -24,7 +24,8 @@ export const enemyUseCase = {
   delete: async (enemyId: string, userId: UserId) => {
     await enemiesRepository.delete(enemyId);
     const userStatus = await playerUseCase.getStatus(userId, null);
-    userStatus !== null &&
-      (await playersRepository.save({ ...userStatus, score: userStatus.score + 1 }));
+    if (userStatus !== null) {
+      await playersRepository.save({ ...userStatus, score: userStatus.score + 1 });
+    }
   },
 };
