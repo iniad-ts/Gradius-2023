@@ -1,9 +1,16 @@
 export type MoveDirection = 'up' | 'left' | 'right' | 'down' | 'push';
 
-export const position: number[][] = [[30, 300]];
-export let gunPosition: number[][] = [[0, 0]];
+export const position: number[][] = [
+  [30, 300],
+  [100, 400],
+];
+export let gunPosition: number[][] = [
+  [0, 0],
+  [0, 600],
+];
 
 export const gunShot = async () => {
+  console.log('gunShot動作');
   gunPosition.push([position[0][0] + 150, position[0][1] + 35]);
 };
 setInterval(() => {
