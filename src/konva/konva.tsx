@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
-import { Layer, Rect, Stage } from 'react-konva';
+import { Circle, Layer, Rect, Stage } from 'react-konva';
 import { apiClient } from 'src/utils/apiClient';
 
 function App() {
@@ -48,7 +48,7 @@ function App() {
           <Rect key={index} x={player[0]} y={player[1]} width={50} height={50} fill="red" />
         ))}
         {newGunPosition.map((gun, index) => (
-          <Rect key={index} x={gun[0]} y={gun[1]} width={50} height={50} fill="green" />
+          <Circle key={index} radius={10} x={gun[0]} y={gun[1]} fill="green" />
         ))}
       </Layer>
     </Stage>
