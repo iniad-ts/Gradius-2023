@@ -24,6 +24,9 @@ function App() {
     const new_gunPosition = await apiClient.rooms.gunPosition.$get();
     setNewGunPosition(new_gunPosition);
   }, []);
+  const movePlayerUp = useCallback(async () => {
+    await apiClient.rooms.control.$post({ body: 'up' });
+  }, []);
 
   //apiを叩く処理を100msごとに実行
   useEffect(() => {
@@ -45,7 +48,15 @@ function App() {
           height={windowHeight}
         />
         {newPlayerPosition.map((player, index) => (
-          <Rect key={index} x={player[0]} y={player[1]} width={50} height={50} fill="red" />
+          <Rect
+            key={index}
+            x={player[0]}
+            y={player[1]}
+            width={50}
+            height={50}
+            fill="red"
+            onClick={movePlayerUp}
+          />
         ))}
         {newGunPosition.map((gun, index) => (
           <Circle key={index} radius={10} x={gun[0]} y={gun[1]} fill="green" />
