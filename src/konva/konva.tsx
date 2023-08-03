@@ -20,7 +20,7 @@ function App() {
   }, []);
   //APiを叩いて銃を撃つ
   const gunShot = useCallback(async () => {
-    await apiClient.rooms.gunPosition.$post(); // Use 'post' method
+    await apiClient.rooms.gunPosition.$post();
     const new_gunPosition = await apiClient.rooms.gunPosition.$get();
     setNewGunPosition(new_gunPosition);
   }, []);
