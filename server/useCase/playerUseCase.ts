@@ -1,7 +1,7 @@
 import type { UserId } from '$/commonTypesWithClient/branded';
 import type { PlayerModel } from '$/commonTypesWithClient/models';
 import { playersRepository } from '$/repository/playersRepository';
-import { serIdParser } from '$/service/idParsers';
+import { userIdParser } from '$/service/idParsers';
 import { minmax } from '$/service/minmax';
 import { randomUUID } from 'crypto';
 
