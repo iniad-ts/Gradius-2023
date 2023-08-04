@@ -8,7 +8,6 @@ const App = () => {
   const [enemies, setenemies] = useState<EnemyModel[]>();
   const fetchBord = async () => {
     const new_enemy_pos = await apiClient.check.$get();
-    console.log(new_enemy_pos);
 
     setenemies(new_enemy_pos);
   };

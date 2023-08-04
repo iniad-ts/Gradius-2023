@@ -1,24 +1,7 @@
 import type { EnemyModel } from '$/commonTypesWithClient/models';
-import { enemyRepository } from '$/repository/enemyRepository';
+import { enemyRepository } from '$/Repository/enemyRepository';
 import { EnemyIdParser } from '$/service/idParsers';
 import { randomUUID } from 'crypto';
-
-//敵の位置を取得する際にこれを使えば、全ての敵の情報が配列で返されます
-export const enemyUsecase = {
-  getAll_Enemies: async (): Promise<EnemyModel[]> => {
-    return await enemyRepository.getEnemies();
-  },
-};
-
-setInterval(() => {
-  create_enemy();
-}, 9000);
-
-setInterval(() => {
-  // move_or_delete_enemy();
-  move_Enemy();
-  delete_off_screen_enemy();
-}, 100);
 
 // 仮初期値
 const enemy_first_pos_x = 1800;
@@ -65,3 +48,12 @@ const delete_off_screen_enemy = async () => {
   //await Promise.all(enemies.map((enemy) => enemyRepository.save(enemy)));
   enemies.map((enemy) => enemyRepository.save(enemy));
 };
+
+setInterval(() => {
+  create_enemy();
+}, 9000);
+
+setInterval(() => {
+  move_Enemy();
+  delete_off_screen_enemy();
+}, 100);

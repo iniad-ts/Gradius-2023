@@ -1,4 +1,4 @@
-import { gunPosition, gunShot } from '$/usecase/playerUsecase';
+import { gunPosition, gunShot } from '$/Usecase/playerUsecase';
 import { defineController } from './$relay';
 
 export default defineController(() => ({

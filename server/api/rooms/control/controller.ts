@@ -1,4 +1,4 @@
-import { roomUsecase } from '$/usecase/playerUsecase';
+import { roomUsecase } from '$/Usecase/playerUsecase';
 import { defineController } from './$relay';
 
 export default defineController(() => ({
