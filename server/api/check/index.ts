@@ -1,6 +1,7 @@
-import { enemyUsecase } from '$/usecase/enemyUsecase';
-import { defineController } from './$relay';
+import type { EnemyModel } from '$/commonTypesWithClient/models';
 
-export default defineController(() => ({
-  get: async () => ({ status: 200, body: await enemyUsecase.getEnemies() }),
-}));
+export type Methods = {
+  get: {
+    resBody: EnemyModel[];
+  };
+};
