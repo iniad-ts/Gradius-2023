@@ -8,6 +8,8 @@ export const enemyUsecase = {
   //ここにあったgetEnemiesは、enemyRepositoryから呼び出す
 };
 
+
+
 // 仮初期値
 const enemy_first_pos_x = 1800;
 const enemy_speed = 5;
@@ -52,6 +54,7 @@ const delete_off_screen_enemy = async () => {
   //await Promise.all(enemies.map((enemy) => enemyRepository.save(enemy)));
   enemies.map((enemy) => enemyRepository.save(enemy));
 };
+
 
 setInterval(() => {
   // make_enemy();
