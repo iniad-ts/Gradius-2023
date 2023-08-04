@@ -30,7 +30,7 @@ export const createTask = async (label: TaskModel['label']): Promise<TaskModel> 
 
 export const updateTask = async (
   id: string,
-  partialTask: Prisma.TaskUpdateInput,
+  partialTask: Prisma.TaskUpdateInput
 ): Promise<TaskModel> => {
   const prismaTask = await prismaClient.task.update({ where: { id }, data: partialTask });
 

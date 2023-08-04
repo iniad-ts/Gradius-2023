@@ -10,7 +10,7 @@ async function main() {
     [
       { id: randomUUID(), label: 'task1', done: true, createdAt: new Date() },
       { id: randomUUID(), label: 'task2', done: false, createdAt: new Date(Date.now() + 100) },
-    ].map((data) => prismaClient.task.create({ data })),
+    ].map((data) => prismaClient.task.create({ data }))
   );
 }
 
