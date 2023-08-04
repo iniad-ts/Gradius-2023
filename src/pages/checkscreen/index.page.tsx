@@ -23,7 +23,7 @@ const App = () => {
 
   return (
     <div style={{ border: 'solid 1px black', background: 'yellow' }}>
-      <Stage width={500} height={500}>
+      <Stage width={1000} height={1000}>
         <Layer>
           {enemies.map((enemy, index) => (
             <Rect
