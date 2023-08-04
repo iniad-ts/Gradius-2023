@@ -1,5 +1,5 @@
 import { bulletsRepository } from '$/repository/bulletsRepository';
-import { bulletUseCase } from '$/useCase/bulletsUseCase';
+import { bulletUseCase } from '$/useCase/bulletUseCase';
 import { defineController } from './$relay';
 
 export default defineController(() => ({
