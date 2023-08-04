@@ -5,9 +5,7 @@ import { randomUUID } from 'crypto';
 
 //敵の位置を取得する際にこれを使えば、全ての敵の情報が配列で返されます
 export const enemyUsecase = {
-  getEnemies: async (): Promise<EnemyModel[]> => {
-    return await enemyRepository.getEnemies();
-  },
+  //ここにあったgetEnemiesは、enemyRepositoryから呼び出す
 };
 
 // 仮初期値
