@@ -129,9 +129,9 @@ const Home = () => {
                     height={100}
                     fill="black"
                   />
-                )
-            // eslint-disable-next-line max-lines
-            )
+                ),
+              // eslint-disable-next-line max-lines
+            ),
           )}
           {enemies.map((enemy, index) => (
             <Circle key={index} x={enemy.x * 100} y={enemy.y * 100 + 50} radius={20} fill="green" />
