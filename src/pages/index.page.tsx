@@ -1,10 +1,9 @@
 import { useAtom } from 'jotai';
 import Konva from 'konva';
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Circle, Layer, Rect, Stage } from 'react-konva';
 import { userAtom } from 'src/atoms/user';
 import { Loading } from 'src/components/Loading/Loading';
-import { apiClient } from 'src/utils/apiClient';
 
 const Home = () => {
   //黒い枠の中をクリックし、矢印ボタンを押すと、赤い点が動くよー
@@ -129,9 +128,9 @@ const Home = () => {
                     height={100}
                     fill="black"
                   />
-                ),
+                )
               // eslint-disable-next-line max-lines
-            ),
+            )
           )}
           {enemies.map((enemy, index) => (
             <Circle key={index} x={enemy.x * 100} y={enemy.y * 100 + 50} radius={20} fill="green" />
