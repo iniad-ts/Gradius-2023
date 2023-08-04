@@ -1,8 +1,37 @@
+import type { playerModel } from '$/commonTypesWithClient/models';
+
 export type MoveDirection = 'up' | 'left' | 'right' | 'down' | 'push';
 
 export const position: number[] = [30, 300];
 export let gunPosition: number[][] = [[]];
 
+export const player_info: playerModel[] = [];
+// export const positions: playerModel = player_info[player_info.length - 1];
+
+// export const position: [number, number] = [positions.pos.x, positions.pos.y];
+
+// //playerの初期値
+// let player_pos_x = 30;
+// let player_pos_y = 300;
+// const player_hp = 100;
+// const player_score = 0;
+// const player_radius = 5;
+// const player_speed = 5;
+
+// const player = () => {
+//   const new_player_info: playerModel = {
+//     pos: { x: player_pos_x, y: player_pos_y },
+//     hp: player_hp,
+//     score: player_score,
+//     radius: player_radius,
+//     speed: player_speed,
+//   };
+//   player_info.push(new_player_info);
+// };
+
+// setInterval(() => {
+//   player();
+// }, 250);
 export const gunShot = async () => {
   gunPosition.push([position[0] + 150, position[1] + 35]);
 };

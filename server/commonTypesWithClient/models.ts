@@ -25,3 +25,11 @@ export type EnemyModel = {
   // size_width: number;
   // size_height: number;
 };
+
+export type playerModel = {
+  pos: { x: number; y: number };
+  hp: number;
+  score: number;
+  radius: number;
+  speed: number;
+};
