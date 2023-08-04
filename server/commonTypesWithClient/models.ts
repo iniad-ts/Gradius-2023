@@ -16,7 +16,7 @@ export type TaskModel = {
 
 export type GameModel = {
   id: GameId;
-  displayNumber: number;
+  displays: string[];
   createdAt: number;
 };
 

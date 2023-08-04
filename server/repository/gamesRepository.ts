@@ -7,7 +7,7 @@ import { z } from 'zod';
 
 const toGameModel = (prismaGame: Game): GameModel => ({
   id: gameIdParser.parse(prismaGame.id),
-  displayNumber: z.number().min(0).parse(prismaGame.displayNumber),
+  displays: z.array(z.string()).parse(prismaGame.displays),
   createdAt: prismaGame.createdAt.getTime(),
 });
 
@@ -15,20 +15,14 @@ export const gamesRepository = {
   save: async (game: GameModel): Promise<GameModel> => {
     const prismaGame = await prismaClient.game.upsert({
       where: { id: game.id },
-      update: { displayNumber: game.displayNumber },
+      update: { displays: game.displays },
       create: {
         id: game.id,
-        displayNumber: game.displayNumber,
+        displays: game.displays,
         createdAt: new Date(game.createdAt),
       },
     });
     return toGameModel(prismaGame);
-  },
-  findAll: async (): Promise<GameModel[]> => {
-    const prismaGames = await prismaClient.game.findMany({
-      orderBy: { createdAt: 'desc' },
-    });
-    return prismaGames.map(toGameModel);
   },
   find: async (id: GameId): Promise<GameModel | null> => {
     const prismaGame = await prismaClient.game.findUnique({ where: { id } });

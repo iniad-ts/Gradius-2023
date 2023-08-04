@@ -15,9 +15,9 @@ model Task {
 }
 
 model Game {
-  id            String   @id
-  createdAt     DateTime
-  displayNumber Int
+  id        String   @id
+  createdAt DateTime
+  displays  Json
 }
 
 model Player {
