@@ -23,8 +23,8 @@ const moveGun = () => {
 export const playerUsecase = (() => {
   return {
     movePlayer: async (movedirection: MoveDirection) => {
-      position[0][0] += movedirection.x;
-      position[0][1] += movedirection.y;
+      position[0][0] += movedirection.x * 10;
+      position[0][1] += movedirection.y * 10;
     },
 
     getPlayerPos: async () => {
