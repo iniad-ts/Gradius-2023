@@ -129,7 +129,6 @@ const Home = () => {
                     fill="black"
                   />
                 )
-              // eslint-disable-next-line max-lines
             )
           )}
           {enemies.map((enemy, index) => (
