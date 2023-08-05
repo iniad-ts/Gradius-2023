@@ -1,34 +1,54 @@
-import { useEffect, useState } from 'react';
-import { Circle, Layer, Rect, Stage } from 'react-konva';
+import { Rect } from 'react-konva';
 
 const Home = () => {
-  const [gradius, setGradius] = useState([0, 0]);
-  const [enemy, setEnemy] = useState([1000, 500]);
-  const [gradiusBullet, setGradiusBullet] = useState([gradius[0] + 50, gradius[1] + 25]);
   const windowWidth = Number(window.innerWidth);
-  const windowHeight = Number(window.innerHeight);
+  /*   const [playerPosition, setplayerPosition] = useState([0, 0]);
+  const [enemyPosition, setEnemyPosition] = useState([1000, 500]);
+  const [BulletPosition, setBulletPosition] = useState([
+    playerPosition[0] + 50,
+    playerPosition[1] + 25,
+  ]); */
+  // const [players, setPlayers] = useState([]);
+  // const [enemies, setEnemies] = useState([]);
+  // const [bullets, setBullets] = useState([]);
+  // const windowWidth = Number(window.innerWidth);
+  // const windowHeight = Number(window.innerHeight);
 
-  const updateGradiusBullet = async () => {
-    setGradiusBullet((prev) => {
+  // const updateplayers = async () => {
+  //   const players = await apiClient.game.player.$get({
+  //     body: {},
+  //   });
+  // };
+
+  // const updatebullets = async () => {
+  //   const bullets = await apiClient.game.bullet.$get({
+  //     body: {},
+  //   });
+  // };
+
+  /*   const updateplayerBullet = async () => {
+    setBulletPosition((prev) => {
       if (prev[0] < windowWidth) {
         return [prev[0] + 10, prev[1]];
       } else {
         return prev;
       }
     });
-  };
+  }; */
 
-  useEffect(() => {
-    const timer = setInterval(updateGradiusBullet, 50);
-
-    return () => {
-      clearInterval(timer);
-    };
-  });
+  // useEffect(() => {
+  //   const fetchplayers = setInterval(updateplayers, 50);
+  //   const fetchenemys = setInterval(updateenemies, 50);
+  //   const fetchbullets = setInterval(updatebullets, 50);
+  // });
 
   return (
+    /*     let player = players.map((player) => {
+    }) */
     <>
-      <Stage width={windowWidth} height={windowHeight}>
+      <Rect x={0} y={0} width={windowWidth} height={windowWidth} fill="black" />
+
+      {/*       <Stage width={windowWidth} height={windowHeight}>
         <Layer>
           <Rect
             stroke="black"
@@ -37,13 +57,13 @@ const Home = () => {
             y={0}
             width={windowWidth}
             height={windowHeight}
-          />
-          <Rect x={gradius[0]} y={gradius[1]} width={50} height={50} fill="red" />
-          <Rect x={enemy[0]} y={enemy[1]} width={50} height={50} fill="green" />
-          <Circle x={gradiusBullet[0]} y={gradiusBullet[1]} radius={10} fill="blue" />
-        </Layer>
+    
+      <Rect x={playerPosition[0]} y={playerPosition[1]} width={50} height={50} fill="red" />
+          <Rect x={enemyPosition[0]} y={enemyPosition[1]} width={50} height={50} fill="green" />
+          <Circle x={BulletPosition[0]} y={BulletPosition[1]} radius={10} fill="blue" />
+      </Layer>
       </Stage>
-      ;
+      ;  */}
     </>
   );
 };
