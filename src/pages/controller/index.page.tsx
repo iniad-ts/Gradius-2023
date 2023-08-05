@@ -1,10 +1,11 @@
 import type { MoveTo } from '$/useCase/playerUseCase';
 import { useAtom } from 'jotai';
+import { useRouter } from 'next/router';
 import { useEffect, useRef, useState } from 'react';
 import { Joystick } from 'react-joystick-component';
 import type { IJoystickUpdateEvent } from 'react-joystick-component/build/lib/Joystick';
-import { userAtom } from 'src/atoms/user';
-import { Loading } from 'src/components/Loading/Loading';
+import { playerAtom } from 'src/atoms/user';
+import { apiClient } from 'src/utils/apiClient';
 import styles from './index.module.css';
 
 const Controller = () => {
@@ -15,7 +16,8 @@ const Controller = () => {
     width: window.innerWidth,
     height: window.innerHeight,
   });
-  const [user] = useAtom(userAtom);
+  const [player] = useAtom(playerAtom);
+  const router = useRouter();
 
   const shootBullet = async () => {
     // await apiClient.bullet.$post();
@@ -33,8 +35,7 @@ const Controller = () => {
   };
 
   const move = async () => {
-    // await apiClient.player.$post({ moveTo: moveDirection });
-    console.log('move', moveDirection.current);
+    await apiClient.player.$post({ body: { moveTo: moveDirection.current } });
   };
 
   const moveStart = () => {
@@ -50,7 +51,7 @@ const Controller = () => {
   const handleMove = (e: IJoystickUpdateEvent) => {
     const moveTo = {
       toX: Math.round(e.x ?? 0),
-      toY: Math.round(e.y ?? 0),
+      toY: -Math.round(e.y ?? 0),
     };
     moveDirection.current = moveTo;
   };
@@ -66,7 +67,9 @@ const Controller = () => {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  if (!user) return <Loading visible />;
+  if (!player) {
+    router.push('/controller/login');
+  }
 
   return (
     <div className={styles.controller}>

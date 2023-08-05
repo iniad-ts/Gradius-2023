@@ -10,7 +10,6 @@ export type Methods = {
   };
   post: {
     reqBody: {
-      name: string;
       moveTo: MoveTo;
     };
     resBody: PlayerModel | null;
