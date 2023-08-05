@@ -1,3 +1,4 @@
+import type { MoveTo } from '$/useCase/playerUseCase';
 import { useAtom } from 'jotai';
 import { useEffect, useRef, useState } from 'react';
 import { Joystick } from 'react-joystick-component';
@@ -9,7 +10,7 @@ import styles from './index.module.css';
 const Controller = () => {
   const [shootIntervalId, setShootIntervalId] = useState<NodeJS.Timeout | null>(null);
   const [moveIntervalId, setMoveIntervalId] = useState<NodeJS.Timeout | null>(null);
-  const moveDirection = useRef<{ x: number; y: number }>({ x: 0, y: 0 });
+  const moveDirection = useRef<MoveTo>({ toX: 0, toY: 0 });
   const [windowSize, setWindowSize] = useState<{ width: number; height: number }>({
     width: window.innerWidth,
     height: window.innerHeight,
@@ -32,7 +33,7 @@ const Controller = () => {
   };
 
   const move = async () => {
-    // await apiClient.move.$post({ direction: moveDirection });
+    // await apiClient.player.$post({ moveTo: moveDirection });
     console.log('move', moveDirection.current);
   };
 
@@ -48,8 +49,8 @@ const Controller = () => {
 
   const handleMove = (e: IJoystickUpdateEvent) => {
     const moveTo = {
-      x: Math.round(e.x ?? 0),
-      y: Math.round(e.y ?? 0),
+      toX: Math.round(e.x ?? 0),
+      toY: Math.round(e.y ?? 0),
     };
     moveDirection.current = moveTo;
   };
