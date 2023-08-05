@@ -85,21 +85,6 @@ const Home = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dx2, dy]);
 
-  //弾の衝突判定
-  useEffect(() => {
-    const updatedEnemies = enemies.filter((enemy) => {
-      for (const bulletObj of bullet) {
-        // eslint-disable-next-line max-depth
-        if (Math.floor(enemy.x) === Math.floor(bulletObj.x) && enemy.y === bulletObj.y) {
-          return false; // 一致したenemyは除外する
-        }
-      }
-      return true; // 一致しなかったenemyは残す
-    });
-    setEnemies(updatedEnemies);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [bullet]);
-
   if (!hoge) return <Loading visible />;
   return (
     <>
