@@ -1,5 +1,5 @@
+import { enemyRepository } from '$/Repository/enemyRepository';
 import type { EnemyModel } from '$/commonTypesWithClient/models';
-import { enemyRepository } from '$/repository/enemyRepository';
 import { EnemyIdParser } from '$/service/idParsers';
 import { randomUUID } from 'crypto';
 
