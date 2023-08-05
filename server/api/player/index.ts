@@ -3,6 +3,9 @@ import type { MoveTo } from '$/useCase/playerUseCase';
 
 export type Methods = {
   get: {
+    query: {
+      display: number;
+    };
     resBody: PlayerModel[];
   };
   post: {
