@@ -1,6 +1,6 @@
-import { enemyRepository } from '$/Repository/enemyRepository';
+import { enemyUsecase } from '$/Usecase/enemyUsecase';
 import { defineController } from './$relay';
 
 export default defineController(() => ({
-  get: async () => ({ status: 200, body: (await enemyRepository.getEnemies()) ?? [] }),
+  get: async () => ({ status: 200, body: (await enemyUsecase.getEnemies()) ?? [] }),
 }));
