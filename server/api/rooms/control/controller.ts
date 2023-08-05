@@ -6,4 +6,8 @@ export default defineController(() => ({
     status: 200,
     body: await playerUsecase.getPlayerPos(),
   }),
+  post: async ({ body }) => ({
+    status: 200,
+    body: await playerUsecase.movePlayer(body),
+  }),
 }));
