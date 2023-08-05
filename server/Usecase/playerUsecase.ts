@@ -1,6 +1,4 @@
 export type MoveDirection = 'up' | 'left' | 'right' | 'down' | 'push';
-// pushって何？forはるき＃かきのき
-
 export const position: number[][] = [[50, 500]];
 export let gunPosition: number[][] = [[]];
 

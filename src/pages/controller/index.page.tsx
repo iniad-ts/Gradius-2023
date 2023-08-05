@@ -69,7 +69,7 @@ const Home = () => {
           <div ref={joystickRef} className={styles.joystick}>
             <Joystick
               size={size}
-              stickSize={size / 2}
+              stickSize={size / 2.5}
               baseColor="gray"
               stickColor="black"
               baseShape={JoystickShape.Square}
