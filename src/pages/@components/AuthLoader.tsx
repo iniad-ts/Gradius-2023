@@ -2,7 +2,7 @@ import { onAuthStateChanged } from 'firebase/auth';
 import { useAtom } from 'jotai';
 import { useRouter } from 'next/router';
 import { useEffect, useReducer } from 'react';
-import { userAtom } from 'src/atoms/user';
+import { playerAtom, userAtom } from 'src/atoms/user';
 import { pagesPath } from 'src/utils/$path';
 import { apiClient } from 'src/utils/apiClient';
 import { createAuth } from 'src/utils/firebase';
@@ -12,6 +12,7 @@ import { Loading } from '../../components/Loading/Loading';
 export const AuthLoader = () => {
   const router = useRouter();
   const [user, setUser] = useAtom(userAtom);
+  const [player, setPlayer] = useAtom(playerAtom);
   const [isInitedAuth, dispatchIsInitedAuth] = useReducer(() => true, false);
 
   useEffect(() => {
@@ -32,6 +33,13 @@ export const AuthLoader = () => {
 
     return unsubscribe;
   }, [setUser]);
+
+  useEffect(() => {
+    (async () => {
+      if (player === null) return;
+      await apiClient.session.player.$post({ body: { id: player.id } });
+    })();
+  }, [setPlayer, player]);
 
   useEffect(() => {
     if (!isInitedAuth) return;
