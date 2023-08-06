@@ -75,7 +75,6 @@ const Game = () => {
         fetchEnemies(display);
         fetchBullets(display);
         setCurrentTime(Date.now());
-        console.log('fetch');
       });
       return () => cancelAnimationFrame(cancelId);
     });
