@@ -5,7 +5,7 @@ export let gunPosition: number[][] = [[]];
 
 export const gunShot = async () => {
   console.log('gunShot動作');
-  gunPosition.push([position[0][0] + 50, position[0][1] + 25]);
+  gunPosition.push([position[0][0] + 10, position[0][1]]);
 };
 setInterval(() => {
   moveGun();
