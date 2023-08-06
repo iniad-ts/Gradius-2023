@@ -1,76 +1,135 @@
-import type { TaskModel } from '$/commonTypesWithClient/models';
 import { useAtom } from 'jotai';
-import type { ChangeEvent, FormEvent } from 'react';
+import Konva from 'konva';
 import { useEffect, useState } from 'react';
+import { Circle, Layer, Rect, Stage } from 'react-konva';
+import { userAtom } from 'src/atoms/user';
 import { Loading } from 'src/components/Loading/Loading';
-import { BasicHeader } from 'src/pages/@components/BasicHeader/BasicHeader';
-import { apiClient } from 'src/utils/apiClient';
-import { returnNull } from 'src/utils/returnNull';
-import { userAtom } from '../atoms/user';
-import styles from './index.module.css';
 
 const Home = () => {
+  //黒い枠の中をクリックし、矢印ボタンを押すと、赤い点が動くよー
+  const [playerX, setPlayerX] = useState(4);
+  const [playerY, setPlayerY] = useState(0);
+  const [tamaX, settamaX] = useState(0);
+  const [tamaY, settamaY] = useState(2);
   const [user] = useAtom(userAtom);
-  const [tasks, setTasks] = useState<TaskModel[]>();
-  const [label, setLabel] = useState('');
-  const inputLabel = (e: ChangeEvent<HTMLInputElement>) => {
-    setLabel(e.target.value);
-  };
-  const fetchTasks = async () => {
-    const tasks = await apiClient.tasks.$get().catch(returnNull);
-
-    if (tasks !== null) setTasks(tasks);
-  };
-  const createTask = async (e: FormEvent) => {
+  const [dx, setDx] = useState(-1); // x方向の移動量
+  const dx2 = 1;
+  const [dy, setDy] = useState(0); // y方向の移動量
+  const [enemies, setEnemies] = useState<{ x: number; y: number }[]>([
+    { x: 5, y: 2 },
+    { x: 8, y: 4 },
+  ]);
+  const [bullet, setbullets] = useState<{ x: number; y: number }[]>([]);
+  const [board, setBoard] = useState([
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  ]);
+  const hoge = true;
+  //キー入力
+  const keydown = async (e: React.KeyboardEvent<HTMLDivElement>) => {
     e.preventDefault();
-    if (!label) return;
-
-    await apiClient.tasks.post({ body: { label } });
-    setLabel('');
-    await fetchTasks();
-  };
-  const toggleDone = async (task: TaskModel) => {
-    await apiClient.tasks._taskId(task.id).patch({ body: { done: !task.done } });
-    await fetchTasks();
-  };
-  const deleteTask = async (task: TaskModel) => {
-    await apiClient.tasks._taskId(task.id).delete();
-    await fetchTasks();
+    // const game = await apiClient.?.$post({
+    //   body: { ? },
+    // });
   };
 
+  //newgame作る
+  const click = async (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    // const newGame = await apiClient.create.$post();
+  };
+
+  //スペースで弾出すよ(打て打つほど早くなっちゃう)
   useEffect(() => {
-    fetchTasks();
-  }, []);
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.code === 'Space') {
+        const newBullets = {
+          x: playerY,
+          y: playerX,
+        };
+        setbullets((prevbullets) => [...prevbullets, newBullets]);
+        console.log(bullet);
+        console.log(enemies);
+        const tamaAnimation = new Konva.Animation((tama) => {
+          setbullets((prevBullets) => {
+            if (tama === undefined) {
+              console.log('error');
+              return prevBullets;
+            } else {
+              const speed = 2;
+              const dist = speed * (tama.timeDiff / 1000);
+              const newbullet = prevBullets.map((bullet) => ({
+                ...bullet,
+                x: bullet.x + dx2 * dist,
+                y: bullet.y,
+              }));
+              return newbullet.filter((bullet) => bullet.x <= 18);
+            }
+          });
+        });
+        tamaAnimation.start();
+      }
+    };
+    document.addEventListener('keydown', handleKeyDown);
 
-  if (!tasks || !user) return <Loading visible />;
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dx2, dy]);
 
+  if (!hoge) return <Loading visible />;
   return (
     <>
-      <BasicHeader user={user} />
-      <div className={styles.title} style={{ marginTop: '160px' }}>
-        Welcome to frourio!
+      <div
+        className="container"
+        onKeyDown={keydown}
+        style={{ border: 'solid' }}
+        onClick={click}
+        tabIndex={0}
+      >
+        <div id="key">X:{playerX}</div>
+        <div id="key">Y:{playerY}</div>
+        <div id="key" />
       </div>
-
-      <form style={{ textAlign: 'center', marginTop: '80px' }} onSubmit={createTask}>
-        <input value={label} type="text" onChange={inputLabel} />
-        <input type="submit" value="ADD" />
-      </form>
-      <ul className={styles.tasks}>
-        {tasks.map((task) => (
-          <li key={task.id}>
-            <label>
-              <input type="checkbox" checked={task.done} onChange={() => toggleDone(task)} />
-              <span>{task.label}</span>
-            </label>
-            <input
-              type="button"
-              value="DELETE"
-              className={styles.deleteBtn}
-              onClick={() => deleteTask(task)}
+      <Stage width={800} height={600}>
+        <Layer>
+          {board.map((row, y) =>
+            row.map(
+              (color, x) =>
+                color !== 0 && (
+                  <Rect
+                    key={`${x}-${y}`}
+                    x={x * 100 + 70}
+                    y={y * 100}
+                    width={100}
+                    height={100}
+                    fill="black"
+                  />
+                )
+            )
+          )}
+          {enemies.map((enemy, index) => (
+            <Circle key={index} x={enemy.x * 100} y={enemy.y * 100 + 50} radius={20} fill="green" />
+          ))}
+          {bullet.map((bullet, index) => (
+            <Circle
+              key={index}
+              x={bullet.x * 100 + 50}
+              y={bullet.y * 100 + 50}
+              radius={20}
+              fill="red"
             />
-          </li>
-        ))}
-      </ul>
+          ))}
+        </Layer>
+      </Stage>
     </>
   );
 };
