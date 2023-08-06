@@ -25,4 +25,10 @@ export const bulletUseCase = {
     }
     return null;
   },
+  delete: async () => {
+    const bullets = await bulletsRepository.findAll();
+    const deleteBulleds = bullets.filter(
+      (bullet) => bullet.createdPosition.x + (bullet.createdAt - new Date().getTime())
+    );
+  },
 };
