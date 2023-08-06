@@ -30,7 +30,7 @@ function App() {
   }, [getPosition, newPlayerPosition]);
   //mapで展開してひとつずつ描画
   return (
-    <Stage width={windowWidth} height={windowHeight} >
+    <Stage width={windowWidth} height={windowHeight}>
       <Layer>
         <Rect
           stroke={'black'}
