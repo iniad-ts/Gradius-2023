@@ -1,7 +1,10 @@
-import type { MoveDirection } from '$/usecase/playerUsecase';
+import type { MoveDirection } from '$/Usecase/playerUsecase';
+
 export type Methods = {
+  get: {
+    resBody: number[][];
+  };
   post: {
     reqBody: MoveDirection;
-    resBody: string;
   };
 };
