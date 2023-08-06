@@ -13,10 +13,10 @@ const Home = () => {
     <>
       <BasicHeader user={user} />
       <div className={styles['handler-board']}>
-        <button className={styles.handler}>上</button>
-        <button className={styles.handler}>下</button>
-        <button className={styles.handler}>左</button>
-        <button className={styles.handler}>右</button>
+        <button className={styles.handler}>-Y</button>
+        <button className={styles.handler}>+Y</button>
+        <button className={styles.handler}>-X</button>
+        <button className={styles.handler}>+X</button>
       </div>
     </>
   );
