@@ -18,15 +18,6 @@ function App() {
     setNewPlayerPosition(new_playerPosition);
     setNewGunPosition(new_gunPosition);
   }, []);
-  //APiを叩いて銃を撃つ
-  const gunShot = useCallback(async () => {
-    await apiClient.rooms.gunPosition.$post();
-    const new_gunPosition = await apiClient.rooms.gunPosition.$get();
-    setNewGunPosition(new_gunPosition);
-  }, []);
-  // const movePlayer = useCallback(async () => {
-  //   await apiClient.rooms.control.$post({ body: 'up' });
-  // }, []);
 
   //apiを叩く処理を100msごとに実行
   useEffect(() => {
@@ -39,7 +30,7 @@ function App() {
   }, [getPosition, newPlayerPosition]);
   //mapで展開してひとつずつ描画
   return (
-    <Stage width={windowWidth} height={windowHeight} onClick={gunShot}>
+    <Stage width={windowWidth} height={windowHeight} >
       <Layer>
         <Rect
           stroke={'black'}
