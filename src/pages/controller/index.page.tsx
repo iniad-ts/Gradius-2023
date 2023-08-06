@@ -12,8 +12,6 @@ import styles from './controller.module.css';
 
 const Home = () => {
   const joystickRef = useRef<HTMLDivElement>(null);
-  console.log(joystickRef);
-
   const [user] = useAtom(userAtom);
   const [size, setSize] = useState<number>(0);
   const [moveIntervalId, setMoveIntervalId] = useState<NodeJS.Timeout | null>(null);
@@ -26,7 +24,6 @@ const Home = () => {
       setSize(width);
     }
   };
-
   // useEffectフックをトップレベルに配置します
   useEffect(() => {
     const cance = setInterval(getsize, 100);
@@ -36,14 +33,6 @@ const Home = () => {
     };
   }, []); // 依存性配列は空にします。getsizeが変更されるとタイマーはリセットされません
   if (!user) return <Loading visible />;
-  // const pushButton = async (pushed: string) => {
-  //   if (isValidInput(pushed)) {
-  //     const input = pushed;
-  //     const res = await apiClient.rooms.control.$post({ body: input });
-  //     console.log(res);
-  //   }
-  // };
-
   const shoot = async () => {
     await apiClient.rooms.gunPosition.$post();
   };
@@ -75,7 +64,7 @@ const Home = () => {
           <div ref={joystickRef} className={styles.joystick}>
             <Joystick
               size={size}
-              stickSize={size / 2.5}
+              stickSize={size / 2}
               baseColor="gray"
               stickColor="black"
               baseShape={JoystickShape.Square}
