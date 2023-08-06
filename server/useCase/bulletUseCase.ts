@@ -6,21 +6,21 @@ import { randomUUID } from 'crypto';
 import { playerUseCase } from './playerUseCase';
 
 export const bulletUseCase = {
-  create: async (id: UserId): Promise<BulletModel | null> => {
-    const userStatus = await playerUseCase.getStatus(id, null);
-    if (userStatus !== null) {
+  create: async (playerId: UserId): Promise<BulletModel | null> => {
+    console.log('bulletUseCase.create');
+    const player = await playerUseCase.getStatus(playerId, null);
+    if (player !== null) {
       const newBullet: BulletModel = {
         id: bulletIdParser.parse(randomUUID()),
         createdPosition: {
-          ...userStatus.position,
+          ...player.position,
         },
         direction: 0,
         type: 0,
-        playerId: id,
+        playerId,
         createdAt: Date.now(),
       };
       await bulletsRepository.create(newBullet);
-      console.log('create');
       return newBullet;
     }
     return null;

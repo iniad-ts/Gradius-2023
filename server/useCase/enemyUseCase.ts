@@ -17,7 +17,6 @@ export const enemyUseCase = {
       createdAt: Date.now(),
       type: 0,
     };
-    console.log('create');
     await enemiesRepository.create(newEnemy);
     return newEnemy;
   },
