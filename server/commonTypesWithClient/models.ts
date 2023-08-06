@@ -23,9 +23,10 @@ export type EnemyModel = {
 };
 
 export type playerModel = {
+  userId: UserId;
   pos: { x: number; y: number };
-  hp: number;
-  score: number;
-  radius: number;
   speed: number;
+  hp: number;
+  radius: number;
+  score: number;
 };
