@@ -4,6 +4,7 @@ import type { EnemyModel } from '$/commonTypesWithClient/models';
 
 import { EnemyIdParser } from '$/service/idParsers';
 import { randomUUID } from 'crypto';
+import { position } from './playerUsecase';
 
 //敵の位置を取得する際にこれを使えば、全ての敵の情報が配列で返されます
 //repositoryからgetEnemiesを直接たたくとusecaseがなぜか更新されないため1時的な回避策としてusecaseをapiでたたいて認識させてます
@@ -23,9 +24,8 @@ setInterval(() => {
 setInterval(() => {
   // move_or_delete_enemy();
   move_Enemy();
-  delete_off_screen_enemy();
-}, 100);
-
+  deleteOffScEreennemy();
+}, 5);
 // 仮初期値
 const enemy_first_pos_x = 1800;
 const enemy_speed = 5;
@@ -39,21 +39,38 @@ const create_enemy = async () => {
     speed: enemy_speed,
     hp: enemy_hp,
     radius: enemy_radius,
+    ///1-3のランダムな数値を返す
     type: Math.floor(Math.random() * 3) + 1,
   };
   await enemyRepository.save(new_enemy);
 };
-//typeに
+/* const moveToplayer = (enemy: EnemyModel, player: playerModel, delay: number) => {
+  enemy.pos.x = (player.pos.x + delay * enemy.pos.x) / (delay + 1);
+  enemy.pos.y = (player.pos.y + delay * enemy.pos.y) / (delay + 1);
+  return { x: enemy.pos.x - enemy.speed, y: enemy.pos.y };
+}; */
+//y軸のみプレイヤーに追従する
+//delayは追従の遅れを表す
+const moveToplayer = (enemy: EnemyModel, player: number[][], delay: number) => {
+  enemy.pos.x = enemy.pos.x - enemy.speed;
+  enemy.pos.y = (player[0][1] + delay * enemy.pos.y) / (delay + 1);
+  return { x: enemy.pos.x - enemy.speed, y: enemy.pos.y };
+};
+
+//typeによって動きを変える
 const moveEnemyByplayer = (enemy: EnemyModel): { x: number; y: number } => {
   if (enemy.type === 1) {
     return { x: enemy.pos.x - enemy.speed, y: enemy.pos.y };
   } else if (enemy.type === 2) {
-    return { x: enemy.pos.x - 30, y: enemy.pos.y };
+    moveToplayer(enemy, position, 60);
+    /* return { x: enemy.pos.x - 30, y: enemy.pos.y }; */
   } else if (enemy.type === 3) {
-    return { x: enemy.pos.x - 100, y: enemy.pos.y };
+    moveToplayer(enemy, position, 30);
+    /*  return { x: enemy.pos.x - 100, y: enemy.pos.y }; */
   }
   return { x: enemy.pos.x, y: enemy.pos.y };
 };
+//敵を動かす
 const move_Enemy = async () => {
   const enemies: EnemyModel[] = await enemyRepository.getEnemies();
 
@@ -67,20 +84,26 @@ const move_Enemy = async () => {
     await enemyRepository.save(moved_enemy);
   }
 };
+//一致する敵が存在するかどうか
 const EnemyExist = async (id: EnemyId): Promise<boolean> => {
   const enemies: EnemyModel[] = await enemyRepository.getEnemies();
   return enemies.some((enemy) => enemy.id === id);
 };
-
-const delete_off_screen_enemy = async () => {
+//敵を削除する
+const deleteEnemy = async (id: EnemyId) => {
+  if (await EnemyExist(id)) {
+    await enemyRepository.declare(id);
+  }
+};
+//
+const deleteOffScEreennemy = async () => {
   const enemies: EnemyModel[] = await enemyRepository.getEnemies();
 
-  for (const enemy of enemies) {
-    if (enemy.pos.x < 50 && (await EnemyExist(enemy.id))) {
-      await enemyRepository.declare(enemy.id);
-    }
+  const offScreenEnemiesIds = enemies.filter((enemy) => enemy.pos.x < 50).map((enemy) => enemy.id);
+
+  for (const id of offScreenEnemiesIds) {
+    await deleteEnemy(id);
   }
-  return;
 };
 
 //await Promise.allは、必要か微妙
