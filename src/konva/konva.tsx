@@ -7,23 +7,24 @@ function App() {
   const windowWidth = Number(window.innerWidth);
   const windowHeight = Number(window.innerHeight);
 
-  //プレイヤーと銃の位置をstateで管理
+  //プレイヤーと弾敵をstateで管理
   const [newPlayerPosition, setNewPlayerPosition] = useState<number[][]>([]);
   const [newGunPosition, setNewGunPosition] = useState<number[][]>([]);
   const [newEnemyPosition, setNewEnemyPosition] = useState<EnemyModel[]>([]);
-  //apiを叩いてプレイヤーと銃の位置を取得stateにセット
+  //apiを叩いてプレイヤーと銃敵の位置を取得stateにセット
   const getPosition = useCallback(async () => {
     const new_playerPosition = await apiClient.rooms.control.$get();
     const new_gunPosition = await apiClient.rooms.gunPosition.$get();
     const new_enemyPosition = await apiClient.check.$get();
 
-    // 例: newPlayerPosition と newEnemyPosition の間で当たり判定を行う場合
+    ///当たり判定を行う
     checkCollision(new_enemyPosition, new_gunPosition);
 
     setNewPlayerPosition(new_playerPosition);
     setNewGunPosition(new_gunPosition);
     setNewEnemyPosition(new_enemyPosition);
   }, []);
+  //仮の当たり判定関数
   const checkCollision = (hitlist1: EnemyModel[], hitlist2: number[][]) => {
     const list2Radius = 10; // list2 の固定の半径
 
@@ -39,6 +40,7 @@ function App() {
       });
     });
   };
+  //配列用の当たり判定関数
 
   /* const checkCollision = (hitlist1: EnemyModel[], hitlist2: EnemyModel[]) => {
     hitlist1.map((list1) => {
