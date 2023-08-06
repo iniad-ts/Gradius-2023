@@ -1,4 +1,5 @@
 import { enemyRepository } from '$/Repository/enemyRepository';
+import type { EnemyId } from '$/commonTypesWithClient/branded';
 import type { EnemyModel } from '$/commonTypesWithClient/models';
 
 import { EnemyIdParser } from '$/service/idParsers';
@@ -9,6 +10,9 @@ import { randomUUID } from 'crypto';
 export const enemyUsecase = {
   getAll_Enemies: async (): Promise<EnemyModel[]> => {
     return await enemyRepository.getEnemies();
+  },
+  delete_enemy: async (id: EnemyId) => {
+    await enemyRepository.declare(id);
   },
 };
 
@@ -63,6 +67,7 @@ const delete_off_screen_enemy = async () => {
       return true;
     }
   });
+
   //await Promise.allは、必要か微妙
   //await Promise.all(enemies.map((enemy) => enemyRepository.save(enemy)));
   // enemies.map((enemy) => enemyRepository.save(enemy));
