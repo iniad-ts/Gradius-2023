@@ -1,32 +1,17 @@
-import type { GameId } from '$/commonTypesWithClient/branded';
 import { gamesRepository } from '$/repository/gamesRepository';
+import { gameIdParser } from '$/service/idParsers';
+import { randomUUID } from 'crypto';
 
 export const gameUseCase = {
-  add: async (gameId: GameId, displayNumber: number, displayIpAddress: string) => {
-    const currentGame = await gamesRepository.find();
-    if (currentGame !== null) {
-      const changeGame = {
-        ...currentGame,
-        displays: [...currentGame.displays].splice(displayNumber, 0, displayIpAddress),
-      };
-      await gamesRepository.save(changeGame);
-    }
-  },
-  remove: async (gameId: GameId, displayIpAddress: string) => {
-    const currentGame = await gamesRepository.find();
-    if (currentGame !== null) {
-      const changeGame = {
-        ...currentGame,
-        displays: [...currentGame.displays].splice(
-          currentGame.displays.indexOf(displayIpAddress),
-          1
-        ),
-      };
-      await gamesRepository.save(changeGame);
-    }
-  },
-  view: async (gameId: GameId, displayIpAddress: string) => {
+  get: async () => {
     const game = await gamesRepository.find();
-    return game?.displays.indexOf(displayIpAddress);
+    if (game !== null) {
+      return game;
+    }
+    return await gamesRepository.save({
+      id: gameIdParser.parse(randomUUID()),
+      displayNumber: 0,
+      createdAt: Date.now(),
+    });
   },
 };
