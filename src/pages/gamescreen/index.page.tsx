@@ -1,24 +1,70 @@
 import { useAtom } from 'jotai';
-import { Circle, Layer, Stage } from 'react-konva';
+import React, { useEffect, useState } from 'react';
+import { Circle, Layer, Line, Stage } from 'react-konva';
 import { Loading } from 'src/components/Loading/Loading';
 import { userAtom } from '../../atoms/user';
-import styles from './index.module.css';
 
 const Home = () => {
   const [user] = useAtom(userAtom);
   if (!user) return <Loading visible />;
   return (
-    <>
-      <div className={styles.title} style={{ marginTop: '160px' }}>
-        Welcome to frourio!
-      </div>
-
-      <Stage width={window.innerWidth} height={window.innerHeight}>
-        <Layer>
-          <Circle fill="black" x={500} y={300} radius={50} />
-        </Layer>
-      </Stage>
-    </>
+    <Stage width={window.innerWidth} height={window.innerHeight}>
+      <Layer>
+        <Line
+          x={450}
+          y={200}
+          points={[0, 0, 100, 0, 50, 50]}
+          tension={0.2}
+          closed
+          stroke="black"
+          fillLinearGradientStartPoint={{ x: 80, y: 0 }}
+          fillLinearGradientEndPoint={{ x: 50, y: 50 }}
+          fillLinearGradientColorStops={[0, 'blue', 1, 'black']}
+        />
+        <Circle x={200} y={200} radius={30} fill="red" />
+      </Layer>
+    </Stage>
   );
+
+  const gradius_move: React.FC = () => {
+    const [UpArrow, setUpArrow] = useState(false);
+    const [DownArrow, setDownArrow] = useState(false);
+    const [LeftArrow, setLeftArrow] = useState(false);
+    const [RightArrow, setRightArrow] = useState(false);
+  };
+
+  useEffect(() => {
+    const keydown = (event: KeyboardEvent) => {
+      if (event.key === 'ArrowUp') {
+        setUpArrow(true);
+      } else if (event.key === 'ArrowDown') {
+        setDownArrow(true);
+      } else if (event.key === 'ArrowLeft') {
+        setLeftArrow(true);
+      } else if (event.key === 'ArrowRight') {
+        setRightArrow(true);
+      }
+    };
+
+    const keyUp = (event: KeyboardEvent) => {
+      if (event.key === 'ArrowUp') {
+        setUpArrow(false);
+      } else if (event.key === 'ArrowDown') {
+        setDownArrow(false);
+      } else if (event.key === 'ArrowLeft') {
+        setLeftArrow(false);
+      } else if (event.key === 'ArrowRight') {
+        setRightArrow(false);
+      }
+    };
+
+    window.addEventListener('keydown', keyDown);
+    window.addEventListener('keyup', keyUp);
+
+    return () => {
+      window.removeEventListener('keydown', keyDown);
+      window.removeEventListener('keyup', keyUp);
+    };
+  }, []);
 };
 export default Home;
