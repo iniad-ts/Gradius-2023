@@ -117,12 +117,13 @@ const delete_off_screen_enemy = async () => {
       return true;
     }
   });
+};
 
   //await Promise.allは、必要か微妙
   //await Promise.all(enemies.map((enemy) => enemyRepository.save(enemy)));
   // enemies.map((enemy) => enemyRepository.save(enemy));
 
-};
+
 
 //await Promise.allは、必要か微妙
 //await Promise.all(enemies.map((enemy) => enemyRepository.save(enemy)));
