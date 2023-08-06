@@ -20,8 +20,7 @@ const Controller = () => {
   const router = useRouter();
 
   const shootBullet = async () => {
-    // await apiClient.bullet.$post();
-    console.log('shoot');
+    await apiClient.bullet.$post();
   };
 
   const shootStart = () => {

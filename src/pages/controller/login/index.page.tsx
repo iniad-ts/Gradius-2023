@@ -18,6 +18,8 @@ const Login = () => {
     if (isButtonDisabled) return;
     const res = await apiClient.login.$post({ body: { name } });
     setPlayer(res);
+    if (res === null) return;
+    await apiClient.session.player.$post({ body: { id: res.id } });
   };
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setName(e.target.value);
