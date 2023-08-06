@@ -99,31 +99,16 @@ const deleteEnemy = async (id: EnemyId) => {
 const deleteOffScEreennemy = async () => {
   const enemies: EnemyModel[] = await enemyRepository.getEnemies();
 
-
   const offScreenEnemiesIds = enemies.filter((enemy) => enemy.pos.x < 50).map((enemy) => enemy.id);
 
   for (const id of offScreenEnemiesIds) {
     await deleteEnemy(id);
   }
-
-const delete_off_screen_enemy = async () => {
-  let enemies: EnemyModel[] = await enemyRepository.getEnemies();
-  enemies = enemies.filter((enemy) => {
-    //とりあえず50です
-    if (enemy.pos.x < 50) {
-      enemyRepository.declare(enemy.id);
-      return false;
-    } else {
-      return true;
-    }
-  });
 };
 
-  //await Promise.allは、必要か微妙
-  //await Promise.all(enemies.map((enemy) => enemyRepository.save(enemy)));
-  // enemies.map((enemy) => enemyRepository.save(enemy));
-
-
+//await Promise.allは、必要か微妙
+//await Promise.all(enemies.map((enemy) => enemyRepository.save(enemy)));
+// enemies.map((enemy) => enemyRepository.save(enemy));
 
 //await Promise.allは、必要か微妙
 //await Promise.all(enemies.map((enemy) => enemyRepository.save(enemy)));
