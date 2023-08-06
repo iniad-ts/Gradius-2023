@@ -2,6 +2,7 @@ import type { playerModel } from '$/commonTypesWithClient/models';
 
 export type MoveDirection = 'up' | 'left' | 'right' | 'down' | 'push';
 // pushって何？forはるき＃かきのき
+//buttunを押したときに球が発射されるよ。
 
 export const position: number[][] = [[50, 500]];
 export let gunPosition: number[][] = [[]];
@@ -33,7 +34,7 @@ export const player_info: playerModel[] = [];
 // setInterval(() => {
 //   player();
 // }, 250);
-export const gunShot = async () => {
+export const gunShot = () => {
   console.log('gunShot動作');
   gunPosition.push([position[0][0] + 50, position[0][1] + 25]);
 };
