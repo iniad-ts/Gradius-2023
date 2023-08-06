@@ -33,7 +33,7 @@ export const bulletUseCase = {
     const maxXPosition = ((game?.displayNumber ?? -1) + 1) * 1920;
     const deleteBullets = bullets.filter((bullet) => {
       const [x, y] = posWithBulletModel(bullet);
-      return [x < 0, maxXPosition < x, y < 0, 1080 < y].some(Boolean);
+      return x < 0 || maxXPosition < x || y < 0 || 1080 < y;
     });
     deleteBullets.forEach((bullet) => {
       bulletsRepository.delete(bullet.id);
