@@ -39,19 +39,31 @@ const create_enemy = async () => {
     speed: enemy_speed,
     hp: enemy_hp,
     radius: enemy_radius,
+    type: Math.floor(Math.random() * 3) + 1,
   };
   await enemyRepository.save(new_enemy);
 };
-
+//typeによって移動速度を変える
+const moveEnemyByplayer = (enemy: EnemyModel): { x: number; y: number } => {
+  if (enemy.type === 1) {
+    return { x: enemy.pos.x - enemy.speed, y: enemy.pos.y };
+  } else if (enemy.type === 2) {
+    return { x: enemy.pos.x - 30, y: enemy.pos.y };
+  } else if (enemy.type === 3) {
+    return { x: enemy.pos.x - 100, y: enemy.pos.y };
+  }
+  return { x: enemy.pos.x, y: enemy.pos.y };
+};
 const move_Enemy = async () => {
   const enemies: EnemyModel[] = await enemyRepository.getEnemies();
 
   for (const enemy of enemies) {
+    const newPos = moveEnemyByplayer(enemy);
     const moved_enemy: EnemyModel = {
       ...enemy,
-      //ここは、後でenemyの複雑な動きに対応させる
-      pos: { x: enemy.pos.x - 10, y: enemy.pos.y },
+      pos: newPos,
     };
+
     await enemyRepository.save(moved_enemy);
   }
 };

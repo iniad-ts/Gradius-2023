@@ -99,7 +99,7 @@ function App() {
               fontSize={15}
               fontFamily="Arial"
               fill="white"
-              text={enemy.hp.toString()}
+              text={enemy.type.toString()}
             />
           </React.Fragment>
         ))}

@@ -1,5 +1,6 @@
 // import type { MoveDirection } from '$/usecase/playerUsecase';
 import type { MoveDirection } from '$/Usecase/playerUsecase';
+
 import { useAtom } from 'jotai';
 import { useEffect, useRef, useState } from 'react';
 import { Joystick, JoystickShape } from 'react-joystick-component';
@@ -69,6 +70,7 @@ const Home = () => {
   return (
     <>
       <div className={styles.container}>
+        {/* <button onClick={() => pushButton('up')}>kakikukeko</button> */}
         <div className={styles.board}>
           <div ref={joystickRef} className={styles.joystick}>
             <Joystick
