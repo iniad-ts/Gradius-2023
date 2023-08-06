@@ -39,7 +39,6 @@ export const playerUseCase = {
       score: 0,
       team: 'red',
     };
-    console.log('create');
     await playersRepository.save(newPlayer);
     return newPlayer;
   },

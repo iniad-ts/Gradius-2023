@@ -10,7 +10,6 @@ export type AdditionalRequest = {
 export default defineHooks(() => ({
   preHandler: async (req, res) => {
     const player = await playersRepository.find(userIdParser.parse(req.cookies['session-player']));
-    console.log(player);
 
     if (!player) {
       if (req.method === 'POST') {

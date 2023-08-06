@@ -20,7 +20,6 @@ export const bulletUseCase = {
         createdAt: Date.now(),
       };
       await bulletsRepository.create(newBullet);
-      console.log('create');
       return newBullet;
     }
     return null;
