@@ -19,6 +19,9 @@ const Game = () => {
         if (res !== null) {
           setDisplayNumber(res);
         }
+        if (res === 0) {
+          router.push('/game/config');
+        }
       };
 
       useEffect(() => {
