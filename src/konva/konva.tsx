@@ -27,7 +27,9 @@ function App() {
   }, []);
   //仮の当たり判定関数
   const checkCollision = (hitlist1: EnemyModel[], hitlist2: number[][]) => {
+
     const list2Radius = 20; // list2 の固定の半径
+
 
     hitlist1.map((list1) => {
       hitlist2.map((list2: number[]) => {
@@ -59,7 +61,7 @@ function App() {
 
   //apiを叩く処理を100msごとに実行
   useEffect(() => {
-    const cancelId = setInterval(getPosition, 100);
+    const cancelId = setInterval(getPosition, 50);
 
     return () => {
       clearInterval(cancelId);
@@ -101,6 +103,7 @@ function App() {
               fontFamily="Arial"
               fill="white"
               text={enemy.type.toString()}
+
             />
           </React.Fragment>
         ))}

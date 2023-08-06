@@ -1,0 +1,55 @@
+.container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url('../../images/gameneon03.jpg');
+}
+
+.main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  text-align: center;
+  backdrop-filter: blur(4px);
+}
+.title {
+  font-size: 80px;
+  font-weight: bold;
+  text-shadow: 1px 1px white;
+}
+
+.btn {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  padding: 3px 12px;
+  border-radius: 4px;
+  font-size: 14px;
+  color: white;
+  font-weight: bold;
+  background: #222;
+  cursor: pointer;
+  transition: 0.2s background;
+}
+.handIn {
+  font-family: Arial;
+  color: #ffffff;
+  font-size: 16px;
+  padding-top: 10px;
+  padding-right: 20px;
+  padding-bottom: 10px;
+  padding-left: 20px;
+  text-decoration: none;
+  -webkit-border-radius: 10px;
+  -moz-border-radius: 10px;
+  border-radius: 10px;
+  -webkit-box-shadow: 0px 8px 6px #e3e3e3;
+  -moz-box-shadow: 0px 8px 6px #e3e3e3;
+  box-shadow: 0px 8px 6px #e3e3e3;
+  border: solid #f5fdff 4px;
+  background-color: aqua;
+}
