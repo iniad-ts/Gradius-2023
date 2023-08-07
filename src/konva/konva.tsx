@@ -19,6 +19,7 @@ function App() {
 
     ///当たり判定を行う
     checkCollision(new_enemyPosition, new_gunPosition);
+    checkCollision(new_enemyPosition, new_playerPosition);
 
     setNewPlayerPosition(new_playerPosition);
     setNewGunPosition(new_gunPosition);
@@ -26,7 +27,7 @@ function App() {
   }, []);
   //仮の当たり判定関数
   const checkCollision = (hitlist1: EnemyModel[], hitlist2: number[][]) => {
-    const list2Radius = 10; // list2 の固定の半径
+    const list2Radius = 20; // list2 の固定の半径
 
     hitlist1.map((list1) => {
       hitlist2.map((list2: number[]) => {
@@ -99,7 +100,7 @@ function App() {
               fontSize={15}
               fontFamily="Arial"
               fill="white"
-              text={enemy.hp.toString()}
+              text={enemy.type.toString()}
             />
           </React.Fragment>
         ))}

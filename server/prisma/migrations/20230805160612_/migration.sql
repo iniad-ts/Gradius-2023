@@ -15,14 +15,14 @@ CREATE TABLE "Enemy" (
     "speed" INTEGER NOT NULL,
     "hp" INTEGER NOT NULL,
     "radius" INTEGER NOT NULL,
-
+    "type" INTEGER NOT NULL,
     CONSTRAINT "Enemy_pkey" PRIMARY KEY ("id")
 );
 -- CreateTable
 CREATE TABLE "Player"(
     "userId" TEXT NOT NULL,
     "pos" JSONB not  NULL,
-    'speed' INTEGER NOT NULL,
+    "speed" INTEGER NOT NULL,
     "hp" INTEGER NOT NULL,
     "radius" INTEGER NOT NULL,
     "score" INTEGER NOT NULL,

@@ -20,6 +20,7 @@ model Enemy {
   speed  Int
   hp     Int
   radius Int
+  type   Int
 }
 
 model Player {

@@ -16,6 +16,7 @@ const toEnemyModel = (prismaEnemy: Enemy): EnemyModel => ({
   speed: z.number().parse(prismaEnemy.speed),
   hp: z.number().parse(prismaEnemy.hp),
   radius: z.number().parse(prismaEnemy.radius),
+  type: z.number().parse(prismaEnemy.type),
 });
 
 export const enemyRepository = {
@@ -33,6 +34,7 @@ export const enemyRepository = {
         hp: enemy.hp,
         //途中でサイズ変わるかも？
         radius: enemy.radius,
+        type: enemy.type,
       },
       create: {
         id: enemy.id,
@@ -40,6 +42,7 @@ export const enemyRepository = {
         speed: enemy.speed,
         hp: enemy.hp,
         radius: enemy.radius,
+        type: enemy.type,
       },
     });
   },
