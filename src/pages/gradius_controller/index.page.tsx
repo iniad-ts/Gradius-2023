@@ -17,7 +17,7 @@ const Home = () => {
 
   //移動方向serveにpost req
   const order_to_direction = useCallback((direction: MoveDirection) => {
-    const ordered_direction = apiClient.controller1.player.$post({ body: direction });
+    const ordered_direction = apiClient.cntroller.player.$post({ body: direction });
     console.log(ordered_direction);
   }, []);
 

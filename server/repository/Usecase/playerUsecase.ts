@@ -39,7 +39,7 @@ export const player_info: Player_Info = {
   scole: player_scole,
 };
 
-export const move_player = {
+export const move = {
   moveplayer: async (move_direction: MoveDirection) => {
     player_info.pos = {
       x: Math.min(
