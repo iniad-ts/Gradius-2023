@@ -20,7 +20,7 @@ export const enemyUsecase = {
 setInterval(() => {
   create_enemy();
   deleteOffScEreennemy();
-}, 1000);
+}, 5000);
 
 setInterval(() => {
   // move_or_delete_enemy();
@@ -54,7 +54,7 @@ const create_enemy = async () => {
 const moveToplayer = (enemy: EnemyModel, player: number[][], delay: number) => {
   enemy.pos.x = enemy.pos.x - enemy.speed;
   enemy.pos.y = (player[0][1] + delay * enemy.pos.y) / (delay + 1);
-  return { x: enemy.pos.x - enemy.speed, y: enemy.pos.y };
+  return { x: enemy.pos.x, y: enemy.pos.y };
 };
 
 //typeによって動きを変える
