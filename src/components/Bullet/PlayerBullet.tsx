@@ -1,5 +1,6 @@
 import React from 'react';
 import { Circle } from 'react-konva';
+import { posWithDirSpeTim } from 'src/utils/posWithDirSpeTim';
 
 type BulletProps = {
   bullet: {
@@ -13,19 +14,8 @@ type BulletProps = {
   currentTime: number;
 };
 
-const BULLET_SPEED = 300;
-
-const angleToRadian = (angle: number) => {
-  return (angle * Math.PI) / 180;
-};
-
 export const Bullet: React.FC<BulletProps> = ({ bullet, currentTime }) => {
-  const elapsedTime = (currentTime - bullet.createdAt) / 1000;
-
-  const dx = BULLET_SPEED * elapsedTime * Math.cos(angleToRadian(bullet.direction));
-  const dy = BULLET_SPEED * elapsedTime * Math.sin(angleToRadian(bullet.direction));
-  const x = bullet.createdPosition.x + dx;
-  const y = bullet.createdPosition.y + dy;
+  const [x, y] = posWithDirSpeTim(bullet, currentTime);
 
   return <Circle x={x} y={y} radius={5} fill="red" />;
 };
