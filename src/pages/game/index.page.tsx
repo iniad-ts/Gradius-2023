@@ -10,12 +10,13 @@ import useImage from 'use-image';
 const Game = () => {
   const router = useRouter();
   const display = router.query.display === undefined ? null : Number(router.query.display);
-
+  console.log(display);
   if (display === null) {
     const Lobby = () => {
       const [displayNumber, setDisplayNumber] = useState<number>(0);
       const getDisplayNumber = async () => {
         const res = await apiClient.game.config.$get();
+        console.log(res);
         if (res !== null) {
           setDisplayNumber(res);
         }
