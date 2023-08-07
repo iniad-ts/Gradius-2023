@@ -13,7 +13,11 @@ export const enemyUsecase = {
     return await enemyRepository.getEnemies();
   },
   delete_enemy: async (id: EnemyId) => {
-    await enemyRepository.declare(id);
+    try {
+      await enemyRepository.declare(id);
+    } catch (e) {
+      console.log(e);
+    }
   },
 };
 
@@ -39,8 +43,9 @@ const create_enemy = async () => {
     speed: enemy_speed,
     hp: enemy_hp,
     radius: enemy_radius,
+    type: 2,
     ///1-3のランダムな数値を返す
-    type: Math.floor(Math.random() * 3) + 1,
+    /* type: Math.floor(Math.random() * 3) + 1, */
   };
   await enemyRepository.save(new_enemy);
 };
@@ -102,7 +107,7 @@ const deleteOffScEreennemy = async () => {
   const offScreenEnemiesIds = enemies.filter((enemy) => enemy.pos.x < 50).map((enemy) => enemy.id);
 
   for (const id of offScreenEnemiesIds) {
-    console.log('delete', id);
+    console.log('画面外delete', id);
     await deleteEnemy(id);
   }
 };

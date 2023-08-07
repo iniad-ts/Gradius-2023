@@ -39,7 +39,7 @@ const Home = () => {
         );
         if (distance1to2 < list1.radius + list2Radius) {
           apiClient.check.$post({ body: list1.id });
-          console.log('hit');
+          console.log('フロントhit', list1.id);
         }
       });
     });

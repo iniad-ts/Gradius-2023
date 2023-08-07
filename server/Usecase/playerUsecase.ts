@@ -5,7 +5,7 @@ import { randomUUID } from 'crypto';
 
 export type MoveDirection = { x: number; y: number };
 
-export const position: number[][] = [[50, 500]];
+export const position: number[][] = [[300, 500]];
 export let gunPosition: number[][] = [[]];
 
 export const gunShot = async () => {
@@ -46,7 +46,7 @@ export const player_Usecase = {
 };
 
 // 仮初期値
-const player_first_pos_x = 50;
+const player_first_pos_x = 300;
 const player_first_pos_y = 300;
 const player_speed = 5;
 const player_radius = 20;
