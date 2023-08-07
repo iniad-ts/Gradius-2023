@@ -19,13 +19,13 @@ export const enemyUsecase = {
 
 setInterval(() => {
   create_enemy();
-}, 4000);
+  deleteOffScEreennemy();
+}, 1000);
 
 setInterval(() => {
   // move_or_delete_enemy();
   move_Enemy();
-  deleteOffScEreennemy();
-}, 5);
+}, 10);
 // 仮初期値
 const enemy_first_pos_x = 1800;
 const enemy_speed = 5;
@@ -102,6 +102,7 @@ const deleteOffScEreennemy = async () => {
   const offScreenEnemiesIds = enemies.filter((enemy) => enemy.pos.x < 50).map((enemy) => enemy.id);
 
   for (const id of offScreenEnemiesIds) {
+    console.log('delete', id);
     await deleteEnemy(id);
   }
 };
