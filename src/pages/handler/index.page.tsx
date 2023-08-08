@@ -10,21 +10,20 @@ const Home = () => {
     e.preventDefault();
     const game = await apiClient.handler.$post({
       body: { position: layerPosition, key: e.code },
-      
     });
     setLayerPosition(game.position);
   };
-  // const click = async (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-  //   await apiClient.handler.$post();
-  //   console.log(e);
-  // };
+  const click = async (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    await apiClient.create.$post();
+    console.log(e);
+  };
   const [layerPosition, setLayerPosition] = useState({ x: 0, y: 0 });
   if (!hoge) return <Loading visible />;
   console.log(`x:${layerPosition.x}y:${layerPosition.y}`);
 
   return (
     <>
-      <div className="debug-board" onKeyDown={keydown} tabIndex={0}>
+      <div className="debug-board" onKeyDown={keydown} onClick={click} tabIndex={0}>
         <div id="key">X:{layerPosition.x}</div>
         <div id="key">Y:{layerPosition.y}</div>
       </div>
