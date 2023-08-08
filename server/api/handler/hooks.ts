@@ -9,6 +9,7 @@ export type AdditionalRequest = {
 };
 export default defineHooks(() => ({
   preHandler: async (req, res) => {
+    console.log('Received requestttttttttttttttttttttttttt', req);
     const user = await getUserModel(req.cookies.session);
 
     if (!user) {
@@ -22,5 +23,6 @@ export default defineHooks(() => ({
       displayName: user.displayName,
       photoURL: user.photoURL,
     };
+    console.log('Sending responseeeeeeeeeeeeeeeeeeeeeeeeeeeee', res);
   },
 }));
