@@ -1,7 +1,7 @@
 import type { RoomModel, UserModel } from '$/commonTypesWithClient/models';
 import { getUserModel } from '$/middleware/firebaseAdmin';
-import { defineHooks } from './$relay';
 import { userIdParser } from '$/service/idParsers';
+import { defineHooks } from './$relay';
 
 export type AdditionalRequest = {
   user: UserModel;
