@@ -34,18 +34,17 @@ const Home = () => {
         <div className={styles['debug-value']}>Y:{layerPosition.y}</div>
       </div>
       <div className={styles['handler-board']} tabIndex={0}>
-        <button className={styles.handler} onClick={() => handleButtonClick('-Y')}>
-          -Y
+        <button className={styles['minus-y']} onClick={() => handleButtonClick('+Y')}>
+          +Y
         </button>
-        
-        <button className={styles.handler} onClick={() => handleButtonClick('-X')}>
+        <button className={styles['minus-x']} onClick={() => handleButtonClick('-X')}>
           -X
         </button>
-        <button className={styles.handler} onClick={() => handleButtonClick('+X')}>
+        <button className={styles['plus-x']} onClick={() => handleButtonClick('+X')}>
           +X
         </button>
-        <button className={styles.handler} onClick={() => handleButtonClick('+Y')}>
-          +Y
+        <button className={styles['plus-y']} onClick={() => handleButtonClick('-Y')}>
+          -Y
         </button>
       </div>
     </>
