@@ -22,32 +22,32 @@ export const handlerusecase = {
     const latest = await handlerrepository.findLatest(label);
     assert(latest);
     console.log(latest);
-    // if (key === '-Y') {
-    //   position.y -= 1;
-    //   latest.position.y = position.y;
-    // } else if (key === '+Y') {
-    //   position.y += 1;
-    //   latest.position.y = position.y;
-    // } else if (key === '-X') {
-    //   position.x -= 1;
-    //   latest.position.x = position.x;
-    // } else if (key === '+X') {
-    //   position.x += 1;
-    //   latest.position.x = position.x;
-    // }
-    if (key === 'ArrowUp') {
-      position.y += 1;
-      latest.position.y = position.y;
-    } else if (key === 'ArrowDown') {
+    if (key === '-Y') {
       position.y -= 1;
       latest.position.y = position.y;
-    } else if (key === 'ArrowLeft') {
+    } else if (key === '+Y') {
+      position.y += 1;
+      latest.position.y = position.y;
+    } else if (key === '-X') {
       position.x -= 1;
       latest.position.x = position.x;
-    } else if (key === 'ArrowRight') {
+    } else if (key === '+X') {
       position.x += 1;
       latest.position.x = position.x;
     }
+    // if (key === 'ArrowUp') {
+    //   position.y += 1;
+    //   latest.position.y = position.y;
+    // } else if (key === 'ArrowDown') {
+    //   position.y -= 1;
+    //   latest.position.y = position.y;
+    // } else if (key === 'ArrowLeft') {
+    //   position.x -= 1;
+    //   latest.position.x = position.x;
+    // } else if (key === 'ArrowRight') {
+    //   position.x += 1;
+    //   latest.position.x = position.x;
+    // }
     console.log(userId);
     await handlerrepository.save(latest);
     return latest;
