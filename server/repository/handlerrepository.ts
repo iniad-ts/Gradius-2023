@@ -4,11 +4,6 @@ import { prismaClient } from '$/service/prismaClient';
 import type { game } from '@prisma/client';
 import { z } from 'zod';
 
-// type game = {
-//   firebaseId: string;
-//   position: { x: number; y: number };
-// };
-
 const toGameModel = (prismaRoom: game): RoomModel => ({
   Id: userIdParser.parse(prismaRoom.firebaseId),
   position: z
@@ -29,7 +24,7 @@ export const handlerrepository = {
   },
   findLatest: async (label: string | undefined): Promise<RoomModel | undefined> => {
     const gamelist = await prismaClient.game.findMany();
-    const rooms = gamelist.find((game) => game.firebaseId === label);
+    const rooms: game | undefined = gamelist.find((game) => game.firebaseId === label);
     return rooms && toGameModel(rooms);
   },
 };
