@@ -10,6 +10,7 @@ const Home = () => {
     e.preventDefault();
     const game = await apiClient.handler.$post({
       body: { position: layerPosition, key: e.code },
+      
     });
     setLayerPosition(game.position);
   };
