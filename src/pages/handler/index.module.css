@@ -1,11 +1,24 @@
-.handler-board {
+.debug-board {
   height: 50px;
   width: 200px;
-  background: gray;
+  background-color: brown;
 }
+
+.debug-value {
+  color: beige;
+  display: inline;
+}
+
+.handler-board {
+  height: 200px;
+  width: 200px;
+  background: gray;
+  position: relative;
+}
+
 .handler {
-  width: 50px;
-  height: 50px;
+  width: 100px;
+  height: 100px;
   background: black;
   color: white;
 }

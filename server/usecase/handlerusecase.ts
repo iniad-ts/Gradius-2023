@@ -22,16 +22,16 @@ export const handlerusecase = {
     const latest = await handlerrepository.findLatest(label);
     assert(latest);
     console.log(latest);
-    if (key === 'ArrowUp') {
+    if (key === '-Y') {
       position.y -= 1;
       latest.position.y = position.y;
-    } else if (key === 'ArrowDown') {
+    } else if (key === '+Y') {
       position.y += 1;
       latest.position.y = position.y;
-    } else if (key === 'ArrowLeft') {
+    } else if (key === '-X') {
       position.x -= 1;
       latest.position.x = position.x;
-    } else if (key === 'ArrowRight') {
+    } else if (key === '+X') {
       position.x += 1;
       latest.position.x = position.x;
     }
