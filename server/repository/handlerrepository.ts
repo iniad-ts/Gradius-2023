@@ -22,19 +22,19 @@ export const handlerrepository = {
       create: { firebaseId: game.Id, position: game.position },
     });
   },
-  // findLatest: async (label: string | undefined): Promise<RoomModel | undefined> => {
-  //   const gamelist = await prismaClient.game.findMany();
-  //   const rooms = gamelist.find((game) => game.firebaseId === label);
-  //   return rooms && toGameModel(rooms);
-  // },
   findLatest: async (label: string | undefined): Promise<RoomModel | undefined> => {
     const gamelist = await prismaClient.game.findMany();
-    const rooms: PrismaGame | undefined = gamelist.find((game) => game.firebaseId === label);
-
-    if (rooms && typeof rooms.firebaseId === 'string') {
-      return toGameModel(rooms);
-    } else {
-      return undefined;
-    }
+    const rooms = gamelist.find((game) => game.firebaseId === label);
+    return rooms && toGameModel(rooms);
   },
+  // findLatest: async (label: string | undefined): Promise<RoomModel | undefined> => {
+  //   const gamelist = await prismaClient.game.findMany();
+  //   const rooms: PrismaGame | undefined = gamelist.find((game) => game.firebaseId === label);
+
+  //   if (rooms && typeof rooms.firebaseId === 'string') {
+  //     return toGameModel(rooms);
+  //   } else {
+  //     return undefined;
+  //   }
+  // },
 };
