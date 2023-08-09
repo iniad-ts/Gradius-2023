@@ -25,16 +25,6 @@ export const handlerrepository = {
   findLatest: async (label: string | undefined): Promise<RoomModel | undefined> => {
     const gamelist = await prismaClient.game.findMany();
     const rooms = gamelist.find((game) => game.firebaseId === label);
-    return rooms && toGameModel(rooms);
+    return rooms ? toGameModel(rooms) : undefined;
   },
-  // findLatest: async (label: string | undefined): Promise<RoomModel | undefined> => {
-  //   const gamelist = await prismaClient.game.findMany();
-  //   const rooms: PrismaGame | undefined = gamelist.find((game) => game.firebaseId === label);
-
-  //   if (rooms && typeof rooms.firebaseId === 'string') {
-  //     return toGameModel(rooms);
-  //   } else {
-  //     return undefined;
-  //   }
-  // },
 };
