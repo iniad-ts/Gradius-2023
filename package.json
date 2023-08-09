@@ -33,7 +33,8 @@
     "jotai": "^1.13.0",
     "next": "^13.3.1",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react-dom": "^18.2.0",
+    "three": "^0.155.0"
   },
   "devDependencies": {
     "@stylelint/postcss-css-in-js": "^0.37.2",

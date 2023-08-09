@@ -1,0 +1,25 @@
+.joystick {
+  position: fixed;
+  bottom: 0.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
+}
+.joystickFrame {
+  width: 130px;
+  height: 130px;
+  border-radius: 100rem;
+  border: 2px white solid;
+  position: relative;
+}
+.joystickBall {
+  width: 60px;
+  height: 60px;
+  background: white;
+  border-radius: 100rem;
+  border: 2px white solid;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
