@@ -1,10 +1,10 @@
 import type { RoomModel } from '$/commonTypesWithClient/models';
 import { userIdParser } from '$/service/idParsers';
 import { prismaClient } from '$/service/prismaClient';
-import type { game as PrismaGame } from '@prisma/client';
+import type { game } from '@prisma/client';
 import { z } from 'zod';
 
-const toGameModel = (prismaRoom: PrismaGame): RoomModel => ({
+const toGameModel = (prismaRoom: game): RoomModel => ({
   Id: userIdParser.parse(prismaRoom.firebaseId),
   position: z
     .object({
@@ -22,9 +22,9 @@ export const handlerrepository = {
       create: { firebaseId: game.Id, position: game.position },
     });
   },
-  findLatest: async (label: string | undefined): Promise<RoomModel | undefined> => {
+  findLatest: async (Label: string | undefined): Promise<RoomModel | undefined> => {
     const gamelist = await prismaClient.game.findMany();
-    const rooms: PrismaGame | undefined = gamelist.find((game) => game.firebaseId === label);
+    const rooms: game | undefined = gamelist.find((game) => game.firebaseId === Label);
     return rooms ? toGameModel(rooms) : undefined;
   },
 };
