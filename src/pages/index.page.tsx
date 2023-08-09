@@ -5,37 +5,16 @@ import { apiClient } from 'src/utils/apiClient';
 import styles from './index.module.css';
 //a
 const Home = () => {
-  // const [playerX, setPlayerX] = useState(0);
-  // const [playerY, setPlayerY] = useState(0);
-  // const [board, setBoard] = useState([
-  //   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-  //   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-  //   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-  //   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-  //   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-  //   [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-  //   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-  //   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-  //   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-  //   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-  //   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-  // ]);
-
   const hoge = true;
   const keydown = async (e: React.KeyboardEvent<HTMLDivElement>) => {
     e.preventDefault();
     const game = await apiClient.game.$post({
       body: { position: layerPosition, key: e.code },
     });
-    // console.log(game.x);
-    // console.log(game.y);
-    // setPlayerX(game.x);
-    // setPlayerY(game.y);
     setLayerPosition(game.position);
     if (e.code === 'KeyZ') {
       setIsFiring(true);
     }
-    // console.log(game.position);
   };
   const click = async (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     await apiClient.create.$post();
@@ -48,18 +27,6 @@ const Home = () => {
     const keyHandler = (event: KeyboardEvent) => {
       const typedEvent = event as unknown as React.KeyboardEvent<HTMLDivElement>;
       switch (typedEvent.code) {
-        case 'ArrowUp':
-          setLayerPosition((prevState) => ({ x: prevState.x, y: prevState.y - 5 }));
-          break;
-        case 'ArrowDown':
-          setLayerPosition((prevState) => ({ x: prevState.x, y: prevState.y + 5 }));
-          break;
-        case 'ArrowRight':
-          setLayerPosition((prevState) => ({ x: prevState.x + 5, y: prevState.y }));
-          break;
-        case 'ArrowLeft':
-          setLayerPosition((prevState) => ({ x: prevState.x - 5, y: prevState.y }));
-          break;
         case 'KeyZ':
           setIsFiring(true);
           break;
@@ -115,10 +82,6 @@ const Home = () => {
         }}
       />
       <div className={styles.board}>
-        {/* {board.map((row, y) =>
-          row.map((color, x) => (
-            <div className={styles.cell} key={`${x}-${y}`} style={{ position: 'relative' }}>
-              {color !== 0 && ( */}
         <Stage width={640} height={400}>
           <Layer>
             <Rect width={640} height={400} stroke="black" fill="blue" />
@@ -186,10 +149,6 @@ const Home = () => {
             </Layer>
           )}
         </Stage>
-        {/* )}
-            </div>
-          ))
-        )} */}
       </div>
     </>
   );
