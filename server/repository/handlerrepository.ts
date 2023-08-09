@@ -22,9 +22,9 @@ export const handlerrepository = {
       create: { firebaseId: game.Id, position: game.position },
     });
   },
-  findLatest: async (Label: string | undefined): Promise<RoomModel | undefined> => {
+  findLatest: async (label: string | undefined): Promise<RoomModel | undefined> => {
     const gamelist = await prismaClient.game.findMany();
-    const rooms: game | undefined = gamelist.find((game) => game.firebaseId === Label);
-    return rooms ? toGameModel(rooms) : undefined;
+    const rooms: game | undefined = gamelist.find((game) => game.firebaseId === label);
+    return rooms !== undefined ? toGameModel(rooms) : undefined;
   },
 };
