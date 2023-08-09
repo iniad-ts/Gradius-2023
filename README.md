@@ -3,8 +3,9 @@
 フロントエンドは src ディレクトリの [Next.js](https://nextjs.org/) 、バックエンドは server ディレクトリの [frourio](https://frourio.com/) で構築された TypeScript で一気通貫開発が可能なモノレポサービス
 
 ## 開発手順
-
+ごっと
 ### Node.js のインストール
+しこーです。
 
 ローカルマシンに直接インストールする
 
@@ -66,3 +67,4 @@ http://localhost:9001/
 $ cd server
 $ npx prisma studio
 ```
+kd
