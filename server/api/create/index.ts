@@ -5,7 +5,6 @@ export type Methods = {
     resBody: string;
   };
   post: {
-    reqBody: { position: { x: number; y: number }; key: string };
     resBody: RoomModel;
   };
 };
