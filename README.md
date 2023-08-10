@@ -1,10 +1,6 @@
 # Next frourio starter
 
-
-
-テスト2
-テストピロピロ
-
+テスト3
 
 フロントエンドは src ディレクトリの [Next.js](https://nextjs.org/) 、バックエンドは server ディレクトリの [frourio](https://frourio.com/) で構築された TypeScript で一気通貫開発が可能なモノレポサービス
 
@@ -70,6 +66,9 @@ http://localhost:9001/
 $ cd server
 $ npx prisma studio
 ```
+
+7ニキ
+
 
 wowow
 

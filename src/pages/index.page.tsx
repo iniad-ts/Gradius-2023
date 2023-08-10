@@ -57,6 +57,7 @@ const Home = () => {
         setbullets((prevbullets) => [...prevbullets, newBullets]);
         console.log(bullet);
         console.log(enemies);
+        console.log(enemies.length);
         const tamaAnimation = new Konva.Animation((tama) => {
           setbullets((prevBullets) => {
             if (tama === undefined) {
@@ -84,6 +85,60 @@ const Home = () => {
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dx2, dy]);
+
+  const findnumber = (n: number) => {
+    let count = 0;
+    for (let y = 0; y < board.length; y++) {
+      for (let x = 0; x < board[y].length; x++) {
+        // eslint-disable-next-line max-depth
+        if (board[y][x] === n) {
+          count++;
+        }
+      }
+    }
+    return count;
+  };
+  useEffect(() => {
+    const moveenemy = () => {
+      console.log('a');
+      if (enemies.length === 0) {
+        const addEnemy = () => {
+          const newEnemies = [
+            { x: 5, y: 2 },
+            { x: 8, y: 4 },
+          ];
+          setEnemies((prevEnemies) => [...prevEnemies, ...newEnemies]);
+        };
+        addEnemy();
+      }
+      if (enemies.length !== 0) {
+        console.log(enemies.length);
+        const enemyAnimation = new Konva.Animation((enemy) => {
+          setEnemies((prevenemy) => {
+            if (enemy === undefined) {
+              console.log('error');
+              return prevenemy;
+            } else {
+              const speed = 0.1;
+              const dist = speed * (enemy.timeDiff / 1000);
+              const newenemy = prevenemy.map((enemies) => ({
+                x: enemies.x + dx * dist,
+                y: enemies.y,
+              }));
+              console.log();
+              return newenemy.filter((enemy) => enemy.x >= 0);
+            }
+          });
+        });
+        enemyAnimation.start();
+      }
+    };
+    moveenemy();
+
+    return () => {
+      moveenemy();
+    };
+  }, [dx, dy, enemies.length]);
 
   if (!hoge) return <Loading visible />;
   return (
