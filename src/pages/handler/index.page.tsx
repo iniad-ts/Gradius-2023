@@ -19,10 +19,10 @@ const Home = () => {
     });
     setLayerPosition(game.position);
   };
-  // const click = async (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-  //   await apiClient.create.$post();
-  //   console.log(e);
-  // };
+  const click = async (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    await apiClient.create.$post();
+    console.log(e);
+  };
   const [layerPosition, setLayerPosition] = useState({ x: 0, y: 0 });
   if (!hoge) return <Loading visible />;
   console.log(`x:${layerPosition.x}y:${layerPosition.y}`);
@@ -46,6 +46,9 @@ const Home = () => {
         <button className={styles['plus-y']} onClick={() => handleButtonClick('-Y')}>
           -Y
         </button>
+      </div>
+      <div className={styles['create-button']} onClick={click}>
+        create
       </div>
     </>
   );

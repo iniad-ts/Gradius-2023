@@ -24,7 +24,8 @@ export const handlerrepository = {
   },
   findLatest: async (label: string | undefined): Promise<RoomModel | undefined> => {
     const gamelist = await prismaClient.game.findMany();
-    const rooms: game | undefined = gamelist.find((game) => game.firebaseId === label);
+    console.log(gamelist);
+    const rooms = gamelist.find((game) => game.firebaseId === label);
     return rooms !== undefined ? toGameModel(rooms) : undefined;
   },
 };
