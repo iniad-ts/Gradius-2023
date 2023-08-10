@@ -19,17 +19,17 @@ const Home = () => {
     });
     setLayerPosition(game.position);
   };
-  // const click = async (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-  //   await apiClient.create.$post();
-  //   console.log(e);
-  // };
+  const click = async (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    await apiClient.create.$post();
+    console.log(e);
+  };
   const [layerPosition, setLayerPosition] = useState({ x: 0, y: 0 });
   if (!hoge) return <Loading visible />;
   console.log(`x:${layerPosition.x}y:${layerPosition.y}`);
 
   return (
     <>
-      <div className={styles['debug-board']}>
+      <div className={styles['debug-board']} tabIndex={0} onClick={click}>
         <div className={styles['debug-value']}>X:{layerPosition.x}</div>
         <div className={styles['debug-value']}>Y:{layerPosition.y}</div>
       </div>

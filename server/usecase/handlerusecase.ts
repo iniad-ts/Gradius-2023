@@ -12,13 +12,10 @@ export const handlerusecase = {
     console.log('newgame');
     return newRoom;
   },
-  operateXY: async (
-    key: string,
-    position: { x: number; y: number },
-    userId: string
-  ): Promise<RoomModel> => {
+  operateXY: async ( position: { x: number; y: number },key: string, userId: string) => {
     const label = userId;
-    console.log(label);
+    console.log(position);
+    console.log(userId);
     const latest = await handlerrepository.findLatest(label);
     assert(latest);
     console.log(latest);
@@ -48,7 +45,7 @@ export const handlerusecase = {
     //   position.x += 1;
     //   latest.position.x = position.x;
     // }
-    console.log(userId);
+    
     await handlerrepository.save(latest);
     return latest;
   },
