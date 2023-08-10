@@ -12,7 +12,7 @@ export const handlerusecase = {
     console.log('newgame');
     return newRoom;
   },
-  operateXY: async ( position: { x: number; y: number },key: string, userId: string) => {
+  operateXY: async (position: { x: number; y: number }, key: string, userId: string) => {
     const label = userId;
     console.log(position);
     console.log(userId);
@@ -45,7 +45,7 @@ export const handlerusecase = {
     //   position.x += 1;
     //   latest.position.x = position.x;
     // }
-    
+
     await handlerrepository.save(latest);
     return latest;
   },
