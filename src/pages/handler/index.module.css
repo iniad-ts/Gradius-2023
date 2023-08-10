@@ -34,8 +34,8 @@
   position: absolute;
   bottom: 0;
   left: 5px;
+  font-size: 30px;
 }
-
 
 .minus-x {
   width: 100px;
@@ -46,6 +46,7 @@
   position: absolute;
   left: 0;
   top: 5px;
+  font-size: 30px;
 }
 
 .plus-x {
@@ -57,6 +58,7 @@
   position: absolute;
   right: 0;
   top: 5px;
+  font-size: 30px;
 }
 
 .minus-y {
@@ -68,4 +70,5 @@
   position: absolute;
   top: 0;
   left: 5px;
+  font-size: 30px;
 }
