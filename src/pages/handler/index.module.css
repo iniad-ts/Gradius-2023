@@ -72,3 +72,18 @@
   left: 5px;
   font-size: 30px;
 }
+
+.create-button {
+  width: 210px;
+  height: 50px;
+  text-align: center;
+  color: white;
+  background-color: black;
+  border: outset 5px #f9f9f9;
+  font-size: 30px;
+}
+
+.create-button:active {
+  border: inset 5px #f9f9f9;
+  background-color: #5c5a5a;
+}

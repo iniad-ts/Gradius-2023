@@ -29,7 +29,7 @@ const Home = () => {
 
   return (
     <>
-      <div className={styles['debug-board']} tabIndex={0} onClick={click}>
+      <div className={styles['debug-board']}>
         <div className={styles['debug-value']}>X:{layerPosition.x}</div>
         <div className={styles['debug-value']}>Y:{layerPosition.y}</div>
       </div>
@@ -46,6 +46,9 @@ const Home = () => {
         <button className={styles['plus-y']} onClick={() => handleButtonClick('-Y')}>
           -Y
         </button>
+      </div>
+      <div className={styles['create-button']} onClick={click}>
+        create
       </div>
     </>
   );
