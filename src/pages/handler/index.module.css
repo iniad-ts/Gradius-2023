@@ -1,11 +1,71 @@
-.handler-board {
+.debug-board {
   height: 50px;
-  width: 200px;
-  background: gray;
+  width: 210px;
+  background-color: brown;
+  display: flex;
+  justify-content: space-around;
 }
-.handler {
-  width: 50px;
-  height: 50px;
+
+.debug-value {
+  color: beige;
+  font-size: 30px;
+}
+
+.handler-board {
+  height: 210px;
+  width: 210px;
+  background: gray;
+  position: relative;
+}
+
+/* .handler {
+  width: 100px;
+  height: 100px;
   background: black;
   color: white;
+} */
+
+.plus-y {
+  width: 200px;
+  height: 100px;
+  clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+  background: black;
+  color: white;
+  position: absolute;
+  bottom: 0;
+  left: 5px;
+}
+
+
+.minus-x {
+  width: 100px;
+  height: 200px;
+  clip-path: polygon(0 100%, 0 0, 100% 50%);
+  background: black;
+  color: white;
+  position: absolute;
+  left: 0;
+  top: 5px;
+}
+
+.plus-x {
+  width: 100px;
+  height: 200px;
+  clip-path: polygon(100% 100%, 100% 0, 0 50%);
+  background: black;
+  color: white;
+  position: absolute;
+  right: 0;
+  top: 5px;
+}
+
+.minus-y {
+  width: 200px;
+  height: 100px;
+  clip-path: polygon(50% 100%, 0 0, 100% 0);
+  background: black;
+  color: white;
+  position: absolute;
+  top: 0;
+  left: 5px;
 }
