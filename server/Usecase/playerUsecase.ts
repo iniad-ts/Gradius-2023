@@ -1,5 +1,4 @@
 import { playerRepository } from '$/Repository/playerRepository';
-import type { UserId } from '$/commonTypesWithClient/branded';
 import type { playerModel } from '$/commonTypesWithClient/models';
 import { UserIdParser } from '$/service/idParsers';
 import { randomUUID } from 'crypto';
@@ -40,12 +39,12 @@ export const playerUsecase = {
     await playerRepository.save(new_player);
     return new_player.userId;
   },
-  movePlayer: async (movedirection: MoveDirection, user_Id: UserId) => {
+  movePlayer: async (movedirection: MoveDirection, user_Id: string) => {
     // position[0][0] += movedirection.x * 10;
     // position[0][1] += movedirection.y * 10;
     const recentlyPlayerInfo = await playerRepository.read(user_Id);
     const updatePlayerInfo: playerModel = {
-      userId: user_Id,
+      userId: recentlyPlayerInfo.userId,
       pos: {
         x: (recentlyPlayerInfo.pos.x += movedirection.x * 10),
         y: (recentlyPlayerInfo.pos.y += movedirection.y * 10),
