@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import styles from './index.module.css';
 
 const Controller = () => {
@@ -32,6 +32,10 @@ const Controller = () => {
     setStickPosition({ x: 0, y: 0 });
   };
 
+  // const buttonTouchStart = (event: React.TouchEvent) => {};
+
+  // const buttonTouchEnd = (event: React.TouchEvent) => {};
+
   return (
     <div className={styles.base}>
       <div
@@ -47,6 +51,7 @@ const Controller = () => {
           style={{ transform: `translate(${stickPosition.x}px, ${stickPosition.y}px)` }}
         />
       </div>
+      <div className={styles.buttonA}>{/* 玉の発射 */}A</div>
     </div>
   );
 };
