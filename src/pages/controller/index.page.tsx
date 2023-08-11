@@ -41,9 +41,9 @@ const Home = () => {
   };
 
   const move = async () => {
-    await apiClient.rooms.control.$post({
-      body: { moveDirection: moveDirection.current, userId: user_Id },
-    });
+    // await apiClient.rooms.control.$post({
+    //   body: { moveDirection: moveDirection.current, userId: user_Id },
+    // });
     console.log('move', moveDirection.current);
   };
   const moveStart = () => {
