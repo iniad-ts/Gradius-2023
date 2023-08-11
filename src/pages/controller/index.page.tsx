@@ -1,6 +1,7 @@
 // import type { MoveDirection } from '$/usecase/playerUsecase';
 import type { MoveDirection } from '$/Usecase/playerUsecase';
 
+import { randomUUID } from 'crypto';
 import { useAtom } from 'jotai';
 import { useEffect, useRef, useState } from 'react';
 import { Joystick, JoystickShape } from 'react-joystick-component';
@@ -16,6 +17,8 @@ const Home = () => {
   const [size, setSize] = useState<number>(0);
   const [moveIntervalId, setMoveIntervalId] = useState<NodeJS.Timeout | null>(null);
   const moveDirection = useRef<MoveDirection>({ x: 0, y: 0 });
+
+  const user_Id = randomUUID();
 
   const getsize = () => {
     if (joystickRef.current !== null) {
@@ -38,7 +41,9 @@ const Home = () => {
   };
 
   const move = async () => {
-    await apiClient.rooms.control.$post({ body: moveDirection.current });
+    await apiClient.rooms.control.$post({
+      body: { moveDirection: moveDirection.current, userId: user_Id },
+    });
     console.log('move', moveDirection.current);
   };
   const moveStart = () => {

@@ -1,4 +1,4 @@
-import type { EnemyModel } from '$/commonTypesWithClient/models';
+import type { EnemyModel, playerModel } from '$/commonTypesWithClient/models';
 import { useAtom } from 'jotai';
 import React, { useCallback, useEffect, useState } from 'react';
 import { Circle, Layer, Rect, Stage, Text } from 'react-konva';
@@ -11,7 +11,7 @@ const Home = () => {
   const windowHeight = Number(window.innerHeight);
 
   //プレイヤーと弾敵をstateで管理
-  const [newPlayerPosition, setNewPlayerPosition] = useState<number[][]>([]);
+  const [newPlayerPosition, setNewPlayerPosition] = useState<playerModel[]>([]);
   const [newGunPosition, setNewGunPosition] = useState<number[][]>([]);
   const [newEnemyPosition, setNewEnemyPosition] = useState<EnemyModel[]>([]);
   //apiを叩いてプレイヤーと銃敵の位置を取得stateにセット
@@ -22,7 +22,7 @@ const Home = () => {
 
     ///当たり判定を行う
     checkCollision(new_enemyPosition, new_gunPosition);
-    checkCollision(new_enemyPosition, new_playerPosition);
+    // checkCollision(new_enemyPosition, new_playerPosition);//一次的にコメントアウトしています。
 
     setNewPlayerPosition(new_playerPosition);
     setNewGunPosition(new_gunPosition);
@@ -85,7 +85,7 @@ const Home = () => {
         />
 
         {newPlayerPosition.map((player, index) => (
-          <Circle key={index} x={player[0]} y={player[1]} width={50} height={50} fill="red" />
+          <Circle key={index} x={player.pos.x} y={player.pos.y} width={50} height={50} fill="red" />
         ))}
         {newGunPosition.map((gun, index) => (
           <Circle key={index} radius={10} x={gun[0]} y={gun[1]} fill="green" />

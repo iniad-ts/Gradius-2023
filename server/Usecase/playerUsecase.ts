@@ -1,4 +1,5 @@
 import { playerRepository } from '$/Repository/playerRepository';
+import type { UserId } from '$/commonTypesWithClient/branded';
 import type { playerModel } from '$/commonTypesWithClient/models';
 import { UserIdParser } from '$/service/idParsers';
 import { randomUUID } from 'crypto';
@@ -25,43 +26,44 @@ const moveGun = () => {
   return gunPosition;
 };
 
-export const playerUsecase = (() => {
-  return {
-    movePlayer: async (movedirection: MoveDirection) => {
-      position[0][0] += movedirection.x * 10;
-      position[0][1] += movedirection.y * 10;
-    },
+export const playerUsecase = {
+  createNewPlayer: async () => {
+    //playerの初期ステータス
+    const new_player: playerModel = {
+      userId: UserIdParser.parse(randomUUID()),
+      pos: { x: 50, y: 300 },
+      speed: 5,
+      hp: 10,
+      radius: 20,
+      score: 0,
+    };
+    await playerRepository.save(new_player);
+    return new_player.userId;
+  },
+  movePlayer: async (movedirection: MoveDirection, user_Id: UserId) => {
+    // position[0][0] += movedirection.x * 10;
+    // position[0][1] += movedirection.y * 10;
+    const recentlyPlayerInfo = await playerRepository.read(user_Id);
+    const updatePlayerInfo: playerModel = {
+      userId: user_Id,
+      pos: {
+        x: (recentlyPlayerInfo.pos.x += movedirection.x * 10),
+        y: (recentlyPlayerInfo.pos.y += movedirection.y * 10),
+      },
+      speed: recentlyPlayerInfo.speed,
+      hp: recentlyPlayerInfo.hp,
+      radius: recentlyPlayerInfo.radius,
+      score: recentlyPlayerInfo.score,
+    };
+    await playerRepository.save(updatePlayerInfo);
+  },
 
-    getPlayerPos: async () => {
-      return position;
-    },
-  };
-})();
-
-//kkkk
-export const player_Usecase = {
-  getAll_Player: async (): Promise<playerModel[]> => {
+  getPlayerPos: async () => {
     return await playerRepository.getPlayers();
+  },
+  getUserId: async () => {
+    return await playerUsecase.createNewPlayer();
   },
 };
 
-// 仮初期値
-const player_first_pos_x = 300;
-const player_first_pos_y = 300;
-const player_speed = 5;
-const player_radius = 20;
-const player_hp = 10;
-const player_score = 0;
-
-const create_player = async () => {
-  const new_player: playerModel = {
-    userId: UserIdParser.parse(randomUUID()),
-    pos: { x: player_first_pos_x, y: player_first_pos_y },
-    speed: player_speed,
-    hp: player_hp,
-    radius: player_radius,
-    score: player_score,
-  };
-  await playerRepository.save(new_player);
-};
-//残りのやることplayerを動かせるように
+//スコアとかどうしよう。

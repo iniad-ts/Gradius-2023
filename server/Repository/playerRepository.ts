@@ -44,6 +44,13 @@ export const playerRepository = {
       },
     });
   },
+  read: async (userId: string) => {
+    const player = await prismaClient.player.findFirst({
+      where: { userId },
+    });
+    if (!player) throw new Error("Player doesn't exist");
+    return toPlayerModel(player);
+  },
   declare: async (userId: UserId) => {
     await prismaClient.player.delete({
       where: { userId },
