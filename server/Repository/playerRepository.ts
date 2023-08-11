@@ -48,7 +48,7 @@ export const playerRepository = {
     const player = await prismaClient.player.findFirst({
       where: { userId },
     });
-    if (!player) throw new Error("Player doesn't exist");
+    if (player === null || player === undefined) throw new Error("Player doesn't exist");
     return toPlayerModel(player);
   },
   declare: async (userId: UserId) => {
