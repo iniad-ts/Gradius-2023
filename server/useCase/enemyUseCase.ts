@@ -6,6 +6,7 @@ import { playersRepository } from '$/repository/playersRepository';
 import { enemyIdParser } from '$/service/idParsers';
 import { isInDisplay } from '$/service/isInDisplay';
 import { randomUUID } from 'crypto';
+import { bulletUseCase } from './bulletUseCase';
 import { playerUseCase } from './playerUseCase';
 
 const RESPAWN_TIME = 5000;
@@ -44,10 +45,51 @@ export const enemyUseCase = {
     const res = await enemiesRepository.findNotNull();
     Promise.all(
       res
-        .filter(
-          (enemy) => enemy.deletedAt !== null && nowTime - enemy.deletedAt.getTime() > RESPAWN_TIME
-        )
+        .filter((enemy) => enemy.deletedAt !== null && nowTime - enemy.deletedAt > RESPAWN_TIME)
         .map((enemy) => enemiesRepository.update(enemy.id, null))
+    ).then((results) =>
+      results.forEach((result) => {
+        result;
+      })
+    );
+  },
+  shot2: async () => {
+    const res = await enemiesRepository.findType(2);
+    Promise.all(
+      res.map((enemy) =>
+        bulletUseCase.createByEnemy({ x: enemy.createdPosition.x, y: enemy.createdPosition.y })
+      )
+    ).then((results) =>
+      results.forEach((result) => {
+        result;
+      })
+    );
+  },
+  shot3: async () => {
+    const res = await enemiesRepository.findType(3);
+    const players = await playersRepository.findAll();
+    Promise.all(
+      res.map((enemy) => {
+        const lockOnPlayerPos = players
+          .map((player) => ({
+            pos: { ...player.position },
+            distance:
+              (player.position.x - enemy.createdPosition.x) ** 2 +
+              (player.position.y - enemy.createdPosition.y) ** 2,
+          }))
+          .sort((a, b) => a.distance - b.distance)[0].pos;
+        const dir = Math.atan(
+          (lockOnPlayerPos.y - enemy.createdPosition.y) /
+            (lockOnPlayerPos.x - enemy.createdPosition.x)
+        );
+        return bulletUseCase.createByEnemy(
+          {
+            x: enemy.createdPosition.x,
+            y: enemy.createdPosition.y,
+          },
+          dir
+        );
+      })
     ).then((results) =>
       results.forEach((result) => {
         result;

@@ -1,9 +1,11 @@
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
+import { SettingIcon } from 'src/components/icons/SettingIcon';
 import { apiClient } from 'src/utils/apiClient';
+import styles from './index.module.css';
 
 const Config = () => {
-  const [display, setDisplay] = useState<number>();
+  const [display, setDisplay] = useState<number>(1);
 
   const fetchDisplayNumber = async () => {
     const res = await apiClient.game.config.$get();
@@ -26,11 +28,27 @@ const Config = () => {
   };
 
   return (
-    <div>
-      <h1>Config</h1>
-      <label>ディスプレイ枚数</label>
-      <input type="number" value={display} onChange={handleChangeDisplay} min={1} max={10} />
-      <Link href="/game">ゲーム画面 </Link>
+    <div className={styles.container}>
+      <div className={styles.card}>
+        <div className={styles.title}>
+          <h1>Gradius</h1>
+          <h2>Config</h2>
+        </div>
+        <div className={styles.config}>
+          <label>ディスプレイ枚数</label>
+          <input type="number" value={display} onChange={handleChangeDisplay} min={1} />
+        </div>
+        <Link href="/game" className={styles.button}>
+          ゲーム画面
+          <span />
+        </Link>
+        <div className={styles['icon-right']}>
+          <SettingIcon size={20} fill="currentColor" />
+        </div>
+        <div className={styles['icon-left']}>
+          <SettingIcon size={20} fill="currentColor" />
+        </div>
+      </div>
     </div>
   );
 };
