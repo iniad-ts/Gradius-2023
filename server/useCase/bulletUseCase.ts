@@ -27,13 +27,13 @@ export const bulletUseCase = {
     }
     return null;
   },
-  createByEnemy: async (pos: { x: number; y: number }) => {
+  createByEnemy: async (pos: { x: number; y: number }, dir = 0) => {
     const newBullet: BulletModel = {
       id: bulletIdParser.parse(randomUUID()),
       createdPosition: {
         ...pos,
       },
-      direction: 0,
+      direction: dir,
       type: 0,
       playerId: undefined,
       createdAt: Date.now(),

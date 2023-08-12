@@ -58,11 +58,11 @@ export const enemiesRepository = {
         },
       })
     ).map(toEnemyModel),
-  findType2: async () =>
+  findType: async (type: number) =>
     (
       await prismaClient.enemy.findMany({
         where: {
-          type: 2,
+          type,
         },
       })
     ).map(toEnemyModel),

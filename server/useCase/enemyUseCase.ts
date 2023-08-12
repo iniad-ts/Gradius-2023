@@ -46,11 +46,42 @@ export const enemyUseCase = {
     );
   },
   shot2: async () => {
-    const res = await enemiesRepository.findType2();
+    const res = await enemiesRepository.findType(2);
     Promise.all(
       res.map((enemy) =>
         bulletUseCase.createByEnemy({ x: enemy.createdPosition.x, y: enemy.createdPosition.y })
       )
+    ).then((results) =>
+      results.forEach((result) => {
+        result;
+      })
+    );
+  },
+  shot3: async () => {
+    const res = await enemiesRepository.findType(3);
+    const players = await playersRepository.findAll();
+    Promise.all(
+      res.map((enemy) => {
+        const lockOnPlayerPos = players
+          .map((player) => ({
+            pos: { ...player.position },
+            distance:
+              (player.position.x - enemy.createdPosition.x) ** 2 +
+              (player.position.y - enemy.createdPosition.y) ** 2,
+          }))
+          .sort((a, b) => a.distance - b.distance)[0].pos;
+        const dir = Math.atan(
+          (lockOnPlayerPos.y - enemy.createdPosition.y) /
+            (lockOnPlayerPos.x - enemy.createdPosition.x)
+        );
+        return bulletUseCase.createByEnemy(
+          {
+            x: enemy.createdPosition.x,
+            y: enemy.createdPosition.y,
+          },
+          dir
+        );
+      })
     ).then((results) =>
       results.forEach((result) => {
         result;
