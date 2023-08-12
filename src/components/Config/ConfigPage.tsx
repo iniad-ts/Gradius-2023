@@ -9,11 +9,14 @@ export const Config = () => {
     const res = await apiClient.config.$get();
     setInfo(res);
   };
-  const update = async (newInfo: ConfigModel) => {
-    if (newInfo !== undefined) {
-      await apiClient.config.$post({ body: newInfo });
-      console.log('更新!');
+  const update = async (id: string) => {
+    const inputElement = document.getElementById(id);
+    if (inputElement !== null) {
+      const inputValue = inputElement.value;
     }
+
+    await apiClient.config.$post({ body: newInfo });
+    console.log('更新!');
   };
 
   useEffect(() => {
@@ -36,7 +39,8 @@ export const Config = () => {
               <th>基本playerspeed</th>
               <td>{info?.playerSpeed}/0.1秒</td>
               <td>
-                <input type="text" name="PlayerSpeed" placeholder="入力してください" />
+                <input type="text" id="PlayerSpeed" placeholder="入力してください" />
+                <button onClick={() => update('PlayerSpeed')}>更新</button>
               </td>
             </tr>
             <tr>
@@ -47,13 +51,15 @@ export const Config = () => {
               <td>
                 <input type="text" name="PlayerSize_h" placeholder="高さを入力してください" />
                 <input type="text" name="PlayerSize_w" placeholder="幅を入力してください" />
+                <button onClick={() => update()}>更新</button>
               </td>
             </tr>
             <tr>
               <th>敵の出現頻度</th>
               <td>1/{info?.makeEnemyFrequency}秒</td>
               <td>
-                <input type="text" name="Enemy" placeholder="入力してください" />
+                <input id="mEF" type="text" name="Enemy" placeholder="入力してください" />
+                <button onClick={() => update()}>更新</button>
               </td>
             </tr>
             <tr>
@@ -61,6 +67,7 @@ export const Config = () => {
               <td>{info?.enemySpeed}/0.1秒</td>
               <td>
                 <input type="text" name="EnemySpeed" placeholder="入力してください" />
+                <button onClick={() => update()}>更新</button>
               </td>
             </tr>
             <tr>
@@ -71,6 +78,7 @@ export const Config = () => {
               <td>
                 <input type="text" name="EnemySize_h" placeholder="高さを入力してください" />
                 <input type="text" name="EnemySize_w" placeholder="幅を入力してください" />
+                <button onClick={() => update()}>更新</button>
               </td>
             </tr>
             <tr>
@@ -78,13 +86,13 @@ export const Config = () => {
               <td>15</td>
               <td>
                 <input type="text" name="Screen" placeholder="入力してください" />
+                <button onClick={() => update()}>更新</button>
               </td>
             </tr>
           </tbody>
 
           <tfoot />
         </table>
-        <button onClick={() => update()}>更新</button>
       </div>
     </div>
   );
