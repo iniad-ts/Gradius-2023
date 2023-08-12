@@ -11,7 +11,7 @@ const RESPAWN_TIME = 5000;
 
 export const enemyUseCase = {
   create: async () => {
-    //専らデバッグ用
+    //現状は専らデバッグ用
     const newEnemy: EnemyModel = {
       id: enemyIdParser.parse(randomUUID()),
       createdPosition: {
@@ -34,31 +34,43 @@ export const enemyUseCase = {
   },
   respawn: async () => {
     const nowTime = new Date().getTime();
-    const resS = await enemiesRepository.findNotNull();
-    resS
-      .filter((res) => res.deletedAt !== null && nowTime - res.deletedAt.getTime() > RESPAWN_TIME)
-      .forEach(async (res) => {
-        await enemiesRepository.update(res.id, null);
-      });
+    const res = await enemiesRepository.findNotNull();
+    Promise.all(
+      res
+        .filter(
+          (enemy) => enemy.deletedAt !== null && nowTime - enemy.deletedAt.getTime() > RESPAWN_TIME
+        )
+        .map((enemy) => enemiesRepository.update(enemy.id, null))
+    ).then((results) =>
+      results.forEach((result) => {
+        result;
+      })
+    );
   },
   createAll: async () => {
     const res = await enemyTable();
     if (res === null) {
       enemyUseCase.createAll();
     } else {
-      res.forEach((tables, displayNumberMinus1) =>
-        tables.forEach((table) => {
-          const newEnemy: EnemyModel = {
-            id: enemyIdParser.parse(randomUUID()),
-            createdPosition: {
-              x: table.createPosition.x + 1920 * displayNumberMinus1,
-              y: table.createPosition.y,
-            },
-            createdAt: Date.now(),
-            deletedAt: null,
-            type: table.type,
-          };
-          enemiesRepository.create(newEnemy);
+      Promise.all(
+        res.map((tables, displayNumberMinus1) =>
+          tables.map((table) => {
+            const newEnemy: EnemyModel = {
+              id: enemyIdParser.parse(randomUUID()),
+              createdPosition: {
+                x: table.createPosition.x + 1920 * displayNumberMinus1,
+                y: table.createPosition.y,
+              },
+              createdAt: Date.now(),
+              deletedAt: null,
+              type: table.type,
+            };
+            return enemiesRepository.create(newEnemy);
+          })
+        )
+      ).then((results) =>
+        results.flat().forEach((result) => {
+          result;
         })
       );
     }
