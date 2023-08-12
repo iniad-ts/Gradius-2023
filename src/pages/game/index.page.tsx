@@ -4,6 +4,7 @@ import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { Image, Layer, Stage } from 'react-konva';
 import { Bullet } from 'src/components/Bullet/PlayerBullet';
+import Lobby from 'src/components/Lobby/Lobby';
 import { staticPath } from 'src/utils/$path';
 import { apiClient } from 'src/utils/apiClient';
 import { posWithDirSpeTim } from 'src/utils/posWithDirSpeTim';
@@ -13,34 +14,7 @@ const Game = () => {
   const router = useRouter();
   const display = router.query.display === undefined ? null : Number(router.query.display);
   if (display === null) {
-    const Lobby = () => {
-      const [displayNumber, setDisplayNumber] = useState<number>(0);
-      const getDisplayNumber = async () => {
-        const res = await apiClient.game.config.$get();
-        if (res !== null) {
-          setDisplayNumber(res);
-        }
-        if (res === 0) {
-          router.push('/game/config');
-        }
-      };
-
-      useEffect(() => {
-        getDisplayNumber();
-      }, []);
-
-      return (
-        <>
-          {[...Array(displayNumber)].map((_, i) => (
-            <button onClick={() => router.push({ query: { display: i } })} key={i}>
-              {i}
-            </button>
-          ))}
-        </>
-      );
-    };
-
-    return <Lobby />;
+    return <Lobby />; // Lobbyコンポーネントの呼び出し
   }
 
   // if (!user) return <Loading visible />;
