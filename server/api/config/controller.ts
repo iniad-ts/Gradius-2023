@@ -1,6 +1,10 @@
-import { enemyInfo } from '$/Usecase/enemyUsecase';
-import { playerInfo } from '$/Usecase/playerUsecase';
+import { enemyUsecase } from '$/Usecase/enemyUsecase';
+import { playerUsecase } from '$/Usecase/playerUsecase';
+
 import { defineController } from './$relay';
+
+const enemyInfo = enemyUsecase.getEnemyInfo();
+const playerInfo = playerUsecase.getPlayerInfo();
 
 export default defineController(() => ({
   get: () => ({

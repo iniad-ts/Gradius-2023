@@ -19,10 +19,13 @@ export const enemyUsecase = {
       console.log(e);
     }
   },
+  getEnemyInfo: () => {
+    return enemyInfo;
+  },
 };
 
 // 仮初期値
-export const enemyInfo = {
+const enemyInfo = {
   enemyFirstPos_x: 100,
   enemySpeed: 5,
   enemyRadius: 20,
@@ -116,10 +119,6 @@ const deleteOffScEreennemy = async () => {
     await deleteEnemy(id);
   }
 };
-
-//await Promise.allは、必要か微妙
-//await Promise.all(enemies.map((enemy) => enemyRepository.save(enemy)));
-// enemies.map((enemy) => enemyRepository.save(enemy));
 
 //await Promise.allは、必要か微妙
 //await Promise.all(enemies.map((enemy) => enemyRepository.save(enemy)));

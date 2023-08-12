@@ -12,10 +12,10 @@ export const Config = () => {
   const fetchInfo = async () => {
     const res = await apiClient.config.$get();
     setPlayerSpeed(res.playerSpeed);
-    setPlayerSize(res.playersize);
+    setPlayerSize(res.playerSize);
     setmakeEnemyFrequency(res.makeEnemyFrequency);
     setenemyspeed(res.enemySpeed);
-    setEnemySize(res.playersize);
+    setEnemySize(res.enemySize);
     console.log(res.playerSpeed);
   };
 
