@@ -23,7 +23,7 @@ export type EnemyModel = {
   type: number;
 };
 
-export type playerModel = {
+export type PlayerModel = {
   userId: UserId;
   pos: { x: number; y: number };
   speed: number;

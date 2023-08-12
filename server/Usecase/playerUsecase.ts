@@ -1,5 +1,6 @@
 import { playerRepository } from '$/Repository/playerRepository';
-import type { playerModel } from '$/commonTypesWithClient/models';
+import type { PlayerModel } from '$/commonTypesWithClient/models';
+
 import { UserIdParser } from '$/service/idParsers';
 import { randomUUID } from 'crypto';
 
@@ -36,7 +37,7 @@ export const playerUsecase = (() => {
       return position;
     },
 
-    getAllPlayer: async (): Promise<playerModel[]> => {
+    getAllPlayer: async (): Promise<PlayerModel[]> => {
       return await playerRepository.getPlayers();
     },
 
@@ -58,7 +59,7 @@ const playerInfo = {
 };
 
 const create_player = async () => {
-  const newPlayer: playerModel = {
+  const newPlayer: PlayerModel = {
     userId: UserIdParser.parse(randomUUID()),
     pos: { x: playerInfo.playerFirstPos_x, y: playerInfo.playerFirstPos_y },
     speed: playerInfo.playerSpeed,
