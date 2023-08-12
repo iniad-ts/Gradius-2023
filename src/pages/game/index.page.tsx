@@ -1,3 +1,4 @@
+import type { UserId } from '$/commonTypesWithClient/branded';
 import type { BulletModel, EnemyModel, PlayerModel } from '$/commonTypesWithClient/models';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
@@ -72,20 +73,13 @@ const Game = () => {
       }
     };
 
-    const updateHealth = (playerId: string) => {
-      const newPlayers = players.map((player) => {
-        if (player.id === playerId) {
-          return { ...player, health: player.health - 1 };
-        }
-        return player;
+    //プレイヤーの体力を減らす
+    const updateHealth = async (playerId: UserId) => {
+      const player = players.find((player) => player.id === playerId);
+      if (!player) return;
+      await apiClient.player.status.$post({
+        body: { player: { ...player, health: player.health - 1 } },
       });
-      setPlayers(newPlayers);
-      const updatedPlayerModel = newPlayers.find((player) => player.id === playerId);
-      if (!updatedPlayerModel) return;
-      const res = apiClient.player.status.$post({
-        body: { player: updatedPlayerModel },
-      });
-      console.log(res);
     };
 
     //衝突判定の距離
@@ -118,8 +112,10 @@ const Game = () => {
     };
 
     //敵とプレイヤーの衝突判定
-    const checkCollisionPlayer = () => {
-      const newEnemies = enemies.filter((enemy) => {
+    const checkCollisionPlayer = async () => {
+      const newEnemies = [];
+
+      for (const enemy of enemies) {
         const hitPlayer = players.find((player) => {
           const distance = Math.sqrt(
             Math.pow(enemy.createdPosition.x - player.position.x, 2) +
@@ -127,18 +123,20 @@ const Game = () => {
           );
           return distance < collisionDistance;
         });
+
         if (hitPlayer) {
-          apiClient.enemy.$delete({
+          await apiClient.enemy.$delete({
             body: {
               enemyId: enemy.id,
               userId: hitPlayer.id,
             },
           });
           updateHealth(hitPlayer.id);
-          return false;
+        } else {
+          newEnemies.push(enemy);
         }
-        return true;
-      });
+      }
+
       setEnemies(newEnemies);
     };
 
