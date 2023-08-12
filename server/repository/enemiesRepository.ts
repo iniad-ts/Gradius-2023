@@ -48,22 +48,22 @@ export const enemiesRepository = {
     const prismaEnemy = await prismaClient.enemy.findUnique({ where: { id } });
     return prismaEnemy !== null ? toEnemyModel(prismaEnemy) : null;
   },
-  findNotNull: async () =>
-    (
-      await prismaClient.enemy.findMany({
-        where: {
-          NOT: {
-            deletedAt: null,
-          },
+  findNotNull: async () => {
+    const res = await prismaClient.enemy.findMany({
+      where: {
+        NOT: {
+          deletedAt: null,
         },
-      })
-    ).map(toEnemyModel),
-  findType: async (type: number) =>
-    (
-      await prismaClient.enemy.findMany({
-        where: {
-          type,
-        },
-      })
-    ).map(toEnemyModel),
+      },
+    });
+    return res.map(toEnemyModel);
+  },
+  findType: async (type: number) => {
+    const res = await prismaClient.enemy.findMany({
+      where: {
+        type,
+      },
+    });
+    return res.map(toEnemyModel);
+  },
 };
