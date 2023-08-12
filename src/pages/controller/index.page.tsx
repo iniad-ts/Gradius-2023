@@ -16,7 +16,7 @@ const Home = () => {
   const [size, setSize] = useState<number>(0);
   const [moveIntervalId, setMoveIntervalId] = useState<NodeJS.Timeout | null>(null);
   const moveDirection = useRef<MoveDirection>({ x: 0, y: 0 });
-  const [user_Id, setUser_Id] = useState('no userId');
+  const [user_Id, setUser_Id] = useState('');
 
   const getUserId = async () => {
     const result = await apiClient.rooms.getUserId.get();
