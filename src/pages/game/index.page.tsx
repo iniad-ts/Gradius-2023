@@ -82,7 +82,7 @@ const Game = () => {
       setPlayers(newPlayers);
       const updatedPlayerModel = newPlayers.find((player) => player.id === playerId);
       if (!updatedPlayerModel) return;
-      apiClient.player.$patch({
+      apiClient.player.status.$post({
         body: { player: updatedPlayerModel },
       });
     };
