@@ -19,9 +19,21 @@ const QRCode = () => {
   };
 
   useEffect(() => {
+    fetchUrl();
     setWidth(window.innerWidth);
     setHeight(window.innerHeight);
-    fetchUrl();
+  }, []);
+
+  useEffect(() => {
+    const handler = () => {
+      setWidth(window.innerWidth);
+      setHeight(window.innerHeight);
+    };
+    window.addEventListener('resize', handler);
+
+    return () => {
+      window.removeEventListener('resize', handler);
+    };
   }, []);
 
   return (
