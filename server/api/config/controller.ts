@@ -1,10 +1,9 @@
-import { enemyUsecase } from '$/Usecase/enemyUsecase';
-import { playerUsecase } from '$/Usecase/playerUsecase';
+import { configUsecase } from '$/Usecase/configUsecase';
 
 import { defineController } from './$relay';
 
-const enemyInfo = enemyUsecase.getEnemyInfo();
-const playerInfo = playerUsecase.getPlayerInfo();
+const enemyInfo = configUsecase.getEnemyInfo();
+const playerInfo = configUsecase.getPlayerInfo();
 
 export default defineController(() => ({
   get: () => ({
@@ -20,6 +19,6 @@ export default defineController(() => ({
   }),
   post: async ({ body }) => ({
     status: 201,
-    body: enemyUsecase.updateInfo(body),
+    body: configUsecase.updateInfo(body),
   }),
 }));
