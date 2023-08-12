@@ -31,3 +31,18 @@ export type playerModel = {
   radius: number;
   score: number;
 };
+
+export type ConfigModel = {
+  playerSpeed: number;
+  playerSize: {
+    h: number;
+    w: number;
+  };
+  makeEnemyFrequency: number;
+  enemySpeed: number;
+  enemySize: {
+    h: number;
+    w: number;
+  };
+  // creenNumber:
+};

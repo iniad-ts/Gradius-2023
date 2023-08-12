@@ -1,21 +1,10 @@
+import type { ConfigModel } from '$/commonTypesWithClient/models';
 import { useEffect, useState } from 'react';
 import { apiClient } from 'src/utils/apiClient';
 import styles from './Config.module.css';
 
 export const Config = () => {
-  const [info, setInfo] = useState<{
-    playerSpeed: number;
-    playerSize: {
-      h: number;
-      w: number;
-    };
-    makeEnemyFrequency: number;
-    enemySpeed: number;
-    enemySize: {
-      h: number;
-      w: number;
-    };
-  }>();
+  const [info, setInfo] = useState<ConfigModel>();
 
   const fetchInfo = async () => {
     const res = await apiClient.config.$get();
