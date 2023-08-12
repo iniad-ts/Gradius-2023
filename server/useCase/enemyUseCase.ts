@@ -36,7 +36,7 @@ export const enemyUseCase = {
     const nowTime = new Date().getTime();
     const resS = await enemiesRepository.findNotNull();
     resS
-      .filter((res) => nowTime - res.deletedAt.getTime() > RESPAWN_TIME)
+      .filter((res) => res.deletedAt !== null && nowTime - res.deletedAt.getTime() > RESPAWN_TIME)
       .forEach(async (res) => {
         await enemiesRepository.update(res.id, null);
       });
