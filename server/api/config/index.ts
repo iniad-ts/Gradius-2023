@@ -2,7 +2,7 @@ export type Methods = {
   get: {
     resBody: {
       playerSpeed: number;
-      playersize: { h: number; w: number };
+      playerSize: { h: number; w: number };
       makeEnemyFrequency: number;
       enemySpeed: number;
       enemySize: { h: number; w: number };

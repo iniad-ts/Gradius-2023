@@ -7,9 +7,9 @@ export default defineController(() => ({
     status: 200,
     body: {
       playerSpeed: playerInfo.playerSpeed,
-      playersize: playerInfo.playerSize,
+      playerSize: playerInfo.playerSize,
       makeEnemyFrequency: enemyInfo.makeEnemyFrequency,
-      enemySpeed: enemyInfo.enemy_speed,
+      enemySpeed: enemyInfo.enemySpeed,
       enemySize: enemyInfo.enemySize,
       // creenNumber:
     },

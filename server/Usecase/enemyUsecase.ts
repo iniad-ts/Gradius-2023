@@ -9,10 +9,10 @@ import { position } from './playerUsecase';
 //敵の位置を取得する際にこれを使えば、全ての敵の情報が配列で返されます
 //repositoryからgetEnemiesを直接たたくとusecaseがなぜか更新されないため1時的な回避策としてusecaseをapiでたたいて認識させてます
 export const enemyUsecase = {
-  getAll_Enemies: async (): Promise<EnemyModel[]> => {
+  getAllEnemies: async (): Promise<EnemyModel[]> => {
     return await enemyRepository.getEnemies();
   },
-  delete_enemy: async (id: EnemyId) => {
+  deleteEnemy: async (id: EnemyId) => {
     try {
       await enemyRepository.declare(id);
     } catch (e) {
@@ -23,10 +23,10 @@ export const enemyUsecase = {
 
 // 仮初期値
 export const enemyInfo = {
-  enemy_first_pos_x: 100,
-  enemy_speed: 5,
-  enemy_radius: 20,
-  enemy_hp: 10,
+  enemyFirstPos_x: 100,
+  enemySpeed: 5,
+  enemyRadius: 20,
+  enemyHp: 10,
   makeEnemyFrequency: 5000,
   enemySize: { h: 30, w: 30 },
 };
@@ -38,21 +38,21 @@ setInterval(() => {
 
 setInterval(() => {
   // move_or_delete_enemy();
-  move_Enemy();
+  moveEnemy();
 }, 10);
 
 const create_enemy = async () => {
-  const new_enemy: EnemyModel = {
+  const newEnemy: EnemyModel = {
     id: EnemyIdParser.parse(randomUUID()),
-    pos: { x: enemyInfo.enemy_first_pos_x, y: Math.floor(Math.random() * 690) + 1 },
-    speed: enemyInfo.enemy_speed,
-    hp: enemyInfo.enemy_hp,
-    radius: enemyInfo.enemy_radius,
+    pos: { x: enemyInfo.enemyFirstPos_x, y: Math.floor(Math.random() * 690) + 1 },
+    speed: enemyInfo.enemyHp,
+    hp: enemyInfo.enemyHp,
+    radius: enemyInfo.enemyRadius,
     type: 2,
     ///1-3のランダムな数値を返す
     /* type: Math.floor(Math.random() * 3) + 1, */
   };
-  await enemyRepository.save(new_enemy);
+  await enemyRepository.save(newEnemy);
 };
 /* const moveToplayer = (enemy: EnemyModel, player: playerModel, delay: number) => {
   enemy.pos.x = (player.pos.x + delay * enemy.pos.x) / (delay + 1);
@@ -81,7 +81,7 @@ const moveEnemyByplayer = (enemy: EnemyModel): { x: number; y: number } => {
   return { x: enemy.pos.x, y: enemy.pos.y };
 };
 //敵を動かす
-const move_Enemy = async () => {
+const moveEnemy = async () => {
   const enemies: EnemyModel[] = await enemyRepository.getEnemies();
 
   for (const enemy of enemies) {
@@ -95,13 +95,13 @@ const move_Enemy = async () => {
   }
 };
 //一致する敵が存在するかどうか
-const EnemyExist = async (id: EnemyId): Promise<boolean> => {
+const enemyExist = async (id: EnemyId): Promise<boolean> => {
   const enemies: EnemyModel[] = await enemyRepository.getEnemies();
   return enemies.some((enemy) => enemy.id === id);
 };
 //敵を削除する
 const deleteEnemy = async (id: EnemyId) => {
-  if (await EnemyExist(id)) {
+  if (await enemyExist(id)) {
     await enemyRepository.declare(id);
   }
 };

@@ -35,36 +35,33 @@ export const playerUsecase = (() => {
     getPlayerPos: async () => {
       return position;
     },
+
+    getAllPlayer: async (): Promise<playerModel[]> => {
+      return await playerRepository.getPlayers();
+    },
   };
 })();
-
-//kkkk
-export const player_Usecase = {
-  getAll_Player: async (): Promise<playerModel[]> => {
-    return await playerRepository.getPlayers();
-  },
-};
 
 // 仮初期値
 export const playerInfo = {
   playerFirstPos_x: 300,
   playerFirstPos_y: 300,
   playerSpeed: 5,
-  player_radius: 20,
-  player_hp: 10,
-  player_score: 0,
+  playerRadius: 20,
+  playerHp: 10,
+  playerScore: 0,
   playerSize: { h: 30, w: 40 },
 };
 
 const create_player = async () => {
-  const new_player: playerModel = {
+  const newPlayer: playerModel = {
     userId: UserIdParser.parse(randomUUID()),
     pos: { x: playerInfo.playerFirstPos_x, y: playerInfo.playerFirstPos_y },
     speed: playerInfo.playerSpeed,
-    hp: playerInfo.player_hp,
-    radius: playerInfo.player_radius,
-    score: playerInfo.player_score,
+    hp: playerInfo.playerHp,
+    radius: playerInfo.playerRadius,
+    score: playerInfo.playerScore,
   };
-  await playerRepository.save(new_player);
+  await playerRepository.save(newPlayer);
 };
 //残りのやることplayerを動かせるように
