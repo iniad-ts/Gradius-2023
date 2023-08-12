@@ -43,6 +43,14 @@ export type EnemyModel = {
   createdAt: number;
 };
 
+export type EnemyTableModel = {
+  createPosition: {
+    x: number;
+    y: number;
+  };
+  type: number;
+};
+
 export type BulletModel = {
   id: BulletId;
   createdPosition: {
