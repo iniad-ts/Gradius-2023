@@ -10,8 +10,7 @@ import { playerUseCase } from './playerUseCase';
 
 export const bulletUseCase = {
   create: async (playerId: UserId): Promise<BulletModel | null> => {
-    console.log('bulletUseCase.create');
-    const player = await playerUseCase.getStatus(playerId, null);
+    const player = await playerUseCase.getStatus(playerId);
     if (player !== null) {
       const newBullet: BulletModel = {
         id: bulletIdParser.parse(randomUUID()),

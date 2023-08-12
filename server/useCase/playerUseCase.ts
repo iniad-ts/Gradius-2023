@@ -35,7 +35,7 @@ export const playerUseCase = {
         y: 350,
       },
       createdAt: Date.now(),
-      health: 100,
+      health: 5,
       score: 0,
       team: 'red',
     };
@@ -43,9 +43,7 @@ export const playerUseCase = {
     return newPlayer;
   },
   getStatus: async (id: UserId): Promise<PlayerModel | null> => {
-    if (id !== null) {
-      await playerUseCase.create(id);
-    }
+    if (id === null) return null;
     const player: PlayerModel | null = await playersRepository.find(id);
     if (player === null) return null;
     return player;
