@@ -48,7 +48,8 @@ const Game = () => {
   const GameCanvas = () => {
     const [players, setPlayers] = useState<PlayerModel[]>([]);
     const [enemies, setEnemies] = useState<EnemyModel[]>([]);
-    const [bullets, setBullets] = useState<BulletModel[]>([]);
+    const [playerBullets, setPlayerBullets] = useState<BulletModel[]>([]);
+    const [enemyBullets, setEnemyBullets] = useState<BulletModel[]>([]);
     const [currentTime, setCurrentTime] = useState<number>(Date.now());
     const [shipImage] = useImage(staticPath.images.spaceship_png);
     const [enemyImage] = useImage(staticPath.images.ufo_jpg);
@@ -70,7 +71,8 @@ const Game = () => {
     const fetchBullets = async (display: number) => {
       const res = await apiClient.bullet.$get({ query: { display } });
       if (res !== null) {
-        setBullets(res);
+        setPlayerBullets(res.playerS);
+        setEnemyBullets(res.enemyS);
       }
     };
 
@@ -92,7 +94,7 @@ const Game = () => {
     //敵と弾の衝突判定
     const checkCollisionBullet = () => {
       const newEnemies = enemies.filter((enemy) => {
-        const hitBullet = bullets.find((bullet) => {
+        const hitBullet = playerBullets.find((bullet) => {
           const bulletPosition = posWithDirSpeTim(bullet, currentTime);
           const distance = Math.sqrt(
             Math.pow(enemy.createdPosition.x - bulletPosition[0], 2) +
@@ -156,7 +158,7 @@ const Game = () => {
       <div>
         <Stage width={1920} height={1080}>
           <Layer>
-            {bullets.map((bullet) => (
+            {playerBullets.map((bullet) => (
               <Bullet key={bullet.id} bullet={bullet} currentTime={currentTime} />
             ))}
           </Layer>
