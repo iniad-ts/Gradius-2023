@@ -4,6 +4,7 @@ import { enemyTable } from '$/constants/enemyTable';
 import { enemiesRepository } from '$/repository/enemiesRepository';
 import { playersRepository } from '$/repository/playersRepository';
 import { enemyIdParser } from '$/service/idParsers';
+import { isInDisplay } from '$/service/isInDisplay';
 import { randomUUID } from 'crypto';
 import { bulletUseCase } from './bulletUseCase';
 import { playerUseCase } from './playerUseCase';
@@ -24,6 +25,13 @@ export const enemyUseCase = {
       type: 0,
     };
     await enemiesRepository.create(newEnemy);
+  },
+  findAll: async (displayNumber: number) => {
+    const res = (await enemiesRepository.findAll()) ?? [];
+    const enemiesInDisplay = res.filter((enemy) =>
+      isInDisplay(displayNumber, enemy.createdPosition.x)
+    );
+    return enemiesInDisplay;
   },
   kill: async (enemyId: string, userId: UserId) => {
     await enemiesRepository.update(enemyId, new Date());
