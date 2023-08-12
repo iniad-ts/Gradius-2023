@@ -45,7 +45,6 @@ const Home = () => {
     });
   };
   //配列用の当たり判定関数
-
   /* const checkCollision = (hitlist1: EnemyModel[], hitlist2: EnemyModel[]) => {
     hitlist1.map((list1) => {
       hitlist2.map((list2) => {

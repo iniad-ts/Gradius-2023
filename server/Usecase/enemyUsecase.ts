@@ -21,29 +21,33 @@ export const enemyUsecase = {
   },
 };
 
+// 仮初期値
+export const enemyInfo = {
+  enemy_first_pos_x: 100,
+  enemy_speed: 5,
+  enemy_radius: 20,
+  enemy_hp: 10,
+  makeEnemyFrequency: 5000,
+  enemySize: { h: 30, w: 30 },
+};
+
 setInterval(() => {
   create_enemy();
   deleteOffScEreennemy();
-}, 5000);
+}, enemyInfo.makeEnemyFrequency);
 
 setInterval(() => {
   // move_or_delete_enemy();
   move_Enemy();
 }, 10);
 
-// 仮初期値
-const enemy_first_pos_x = 1800;
-const enemy_speed = 5;
-const enemy_radius = 20;
-const enemy_hp = 10;
-
 const create_enemy = async () => {
   const new_enemy: EnemyModel = {
     id: EnemyIdParser.parse(randomUUID()),
-    pos: { x: enemy_first_pos_x, y: Math.floor(Math.random() * 690) + 1 },
-    speed: enemy_speed,
-    hp: enemy_hp,
-    radius: enemy_radius,
+    pos: { x: enemyInfo.enemy_first_pos_x, y: Math.floor(Math.random() * 690) + 1 },
+    speed: enemyInfo.enemy_speed,
+    hp: enemyInfo.enemy_hp,
+    radius: enemyInfo.enemy_radius,
     type: 2,
     ///1-3のランダムな数値を返す
     /* type: Math.floor(Math.random() * 3) + 1, */
