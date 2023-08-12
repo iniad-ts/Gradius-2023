@@ -7,6 +7,8 @@ import { enemyIdParser } from '$/service/idParsers';
 import { randomUUID } from 'crypto';
 import { playerUseCase } from './playerUseCase';
 
+const RESPAWN_TIME = 5000;
+
 export const enemyUseCase = {
   create: async () => {
     //専らデバッグ用
@@ -17,16 +19,27 @@ export const enemyUseCase = {
         y: Math.floor(Math.random() * 1080),
       },
       createdAt: Date.now(),
+      deletedAt: null,
       type: 0,
     };
-    await enemiesRepository.save(newEnemy);
+    await enemiesRepository.create(newEnemy);
   },
-  delete: async (enemyId: string, userId: UserId) => {
-    await enemiesRepository.delete(enemyId);
+  kill: async (enemyId: string, userId: UserId) => {
+    await enemiesRepository.update(enemyId, new Date());
+    console.log('killed');
     const userStatus = await playerUseCase.getStatus(userId, null);
     if (userStatus !== null) {
       await playersRepository.save({ ...userStatus, score: userStatus.score + 1 });
     }
+  },
+  respawn: async () => {
+    const nowTime = new Date().getTime();
+    const resS = await enemiesRepository.findNotNull();
+    resS
+      .filter((res) => nowTime - res.deletedAt.getTime() > RESPAWN_TIME)
+      .forEach(async (res) => {
+        await enemiesRepository.update(res.id, null);
+      });
   },
   createAll: async () => {
     const res = await enemyTable();
@@ -42,9 +55,10 @@ export const enemyUseCase = {
               y: table.createPosition.y,
             },
             createdAt: Date.now(),
+            deletedAt: null,
             type: table.type,
           };
-          enemiesRepository.save(newEnemy);
+          enemiesRepository.create(newEnemy);
         })
       );
     }

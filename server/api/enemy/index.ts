@@ -15,6 +15,6 @@ export type Methods = {
     };
   };
   post: {
-    resBody: EnemyModel | null;
+    resBody: void;
   };
 };
