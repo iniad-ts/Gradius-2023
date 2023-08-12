@@ -6,7 +6,7 @@ export default defineController(() => ({
   get: async () => ({ status: 200, body: (await enemiesRepository.findAll()) ?? [] }),
   delete: async ({ body }) => ({
     status: 200,
-    body: await enemyUseCase.delete(body.enemyId, body.userId),
+    body: await enemyUseCase.kill(body.enemyId, body.userId),
   }),
   post: async () => ({
     status: 200,

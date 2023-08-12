@@ -5,6 +5,7 @@ import { gamesRepository } from '$/repository/gamesRepository';
 import { bulletIdParser } from '$/service/idParsers';
 import { posWithDirSpeTim as posWithBulletModel } from '$/service/posWithDirSpeTim';
 import { randomUUID } from 'crypto';
+import { enemyUseCase } from './enemyUseCase';
 import { playerUseCase } from './playerUseCase';
 
 export const bulletUseCase = {
@@ -38,5 +39,10 @@ export const bulletUseCase = {
     deleteBullets.forEach((bullet) => {
       bulletsRepository.delete(bullet.id);
     });
+  },
+  getStatus: async () => {
+    bulletUseCase.delete();
+    enemyUseCase.respawn();
+    return (await bulletsRepository.findAll()) ?? [];
   },
 };

@@ -31,10 +31,11 @@ model Player {
 }
 
 model Enemy {
-  id              String   @id
+  id              String    @id
   createdAt       DateTime
   createdPosition Json
   type            Int
+  deletedAt       DateTime?
 }
 
 model Bullet {

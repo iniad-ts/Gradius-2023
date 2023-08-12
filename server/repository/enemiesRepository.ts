@@ -14,11 +14,12 @@ const toEnemyModel = (prismaEnemy: Enemy): EnemyModel => ({
     .parse(prismaEnemy.createdPosition),
   type: z.number().min(0).parse(prismaEnemy.type),
   createdAt: prismaEnemy.createdAt.getTime(),
+  deletedAt: prismaEnemy.deletedAt?.getTime() ?? null,
 });
 
 export const enemiesRepository = {
-  create: async (enemy: EnemyModel): Promise<EnemyModel> => {
-    const prismaEnemy = await prismaClient.enemy.create({
+  create: async (enemy: EnemyModel) => {
+    await prismaClient.enemy.create({
       data: {
         id: enemy.id,
         createdPosition: enemy.createdPosition,
@@ -26,10 +27,19 @@ export const enemiesRepository = {
         createdAt: new Date(enemy.createdAt),
       },
     });
+  },
+  update: async (enemyId: string, deletedAt: Date | null): Promise<EnemyModel> => {
+    const prismaEnemy = await prismaClient.enemy.update({
+      where: { id: enemyId },
+      data: { deletedAt },
+    });
     return toEnemyModel(prismaEnemy);
   },
   findAll: async (): Promise<EnemyModel[]> => {
     const prismaEnemies = await prismaClient.enemy.findMany({
+      where: {
+        deletedAt: null,
+      },
       orderBy: { createdAt: 'desc' },
     });
     return prismaEnemies.map(toEnemyModel);
@@ -38,7 +48,12 @@ export const enemiesRepository = {
     const prismaEnemy = await prismaClient.enemy.findUnique({ where: { id } });
     return prismaEnemy !== null ? toEnemyModel(prismaEnemy) : null;
   },
-  delete: async (id: string): Promise<void> => {
-    await prismaClient.enemy.delete({ where: { id } });
-  },
+  findNotNull: async () =>
+    await prismaClient.enemy.findMany({
+      where: {
+        NOT: {
+          deletedAt: null,
+        },
+      },
+    }),
 };
