@@ -1,5 +1,6 @@
 import type { UserId } from '$/commonTypesWithClient/branded';
 import type { EnemyModel } from '$/commonTypesWithClient/models';
+import { enemyTable } from '$/constants/enemyTable';
 import { enemiesRepository } from '$/repository/enemiesRepository';
 import { playersRepository } from '$/repository/playersRepository';
 import { enemyIdParser } from '$/service/idParsers';
@@ -7,7 +8,8 @@ import { randomUUID } from 'crypto';
 import { playerUseCase } from './playerUseCase';
 
 export const enemyUseCase = {
-  create: async (): Promise<EnemyModel | null> => {
+  create: async () => {
+    //専らデバッグ用
     const newEnemy: EnemyModel = {
       id: enemyIdParser.parse(randomUUID()),
       createdPosition: {
@@ -17,14 +19,34 @@ export const enemyUseCase = {
       createdAt: Date.now(),
       type: 0,
     };
-    await enemiesRepository.create(newEnemy);
-    return newEnemy;
+    await enemiesRepository.save(newEnemy);
   },
   delete: async (enemyId: string, userId: UserId) => {
     await enemiesRepository.delete(enemyId);
     const userStatus = await playerUseCase.getStatus(userId, null);
     if (userStatus !== null) {
       await playersRepository.save({ ...userStatus, score: userStatus.score + 1 });
+    }
+  },
+  createAll: async () => {
+    const res = await enemyTable();
+    if (res === null) {
+      enemyUseCase.createAll();
+    } else {
+      res.forEach((tables, displayNumberMinus1) =>
+        tables.forEach((table) => {
+          const newEnemy: EnemyModel = {
+            id: enemyIdParser.parse(randomUUID()),
+            createdPosition: {
+              x: table.createPosition.x + 1920 * displayNumberMinus1,
+              y: table.createPosition.y,
+            },
+            createdAt: Date.now(),
+            type: table.type,
+          };
+          enemiesRepository.save(newEnemy);
+        })
+      );
     }
   },
 };
