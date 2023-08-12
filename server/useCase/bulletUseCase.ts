@@ -28,8 +28,24 @@ export const bulletUseCase = {
     }
     return null;
   },
+  createByEnemy: async (pos: { x: number; y: number }, dir = 0) => {
+    const newBullet: BulletModel = {
+      id: bulletIdParser.parse(randomUUID()),
+      createdPosition: {
+        ...pos,
+      },
+      direction: dir,
+      type: 0,
+      playerId: undefined,
+      createdAt: Date.now(),
+    };
+    await bulletsRepository.create(newBullet);
+  },
   delete: async () => {
-    const bullets = await bulletsRepository.findAll();
+    const bullets = [
+      ...(await bulletsRepository.findAllOfPlayers()),
+      ...(await bulletsRepository.findAllOfEnemies()),
+    ];
     const game = await gamesRepository.find();
     const maxXPosition = ((game?.displayNumber ?? -1) + 1) * 1920;
     const deleteBullets = bullets.filter((bullet) => {
@@ -43,8 +59,10 @@ export const bulletUseCase = {
   getStatus: async (displayNumber: number) => {
     bulletUseCase.delete();
     enemyUseCase.respawn();
-    const res = (await bulletsRepository.findAll()) ?? [];
-    const bulletsInDisplay = res
+    const res1 = (await bulletsRepository.findAllOfPlayers()) ?? [];
+    const res2 = await bulletsRepository.findAllOfEnemies() ?? [];
+
+    const bulletsInDisplay1 = res1
       .filter((bullet) => isInDisplay(displayNumber, posWithBulletModel(bullet)[0]))
       .map((bullet) => ({
         ...bullet,
@@ -53,6 +71,18 @@ export const bulletUseCase = {
           x: bullet.createdPosition.x - 1920 * displayNumber,
         },
       }));
-    return bulletsInDisplay;
+    const bulletsInDisplay2 = res2
+      .filter((bullet) => isInDisplay(displayNumber, posWithBulletModel(bullet)[0]))
+      .map((bullet) => ({
+        ...bullet,
+        createdPosition: {
+          ...bullet.createdPosition,
+          x: bullet.createdPosition.x - 1920 * displayNumber,
+        },
+      }));
+    return {
+      playerS: bulletsInDisplay1,
+      enemyS: bulletsInDisplay2,
+    };
   },
 };
