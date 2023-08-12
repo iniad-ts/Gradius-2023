@@ -3,6 +3,7 @@ import type { BulletModel } from '$/commonTypesWithClient/models';
 import { bulletsRepository } from '$/repository/bulletsRepository';
 import { gamesRepository } from '$/repository/gamesRepository';
 import { bulletIdParser } from '$/service/idParsers';
+import { isInDisplay } from '$/service/isInDisplay';
 import { posWithDirSpeTim as posWithBulletModel } from '$/service/posWithDirSpeTim';
 import { randomUUID } from 'crypto';
 import { enemyUseCase } from './enemyUseCase';
@@ -44,13 +45,7 @@ export const bulletUseCase = {
     enemyUseCase.respawn();
     const res = (await bulletsRepository.findAll()) ?? [];
     const bulletsInDisplay = res
-      .filter(
-        (bullet) =>
-          !(
-            1920 * displayNumber > posWithBulletModel(bullet)[0] ||
-            posWithBulletModel(bullet)[0] > 1920 * (displayNumber + 1)
-          )
-      )
+      .filter((bullet) => isInDisplay(displayNumber, posWithBulletModel(bullet)[0]))
       .map((bullet) => ({
         ...bullet,
         createdPosition: {

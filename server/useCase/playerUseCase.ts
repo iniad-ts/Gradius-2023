@@ -2,6 +2,7 @@ import type { UserId } from '$/commonTypesWithClient/branded';
 import type { PlayerModel } from '$/commonTypesWithClient/models';
 import { playersRepository } from '$/repository/playersRepository';
 import { userIdParser } from '$/service/idParsers';
+import { isInDisplay } from '$/service/isInDisplay';
 import { minmax } from '$/service/minmax';
 import { randomUUID } from 'crypto';
 
@@ -44,12 +45,7 @@ export const playerUseCase = {
   },
   findAll: async (displayNumber: number) => {
     const res = (await playersRepository.findAll()) ?? [];
-    const playerInDisplay = res.filter(
-      (player) =>
-        !(
-          1920 * displayNumber > player.position.x || player.position.x > 1920 * (displayNumber + 1)
-        )
-    );
+    const playerInDisplay = res.filter((player) => isInDisplay(displayNumber, player.position.x));
     return playerInDisplay;
   },
   getStatus: async (id: UserId, name: string | null): Promise<PlayerModel | null> => {

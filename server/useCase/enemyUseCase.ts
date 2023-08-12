@@ -4,6 +4,7 @@ import { enemyTable } from '$/constants/enemyTable';
 import { enemiesRepository } from '$/repository/enemiesRepository';
 import { playersRepository } from '$/repository/playersRepository';
 import { enemyIdParser } from '$/service/idParsers';
+import { isInDisplay } from '$/service/isInDisplay';
 import { randomUUID } from 'crypto';
 import { playerUseCase } from './playerUseCase';
 
@@ -26,12 +27,8 @@ export const enemyUseCase = {
   },
   findAll: async (displayNumber: number) => {
     const res = (await enemiesRepository.findAll()) ?? [];
-    const enemiesInDisplay = res.filter(
-      (enemy) =>
-        !(
-          1920 * displayNumber > enemy.createdPosition.x ||
-          enemy.createdPosition.x > 1920 * (displayNumber + 1)
-        )
+    const enemiesInDisplay = res.filter((enemy) =>
+      isInDisplay(displayNumber, enemy.createdPosition.x)
     );
     return enemiesInDisplay;
   },
