@@ -47,7 +47,6 @@ export const bulletsRepository = {
   delete: async (id: string): Promise<void> => {
     try {
       await prismaClient.bullet.delete({ where: { id } });
-      console.log('success delete');
     } catch (error) {
       console.error(error);
     }
