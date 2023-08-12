@@ -14,14 +14,14 @@ export const Config = () => {
           </thead>
           <tbody>
             <tr>
-              <td>基本playerspeed</td>
-              <td>5</td>
+              <th>基本playerspeed</th>
+              <td>5/0.1秒</td>
               <td>
                 <input type="text" name="PlayerSpeed" placeholder="入力してください" />
               </td>
             </tr>
             <tr>
-              <td>基本playerサイズ</td>
+              <th>基本playerサイズ</th>
               <td>h:30 w:20</td>
               <td>
                 <input type="text" name="PlayerSize_h" placeholder="高さを入力してください" />
@@ -29,21 +29,21 @@ export const Config = () => {
               </td>
             </tr>
             <tr>
-              <td>敵の出現頻度</td>
+              <th>敵の出現頻度</th>
               <td>2/秒</td>
               <td>
                 <input type="text" name="Enemy" placeholder="入力してください" />
               </td>
             </tr>
             <tr>
-              <td>基本敵speed</td>
-              <td>10</td>
+              <th>基本敵speed</th>
+              <td>10/0.1秒</td>
               <td>
                 <input type="text" name="EnemySpeed" placeholder="入力してください" />
               </td>
             </tr>
             <tr>
-              <td>基本敵サイズ</td>
+              <th>基本敵サイズ</th>
               <td>h:30,w:20</td>
               <td>
                 <input type="text" name="EnemySize_h" placeholder="高さを入力してください" />
@@ -51,16 +51,17 @@ export const Config = () => {
               </td>
             </tr>
             <tr>
-              <td>画面数</td>
+              <th>画面数</th>
               <td>15</td>
               <td>
-                <input type="text" name="screen" placeholder="入力してください" />
+                <input type="text" name="Screen" placeholder="入力してください" />
               </td>
             </tr>
           </tbody>
 
           <tfoot />
         </table>
+        <button>更新</button>
       </div>
     </div>
   );
