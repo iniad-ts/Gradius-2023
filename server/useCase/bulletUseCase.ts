@@ -29,7 +29,7 @@ export const bulletUseCase = {
     return null;
   },
   delete: async () => {
-    const bullets = await bulletsRepository.findAll();
+    const bullets = await bulletsRepository.findAllOfPlayers();
     const game = await gamesRepository.find();
     const maxXPosition = ((game?.displayNumber ?? -1) + 1) * 1920;
     const deleteBullets = bullets.filter((bullet) => {
@@ -43,6 +43,7 @@ export const bulletUseCase = {
   getStatus: async () => {
     bulletUseCase.delete();
     enemyUseCase.respawn();
-    return (await bulletsRepository.findAll()) ?? [];
+
+    return (await bulletsRepository.findAllOfPlayers()) ?? [];
   },
 };
