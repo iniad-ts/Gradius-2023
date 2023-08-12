@@ -1,7 +1,5 @@
-.all {
+.container {
   display: block;
-  justify-content: center;
-  align-items: center;
 }
 
 .text {
@@ -28,8 +26,6 @@
 }
 
 .input {
-  justify-content: center;
-  align-items: center;
   font-size: 200%;
   text-align: center;
   width: 70%;
@@ -39,8 +35,6 @@
 }
 
 .button {
-  justify-content: center;
-  align-items: center;
   width: 100px;
   height: 50px;
   border: 2px solid black;
