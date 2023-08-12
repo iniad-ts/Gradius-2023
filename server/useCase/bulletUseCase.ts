@@ -61,6 +61,7 @@ export const bulletUseCase = {
     enemyUseCase.respawn();
     const res1 = (await bulletsRepository.findAllOfPlayers()) ?? [];
     const res2 = (await bulletsRepository.findAllOfEnemies()) ?? [];
+
     const bulletsInDisplay1 = res1
       .filter((bullet) => isInDisplay(displayNumber, posWithBulletModel(bullet)[0]))
       .map((bullet) => ({
