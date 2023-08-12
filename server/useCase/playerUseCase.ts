@@ -4,6 +4,7 @@ import { playersRepository } from '$/repository/playersRepository';
 import { userIdParser } from '$/service/idParsers';
 import { minmax } from '$/service/minmax';
 import { randomUUID } from 'crypto';
+import { bulletsRepository } from '../repository/bulletsRepository';
 
 export type MoveTo = {
   toX: number;
@@ -25,6 +26,11 @@ export const playerUseCase = {
     };
     await playersRepository.save(movedPlayer);
     return movedPlayer;
+  },
+  hit: async (player: PlayerModel, bulletId: string) => {
+    const newPlayer = { ...player, health: player.health - 1 };
+    await playersRepository.save(newPlayer);
+    await bulletsRepository.delete(bulletId);
   },
   create: async (userName: string): Promise<PlayerModel | null> => {
     const newPlayer: PlayerModel = {
