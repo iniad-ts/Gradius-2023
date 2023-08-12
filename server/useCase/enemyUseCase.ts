@@ -26,7 +26,6 @@ export const enemyUseCase = {
   },
   kill: async (enemyId: string, userId: UserId) => {
     await enemiesRepository.update(enemyId, new Date());
-    console.log('killed');
     const userStatus = await playerUseCase.getStatus(userId, null);
     if (userStatus !== null) {
       await playersRepository.save({ ...userStatus, score: userStatus.score + 1 });
