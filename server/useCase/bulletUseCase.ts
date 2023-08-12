@@ -10,7 +10,6 @@ import { playerUseCase } from './playerUseCase';
 
 export const bulletUseCase = {
   create: async (playerId: UserId): Promise<BulletModel | null> => {
-    console.log('bulletUseCase.create');
     const player = await playerUseCase.getStatus(playerId, null);
     if (player !== null) {
       const newBullet: BulletModel = {
@@ -40,9 +39,25 @@ export const bulletUseCase = {
       bulletsRepository.delete(bullet.id);
     });
   },
-  getStatus: async () => {
+  getStatus: async (displayNumber: number) => {
     bulletUseCase.delete();
     enemyUseCase.respawn();
-    return (await bulletsRepository.findAll()) ?? [];
+    const res = (await bulletsRepository.findAll()) ?? [];
+    const bulletsInDisplay = res
+      .filter(
+        (bullet) =>
+          !(
+            1920 * displayNumber > posWithBulletModel(bullet)[0] ||
+            posWithBulletModel(bullet)[0] > 1920 * (displayNumber + 1)
+          )
+      )
+      .map((bullet) => ({
+        ...bullet,
+        createdPosition: {
+          ...bullet.createdPosition,
+          x: bullet.createdPosition.x - 1920 * displayNumber,
+        },
+      }));
+    return bulletsInDisplay;
   },
 };

@@ -42,6 +42,16 @@ export const playerUseCase = {
     await playersRepository.save(newPlayer);
     return newPlayer;
   },
+  findAll: async (displayNumber: number) => {
+    const res = (await playersRepository.findAll()) ?? [];
+    const playerInDisplay = res.filter(
+      (player) =>
+        !(
+          1920 * displayNumber > player.position.x || player.position.x > 1920 * (displayNumber + 1)
+        )
+    );
+    return playerInDisplay;
+  },
   getStatus: async (id: UserId, name: string | null): Promise<PlayerModel | null> => {
     if (name !== null) {
       await playerUseCase.create(name);
