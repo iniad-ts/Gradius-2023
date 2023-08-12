@@ -55,6 +55,11 @@ const Controller = () => {
     moveDirection.current = moveTo;
   };
 
+  //仮の敵生成ボタン
+  const createEnemy = async () => {
+    await apiClient.enemy.$post();
+  };
+
   useEffect(() => {
     const handleResize = () => {
       setWindowSize({
@@ -105,6 +110,7 @@ const Controller = () => {
       >
         🚀
       </button>
+      <button onClick={createEnemy}>敵</button>
     </div>
   );
 };

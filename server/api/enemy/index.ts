@@ -8,10 +8,13 @@ export type Methods = {
     };
     resBody: EnemyModel[];
   };
-  post: {
+  delete: {
     reqBody: {
       enemyId: string;
       userId: UserId;
     };
+  };
+  post: {
+    resBody: EnemyModel | null;
   };
 };

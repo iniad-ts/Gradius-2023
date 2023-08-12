@@ -1,0 +1,44 @@
+.container {
+  display: block;
+}
+
+.text {
+  text-align: center;
+  font-size: 30px;
+  font-weight: bold;
+  color: black;
+  margin-bottom: 20px;
+}
+
+.text2 {
+  text-align: center;
+  font-size: 15px;
+  font-weight: bold;
+  color: black;
+  margin-bottom: 20px;
+  margin-top: 20px;
+}
+
+.box {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.input {
+  font-size: 200%;
+  text-align: center;
+  width: 70%;
+  height: 80%;
+  border: 1px solid black;
+  border-radius: 10px;
+}
+
+.button {
+  width: 100px;
+  height: 50px;
+  border: 2px solid black;
+  border-radius: 10px;
+  background-color: gray;
+  margin-top: 20px;
+}

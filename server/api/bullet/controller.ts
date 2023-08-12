@@ -7,5 +7,9 @@ export default defineController(() => ({
     bulletUseCase.delete();
     return { status: 200, body: (await bulletsRepository.findAll()) ?? [] };
   },
+  delete: async ({ body }) => ({
+    status: 200,
+    body: await bulletsRepository.delete(body.bulletId),
+  }),
   post: async ({ player }) => ({ status: 200, body: await bulletUseCase.create(player.id) }),
 }));

@@ -5,17 +5,19 @@ import { Image, Layer, Stage } from 'react-konva';
 import { Bullet } from 'src/components/Bullet/PlayerBullet';
 import { staticPath } from 'src/utils/$path';
 import { apiClient } from 'src/utils/apiClient';
+import { posWithDirSpeTim } from 'src/utils/posWithDirSpeTim';
 import useImage from 'use-image';
 
 const Game = () => {
   const router = useRouter();
   const display = router.query.display === undefined ? null : Number(router.query.display);
-
+  console.log(display);
   if (display === null) {
     const Lobby = () => {
       const [displayNumber, setDisplayNumber] = useState<number>(0);
       const getDisplayNumber = async () => {
         const res = await apiClient.game.config.$get();
+        console.log(res);
         if (res !== null) {
           setDisplayNumber(res);
         }
@@ -49,7 +51,7 @@ const Game = () => {
     const [bullets, setBullets] = useState<BulletModel[]>([]);
     const [currentTime, setCurrentTime] = useState<number>(Date.now());
     const [shipImage] = useImage(staticPath.images.spaceship_png);
-    const [enemyImage] = useImage(staticPath.images.enemy_spaceship_png);
+    const [enemyImage] = useImage(staticPath.images.ufo_jpg);
 
     const fetchPlayers = async (display: number) => {
       const res = await apiClient.player.$get({ query: { display } });
@@ -72,11 +74,38 @@ const Game = () => {
       }
     };
 
+    //衝突判定
+    const checkCollision = () => {
+      const newEnemies = enemies.filter((enemy) => {
+        const hitBullet = bullets.find((bullet) => {
+          const bulletPosition = posWithDirSpeTim(bullet, currentTime);
+          const distance = Math.sqrt(
+            Math.pow(enemy.createdPosition.x - bulletPosition[0], 2) +
+              Math.pow(enemy.createdPosition.y - bulletPosition[1], 2)
+          );
+          return distance < 50;
+        });
+        if (hitBullet && hitBullet.playerId) {
+          apiClient.enemy.$delete({
+            body: {
+              enemyId: enemy.id,
+              userId: hitBullet.playerId,
+            },
+          });
+          apiClient.bullet.$delete({ body: { bulletId: hitBullet.id } });
+          return false;
+        }
+        return true;
+      });
+      setEnemies(newEnemies);
+    };
+
     useEffect(() => {
       const cancelId = requestAnimationFrame(() => {
         fetchPlayers(display);
         fetchEnemies(display);
         fetchBullets(display);
+        checkCollision();
         setCurrentTime(Date.now());
       });
       return () => cancelAnimationFrame(cancelId);
@@ -107,9 +136,8 @@ const Game = () => {
             {enemies.map((enemy) => (
               <Image
                 image={enemyImage}
-                width={50}
-                height={50}
-                rotation={90}
+                width={80}
+                height={80}
                 x={enemy.createdPosition.x}
                 y={enemy.createdPosition.y}
                 key={enemy.id}
