@@ -5,6 +5,7 @@ import { enemiesRepository } from '$/repository/enemiesRepository';
 import { playersRepository } from '$/repository/playersRepository';
 import { enemyIdParser } from '$/service/idParsers';
 import { randomUUID } from 'crypto';
+import { bulletUseCase } from './bulletUseCase';
 import { playerUseCase } from './playerUseCase';
 
 const RESPAWN_TIME = 5000;
@@ -36,10 +37,20 @@ export const enemyUseCase = {
     const res = await enemiesRepository.findNotNull();
     Promise.all(
       res
-        .filter(
-          (enemy) => enemy.deletedAt !== null && nowTime - enemy.deletedAt.getTime() > RESPAWN_TIME
-        )
+        .filter((enemy) => enemy.deletedAt !== null && nowTime - enemy.deletedAt > RESPAWN_TIME)
         .map((enemy) => enemiesRepository.update(enemy.id, null))
+    ).then((results) =>
+      results.forEach((result) => {
+        result;
+      })
+    );
+  },
+  shot2: async () => {
+    const res = await enemiesRepository.findType2();
+    Promise.all(
+      res.map((enemy) =>
+        bulletUseCase.createByEnemy({ x: enemy.createdPosition.x, y: enemy.createdPosition.y })
+      )
     ).then((results) =>
       results.forEach((result) => {
         result;
