@@ -14,4 +14,9 @@ export type Methods = {
     };
     resBody: PlayerModel | null;
   };
+  patch: {
+    reqBody: {
+      player: PlayerModel;
+    };
+  };
 };
