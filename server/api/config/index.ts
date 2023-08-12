@@ -4,4 +4,7 @@ export type Methods = {
   get: {
     resBody: ConfigModel;
   };
+  post: {
+    reqBody: ConfigModel;
+  };
 };

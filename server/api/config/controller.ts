@@ -18,4 +18,8 @@ export default defineController(() => ({
       // creenNumber:
     },
   }),
+  post: async ({ body }) => ({
+    status: 201,
+    body: enemyUsecase.updateInfo(body),
+  }),
 }));
