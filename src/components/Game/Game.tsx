@@ -1,4 +1,4 @@
-import type { EnemyModel, playerModel } from '$/commonTypesWithClient/models';
+import type { EnemyModel, PlayerModel } from '$/commonTypesWithClient/models';
 import { useAtom } from 'jotai';
 import React, { useCallback, useEffect, useState } from 'react';
 import { Circle, Layer, Rect, Stage, Text } from 'react-konva';
@@ -11,7 +11,7 @@ const Game = ({ monitorId }: { monitorId: number }) => {
   const windowHeight = Number(window.innerHeight);
 
   //プレイヤーと弾敵をstateで管理
-  const [newPlayerPosition, setNewPlayerPosition] = useState<playerModel[]>([]);
+  const [newPlayerPosition, setNewPlayerPosition] = useState<PlayerModel[]>([]);
   const [newGunPosition, setNewGunPosition] = useState<number[][]>([]);
   const [newEnemyPosition, setNewEnemyPosition] = useState<EnemyModel[]>([]);
   //apiを叩いてプレイヤーと銃敵の位置を取得stateにセット
