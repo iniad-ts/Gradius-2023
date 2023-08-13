@@ -1,10 +1,14 @@
 import { useAtom } from 'jotai';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Circle, Layer, Line, Stage } from 'react-konva';
 import { Loading } from 'src/components/Loading/Loading';
 import { userAtom } from '../../atoms/user';
 
 const Home = () => {
+  const [UpArrow, setUpArrow] = useState(false);
+  const [DownArrow, setDownArrow] = useState(false);
+  const [LeftArrow, setLeftArrow] = useState(false);
+  const [RightArrow, setRightArrow] = useState(false);
   const [user] = useAtom(userAtom);
   if (!user) return <Loading visible />;
   return (
@@ -25,13 +29,6 @@ const Home = () => {
       </Layer>
     </Stage>
   );
-
-  const gradius_move: React.FC = () => {
-    const [UpArrow, setUpArrow] = useState(false);
-    const [DownArrow, setDownArrow] = useState(false);
-    const [LeftArrow, setLeftArrow] = useState(false);
-    const [RightArrow, setRightArrow] = useState(false);
-  };
 
   useEffect(() => {
     const keydown = (event: KeyboardEvent) => {
