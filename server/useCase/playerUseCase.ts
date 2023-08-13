@@ -1,6 +1,7 @@
 import type { UserId } from '$/commonTypesWithClient/branded';
 import type { PlayerModel } from '$/commonTypesWithClient/models';
 import { bulletsRepository } from '$/repository/bulletsRepository';
+import { gamesRepository } from '$/repository/gamesRepository';
 import { playersRepository } from '$/repository/playersRepository';
 import { userIdParser } from '$/service/idParsers';
 import { isInDisplay } from '$/service/isInDisplay';
@@ -15,13 +16,12 @@ export type MoveTo = {
 export const playerUseCase = {
   move: async (id: UserId, moveTo: MoveTo): Promise<PlayerModel | null> => {
     const player: PlayerModel | null = await playersRepository.find(id);
-
-    if (player === null) return null;
-
+    const displayNumber = (await gamesRepository.find())?.displayNumber;
+    if (player === null || displayNumber === undefined) return null;
     const movedPlayer: PlayerModel = {
       ...player,
       position: {
-        x: minmax(player.position.x + moveTo.toX * 5, 0, 1920),
+        x: minmax(player.position.x + moveTo.toX * 5, 0, 1920 + 1920 * displayNumber),
         y: minmax(player.position.y + moveTo.toY * 5, 0, 1080),
       },
     };
@@ -49,7 +49,7 @@ export const playerUseCase = {
     await playersRepository.save(newPlayer);
     return newPlayer;
   },
-  findAll: async (displayNumber: number) => {
+  findInDisplay: async (displayNumber: number) => {
     const res = (await playersRepository.findAll()) ?? [];
     const playerInDisplay = res
       .filter((player) => isInDisplay(displayNumber, player.position.x))
@@ -58,15 +58,5 @@ export const playerUseCase = {
         position: { ...player.position, x: player.position.x - 1920 * displayNumber },
       }));
     return playerInDisplay;
-  },
-  getStatus: async (id: UserId): Promise<PlayerModel | null> => {
-    if (id === null) return null;
-    const player: PlayerModel | null = await playersRepository.find(id);
-    if (player === null) return null;
-    return player;
-  },
-  update: async (player: PlayerModel): Promise<PlayerModel | null> => {
-    await playersRepository.save(player);
-    return player;
   },
 };
