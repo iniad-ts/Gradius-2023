@@ -4,7 +4,7 @@ import { apiClient } from 'src/utils/apiClient';
 
 const Lobby = () => {
   const router = useRouter();
-  const [displayNumber, setDisplayNumber] = useState<number>(0);
+  const [displayNumber, setDisplayNumber] = useState(0);
 
   useEffect(() => {
     const getDisplayNumber = async () => {

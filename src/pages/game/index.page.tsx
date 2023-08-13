@@ -57,7 +57,7 @@ const Game = () => {
     };
 
     //衝突判定の距離
-    const collisionDistance = 50;
+    const COLLISION_DISTANCE = 50;
 
     //敵と弾の衝突判定
     const checkCollisionBullet = async () => {
@@ -70,7 +70,7 @@ const Game = () => {
             Math.pow(enemy.createdPosition.x - bulletPosition[0], 2) +
               Math.pow(enemy.createdPosition.y - bulletPosition[1], 2)
           );
-          return distance < collisionDistance;
+          return distance < COLLISION_DISTANCE;
         });
 
         if (hitBullet && hitBullet.playerId) {
@@ -89,15 +89,14 @@ const Game = () => {
 
     //敵とプレイヤーの衝突判定
     const checkCollisionPlayer = async () => {
-      const newEnemies = [];
+      const remainingEnemies = [];
 
       for (const enemy of enemies) {
         const hitPlayer = players.find((player) => {
-          const distance = Math.sqrt(
+          const distanceSquared =
             Math.pow(enemy.createdPosition.x - player.position.x, 2) +
-              Math.pow(enemy.createdPosition.y - player.position.y, 2)
-          );
-          return distance < collisionDistance;
+            Math.pow(enemy.createdPosition.y - player.position.y, 2);
+          return distanceSquared < COLLISION_DISTANCE ** 2;
         });
 
         if (hitPlayer) {
@@ -109,7 +108,7 @@ const Game = () => {
           });
           updateHealth(hitPlayer.id);
         } else {
-          newEnemies.push(enemy);
+          remainingEnemies.push(enemy);
         }
       }
     };
