@@ -25,12 +25,51 @@ export const Config = () => {
     }
   };
 
+  const updatePlayerSize = async () => {
+    const inputElement_h = document.getElementById('PlayerSize_h') as HTMLInputElement;
+    const inputValue_h = inputElement_h.value;
+    const inputElement_w = document.getElementById('PlayerSize_w') as HTMLInputElement;
+    const inputValue_w = inputElement_w.value;
+
+    if (newInfo !== undefined) {
+      newInfo.playerSize.h = Number(inputValue_h);
+      newInfo.playerSize.w = Number(inputValue_w);
+      await apiClient.config.$post({ body: newInfo });
+      setInfo(newInfo);
+    }
+  };
+
   const updateMakeEnemyFrequency = async () => {
     const inputElement = document.getElementById('mEF') as HTMLInputElement;
     const inputValue = inputElement.value;
 
     if (newInfo !== undefined) {
       newInfo.makeEnemyFrequency = Number(inputValue);
+      await apiClient.config.$post({ body: newInfo });
+      setInfo(newInfo);
+    }
+  };
+
+  const updateEnemySpeed = async () => {
+    const inputElement = document.getElementById('EnemySpeed') as HTMLInputElement;
+    const inputValue = inputElement.value;
+
+    if (newInfo !== undefined) {
+      newInfo.enemySpeed = Number(inputValue);
+      await apiClient.config.$post({ body: newInfo });
+      setInfo(newInfo);
+    }
+  };
+
+  const updateEnemySize = async () => {
+    const inputElement_h = document.getElementById('EnemySize_h') as HTMLInputElement;
+    const inputValue_h = inputElement_h.value;
+    const inputElement_w = document.getElementById('EnemySize_h') as HTMLInputElement;
+    const inputValue_w = inputElement_w.value;
+
+    if (newInfo !== undefined) {
+      newInfo.enemySize.h = Number(inputValue_h);
+      newInfo.enemySize.w = Number(inputValue_w);
       await apiClient.config.$post({ body: newInfo });
       setInfo(newInfo);
     }
@@ -66,9 +105,19 @@ export const Config = () => {
                 h:{info?.playerSize.h} w:{info?.playerSize.w}
               </td>
               <td>
-                <input type="text" name="PlayerSize_h" placeholder="高さを入力してください" />
-                <input type="text" name="PlayerSize_w" placeholder="幅を入力してください" />
-                <button onClick={() => update()}>更新</button>
+                <input
+                  id="PlayerSize_h"
+                  type="text"
+                  name="PlayerSize_h"
+                  placeholder="高さを入力してください"
+                />
+                <input
+                  id="PlayerSize_w"
+                  type="text"
+                  name="PlayerSize_w"
+                  placeholder="幅を入力してください"
+                />
+                <button onClick={() => updatePlayerSize()}>更新</button>
               </td>
             </tr>
             <tr>
@@ -83,8 +132,13 @@ export const Config = () => {
               <th>基本敵speed</th>
               <td>{info?.enemySpeed}/0.1秒</td>
               <td>
-                <input type="text" name="EnemySpeed" placeholder="入力してください" />
-                <button onClick={() => update()}>更新</button>
+                <input
+                  id="EnemySpeed"
+                  type="text"
+                  name="EnemySpeed"
+                  placeholder="入力してください"
+                />
+                <button onClick={() => updateEnemySpeed()}>更新</button>
               </td>
             </tr>
             <tr>
@@ -93,9 +147,19 @@ export const Config = () => {
                 h:{info?.enemySize.h},w:{info?.enemySize.w}
               </td>
               <td>
-                <input type="text" name="EnemySize_h" placeholder="高さを入力してください" />
-                <input type="text" name="EnemySize_w" placeholder="幅を入力してください" />
-                <button onClick={() => update()}>更新</button>
+                <input
+                  id="EnemySize_h"
+                  type="text"
+                  name="EnemySize_h"
+                  placeholder="高さを入力してください"
+                />
+                <input
+                  id="EnemySize_w"
+                  type="text"
+                  name="EnemySize_w"
+                  placeholder="幅を入力してください"
+                />
+                <button onClick={() => updateEnemySize()}>更新</button>
               </td>
             </tr>
             <tr>
@@ -103,7 +167,7 @@ export const Config = () => {
               <td>15</td>
               <td>
                 <input type="text" name="Screen" placeholder="入力してください" />
-                <button onClick={() => update()}>更新</button>
+                {/* <button onClick={() => update()}>更新</button> */}
               </td>
             </tr>
           </tbody>
