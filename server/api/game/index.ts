@@ -1,5 +1,10 @@
+import type { EnemyModel, PlayerModel } from '$/commonTypesWithClient/models';
+
 export type Methods = {
-  get: {
-    resBody: string;
+  put: {
+    resBody: PlayerModel | null;
+  };
+  post: {
+    reqBody: { player: PlayerModel; enemy: EnemyModel };
   };
 };

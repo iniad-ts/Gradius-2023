@@ -17,7 +17,6 @@ export default defineHooks(() => ({
       }
       return;
     }
-
     req.player = player;
   },
 }));

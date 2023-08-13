@@ -7,7 +7,6 @@ import { enemyIdParser } from '$/service/idParsers';
 import { isInDisplay } from '$/service/isInDisplay';
 import { randomUUID } from 'crypto';
 import { bulletUseCase } from './bulletUseCase';
-import { playerUseCase } from './playerUseCase';
 
 const RESPAWN_TIME = 5000;
 
@@ -26,7 +25,7 @@ export const enemyUseCase = {
     };
     await enemiesRepository.create(newEnemy);
   },
-  findAll: async (displayNumber: number) => {
+  findInDisplay: async (displayNumber: number) => {
     const res = (await enemiesRepository.findAll()) ?? [];
     const enemiesInDisplay = res
       .filter((enemy) => isInDisplay(displayNumber, enemy.createdPosition.x))
@@ -41,7 +40,7 @@ export const enemyUseCase = {
   },
   kill: async (enemyId: string, userId: UserId) => {
     await enemiesRepository.update(enemyId, new Date());
-    const userStatus = await playerUseCase.getStatus(userId);
+    const userStatus = await playersRepository.find(userId);
     if (userStatus !== null) {
       await playersRepository.save({ ...userStatus, score: userStatus.score + 1 });
     }
