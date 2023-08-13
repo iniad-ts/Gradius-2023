@@ -14,6 +14,9 @@ const Config = () => {
     }
   };
 
+  //gameが作られたときに、決められた敵を生成する
+  const gameStart = async () => {};
+
   useEffect(() => {
     const cancelId = requestAnimationFrame(() => {
       fetchDisplayNumber();
@@ -38,7 +41,7 @@ const Config = () => {
           <label>ディスプレイ枚数</label>
           <input type="number" value={display} onChange={handleChangeDisplay} min={1} />
         </div>
-        <Link href="/game" className={styles.button}>
+        <Link href="/game" className={styles.button} onClick={gameStart}>
           ゲーム画面
           <span />
         </Link>
