@@ -51,7 +51,12 @@ export const playerUseCase = {
   },
   findAll: async (displayNumber: number) => {
     const res = (await playersRepository.findAll()) ?? [];
-    const playerInDisplay = res.filter((player) => isInDisplay(displayNumber, player.position.x));
+    const playerInDisplay = res
+      .filter((player) => isInDisplay(displayNumber, player.position.x))
+      .map((player) => ({
+        ...player,
+        position: { ...player.position, x: player.position.x - 1920 * displayNumber },
+      }));
     return playerInDisplay;
   },
   getStatus: async (id: UserId): Promise<PlayerModel | null> => {
