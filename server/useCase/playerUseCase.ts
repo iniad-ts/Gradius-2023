@@ -1,5 +1,6 @@
 import type { UserId } from '$/commonTypesWithClient/branded';
 import type { PlayerModel } from '$/commonTypesWithClient/models';
+import { bulletsRepository } from '$/repository/bulletsRepository';
 import { playersRepository } from '$/repository/playersRepository';
 import { userIdParser } from '$/service/idParsers';
 import { isInDisplay } from '$/service/isInDisplay';
@@ -26,6 +27,11 @@ export const playerUseCase = {
     };
     await playersRepository.save(movedPlayer);
     return movedPlayer;
+  },
+  hit: async (player: PlayerModel, bulletId: string) => {
+    const newPlayer = { ...player, health: player.health - 1 };
+    await playersRepository.save(newPlayer);
+    await bulletsRepository.delete(bulletId);
   },
   create: async (userName: string): Promise<PlayerModel | null> => {
     const newPlayer: PlayerModel = {
