@@ -30,7 +30,7 @@ export const gamesRepository = {
     return prismaGames.map(toGameModel);
   },
   find: async (): Promise<GameModel | null> => {
-    const prismaGame = await prismaClient.game.findFirst();
+    const prismaGame = await prismaClient.game.findFirst().catch(() => null);
     return prismaGame !== null ? toGameModel(prismaGame) : null;
   },
 };

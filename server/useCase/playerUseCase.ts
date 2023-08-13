@@ -1,7 +1,9 @@
 import type { UserId } from '$/commonTypesWithClient/branded';
 import type { PlayerModel } from '$/commonTypesWithClient/models';
+import { bulletsRepository } from '$/repository/bulletsRepository';
 import { playersRepository } from '$/repository/playersRepository';
 import { userIdParser } from '$/service/idParsers';
+import { isInDisplay } from '$/service/isInDisplay';
 import { minmax } from '$/service/minmax';
 import { randomUUID } from 'crypto';
 
@@ -26,6 +28,11 @@ export const playerUseCase = {
     await playersRepository.save(movedPlayer);
     return movedPlayer;
   },
+  hit: async (player: PlayerModel, bulletId: string) => {
+    const newPlayer = { ...player, health: player.health - 1 };
+    await playersRepository.save(newPlayer);
+    await bulletsRepository.delete(bulletId);
+  },
   create: async (userName: string): Promise<PlayerModel | null> => {
     const newPlayer: PlayerModel = {
       id: userIdParser.parse(randomUUID()),
@@ -35,17 +42,20 @@ export const playerUseCase = {
         y: 350,
       },
       createdAt: Date.now(),
-      health: 100,
+      health: 5,
       score: 0,
       team: 'red',
     };
     await playersRepository.save(newPlayer);
     return newPlayer;
   },
-  getStatus: async (id: UserId, name: string | null): Promise<PlayerModel | null> => {
-    if (name !== null) {
-      await playerUseCase.create(name);
-    }
+  findAll: async (displayNumber: number) => {
+    const res = (await playersRepository.findAll()) ?? [];
+    const playerInDisplay = res.filter((player) => isInDisplay(displayNumber, player.position.x));
+    return playerInDisplay;
+  },
+  getStatus: async (id: UserId): Promise<PlayerModel | null> => {
+    if (id === null) return null;
     const player: PlayerModel | null = await playersRepository.find(id);
     if (player === null) return null;
     return player;
