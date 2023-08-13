@@ -60,19 +60,12 @@ const Game = ({ monitorId }: { monitorId: number }) => {
   //apiを叩く処理を100msごとに実行
   useEffect(() => {
     const cancelId = setInterval(getPosition, 50);
-    console.log('monitorId', monitorId);
-    console.log('windowWidth', windowWidth);
-    console.log(
-      'player',
-      newPlayerPosition.map((player) => player.pos.x - monitorId * windowWidth)
-    );
 
     return () => {
       clearInterval(cancelId);
     };
-  }, [getPosition, newPlayerPosition]);
+  }, [getPosition]);
   //mapで展開してひとつずつ描画
-
   return (
     <Stage width={windowWidth} height={windowHeight}>
       <Layer>

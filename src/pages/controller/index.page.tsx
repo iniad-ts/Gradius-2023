@@ -3,7 +3,6 @@ import type { MoveDirection } from '$/Usecase/playerUsecase';
 
 import type { UserId } from '$/commonTypesWithClient/branded';
 import { useAtom } from 'jotai';
-import { useRouter } from 'next/router';
 import { useEffect, useRef, useState } from 'react';
 import { Joystick, JoystickShape } from 'react-joystick-component';
 import type { IJoystickUpdateEvent } from 'react-joystick-component/build/lib/Joystick';
@@ -19,7 +18,6 @@ const Home = () => {
   const moveDirection = useRef<MoveDirection>({ x: 0, y: 0 });
   const [userId, setUserId] = useState<UserId | null>(null);
   const [isready, setIsready] = useState(false);
-  const router = useRouter();
 
   const createPlayer = async () => {
     const result = await apiClient.rooms.createPlayer.$get();
