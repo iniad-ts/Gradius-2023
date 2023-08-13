@@ -49,11 +49,13 @@ const Home = () => {
   }, []); // 依存性配列は空にします。getsizeが変更されるとタイマーはリセットされません
 
   const shoot = async () => {
+    if (userId === null) return;
     await apiClient.rooms.gunPosition.$post({
       body: userId,
     });
   };
   const move = async () => {
+    if (userId === null) return;
     await apiClient.rooms.control.$post({
       body: { moveDirection: moveDirection.current, userId },
     });
