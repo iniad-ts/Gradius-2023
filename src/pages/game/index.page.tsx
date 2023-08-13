@@ -51,9 +51,9 @@ const Game = () => {
     const [bullets, setBullets] = useState<BulletModel[]>([]);
     const [currentTime, setCurrentTime] = useState<number>(Date.now());
     const [shipImage] = useImage(staticPath.images.spaceship_png);
-    const [enemyImage1] = useImage(staticPath.images.enemys.ufo_jpg);
-    const [enemyImage2] = useImage(staticPath.images.enemys.ufo_2_PNG);
-    const [enemyImage3] = useImage(staticPath.images.enemys.ufo_3_PNG);
+    const [enemyImage1] = useImage(staticPath.images.ufo_jpg);
+    const [enemyImage2] = useImage(staticPath.images.ufo_2_PNG);
+    const [enemyImage3] = useImage(staticPath.images.ufo_3_PNG);
 
     const fetchPlayers = async (display: number) => {
       const res = await apiClient.player.$get({ query: { display } });
@@ -142,15 +142,6 @@ const Game = () => {
       setEnemies(newEnemies);
     };
 
-    //敵画像を配列として格納する
-    const createImageList = ()=>{
-      const images [] = Object.keys(staticPath.images.enemys);
-        
-      });
-    }
-
-    const enemyImages[] = createImageList()
-
     useEffect(() => {
       const cancelId = requestAnimationFrame(() => {
         fetchPlayers(display);
@@ -189,7 +180,7 @@ const Game = () => {
               <Image
                 image={
                   enemy.type === 1 ? enemyImage1 : enemy.type === 2 ? enemyImage2 : enemyImage3
-                 }
+                }
                 width={80}
                 height={80}
                 x={enemy.createdPosition.x}
@@ -202,8 +193,6 @@ const Game = () => {
       </div>
     );
   };
-
   return <GameCanvas />;
 };
-
 export default Game;

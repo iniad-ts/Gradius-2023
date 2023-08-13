@@ -15,7 +15,7 @@ export const enemyUseCase = {
         y: Math.floor(Math.random() * 1080),
       },
       createdAt: Date.now(),
-      type: 0,
+      type: Math.floor(Math.random() * 3) + 1,
     };
     await enemiesRepository.create(newEnemy);
     return newEnemy;
