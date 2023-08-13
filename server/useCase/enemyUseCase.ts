@@ -28,9 +28,15 @@ export const enemyUseCase = {
   },
   findAll: async (displayNumber: number) => {
     const res = (await enemiesRepository.findAll()) ?? [];
-    const enemiesInDisplay = res.filter((enemy) =>
-      isInDisplay(displayNumber, enemy.createdPosition.x)
-    );
+    const enemiesInDisplay = res
+      .filter((enemy) => isInDisplay(displayNumber, enemy.createdPosition.x))
+      .map((enemy) => ({
+        ...enemy,
+        createdPosition: {
+          ...enemy.createdPosition,
+          x: enemy.createdPosition.x - 1920 * displayNumber,
+        },
+      }));
     return enemiesInDisplay;
   },
   kill: async (enemyId: string, userId: UserId) => {
