@@ -90,7 +90,6 @@ const Game = () => {
         });
 
         if (hitPlayer) {
-
           apiClient.game.$post({ body: { player: hitPlayer, enemy } });
         } else {
           remainingEnemies.push(enemy);
