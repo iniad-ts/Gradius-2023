@@ -18,10 +18,10 @@ const Home = () => {
   const moveDirection = useRef<MoveDirection>({ x: 0, y: 0 });
   const [user_Id, setUser_Id] = useState('');
 
-  const getUserId = async () => {
-    const result = await apiClient.rooms.getUserId.get();
+  const createPlayer = async () => {
+    const result = await apiClient.rooms.createPlayer.$get();
 
-    setUser_Id(result.body.userId);
+    setUser_Id(result.userId);
   };
 
   const getsize = () => {
