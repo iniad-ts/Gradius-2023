@@ -2,16 +2,19 @@ import { playerRepository } from '$/Repository/playerRepository';
 import type { playerModel } from '$/commonTypesWithClient/models';
 import { UserIdParser } from '$/service/idParsers';
 import { randomUUID } from 'crypto';
+import type { UserId } from './../commonTypesWithClient/branded';
 
 export type MoveDirection = { x: number; y: number };
 
 export const position: number[][] = [[300, 500]];
 export let gunPosition: number[][] = [[]];
 
-export const gunShot = async () => {
+export const gunShot = async (userId: UserId) => {
   console.log('gunShot動作');
-  gunPosition.push([position[0][0] + 10, position[0][1]]);
+  const recentlyPlayerInfo = await playerRepository.read(userId);
+  gunPosition.push([recentlyPlayerInfo.pos.x, recentlyPlayerInfo.pos.y]);
 };
+
 setInterval(() => {
   moveGun();
 }, 5);
@@ -20,7 +23,7 @@ const moveGun = () => {
   const newGunPosition: number[][] = [];
   for (const s of gunPosition) {
     //TODO この5000は仮の値、将来的にはモニターサイズから逆算して出す
-    s[0] + 1 <= 5000 && newGunPosition.push([s[0] + 1, s[1]]);
+    s[0] + 1 <= 15000 && newGunPosition.push([s[0] + 1, s[1]]);
   }
   gunPosition = newGunPosition;
   return gunPosition;
@@ -40,10 +43,10 @@ export const playerUsecase = {
     await playerRepository.save(new_player);
     return new_player.userId;
   },
-  movePlayer: async (movedirection: MoveDirection, user_Id: string) => {
+  movePlayer: async (movedirection: MoveDirection, userid: UserId) => {
     // position[0][0] += movedirection.x * 10;
     // position[0][1] += movedirection.y * 10;
-    const recentlyPlayerInfo = await playerRepository.read(user_Id);
+    const recentlyPlayerInfo = await playerRepository.read(userid);
     const updatePlayerInfo: playerModel = {
       userId: recentlyPlayerInfo.userId,
       pos: {
@@ -58,7 +61,10 @@ export const playerUsecase = {
     await playerRepository.save(updatePlayerInfo);
   },
 
-  getPlayerPos: async () => {
+  getPlayer: async (userid: UserId) => {
+    return await playerRepository.read(userid);
+  },
+  getPlayers: async () => {
     return await playerRepository.getPlayers();
   },
 };
