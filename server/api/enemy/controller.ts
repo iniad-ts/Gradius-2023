@@ -11,4 +11,8 @@ export default defineController(() => ({
     status: 200,
     body: await enemyUseCase.create(),
   }),
+  start: async () => ({
+    status: 200,
+    body: await enemyUseCase.createAll(),
+  }),
 }));
