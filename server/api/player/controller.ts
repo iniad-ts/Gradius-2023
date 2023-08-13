@@ -7,8 +7,4 @@ export default defineController(() => ({
     status: 200,
     body: await playerUseCase.move(player.id, body.moveTo),
   }),
-  patch: async ({ body }) => ({
-    status: 200,
-    body: await playerUseCase.update(body.player),
-  }),
 }));

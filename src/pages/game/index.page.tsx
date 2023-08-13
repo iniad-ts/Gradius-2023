@@ -1,8 +1,10 @@
+import type { UserId } from '$/commonTypesWithClient/branded';
 import type { BulletModel, EnemyModel, PlayerModel } from '$/commonTypesWithClient/models';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { Image, Layer, Stage } from 'react-konva';
 import { Bullet } from 'src/components/Bullet/PlayerBullet';
+import Lobby from 'src/components/Lobby/Lobby';
 import { staticPath } from 'src/utils/$path';
 import { apiClient } from 'src/utils/apiClient';
 import { posWithDirSpeTim } from 'src/utils/posWithDirSpeTim';
@@ -11,37 +13,8 @@ import useImage from 'use-image';
 const Game = () => {
   const router = useRouter();
   const display = router.query.display === undefined ? null : Number(router.query.display);
-  console.log(display);
   if (display === null) {
-    const Lobby = () => {
-      const [displayNumber, setDisplayNumber] = useState<number>(0);
-      const getDisplayNumber = async () => {
-        const res = await apiClient.game.config.$get();
-        console.log(res);
-        if (res !== null) {
-          setDisplayNumber(res);
-        }
-        if (res === 0) {
-          router.push('/game/config');
-        }
-      };
-
-      useEffect(() => {
-        getDisplayNumber();
-      }, []);
-
-      return (
-        <>
-          {[...Array(displayNumber)].map((_, i) => (
-            <button onClick={() => router.push({ query: { display: i } })} key={i}>
-              {i}
-            </button>
-          ))}
-        </>
-      );
-    };
-
-    return <Lobby />;
+    return <Lobby />; // Lobbyコンポーネントの呼び出し
   }
 
   // if (!user) return <Loading visible />;
@@ -76,70 +49,68 @@ const Game = () => {
       }
     };
 
-    const updateHealth = (playerId: string) => {
-      const newPlayers = players.map((player) => {
-        if (player.id === playerId) {
-          return { ...player, health: player.health - 1 };
-        }
-        return player;
-      });
-      setPlayers(newPlayers);
-      const updatedPlayerModel = newPlayers.find((player) => player.id === playerId);
-      if (!updatedPlayerModel) return;
-      apiClient.player.$patch({
-        body: { player: updatedPlayerModel },
+    //プレイヤーの体力を減らす
+    const updateHealth = async (playerId: UserId) => {
+      const player = players.find((player) => player.id === playerId);
+      if (!player) return;
+      await apiClient.player.status.$post({
+        body: { player: { ...player, health: player.health - 1 } },
       });
     };
 
+    //衝突判定の距離
+    const COLLISION_DISTANCE = 50;
+
     //敵と弾の衝突判定
-    const checkCollisionBullet = () => {
-      const newEnemies = enemies.filter((enemy) => {
+    const checkCollisionBullet = async () => {
+      const remainingEnemies = [];
+      for (const enemy of enemies) {
         const hitBullet = playerBullets.find((bullet) => {
           const bulletPosition = posWithDirSpeTim(bullet, currentTime);
-          const distance = Math.sqrt(
+          const distanceSquared =
             Math.pow(enemy.createdPosition.x - bulletPosition[0], 2) +
-              Math.pow(enemy.createdPosition.y - bulletPosition[1], 2)
-          );
-          return distance < 50;
+            Math.pow(enemy.createdPosition.y - bulletPosition[1], 2);
+          return distanceSquared < COLLISION_DISTANCE ** 2;
         });
+
         if (hitBullet && hitBullet.playerId) {
-          apiClient.enemy.$delete({
+          await apiClient.enemy.$delete({
             body: {
               enemyId: enemy.id,
               userId: hitBullet.playerId,
             },
           });
-          apiClient.bullet.$delete({ body: { bulletId: hitBullet.id } });
-          return false;
+          await apiClient.bullet.$delete({ body: { bulletId: hitBullet.id } });
+        } else {
+          remainingEnemies.push(enemy);
         }
-        return true;
-      });
-      setEnemies(newEnemies);
+      }
     };
 
     //敵とプレイヤーの衝突判定
-    const checkCollisionPlayer = () => {
-      const newEnemies = enemies.filter((enemy) => {
+    const checkCollisionPlayer = async () => {
+      const remainingEnemies = [];
+
+      for (const enemy of enemies) {
         const hitPlayer = players.find((player) => {
-          const distance = Math.sqrt(
+          const distanceSquared =
             Math.pow(enemy.createdPosition.x - player.position.x, 2) +
-              Math.pow(enemy.createdPosition.y - player.position.y, 2)
-          );
-          return distance < 50;
+            Math.pow(enemy.createdPosition.y - player.position.y, 2);
+          return distanceSquared < COLLISION_DISTANCE ** 2;
         });
+
         if (hitPlayer) {
-          apiClient.enemy.$delete({
+          await apiClient.enemy.$delete({
             body: {
               enemyId: enemy.id,
               userId: hitPlayer.id,
             },
           });
           updateHealth(hitPlayer.id);
-          return false;
+        } else {
+          remainingEnemies.push(enemy);
         }
-        return true;
-      });
-      setEnemies(newEnemies);
+      }
     };
 
     useEffect(() => {

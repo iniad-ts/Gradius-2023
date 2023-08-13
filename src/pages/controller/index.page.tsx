@@ -1,3 +1,4 @@
+import type { PlayerModel } from '$/commonTypesWithClient/models';
 import type { MoveTo } from '$/useCase/playerUseCase';
 import { useAtom } from 'jotai';
 import { useRouter } from 'next/router';
@@ -11,6 +12,7 @@ import styles from './index.module.css';
 const Controller = () => {
   const [shootIntervalIds, setShootIntervalIds] = useState<NodeJS.Timeout[]>([]);
   const [moveIntervalIds, setMoveIntervalIds] = useState<NodeJS.Timeout[]>([]);
+  const [playerDetails, setPlayerDetails] = useState<PlayerModel>();
   const moveDirection = useRef<MoveTo>({ toX: 0, toY: 0 });
   const [windowSize, setWindowSize] = useState<{ width: number; height: number }>({
     width: window.innerWidth,
@@ -62,6 +64,16 @@ const Controller = () => {
     await apiClient.enemy.$post();
   };
 
+  //プレイヤーの情報をsetIntervalで取得
+  useEffect(() => {
+    const intervalId = setInterval(async () => {
+      const res = await apiClient.player.status.$get();
+      if (res === null) return;
+      setPlayerDetails(res);
+    }, 1000);
+    return () => clearInterval(intervalId);
+  }, []);
+
   useEffect(() => {
     const handleResize = () => {
       setWindowSize({
@@ -93,12 +105,12 @@ const Controller = () => {
         <p>
           HP
           <br />
-          💛💛💛💛💛
+          {`${'💛'.repeat(playerDetails?.health ?? 0)}`}
         </p>
         <p>
           SCORE
           <br />
-          314159265
+          {playerDetails?.score ?? 0}
         </p>
       </div>
       <button
