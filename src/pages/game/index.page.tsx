@@ -26,8 +26,8 @@ const Game = () => {
     const [currentTime, setCurrentTime] = useState<number>(Date.now());
     const [shipImage] = useImage(staticPath.images.spaceship_png);
     const [enemyImage1] = useImage(staticPath.images.ufo_jpg);
-    const [enemyImage2] = useImage(staticPath.images.ufo_2_PNG);
-    const [enemyImage3] = useImage(staticPath.images.ufo_3_PNG);
+    const [enemyImage2] = useImage(staticPath.images.ufo_2_png);
+    const [enemyImage3] = useImage(staticPath.images.ufo_3_png);
 
     const fetchPlayers = async (display: number) => {
       const res = await apiClient.player.$get({ query: { display } });
