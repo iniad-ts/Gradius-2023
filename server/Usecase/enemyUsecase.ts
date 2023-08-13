@@ -32,7 +32,7 @@ setInterval(() => {
 }, 10);
 
 // 仮初期値
-const enemy_first_pos_x = 1800;
+const enemy_first_pos_x = 3000;
 const enemy_speed = 5;
 const enemy_radius = 20;
 const enemy_hp = 10;
