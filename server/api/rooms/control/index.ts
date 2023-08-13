@@ -1,10 +1,11 @@
 import type { MoveDirection } from '$/Usecase/playerUsecase';
+import type { playerModel } from '$/commonTypesWithClient/models';
 
 export type Methods = {
   get: {
-    resBody: number[][];
+    resBody: playerModel[];
   };
   post: {
-    reqBody: MoveDirection;
+    reqBody: { moveDirection: MoveDirection; userId: string };
   };
 };

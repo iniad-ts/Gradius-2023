@@ -6,7 +6,7 @@ import { userAtom } from 'src/atoms/user';
 import { Loading } from 'src/components/Loading/Loading';
 import { apiClient } from 'src/utils/apiClient';
 
-const Home = () => {
+const Game = ({ monitorId }: { monitorId: number }) => {
   const windowWidth = Number(window.innerWidth);
   const windowHeight = Number(window.innerHeight);
 
@@ -45,6 +45,7 @@ const Home = () => {
     });
   };
   //配列用の当たり判定関数
+
   /* const checkCollision = (hitlist1: EnemyModel[], hitlist2: EnemyModel[]) => {
     hitlist1.map((list1) => {
       hitlist2.map((list2) => {
@@ -84,24 +85,37 @@ const Home = () => {
         />
 
         {newPlayerPosition.map((player, index) => (
-          <Circle key={index} x={player.pos.x} y={player.pos.y} width={50} height={50} fill="red" />
+          <Circle
+            key={index}
+            x={player.pos.x - monitorId * windowWidth}
+            y={player.pos.y - monitorId * windowWidth}
+            width={50}
+            height={50}
+            fill="red"
+          />
         ))}
         {newGunPosition.map((gun, index) => (
-          <Circle key={index} radius={10} x={gun[0]} y={gun[1]} fill="green" />
+          <Circle
+            key={index}
+            radius={10}
+            x={gun[0] - monitorId * windowWidth}
+            y={gun[1] - monitorId * windowWidth}
+            fill="green"
+          />
         ))}
         {newEnemyPosition.map((enemy, index) => (
           <React.Fragment key={index}>
             <Circle
               key={index}
-              x={enemy.pos.x}
-              y={enemy.pos.y}
+              x={enemy.pos.x - monitorId * windowWidth}
+              y={enemy.pos.y - monitorId * windowWidth}
               width={50}
               height={50}
               fill="blue"
             />
             <Text
-              x={enemy.pos.x}
-              y={enemy.pos.y}
+              x={enemy.pos.x - monitorId * windowWidth}
+              y={enemy.pos.y - monitorId * windowWidth}
               fontSize={15}
               fontFamily="Arial"
               fill="white"
@@ -114,4 +128,4 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default Game;
