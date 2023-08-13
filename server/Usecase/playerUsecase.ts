@@ -1,5 +1,6 @@
 import { playerRepository } from '$/Repository/playerRepository';
-import type { playerModel } from '$/commonTypesWithClient/models';
+import type { PlayerModel } from '$/commonTypesWithClient/models';
+
 import { UserIdParser } from '$/service/idParsers';
 import { randomUUID } from 'crypto';
 import type { UserId } from './../commonTypesWithClient/branded';
@@ -29,10 +30,21 @@ const moveGun = () => {
   return gunPosition;
 };
 
+// 仮初期値
+export const playerInfo = {
+  playerFirstPos_x: 300,
+  playerFirstPos_y: 300,
+  playerSpeed: 5,
+  playerRadius: 20,
+  playerHp: 10,
+  playerScore: 0,
+  playerSize: { h: 30, w: 40 },
+};
+
 export const playerUsecase = {
   createNewPlayer: async () => {
     //playerの初期ステータス
-    const new_player: playerModel = {
+    const new_player: PlayerModel = {
       userId: UserIdParser.parse(randomUUID()),
       pos: { x: 50, y: 300 },
       speed: 5,
@@ -47,7 +59,7 @@ export const playerUsecase = {
     // position[0][0] += movedirection.x * 10;
     // position[0][1] += movedirection.y * 10;
     const recentlyPlayerInfo = await playerRepository.read(userid);
-    const updatePlayerInfo: playerModel = {
+    const updatePlayerInfo: PlayerModel = {
       userId: recentlyPlayerInfo.userId,
       pos: {
         x: (recentlyPlayerInfo.pos.x += movedirection.x * 10),
@@ -61,12 +73,28 @@ export const playerUsecase = {
     await playerRepository.save(updatePlayerInfo);
   },
 
-  getPlayer: async (userid: UserId) => {
-    return await playerRepository.read(userid);
+  getAllPlayer: async (): Promise<PlayerModel[]> => {
+    return await playerRepository.getPlayers();
+  },
+  create_player: async () => {
+    const newPlayer: PlayerModel = {
+      userId: UserIdParser.parse(randomUUID()),
+      pos: { x: playerInfo.playerFirstPos_x, y: playerInfo.playerFirstPos_y },
+      speed: playerInfo.playerSpeed,
+      hp: playerInfo.playerHp,
+      radius: playerInfo.playerRadius,
+      score: playerInfo.playerScore,
+    };
+    await playerRepository.save(newPlayer);
+  },
+
+  //残りのやることplayerを動かせるように
+  getPlayerPos: async () => {
+    return await playerRepository.getPlayers();
   },
   getPlayers: async () => {
     return await playerRepository.getPlayers();
   },
-};
 
-//スコアとかどうしよう。
+  //スコアとかどうしよう。
+};

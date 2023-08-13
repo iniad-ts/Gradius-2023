@@ -21,34 +21,38 @@ export const enemyUsecase = {
   },
 };
 
+// 仮初期値
+export const enemyInfo = {
+  enemyFirstPos_x: 100,
+  enemySpeed: 5,
+  enemyRadius: 20,
+  enemyHp: 10,
+  makeEnemyFrequency: 5000,
+  enemySize: { h: 30, w: 30 },
+};
+
 setInterval(() => {
-  createEnemy();
+  create_enemy();
   deleteOffScreenEnemy();
-}, 5000);
+}, enemyInfo.makeEnemyFrequency);
 
 setInterval(() => {
   // move_or_delete_enemy();
   moveEnemy();
 }, 10);
 
-// 仮初期値
-const enemyFirstPosX = 3000;
-const enemySpeed = 5;
-const enemyRadius = 20;
-const enemyHp = 10;
-
-const createEnemy = async () => {
-  const new_enemy: EnemyModel = {
+const create_enemy = async () => {
+  const newEnemy: EnemyModel = {
     id: EnemyIdParser.parse(randomUUID()),
-    pos: { x: enemyFirstPosX, y: Math.floor(Math.random() * 690) + 1 },
-    speed: enemySpeed,
-    hp: enemyHp,
-    radius: enemyRadius,
+    pos: { x: enemyInfo.enemyFirstPos_x, y: Math.floor(Math.random() * 690) + 1 },
+    speed: enemyInfo.enemyHp,
+    hp: enemyInfo.enemyHp,
+    radius: enemyInfo.enemyRadius,
     type: 2,
     ///1-3のランダムな数値を返す
     /* type: Math.floor(Math.random() * 3) + 1, */
   };
-  await enemyRepository.save(new_enemy);
+  await enemyRepository.save(newEnemy);
 };
 /* const moveToplayer = (enemy: EnemyModel, player: playerModel, delay: number) => {
   enemy.pos.x = (player.pos.x + delay * enemy.pos.x) / (delay + 1);
@@ -91,13 +95,13 @@ const moveEnemy = async () => {
   }
 };
 //一致する敵が存在するかどうか
-const EnemyExist = async (id: EnemyId): Promise<boolean> => {
+const enemyExist = async (id: EnemyId): Promise<boolean> => {
   const enemies: EnemyModel[] = await enemyRepository.getEnemies();
   return enemies.some((enemy) => enemy.id === id);
 };
 //敵を削除する
 const deleteEnemy = async (id: EnemyId) => {
-  if (await EnemyExist(id)) {
+  if (await enemyExist(id)) {
     await enemyRepository.declare(id);
   }
 };
@@ -112,10 +116,6 @@ const deleteOffScreenEnemy = async () => {
     await deleteEnemy(id);
   }
 };
-
-//await Promise.allは、必要か微妙
-//await Promise.all(enemies.map((enemy) => enemyRepository.save(enemy)));
-// enemies.map((enemy) => enemyRepository.save(enemy));
 
 //await Promise.allは、必要か微妙
 //await Promise.all(enemies.map((enemy) => enemyRepository.save(enemy)));
