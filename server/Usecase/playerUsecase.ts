@@ -19,7 +19,8 @@ setInterval(() => {
 const moveGun = () => {
   const newGunPosition: number[][] = [];
   for (const s of gunPosition) {
-    s[0] + 1 <= 1500 && newGunPosition.push([s[0] + 1, s[1]]);
+    //TODO この5000は仮の値、将来的にはモニターサイズから逆算して出す
+    s[0] + 1 <= 5000 && newGunPosition.push([s[0] + 1, s[1]]);
   }
   gunPosition = newGunPosition;
   return gunPosition;
