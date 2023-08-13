@@ -1,9 +1,6 @@
 import type { EnemyModel, PlayerModel } from '$/commonTypesWithClient/models';
-import { useAtom } from 'jotai';
 import React, { useCallback, useEffect, useState } from 'react';
 import { Circle, Layer, Rect, Stage, Text } from 'react-konva';
-import { userAtom } from 'src/atoms/user';
-import { Loading } from 'src/components/Loading/Loading';
 import { apiClient } from 'src/utils/apiClient';
 
 const Home = () => {
@@ -68,8 +65,6 @@ const Home = () => {
     };
   }, [getPosition, newPlayerPosition]);
   //mapで展開してひとつずつ描画
-  const [user] = useAtom(userAtom);
-  if (!user) return <Loading visible />;
 
   return (
     <Stage width={windowWidth} height={windowHeight}>

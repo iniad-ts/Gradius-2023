@@ -33,7 +33,7 @@ export const enemyInfo = {
 
 setInterval(() => {
   create_enemy();
-  deleteOffScEreennemy();
+  deleteOffScreenEnemy();
 }, enemyInfo.makeEnemyFrequency);
 
 setInterval(() => {
@@ -61,21 +61,21 @@ const create_enemy = async () => {
 }; */
 //y軸のみプレイヤーに追従する
 //delayは追従の遅れを表す
-const moveToplayer = (enemy: EnemyModel, player: number[][], delay: number) => {
+const moveToPlayer = (enemy: EnemyModel, player: number[][], delay: number) => {
   enemy.pos.x = enemy.pos.x - enemy.speed;
   enemy.pos.y = (player[0][1] + delay * enemy.pos.y) / (delay + 1);
   return { x: enemy.pos.x, y: enemy.pos.y };
 };
 
 //typeによって動きを変える
-const moveEnemyByplayer = (enemy: EnemyModel): { x: number; y: number } => {
+const moveEnemyByPlayer = (enemy: EnemyModel): { x: number; y: number } => {
   if (enemy.type === 1) {
     return { x: enemy.pos.x - enemy.speed, y: enemy.pos.y };
   } else if (enemy.type === 2) {
-    moveToplayer(enemy, position, 60);
+    moveToPlayer(enemy, position, 60);
     /* return { x: enemy.pos.x - 30, y: enemy.pos.y }; */
   } else if (enemy.type === 3) {
-    moveToplayer(enemy, position, 30);
+    moveToPlayer(enemy, position, 30);
     /*  return { x: enemy.pos.x - 100, y: enemy.pos.y }; */
   }
   return { x: enemy.pos.x, y: enemy.pos.y };
@@ -85,7 +85,7 @@ const moveEnemy = async () => {
   const enemies: EnemyModel[] = await enemyRepository.getEnemies();
 
   for (const enemy of enemies) {
-    const newPos = moveEnemyByplayer(enemy);
+    const newPos = moveEnemyByPlayer(enemy);
     const moved_enemy: EnemyModel = {
       ...enemy,
       pos: newPos,
@@ -106,7 +106,7 @@ const deleteEnemy = async (id: EnemyId) => {
   }
 };
 //
-const deleteOffScEreennemy = async () => {
+const deleteOffScreenEnemy = async () => {
   const enemies: EnemyModel[] = await enemyRepository.getEnemies();
 
   const offScreenEnemiesIds = enemies.filter((enemy) => enemy.pos.x < 50).map((enemy) => enemy.id);

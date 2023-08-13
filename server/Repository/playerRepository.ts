@@ -45,7 +45,7 @@ export const playerRepository = {
       },
     });
   },
-  read: async (userId: string) => {
+  read: async (userId: UserId) => {
     const player = await prismaClient.player.findFirst({
       where: { userId },
     });

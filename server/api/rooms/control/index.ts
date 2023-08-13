@@ -6,6 +6,6 @@ export type Methods = {
     resBody: PlayerModel[];
   };
   post: {
-    reqBody: { moveDirection: MoveDirection; userId: string };
+    reqBody: { moveDirection: MoveDirection; userId: UserId };
   };
 };
