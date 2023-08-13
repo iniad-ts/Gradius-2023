@@ -1,4 +1,5 @@
 import type { MoveDirection } from '$/Usecase/playerUsecase';
+import type { UserId } from '$/commonTypesWithClient/branded';
 import type { playerModel } from '$/commonTypesWithClient/models';
 
 export type Methods = {
@@ -6,6 +7,6 @@ export type Methods = {
     resBody: playerModel[];
   };
   post: {
-    reqBody: { moveDirection: MoveDirection; userId: string };
+    reqBody: { moveDirection: MoveDirection; userId: UserId };
   };
 };

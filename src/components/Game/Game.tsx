@@ -1,9 +1,6 @@
 import type { EnemyModel, playerModel } from '$/commonTypesWithClient/models';
-import { useAtom } from 'jotai';
 import React, { useCallback, useEffect, useState } from 'react';
 import { Circle, Layer, Rect, Stage, Text } from 'react-konva';
-import { userAtom } from 'src/atoms/user';
-import { Loading } from 'src/components/Loading/Loading';
 import { apiClient } from 'src/utils/apiClient';
 
 const Game = ({ monitorId }: { monitorId: number }) => {
@@ -67,11 +64,8 @@ const Game = ({ monitorId }: { monitorId: number }) => {
     return () => {
       clearInterval(cancelId);
     };
-  }, [getPosition, newPlayerPosition]);
+  }, [getPosition]);
   //mapで展開してひとつずつ描画
-  const [user] = useAtom(userAtom);
-  if (!user) return <Loading visible />;
-
   return (
     <Stage width={windowWidth} height={windowHeight}>
       <Layer>
@@ -88,7 +82,7 @@ const Game = ({ monitorId }: { monitorId: number }) => {
           <Circle
             key={index}
             x={player.pos.x - monitorId * windowWidth}
-            y={player.pos.y - monitorId * windowWidth}
+            y={player.pos.y}
             width={50}
             height={50}
             fill="red"
@@ -99,7 +93,7 @@ const Game = ({ monitorId }: { monitorId: number }) => {
             key={index}
             radius={10}
             x={gun[0] - monitorId * windowWidth}
-            y={gun[1] - monitorId * windowWidth}
+            y={gun[1]}
             fill="green"
           />
         ))}
@@ -115,7 +109,7 @@ const Game = ({ monitorId }: { monitorId: number }) => {
             />
             <Text
               x={enemy.pos.x - monitorId * windowWidth}
-              y={enemy.pos.y - monitorId * windowWidth}
+              y={enemy.pos.y}
               fontSize={15}
               fontFamily="Arial"
               fill="white"
