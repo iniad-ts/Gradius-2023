@@ -24,7 +24,9 @@ const Game = () => {
     const [enemyBullets, setEnemyBullets] = useState<BulletModel[]>([]);
     const [currentTime, setCurrentTime] = useState<number>(Date.now());
     const [shipImage] = useImage(staticPath.images.spaceship_png);
-    const [enemyImage] = useImage(staticPath.images.ufo_jpg);
+    const [enemyImage1] = useImage(staticPath.images.ufo_jpg);
+    const [enemyImage2] = useImage(staticPath.images.ufo_2_PNG);
+    const [enemyImage3] = useImage(staticPath.images.ufo_3_PNG);
 
     const fetchPlayers = async (display: number) => {
       const res = await apiClient.player.$get({ query: { display } });
@@ -133,7 +135,9 @@ const Game = () => {
           <Layer>
             {enemies.map((enemy) => (
               <Image
-                image={enemyImage}
+                image={
+                  enemy.type === 1 ? enemyImage1 : enemy.type === 2 ? enemyImage2 : enemyImage3
+                }
                 width={80}
                 height={80}
                 x={enemy.createdPosition.x}
