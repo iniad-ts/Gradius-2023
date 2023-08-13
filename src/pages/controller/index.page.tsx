@@ -47,10 +47,6 @@ const Home = () => {
       clearInterval(cance);
     };
   }, []); // 依存性配列は空にします。getsizeが変更されるとタイマーはリセットされません
-  if (userId === null) {
-    router.push('/');
-    return <></>;
-  }
 
   const shoot = async () => {
     await apiClient.rooms.gunPosition.$post({
