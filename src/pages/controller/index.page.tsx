@@ -1,12 +1,13 @@
 // import type { MoveDirection } from '$/usecase/playerUsecase';
 import type { MoveDirection } from '$/Usecase/playerUsecase';
 
+import type { UserId } from '$/commonTypesWithClient/branded';
 import { useAtom } from 'jotai';
+import { useRouter } from 'next/router';
 import { useEffect, useRef, useState } from 'react';
 import { Joystick, JoystickShape } from 'react-joystick-component';
 import type { IJoystickUpdateEvent } from 'react-joystick-component/build/lib/Joystick';
 import { userAtom } from 'src/atoms/user';
-import { Loading } from 'src/components/Loading/Loading';
 import { apiClient } from 'src/utils/apiClient';
 import styles from './controller.module.css';
 
@@ -16,13 +17,20 @@ const Home = () => {
   const [size, setSize] = useState<number>(0);
   const [moveIntervalId, setMoveIntervalId] = useState<NodeJS.Timeout | null>(null);
   const moveDirection = useRef<MoveDirection>({ x: 0, y: 0 });
-  const [user_Id, setUser_Id] = useState('');
+  const [userId, setUserId] = useState<UserId | null>(null);
+  const [isready, setIsready] = useState(false);
+  const router = useRouter();
 
   const createPlayer = async () => {
     const result = await apiClient.rooms.createPlayer.$get();
 
-    setUser_Id(result.userId);
+    setUserId(result.userId);
   };
+  if (!isready) {
+    //FIXME 将来的にはcookieとかで判定して、すでにプレイヤーが存在する場合はcreatePlayerしないようにする
+    createPlayer();
+    setIsready(true);
+  }
 
   const getsize = () => {
     if (joystickRef.current !== null) {
@@ -39,14 +47,19 @@ const Home = () => {
       clearInterval(cance);
     };
   }, []); // 依存性配列は空にします。getsizeが変更されるとタイマーはリセットされません
-  if (!user) return <Loading visible />;
-  const shoot = async () => {
-    await apiClient.rooms.gunPosition.$post();
-  };
+  if (userId === null) {
+    router.push('/');
+    return <></>;
+  }
 
+  const shoot = async () => {
+    await apiClient.rooms.gunPosition.$post({
+      body: userId,
+    });
+  };
   const move = async () => {
     await apiClient.rooms.control.$post({
-      body: { moveDirection: moveDirection.current, userId: user_Id },
+      body: { moveDirection: moveDirection.current, userId },
     });
     console.log('move', moveDirection.current);
   };
@@ -65,6 +78,7 @@ const Home = () => {
     };
     moveDirection.current = moveTo;
   };
+
   return (
     <>
       <div className={styles.container}>
