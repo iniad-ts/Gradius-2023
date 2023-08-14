@@ -15,6 +15,14 @@ const Home = () => {
           <div className={styles.button}>コントローラー</div>
         </Link>
       </div>
+      <div className={styles.buttonContainer}>
+        <Link href="/gamescreen/0">
+          <div className={styles.button}>ゲーム画面[0]</div>
+        </Link>
+        <Link href="/gamescreen/1">
+          <div className={styles.button}>ゲーム画面[1]</div>
+        </Link>
+      </div>
     </div>
   );
 };

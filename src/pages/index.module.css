@@ -21,7 +21,7 @@
   font-size: 1.25rem;
   padding: 0.5rem 1rem;
   text-decoration: none;
-  transition: background-color 0.3s ease, box-shadow 0.3s ease; /* ボタンのbox-shadowもアニメーションに追加 */
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
   margin-top: 1rem;
 }
 
