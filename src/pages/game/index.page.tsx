@@ -1,6 +1,8 @@
 import type { BulletModel, EnemyModel, PlayerModel } from '$/commonTypesWithClient/models';
+import Konva from 'konva';
 import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
+import type { RefObject } from 'react';
+import { createRef, useEffect, useRef, useState } from 'react';
 import { Image, Layer, Stage } from 'react-konva';
 import { Bullet } from 'src/components/Bullet/PlayerBullet';
 import Lobby from 'src/components/Lobby/Lobby';
@@ -23,10 +25,13 @@ const Game = () => {
     const [playerBullets, setPlayerBullets] = useState<BulletModel[]>([]);
     const [enemyBullets, setEnemyBullets] = useState<BulletModel[]>([]);
     const [currentTime, setCurrentTime] = useState<number>(Date.now());
+
     const [shipImage] = useImage(staticPath.images.spaceship_png);
     const [enemyImage1] = useImage(staticPath.images.ufo_jpg);
     const [enemyImage2] = useImage(staticPath.images.ufo_2_PNG);
     const [enemyImage3] = useImage(staticPath.images.ufo_3_PNG);
+
+    const ufoRefs = useRef<RefObject<Konva.Image>[]>([]);
 
     const fetchPlayers = async (display: number) => {
       const res = await apiClient.player.$get({ query: { display } });
@@ -111,6 +116,31 @@ const Game = () => {
       return () => cancelAnimationFrame(cancelId);
     });
 
+    useEffect(() => {
+      const anim = new Konva.Animation((layer) => {
+        ufoRefs.current.forEach((ufoRef) => {
+          if (ufoRef.current) {
+            ufoRef.current.offset({
+              x:
+                Math.cos(
+                  Math.floor(((layer?.time ?? 0) / 10 + ufoRef.current.x()) * Math.PI) / 100
+                ) * 5,
+              y:
+                Math.sin(
+                  Math.floor(((layer?.time ?? 0) / 10) * Math.PI + ufoRef.current.y()) / 100
+                ) * 5,
+            });
+          }
+        });
+      }, ufoRefs.current[0]?.current?.getLayer());
+
+      anim.start();
+
+      return () => {
+        anim.stop();
+      };
+    }, []);
+
     return (
       <div>
         <Stage width={1920} height={1080}>
@@ -133,18 +163,22 @@ const Game = () => {
             ))}
           </Layer>
           <Layer>
-            {enemies.map((enemy) => (
-              <Image
-                image={
-                  enemy.type === 1 ? enemyImage1 : enemy.type === 2 ? enemyImage2 : enemyImage3
-                }
-                width={80}
-                height={80}
-                x={enemy.createdPosition.x}
-                y={enemy.createdPosition.y}
-                key={enemy.id}
-              />
-            ))}
+            {enemies.map((enemy, i) => {
+              ufoRefs.current[i] = createRef<Konva.Image>();
+              return (
+                <Image
+                  image={
+                    enemy.type === 1 ? enemyImage1 : enemy.type === 2 ? enemyImage2 : enemyImage3
+                  }
+                  width={80}
+                  height={80}
+                  x={enemy.createdPosition.x - 40}
+                  y={enemy.createdPosition.y - 40}
+                  key={enemy.id}
+                  ref={ufoRefs.current[i]}
+                />
+              );
+            })}
           </Layer>
         </Stage>
       </div>
