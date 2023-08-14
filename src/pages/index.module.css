@@ -20,3 +20,10 @@
 .deleteBtn {
   float: right;
 }
+
+.background {
+  width: 1500px;
+  height: 800px;
+  background: url('../../public/utyuu2.jpg') repeat-x;
+  background-size: cover;
+}
