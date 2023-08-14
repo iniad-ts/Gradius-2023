@@ -7,6 +7,6 @@ export type Methods = {
   };
   post: {
     reqBody: UserId;
-    resBody: number[][];
+    resBody: string;
   };
 };
