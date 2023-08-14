@@ -75,21 +75,22 @@ export const enemyUseCase = {
     const players = await playersRepository.findAll();
     Promise.all(
       res.map((enemy) => {
-        const lockOnPlayerPos = players
+        const lockOnPlayer = players
           .map((player) => ({
             pos: { ...player.position },
             distance:
               (player.position.x - enemy.createdPosition.x) ** 2 +
               (player.position.y - enemy.createdPosition.y) ** 2,
           }))
-          .sort((a, b) => a.distance - b.distance)[0].pos;
-        const dir =
-          (Math.atan(
-            (lockOnPlayerPos.y - enemy.createdPosition.y) /
-              (lockOnPlayerPos.x - enemy.createdPosition.x)
-          ) /
-            Math.PI) *
-          180;
+          .sort((a, b) => a.distance - b.distance)[0];
+
+        const diffX = lockOnPlayer.pos.x - enemy.createdPosition.x;
+        const diffY = lockOnPlayer.pos.y - enemy.createdPosition.y;
+        const normalization = 1 / Math.sqrt(lockOnPlayer.distance);
+        const dir = {
+          x: diffX * normalization,
+          y: diffY * normalization,
+        };
         return bulletUseCase.createByEnemy(
           {
             x: enemy.createdPosition.x,
