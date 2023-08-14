@@ -30,6 +30,7 @@ export type PlayerModel = {
   hp: number;
   radius: number;
   score: number;
+  name: string;
 };
 
 export type ConfigModel = {
