@@ -12,13 +12,18 @@
   display: grid;
   width: 70vw;
   height: 85vh;
-  grid-template-rows: 70vw 8fr 70vw;
-  grid-template-areas: 'joystick' 'none' 'shoot';
+  grid-template-rows: 75vw 8fr 75vw;
+  grid-template-areas: 'joystick' 'ma' 'shoot';
 }
 
 .joystick {
   grid-area: joystick;
   background-color: #bbb 0.1;
+}
+
+.ma {
+  grid-area: ma;
+  text-align: center;
 }
 
 .shoot {

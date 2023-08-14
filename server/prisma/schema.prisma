@@ -30,4 +30,5 @@ model Player {
   hp     Int    @default(3)
   radius Int
   score  Int    @default(0)
+  name   String @default("Player")
 }
