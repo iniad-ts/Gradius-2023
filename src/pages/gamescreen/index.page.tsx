@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from 'react';
 import { Circle, Layer, Stage } from 'react-konva';
 import { Loading } from 'src/components/Loading/Loading';
 import { userAtom } from '../../atoms/user';
+import { spawnRandomTypeOfEnemy } from '../enemyspawn';
 import { checkCollision } from './checkCollision';
 
 const Home = () => {
@@ -99,6 +100,10 @@ const Home = () => {
     });
   };
 
+  useEffect(() => {
+    spawnRandomTypeOfEnemy([]);
+  });
+
   //高速で実行される(Animation)
   useEffect(() => {
     const anim = new Konva.Animation((frame) => {
@@ -116,7 +121,6 @@ const Home = () => {
       anim.stop();
     };
   });
-
   const updateGradiusPosition = () => {
     setGradiusPosition((prevPosition) => {
       const newPosition = [
@@ -138,10 +142,8 @@ const Home = () => {
       return newPosition;
     });
   };
-
   const updateBulletPositions = (timeDiff: number) => {
     setShottimer(shottimer + timeDiff);
-
     if (bullet && shottimer > 0.3) {
       setGradiusBullet((prevGradiusBullet) => [
         ...prevGradiusBullet,
@@ -149,7 +151,6 @@ const Home = () => {
       ]);
       setShottimer(0);
     }
-
     setGradiusBullet((prevBullets) =>
       prevBullets
         .map((bullet) => ({
@@ -159,7 +160,6 @@ const Home = () => {
         .filter((bullet) => bullet.x < window.innerWidth && bullet.y < window.innerHeight)
     );
   };
-
   useEffect(() => {
     // コンポーネントがマウントされたときにイベントリスナーを追加
     document.addEventListener('keydown', handleKeyDown);
