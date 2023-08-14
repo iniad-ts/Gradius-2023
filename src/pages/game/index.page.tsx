@@ -3,7 +3,7 @@ import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { Layer, Stage } from 'react-konva';
 import { Bullet } from 'src/components/Bullet/PlayerBullet';
-import { Enemy } from 'src/components/Enemy/Enemy';
+import { Enemies } from 'src/components/Enemies/Enemies';
 import Lobby from 'src/components/Lobby/Lobby';
 import { Player } from 'src/components/Player/Player';
 import { apiClient } from 'src/utils/apiClient';
@@ -127,7 +127,7 @@ const Game = () => {
           </Layer>
           <Layer>
             {/* アニメーションの関係で、Enemyは中でmap */}
-            <Enemy enemies={enemies} />
+            <Enemies enemies={enemies} />
           </Layer>
         </Stage>
       </div>

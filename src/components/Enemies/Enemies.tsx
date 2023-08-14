@@ -9,7 +9,7 @@ type props = {
   enemies: EnemyModel[];
 };
 
-export const Enemy = ({ enemies }: props) => {
+export const Enemies = ({ enemies }: props) => {
   const ufoRefs = useRef<RefObject<Konva.Image>[]>([]);
 
   const [enemyImage1] = useImage(staticPath.images.ufo_jpg);
