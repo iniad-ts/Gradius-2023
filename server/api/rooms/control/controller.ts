@@ -4,7 +4,7 @@ import { defineController } from './$relay';
 export default defineController(() => ({
   get: async () => ({
     status: 200,
-    body: await playerUsecase.getPlayers(),
+    body: await playerUsecase.getPlayerPos(),
   }),
   post: async ({ body: { moveDirection, userId } }) => ({
     status: 200,
