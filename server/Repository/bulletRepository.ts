@@ -1,12 +1,12 @@
 import type { UserId } from '$/commonTypesWithClient/branded';
 import type { BulletModel } from '$/commonTypesWithClient/models';
-import { UserIdParser } from '$/service/idParsers';
+import { BulletIdParser, UserIdParser } from '$/service/idParsers';
 import { prismaClient } from '$/service/prismaClient';
 import type { Bullet } from '@prisma/client';
 import { z } from 'zod';
 
 const toBulletModel = (prismaBullet: Bullet): BulletModel => ({
-  bulletId: z.string().parse(prismaBullet.bulletId),
+  bulletId: BulletIdParser.parse(prismaBullet.bulletId),
   userId: UserIdParser.parse(prismaBullet.userId),
   pos: z
     .object({

@@ -32,7 +32,7 @@ CREATE TABLE "Player"(
 
 -- CreateTable
 CREATE TABLE "Bullet"(
-    "bulletId" INTEGER NOT NULL,
+    "bulletId" TEXT NOT NULL,
     "userId" TEXT NOT NULL,
     "pos" JSONB NOT NULL,
     "attack" INTEGER NOT NULL,
