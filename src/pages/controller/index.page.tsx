@@ -41,7 +41,7 @@ const Home = () => {
   useEffect(() => {
     const cance = setInterval(getsize, 100);
     return () => {
-      console.log('AAAAAAAAAAAAAAAAAAAAAA');
+      console.log('AAAAAAAAAAAA');
       clearInterval(cance);
     };
   }, []); // 依存性配列は空にします。getsizeが変更されるとタイマーはリセットされません
