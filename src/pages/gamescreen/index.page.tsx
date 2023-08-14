@@ -17,7 +17,7 @@ const Home = () => {
     const new_bulletPosition = await apiClient.rooms.gunPosition.$get();
     const new_enemyPosition = await apiClient.check.$get();
 
-    //DBを導入した影響で、checkCollisionが動かなくなったので、コメントアウト化しました。
+    //DBを導入した影響で、checkCollisionが動かなくなったので、コメントアウト化
     ///当たり判定を行う
     // checkCollision(new_enemyPosition, new_bulletPosition);
     // checkCollision(new_enemyPosition, new_playerPosition);//一次的にコメントアウトしています。
