@@ -150,12 +150,12 @@ export const enemyUseCase = {
   createAll: async (displayNumber: number) => {
     const res = enemyTable(displayNumber);
     Promise.all(
-      res.map((tables, displayNumberMinus1) =>
+      res.map((tables, displayNumZeroOrigin) =>
         tables.map((table) => {
           const newEnemy: EnemyModel = {
             id: enemyIdParser.parse(randomUUID()),
             createdPosition: {
-              x: table.createPosition.x + 1920 * displayNumberMinus1,
+              x: table.createPosition.x + 1920 * displayNumZeroOrigin,
               y: table.createPosition.y,
             },
             createdAt: Date.now(),
