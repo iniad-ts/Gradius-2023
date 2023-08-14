@@ -17,6 +17,7 @@ const Home = () => {
     const new_bulletPosition = await apiClient.rooms.gunPosition.$get();
     const new_enemyPosition = await apiClient.check.$get();
 
+    //DBを導入した影響で、checkCollisionが動かなくなったので、コメントアウト化しました。
     ///当たり判定を行う
     // checkCollision(new_enemyPosition, new_bulletPosition);
     // checkCollision(new_enemyPosition, new_playerPosition);//一次的にコメントアウトしています。
@@ -25,7 +26,7 @@ const Home = () => {
     setNewBulletPosition(new_bulletPosition);
     setNewEnemyPosition(new_enemyPosition);
   }, []);
-  //
+
   //仮の当たり判定関数
   const checkCollision = (hitlist1: EnemyModel[], hitlist2: number[][]) => {
     const list2Radius = 20; // list2 の固定の半径
