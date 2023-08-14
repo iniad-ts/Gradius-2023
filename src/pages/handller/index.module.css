@@ -13,8 +13,6 @@
 
 .box {
   opacity: 0.75;
-  width: 33.3%;
-  height: 33.3%;
   position: absolute;
   border-radius: 50%;
   width: 75%;
@@ -44,7 +42,7 @@
   border-bottom: 30px solid #696969;
   position: absolute;
   top: 15%;
-  right: 41%;
+  right: 46%;
   transform: translateY(-50%);
 }
 
