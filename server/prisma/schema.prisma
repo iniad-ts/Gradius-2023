@@ -31,3 +31,10 @@ model Player {
   radius Int
   score  Int    @default(0)
 }
+
+model Bullet {
+  bulletId String
+  userId   String @id
+  pos      Json
+  attack   Int
+}

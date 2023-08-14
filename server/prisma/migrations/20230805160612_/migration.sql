@@ -21,11 +21,19 @@ CREATE TABLE "Enemy" (
 -- CreateTable
 CREATE TABLE "Player"(
     "userId" TEXT NOT NULL,
-    "pos" JSONB not  NULL,
+    "pos" JSONB NOT NULL,
     "speed" INTEGER NOT NULL,
     "hp" INTEGER NOT NULL,
     "radius" INTEGER NOT NULL,
     "score" INTEGER NOT NULL,
 
     CONSTRAINT "Plyer_pkey" PRIMARY KEY ("userId")
+)
+
+-- CreateTable
+CREATE TABLE "Bullet"(
+    "bulletId" INTEGER NOT NULL,
+    "userId" TEXT NOT NULL,
+    "pos" JSONB NOT NULL,
+    "attack" INTEGER NOT NULL,
 )
