@@ -4,7 +4,5 @@ export type Methods = {
   put: {
     resBody: PlayerModel | null;
   };
-  post: {
-    reqBody: { player: PlayerModel; enemy: EnemyModel };
-  };
+  post: { query: { display: number }; reqBody: { player: PlayerModel; enemy: EnemyModel } };
 };
