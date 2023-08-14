@@ -10,4 +10,8 @@ export default defineController(() => ({
     status: 200,
     body: await playerUseCase.move(player.id, body.moveTo),
   }),
+  delete: async ({ body }) => ({
+    status: 200,
+    body: await playerUseCase.hit(body.player, body.bulletId),
+  }),
 }));
