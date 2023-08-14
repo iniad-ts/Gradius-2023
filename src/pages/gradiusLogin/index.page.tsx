@@ -13,10 +13,12 @@ const Login = () => {
       <div className={styles.main}>
         <div className={styles.title}>Gradius</div>
         <div style={{ marginTop: '16px' }}>
-          <div className={styles.btn}>
-            <input placeholder="Write your user name here." />
-          </div>
-          <button className={styles.handIn}>Play Gradius</button>
+          <form>
+            <div className={styles.btn}>
+              <input placeholder="Write your user name here." />
+            </div>
+            <button className={styles.handIn}>Play Gradius</button>
+          </form>
         </div>
       </div>
     </div>
