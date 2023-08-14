@@ -105,32 +105,28 @@ export const enemyUseCase = {
       })
     );
   },
-  createAll: async () => {
-    const res = await enemyTable();
-    if (res === null) {
-      enemyUseCase.createAll();
-    } else {
-      Promise.all(
-        res.map((tables, displayNumberMinus1) =>
-          tables.map((table) => {
-            const newEnemy: EnemyModel = {
-              id: enemyIdParser.parse(randomUUID()),
-              createdPosition: {
-                x: table.createPosition.x + 1920 * displayNumberMinus1,
-                y: table.createPosition.y,
-              },
-              createdAt: Date.now(),
-              deletedAt: null,
-              type: table.type,
-            };
-            return enemiesRepository.create(newEnemy);
-          })
-        )
-      ).then((results) =>
-        results.flat().forEach((result) => {
-          result;
+  createAll: async (displayNumber: number) => {
+    const res = enemyTable(displayNumber);
+    Promise.all(
+      res.map((tables, displayNumberMinus1) =>
+        tables.map((table) => {
+          const newEnemy: EnemyModel = {
+            id: enemyIdParser.parse(randomUUID()),
+            createdPosition: {
+              x: table.createPosition.x + 1920 * displayNumberMinus1,
+              y: table.createPosition.y,
+            },
+            createdAt: Date.now(),
+            deletedAt: null,
+            type: table.type,
+          };
+          return enemiesRepository.create(newEnemy);
         })
-      );
-    }
+      )
+    ).then((results) =>
+      results.flat().forEach((result) => {
+        result;
+      })
+    );
   },
 };

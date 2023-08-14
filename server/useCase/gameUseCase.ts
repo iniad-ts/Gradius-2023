@@ -23,6 +23,7 @@ export const gameUseCase = {
     },
     setup: async (displayNumber: number) => {
       const game = await gamesRepository.find();
+      await enemyUseCase.createAll(displayNumber);
       if (game === null) {
         return;
       }
