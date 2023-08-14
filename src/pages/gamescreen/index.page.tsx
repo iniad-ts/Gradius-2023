@@ -25,6 +25,7 @@ const Home = () => {
     setNewBulletPosition(new_bulletPosition);
     setNewEnemyPosition(new_enemyPosition);
   }, []);
+  //
   //仮の当たり判定関数
   const checkCollision = (hitlist1: EnemyModel[], hitlist2: number[][]) => {
     const list2Radius = 20; // list2 の固定の半径
