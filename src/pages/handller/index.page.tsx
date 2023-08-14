@@ -1,15 +1,12 @@
-import { useAtom } from 'jotai';
 import { useRef, useState } from 'react';
-import { userAtom } from '../../atoms/user';
 import styles from './index.module.css';
 
 const Controller = () => {
-  const [user] = useAtom(userAtom);
   const [boxPosition, setBoxPosition] = useState('60%');
   const [circlePosition, setCirclePosition] = useState('15%');
 
-  const joystickRef = useRef<HTMLDivElement | null>(null); // 指定した型で初期化
-  const containerRef = useRef<HTMLDivElement | null>(null); // 指定した型で初期化
+  const joystickRef = useRef<HTMLDivElement | null>(null);
+  const containerRef = useRef<HTMLDivElement | null>(null);
   const isDragging = useRef(false);
   const startPosition = useRef({ x: 0, y: 0 });
 
@@ -19,10 +16,9 @@ const Controller = () => {
   };
 
   const handleJoystickTouchStart = (e: React.TouchEvent) => {
-    // eの型を指定
     isDragging.current = true;
     const touch = e.targetTouches[0];
-    if (!containerRef.current) return; // nullチェック
+    if (!containerRef.current) return;
     const containerRect = containerRef.current.getBoundingClientRect();
 
     const centerX = containerRect.left + containerRect.width / 2;
