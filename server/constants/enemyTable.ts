@@ -64,4 +64,3 @@ export const enemyTable = async (): Promise<EnemyTableModel[][] | null> => {
   return [firstTable, ...middle, finalTable];
 };
 
-console.table(enemyTable());
