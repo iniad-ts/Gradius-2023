@@ -43,7 +43,17 @@ export const gameUseCase = {
     return player;
   },
   collision: async (player: PlayerModel, enemy: EnemyModel) => {
-    const newPlayer = { ...player, health: player.health - 1 };
+    const enemyStatus = await enemiesRepository.find(enemy.id);
+    if (enemyStatus?.deletedAt !== null) {
+      return;
+    }
+    let newPlayer;
+    if (player.health <= 0) {
+      const newScore = player.score - 5 >= 0 ? player.score - 5 : 0; // 仮でスコアが0以下にならないように
+      newPlayer = { ...player, health: 0, score: newScore };
+    } else {
+      newPlayer = { ...player, health: player.health - 1 };
+    }
     await playersRepository.save(newPlayer);
     await enemiesRepository.update(enemy.id, new Date());
   },
