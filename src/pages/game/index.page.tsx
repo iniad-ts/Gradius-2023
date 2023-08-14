@@ -3,9 +3,10 @@ import Konva from 'konva';
 import { useRouter } from 'next/router';
 import type { RefObject } from 'react';
 import { createRef, useEffect, useRef, useState } from 'react';
-import { Image, Layer, Stage } from 'react-konva';
+import { Image, Layer, Stage, Text } from 'react-konva';
 import { Bullet } from 'src/components/Bullet/PlayerBullet';
 import Lobby from 'src/components/Lobby/Lobby';
+import { Player } from 'src/components/Player/Player';
 import { staticPath } from 'src/utils/$path';
 import { apiClient } from 'src/utils/apiClient';
 import { posWithDirSpeTim } from 'src/utils/posWithDirSpeTim';
@@ -26,7 +27,6 @@ const Game = () => {
     const [enemyBullets, setEnemyBullets] = useState<BulletModel[]>([]);
     const [currentTime, setCurrentTime] = useState<number>(Date.now());
 
-    const [shipImage] = useImage(staticPath.images.spaceship_png);
     const [enemyImage1] = useImage(staticPath.images.ufo_jpg);
     const [enemyImage2] = useImage(staticPath.images.ufo_2_PNG);
     const [enemyImage3] = useImage(staticPath.images.ufo_3_PNG);
@@ -156,15 +156,7 @@ const Game = () => {
           </Layer>
           <Layer>
             {players.map((player) => (
-              <Image
-                image={shipImage}
-                width={100}
-                height={100}
-                rotation={player.team === 'red' ? 90 : -90}
-                x={player.position.x + 50}
-                y={player.position.y - 50}
-                key={player.id}
-              />
+              <Player key={player.id} player={player} />
             ))}
           </Layer>
           <Layer>
