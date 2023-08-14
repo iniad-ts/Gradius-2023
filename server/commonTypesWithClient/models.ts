@@ -20,4 +20,29 @@ export type EnemyModel = {
   speed: number;
   hp: number;
   radius: number;
+  type: number;
+};
+
+export type PlayerModel = {
+  userId: UserId;
+  pos: { x: number; y: number };
+  speed: number;
+  hp: number;
+  radius: number;
+  score: number;
+};
+
+export type ConfigModel = {
+  playerSpeed: number;
+  playerSize: {
+    h: number;
+    w: number;
+  };
+  makeEnemyFrequency: number;
+  enemySpeed: number;
+  enemySize: {
+    h: number;
+    w: number;
+  };
+  // creenNumber:
 };
