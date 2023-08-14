@@ -50,7 +50,6 @@ const Home = () => {
     await apiClient.rooms.control.$post({
       body: { moveDirection: moveDirection.current, userId },
     });
-    console.log('move', moveDirection.current);
   };
   const moveStart = () => {
     const intervalId = setInterval(move, 50);
