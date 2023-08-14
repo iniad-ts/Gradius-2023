@@ -42,4 +42,4 @@ const spawnRandomTypeOfEnemy = (prevEnemy: SingleEnemy[]): SingleEnemy[] => {
   return [...prevEnemy, newEnemy];
 };
 
-export { spawnRandomTypeOfEnemy };
+export { spawnRandomTypeOfEnemy, createBallEnemy, createUpDownEnemy };
