@@ -150,6 +150,11 @@ const Game = () => {
             ))}
           </Layer>
           <Layer>
+            {enemyBullets.map((bullet) => (
+              <Bullet key={bullet.id} bullet={bullet} currentTime={currentTime} />
+            ))}
+          </Layer>
+          <Layer>
             {players.map((player) => (
               <Image
                 image={shipImage}
