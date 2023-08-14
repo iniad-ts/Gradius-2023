@@ -1,44 +1,208 @@
 .container {
-  display: block;
-}
-
-.text {
-  text-align: center;
-  font-size: 30px;
-  font-weight: bold;
-  color: black;
-  margin-bottom: 20px;
-}
-
-.text2 {
-  text-align: center;
-  font-size: 15px;
-  font-weight: bold;
-  color: black;
-  margin-bottom: 20px;
-  margin-top: 20px;
-}
-
-.box {
   display: flex;
+  height: 100dvh;
+  width: 100vw;
   justify-content: center;
   align-items: center;
+  background-color: #111;
+  font-family: 'Jost', 'Zen Kaku Gothic New', sans-serif;
+}
+
+.card {
+  width: min(84vw, 64dvh);
+  aspect-ratio: 16 / 9;
+  background-color: #131313;
+  border-radius: 2vmin;
+  box-shadow: 0 0 2vmin 0 #0006, inset 0 0 0 0.4vmin #222;
+  border: 0.2vmin solid #030303;
+  overflow: hidden;
+  display: grid;
+  grid-template-rows: 3vmin 36% 1fr 3fr 2fr 12% 5vmin;
+  grid-template-columns: 3vmin 1fr 1fr 2fr 1fr 1fr 3vmin;
+  grid-template-areas:
+    '. .     .      .      .      .     .'
+    '. title title  title  title  title .'
+    '. .     .      .      .      .     .'
+    '. .     input  input  input  .     .'
+    '. .     .      .      .      .     .'
+    '. .     .      button .      .     .'
+    '. .     .      .      .      .     .';
+  position: relative;
+}
+
+.title {
+  grid-area: title;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: #eee;
+}
+
+.title > h1 {
+  height: 72%;
+  margin: 0;
+  font-weight: 400;
+  font-size: calc(min(84vw, 64dvh) / 16 * 9 * 0.36 * 0.72 * 0.6);
+  line-height: calc(min(84vw, 64dvh) / 16 * 9 * 0.36 * 0.72);
+}
+
+.title > h2 {
+  height: 28%;
+  margin: 0;
+  font-weight: 400;
+  letter-spacing: 0.4vmin;
+  position: relative;
+  font-size: calc(min(84vw, 64dvh) / 16 * 9 * 0.36 * 0.28 * 0.4);
+  line-height: calc(min(84vw, 64dvh) / 16 * 9 * 0.28 * 0.36);
+}
+
+.title > h2::before {
+  content: '';
+  display: block;
+  position: absolute;
+  width: 5%;
+  height: 0.16vmin;
+  background-color: #eee;
+  bottom: 50%;
+  left: -16%;
+}
+
+.title > h2::after {
+  content: '';
+  display: block;
+  position: absolute;
+  width: 5%;
+  height: 0.16vmin;
+  background-color: #eee;
+  bottom: 50%;
+  right: -16%;
 }
 
 .input {
-  font-size: 200%;
-  text-align: center;
-  width: 70%;
-  height: 80%;
-  border: 1px solid black;
-  border-radius: 10px;
+  grid-area: input;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+}
+
+.input > input {
+  font-family: 'Jost', 'Zen Kaku Gothic New', sans-serif;
+  flex-grow: 1;
+  width: 100%;
+  background-color: #fff1;
+  color: #fff;
+  border: solid 0.16vmin #eee;
+  border-radius: 1vmin;
+  margin-top: -1vmin;
+  padding: 0.5vmin 1vmin;
+}
+
+.input > input:focus {
+  outline: none;
+}
+
+.input > input::-webkit-outer-spin-button,
+.input > input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+}
+
+.input > label {
+  color: #eee;
+  background-image: linear-gradient(to top, #fff1, #fff1 1vmin, #131313 1vmin, #131313);
+  background-color: #131313;
+  position: relative;
+  z-index: 1;
+  padding: 0 1vmin;
+  font-size: min(1.8vw, 1.4dvh);
 }
 
 .button {
-  width: 100px;
-  height: 50px;
-  border: 2px solid black;
-  border-radius: 10px;
-  background-color: gray;
-  margin-top: 20px;
+  grid-area: button;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 0 1vmin #000c;
+  background-image: linear-gradient(45deg, #55ccee, #2244cc);
+  font-family: 'Jost', 'Zen Kaku Gothic New', sans-serif;
+  border: 0;
+  border-radius: calc(min(84vw, 64dvh) / 16 * 9 * 0.12);
+  position: relative;
+  color: #fff;
+  font-size: min(2vw, 1.5dvh);
+  text-shadow: 0 0 1vmin #0009;
+  background-size: 200% 100%;
+  background-position: 100% 0;
+  transition-property: background-position, color;
+  transition-duration: 0.2s;
+  transition-timing-function: ease-in-out;
+}
+
+.button[disabled] {
+  color: #c8c8c8;
+}
+
+.button[disabled]:hover {
+  cursor: not-allowed;
+}
+
+.button:not([disabled]):hover {
+  cursor: pointer;
+  background-position: 0 0;
+}
+
+.button > span {
+  content: '';
+  display: block;
+  position: absolute;
+  height: 76%;
+  aspect-ratio: 1;
+  background-color: #fff;
+  border-radius: 20px;
+  border-radius: 50%;
+  top: 12%;
+  text-shadow: 0;
+  right: min(0.68vw, 0.52dvh);
+  line-height: calc(min(84vw, 64dvh) / 16 * 9 * 0.12 * 0.76);
+  overflow: hidden;
+}
+
+.button > span::before {
+  content: '👾';
+  position: absolute;
+  display: block;
+  width: 100%;
+  top: -64%;
+  right: -64%;
+  transition-property: top, right;
+  transition-duration: 0.2s;
+  transition-timing-function: ease-in-out;
+}
+
+.button[disabled] > span::before {
+  top: 0;
+  right: 0;
+}
+
+.button > span::after {
+  content: '🚀';
+  position: absolute;
+  display: block;
+  width: 100%;
+  bottom: 0;
+  left: 0;
+  transition-property: bottom, left;
+  transition-duration: 0.2s;
+  transition-timing-function: ease-in-out;
+}
+
+.button[disabled] > span::after {
+  bottom: -64%;
+  left: -64%;
 }
