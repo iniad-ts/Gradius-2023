@@ -1,7 +1,8 @@
 import type { UserId } from '$/commonTypesWithClient/branded';
 
 export type Methods = {
-  get: {
+  post: {
+    reqBody: { username: string };
     resBody: { userId: UserId };
   };
 };
