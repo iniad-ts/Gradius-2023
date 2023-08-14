@@ -50,7 +50,17 @@ export const gameUseCase = {
       health: player.health - 1,
       position: { ...player.position, x: player.position.x + 1920 * displayNumber },
     };
-    await playersRepository.save(newPlayer);
+
+    const enemyStatus = await enemiesRepository.find(enemy.id);
+    if (enemyStatus?.deletedAt !== null) {
+      return;
+    }
+    if (player.health <= 0) {
+      const newScore = player.score - 5 >= 0 ? player.score - 5 : 0; // 仮でスコアが0以下にならないように
+      playersRepository.save({ ...newPlayer, health: 0, score: newScore });
+    } else {
+      playersRepository.save({ ...newPlayer, health: player.health - 1 });
+    }
     await enemiesRepository.update(enemy.id, new Date());
   },
 };
