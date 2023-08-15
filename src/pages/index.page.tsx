@@ -16,6 +16,8 @@ const Home = () => {
   const gradiusImg = useRef(new window.Image());
   const [isGradiusLoaded, setIsGradiusLoaded] = useState(false);
   const [backgroundX, setBackgroundX] = useState(0);
+  const [imageBack, setImageBack] = useState(new window.Image());
+  const [imageTama, setImageTama] = useState(new window.Image());
   const [enemies, setEnemies] = useState<{ x: number; y: number }[]>([
     { x: 5, y: 2 },
     { x: 8, y: 4 },
@@ -52,9 +54,13 @@ const Home = () => {
   }, []);
 
   useEffect(() => {
-    gradiusImg.current.src = '/images/jett1.png';
-    gradiusImg.current.onload = () => {
-      setIsGradiusLoaded(true);
+    const image = new window.Image();
+    const image2 = new window.Image();
+    image.src = '/images/jett4.png';
+    image2.src = '/images/tama.png';
+    image.onload = () => {
+      setImageBack(image);
+      setImageTama(image2);
     };
   }, []);
 
@@ -211,6 +217,48 @@ const Home = () => {
     };
   }, [dx, dy, enemies.length]);
 
+  const detectCollisions = () => {
+    setbullets((prevBullets) => {
+      const newBullets = prevBullets.filter((bullet) => {
+        const bulletHitbox = {
+          x: bullet.x * 100 + 50,
+          y: bullet.y * 100 + 50,
+          radius: 10, // 弾の半径を適切な値に調整
+        };
+  
+        const remainingEnemies = enemies.filter((enemy) => {
+          const enemyHitbox = {
+            x: enemy.x * 100,
+            y: enemy.y * 100 + 50,
+            radius: 20, // 敵の半径を適切な値に調整
+          };
+  
+          const distance = Math.sqrt(
+            Math.pow(bulletHitbox.x - enemyHitbox.x, 2) +
+            Math.pow(bulletHitbox.y - enemyHitbox.y, 2)
+          );
+  
+          const collisionDetected = distance < bulletHitbox.radius + enemyHitbox.radius;
+  
+          return !collisionDetected;
+        });
+  
+        if (remainingEnemies.length !== enemies.length) {
+          // 当たり判定が発生した場合、敵も弾も消滅させる
+          return null;
+        }
+  
+        return bullet;
+      });
+  
+      return newBullets.filter(Boolean);
+    });
+  };
+  
+  // 上記の当たり判定関数を適切なタイミングで呼び出す
+  useEffect(() => {
+    detectCollisions();
+  }, [bullet, enemies]);
   if (!hoge) return <Loading visible />;
   return (
     <>
@@ -218,19 +266,21 @@ const Home = () => {
       <Stage width={1200} height={800} className={styles.background}>
         <Layer>
           <Image
-            image={gradiusImg.current}
+            image={imageBack}
             x={playerY * 100}
             y={playerX * 100}
             width={90}
-            height={90}
+            height={130}
+            
           />
           {bullet.map((bullet, index) => (
-            <Circle
+            <Image
+            image={imageTama}
               key={index}
               x={bullet.x * 100 + 50}
               y={bullet.y * 100 + 50}
               radius={20}
-              fill="red"
+              scaleX={0.05} scaleY={0.05}
             />
           ))}
           {enemies.map((enemy, index) => (
