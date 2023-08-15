@@ -8,6 +8,7 @@ import Lobby from 'src/components/Lobby/Lobby';
 import { Player } from 'src/components/Player/Player';
 import { apiClient } from 'src/utils/apiClient';
 import { posWithDirSpeTim } from 'src/utils/posWithDirSpeTim';
+import styles from './index.module.css';
 
 const Game = () => {
   const router = useRouter();
@@ -23,6 +24,9 @@ const Game = () => {
     const [playerBullets, setPlayerBullets] = useState<BulletModel[]>([]);
     const [enemyBullets, setEnemyBullets] = useState<BulletModel[]>([]);
     const [currentTime, setCurrentTime] = useState<number>(Date.now());
+
+    const [width, setWidth] = useState<number>(0);
+    const [height, setHeight] = useState<number>(0);
 
     const fetchPlayers = async (display: number) => {
       const res = await apiClient.player.$get({ query: { display } });
@@ -107,9 +111,29 @@ const Game = () => {
       return () => cancelAnimationFrame(cancelId);
     });
 
+    useEffect(() => {
+      const setWindowSize = () => {
+        setWidth(window.innerWidth);
+        setHeight(window.innerHeight);
+      };
+      setWindowSize();
+      window.addEventListener('resize', setWindowSize);
+      return () => window.removeEventListener('resize', setWindowSize);
+    }, []);
+
     return (
-      <div>
-        <Stage width={1920} height={1080}>
+      <div className={styles['canvas-container']}>
+        <Stage
+          width={1920}
+          height={1080}
+          style={{
+            /* stylelint-disable function-no-unknown */
+            transform: `
+            scale( ${width / 1920}, ${height / 1080} )
+            translate(${(width - 1920) / 2}px, ${(height - 1080) / 2}px)`,
+            /* stylelint-enable function-no-unknown */
+          }}
+        >
           <Layer>
             {playerBullets.map((bullet) => (
               <Bullet key={bullet.id} bullet={bullet} currentTime={currentTime} />
