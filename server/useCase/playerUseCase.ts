@@ -8,6 +8,7 @@ import { gameOver } from '$/service/gameOver';
 import { userIdParser } from '$/service/idParsers';
 import { isInDisplay } from '$/service/isInDisplay';
 import { minmax } from '$/service/minmax';
+import { posWithDirSpeTim } from '$/service/posWithDirSpeTim';
 import { randomUUID } from 'crypto';
 import { bulletUseCase } from './bulletUseCase';
 
@@ -86,6 +87,20 @@ export const playerUseCase = {
             y: y * normalization,
           };
           return bulletUseCase.create(player, dir);
+        })
+    );
+  },
+  barrier: async (player: PlayerModel) => {
+    const res = await bulletsRepository.findAllOfEnemies();
+    const deletingBullets = res.filter((bullet) => {
+      const [x, y] = posWithDirSpeTim(bullet);
+      const BARRIER_WIDTH = 100;
+      return (player.position.x - x) ** 2 + (player.position.y - y) ** 2 < BARRIER_WIDTH;
+    });
+    Promise.all(deletingBullets.map((bullet) => bulletsRepository.delete(bullet.id))).then(
+      (results) =>
+        results.forEach((result) => {
+          result;
         })
     );
   },
