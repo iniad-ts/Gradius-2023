@@ -4,6 +4,7 @@ import { useRouter } from 'next/router';
 import type { RefObject } from 'react';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { Layer, Stage } from 'react-konva';
+import { Background } from 'src/components/Background/Background';
 import { Bullet } from 'src/components/Bullet/PlayerBullet';
 import { Enemies } from 'src/components/Enemies/Enemies';
 import Lobby from 'src/components/Lobby/Lobby';
@@ -33,16 +34,12 @@ const Game = () => {
 
     const fetchPlayers = async (display: number) => {
       const res = await apiClient.player.$get({ query: { display } });
-      if (res !== null) {
-        setPlayers(res);
-      }
+      if (res !== null) setPlayers(res);
     };
 
     const fetchEnemies = async (display: number) => {
       const res = await apiClient.enemy.$get({ query: { display } });
-      if (res !== null) {
-        setEnemies(res);
-      }
+      if (res !== null) setEnemies(res);
     };
 
     const fetchBullets = async (display: number) => {
@@ -170,13 +167,16 @@ const Game = () => {
           }}
         >
           <Layer>
+            <Background />
+          </Layer>
+          <Layer>
             {playerBullets.map((bullet) => (
-              <Bullet key={bullet.id} bullet={bullet} currentTime={currentTime} />
+              <Bullet key={bullet.id} bullet={bullet} type={1} currentTime={currentTime} />
             ))}
           </Layer>
           <Layer>
             {enemyBullets.map((bullet) => (
-              <Bullet key={bullet.id} bullet={bullet} currentTime={currentTime} />
+              <Bullet key={bullet.id} bullet={bullet} type={0} currentTime={currentTime} />
             ))}
           </Layer>
           <Layer>
@@ -185,7 +185,6 @@ const Game = () => {
             ))}
           </Layer>
           <Layer>
-            {/* アニメーションの関係で、Enemyは中でmap */}
             <Enemies enemies={enemies} />
           </Layer>
         </Stage>
