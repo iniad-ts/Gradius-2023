@@ -2,7 +2,7 @@ import type { BulletModel, EnemyModel, PlayerModel } from '$/commonTypesWithClie
 import Konva from 'konva';
 import { useRouter } from 'next/router';
 import type { RefObject } from 'react';
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { Layer, Stage } from 'react-konva';
 import { Bullet } from 'src/components/Bullet/PlayerBullet';
 import { Enemies } from 'src/components/Enemies/Enemies';
@@ -53,64 +53,65 @@ const Game = () => {
       }
     };
 
-    useEffect(() => {
-      const checkCollisionPlayerBullet = async () => {
-        const remainingEnemies = [];
-        for (const enemy of enemies) {
-          const hitBullet: BulletModel | undefined = collisionBullets(
-            enemy.createdPosition,
-            playerBullets,
-            currentTime
-          )[0];
-          if (hitBullet !== undefined && hitBullet.playerId) {
-            const body = {
-              enemyId: enemy.id,
-              playerId: hitBullet.playerId,
-            };
-            await apiClient.enemy.$delete({ body });
-            await apiClient.bullet.$delete({ body: { bulletId: hitBullet.id } });
-          } else {
-            remainingEnemies.push(enemy);
-          }
+    const checkCollisionPlayerBullet = useCallback(async () => {
+      const remainingEnemies = [];
+      for (const enemy of enemies) {
+        const hitBullet: BulletModel | undefined = collisionBullets(
+          enemy.createdPosition,
+          playerBullets,
+          currentTime
+        )[0];
+        if (hitBullet !== undefined && hitBullet.playerId) {
+          const body = {
+            enemyId: enemy.id,
+            playerId: hitBullet.playerId,
+          };
+          await apiClient.enemy.$delete({ body });
+          await apiClient.bullet.$delete({ body: { bulletId: hitBullet.id } });
+        } else {
+          remainingEnemies.push(enemy);
         }
-      };
+      }
+    }, [currentTime, enemies, playerBullets]);
 
-      const checkCollisionEnemyBullet = async () => {
-        Promise.all(
-          players
-            .map((player) => {
-              const hitBullets = collisionBullets(player.position, enemyBullets, currentTime);
-              return hitBullets.map((bullet) =>
-                apiClient.player.delete({
-                  body: { player, bulletId: bullet.id, display },
-                })
-              );
-            })
-            .flat()
-        ).then((results) =>
-          results.forEach((result) => {
-            result;
+    const checkCollisionEnemyBullet = useCallback(async () => {
+      Promise.all(
+        players
+          .map((player) => {
+            const hitBullets = collisionBullets(player.position, enemyBullets, currentTime);
+            return hitBullets.map((bullet) =>
+              apiClient.player.delete({
+                body: { player, bulletId: bullet.id, display },
+              })
+            );
           })
-        );
-      };
+          .flat()
+      ).then((results) =>
+        results.forEach((result) => {
+          result;
+        })
+      );
+    }, [currentTime, players, enemyBullets]);
 
-      const checkCollisionPlayerAndEnemy = async () => {
-        const remainingEnemies = [];
-        for (const enemy of enemies) {
-          const COLLISION_DISTANCE = 100;
-          const hitPlayer = players.find((player) => {
-            const distanceSquared =
-              Math.pow(enemy.createdPosition.x - player.position.x, 2) +
-              Math.pow(enemy.createdPosition.y - player.position.y, 2);
-            return distanceSquared < COLLISION_DISTANCE ** 2;
-          });
-          if (hitPlayer !== undefined) {
-            await apiClient.game.$post({ body: { player: hitPlayer, enemy, display } });
-          } else {
-            remainingEnemies.push(enemy);
-          }
+    const checkCollisionPlayerAndEnemy = useCallback(async () => {
+      const remainingEnemies = [];
+      for (const enemy of enemies) {
+        const COLLISION_DISTANCE = 100;
+        const hitPlayer = players.find((player) => {
+          const distanceSquared =
+            Math.pow(enemy.createdPosition.x - player.position.x, 2) +
+            Math.pow(enemy.createdPosition.y - player.position.y, 2);
+          return distanceSquared < COLLISION_DISTANCE ** 2;
+        });
+        if (hitPlayer !== undefined) {
+          await apiClient.game.$post({ body: { player: hitPlayer, enemy, display } });
+        } else {
+          remainingEnemies.push(enemy);
         }
-      };
+      }
+    }, [enemies, players]);
+
+    useEffect(() => {
       const cancelId = requestAnimationFrame(() => {
         fetchPlayers(display);
         fetchEnemies(display);
@@ -121,7 +122,7 @@ const Game = () => {
         setCurrentTime(Date.now());
       });
       return () => cancelAnimationFrame(cancelId);
-    }, [currentTime, enemies, players, playerBullets, enemyBullets]);
+    }, [checkCollisionEnemyBullet, checkCollisionPlayerAndEnemy, checkCollisionPlayerBullet]);
 
     useEffect(() => {
       const anim = new Konva.Animation((layer) => {
