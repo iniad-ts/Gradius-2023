@@ -34,16 +34,12 @@ const Game = () => {
 
     const fetchPlayers = async (display: number) => {
       const res = await apiClient.player.$get({ query: { display } });
-      if (res !== null) {
-        setPlayers(res);
-      }
+      if (res !== null) setPlayers(res);
     };
 
     const fetchEnemies = async (display: number) => {
       const res = await apiClient.enemy.$get({ query: { display } });
-      if (res !== null) {
-        setEnemies(res);
-      }
+      if (res !== null) setEnemies(res);
     };
 
     const fetchBullets = async (display: number) => {
@@ -189,7 +185,6 @@ const Game = () => {
             ))}
           </Layer>
           <Layer>
-            {/* アニメーションの関係で、Enemyは中でmap */}
             <Enemies enemies={enemies} />
           </Layer>
         </Stage>
