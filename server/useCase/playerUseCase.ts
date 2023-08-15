@@ -66,7 +66,7 @@ export const playerUseCase = {
           x: diffX * normalization,
           y: diffY * normalization,
         };
-        bulletUseCase.create(player, dir);
+        bulletUseCase.createByPlayer(player, dir);
       })
     ).then((results) =>
       results.forEach((result) => {
@@ -86,12 +86,12 @@ export const playerUseCase = {
             x: 1,
             y: y * normalization,
           };
-          return bulletUseCase.create(player, dir);
+          return bulletUseCase.createByPlayer(player, dir);
         })
     );
   },
   barrier: async (player: PlayerModel) => {
-    const res = await bulletsRepository.findAllOfEnemies();
+    const res = await bulletsRepository.findAllByEnemy();
     const deletingBullets = res.filter((bullet) => {
       const [x, y] = posWithDirSpeTim(bullet);
       const BARRIER_WIDTH = 100;

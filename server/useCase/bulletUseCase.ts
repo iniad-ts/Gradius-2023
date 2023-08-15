@@ -7,7 +7,10 @@ import { posWithDirSpeTim as posWithBulletModel } from '$/service/posWithDirSpeT
 import { randomUUID } from 'crypto';
 
 export const bulletUseCase = {
-  create: async (player: PlayerModel, direction = { x: 1, y: 0 }): Promise<BulletModel | null> => {
+  createByPlayer: async (
+    player: PlayerModel,
+    direction = { x: 1, y: 0 }
+  ): Promise<BulletModel | null> => {
     if (player !== null) {
       const newBullet: BulletModel = {
         id: bulletIdParser.parse(randomUUID()),
@@ -37,10 +40,10 @@ export const bulletUseCase = {
     };
     await bulletsRepository.create(newBullet);
   },
-  delete: async () => {
+  deleteInOutside: async () => {
     const bullets = [
-      ...(await bulletsRepository.findAllOfPlayers()),
-      ...(await bulletsRepository.findAllOfEnemies()),
+      ...(await bulletsRepository.findAllByPlayer()),
+      ...(await bulletsRepository.findAllByEnemy()),
     ];
     const game = await gamesRepository.find();
     const maxXPosition = ((game?.displayNumber ?? -1) + 1) * 1920;
@@ -53,8 +56,8 @@ export const bulletUseCase = {
     });
   },
   findInDisplay: async (displayNumber: number) => {
-    const res1 = (await bulletsRepository.findAllOfPlayers()) ?? [];
-    const res2 = (await bulletsRepository.findAllOfEnemies()) ?? [];
+    const res1 = (await bulletsRepository.findAllByPlayer()) ?? [];
+    const res2 = (await bulletsRepository.findAllByEnemy()) ?? [];
     const [bulletsInDisplay1, bulletsInDisplay2] = [res1, res2].map((res) =>
       res
         .filter((bullet) => isInDisplay(displayNumber, posWithBulletModel(bullet)[0]))
