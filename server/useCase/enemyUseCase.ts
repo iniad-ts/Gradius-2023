@@ -1,5 +1,5 @@
 import type { UserId } from '$/commonTypesWithClient/branded';
-import type { EnemyModel, PlayerModel } from '$/commonTypesWithClient/models';
+import type { EnemyModel, LockOnModel, PlayerModel } from '$/commonTypesWithClient/models';
 import { enemyTable } from '$/constants/enemyTable';
 import { enemiesRepository } from '$/repository/enemiesRepository';
 import { playersRepository } from '$/repository/playersRepository';
@@ -10,20 +10,15 @@ import { bulletUseCase } from './bulletUseCase';
 
 const RESPAWN_TIME = 5000;
 
-type LockOnModel = {
-  pos: { x: number; y: number };
-  distance2: number;
-};
-
 const sortByDistance = (players: PlayerModel[], enemy: EnemyModel): LockOnModel[] =>
   players
     .map((player) => ({
       pos: { ...player.position },
-      distance2:
+      squaredDistance:
         (player.position.x - enemy.createdPosition.x) ** 2 +
         (player.position.y - enemy.createdPosition.y) ** 2,
     }))
-    .sort((a, b) => a.distance2 - b.distance2);
+    .sort((a, b) => a.squaredDistance - b.squaredDistance);
 
 export const enemyUseCase = {
   create: async () => {
@@ -77,7 +72,7 @@ export const enemyUseCase = {
       })
     );
   },
-  shot2: async () => {
+  shot1: async () => {
     const res = await enemiesRepository.findType(1);
     Promise.all(
       res.map((enemy) =>
@@ -89,7 +84,7 @@ export const enemyUseCase = {
       })
     );
   },
-  shot3: async () => {
+  shot2: async () => {
     const res = await enemiesRepository.findType(2);
     const players = await playersRepository.findAll();
     Promise.all(
@@ -100,7 +95,7 @@ export const enemyUseCase = {
         if (lockOnPlayer === undefined) return;
         const diffX = lockOnPlayer.pos.x - enemy.createdPosition.x;
         const diffY = lockOnPlayer.pos.y - enemy.createdPosition.y;
-        const normalization = 1 / Math.sqrt(lockOnPlayer.distance2);
+        const normalization = 1 / Math.sqrt(lockOnPlayer.squaredDistance);
         const dir = {
           x: diffX * normalization,
           y: diffY * normalization,
@@ -113,7 +108,7 @@ export const enemyUseCase = {
       })
     );
   },
-  shot4: async () => {
+  shot3: async () => {
     const res = await enemiesRepository.findType(3);
     const players = await playersRepository.findAll();
     Promise.all(
