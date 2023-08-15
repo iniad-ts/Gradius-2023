@@ -1,38 +1,76 @@
 .controller {
   display: grid;
   grid-template-columns: 3fr 2fr 3fr;
+  align-items: center;
   height: 100dvh;
   background-color: #eee;
   font-family: 'Jost', 'Zen Kaku Gothic New', sans-serif;
 }
 
 .center {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 2vmin;
-  text-align: center;
-  height: 100%;
+  height: 36vmin;
+  display: grid;
+  grid-template-rows: 1fr 1fr 1fr;
+  grid-template-columns: 1fr 1fr;
+  grid-template-areas:
+    'hp    hp'
+    'score score'
+    'enemy item';
+  gap: 4vmin 2vmin;
+}
+
+.center-button {
+  display: block;
+  box-shadow: 0 0 2vmin 0 #9994, inset 0 0 0 0.6vmin #fff;
+  border: 0.2vmin solid #bbb;
+  background-color: #eee;
+  border-radius: 1vmin;
+  transition: transform 0.1s ease;
+  font-size: 3vmin;
+}
+
+.center-button:active {
+  transform: scale(0.9);
+}
+
+.hp {
+  grid-area: hp;
+}
+
+.score {
+  grid-area: score;
+}
+
+.enemy {
+  grid-area: enemy;
+}
+
+.item {
+  grid-area: item;
 }
 
 .info {
   border: solid 0.2vmin #999;
-  width: 80%;
+  width: 100%;
+  height: 100%;
   border-radius: 4px;
-  padding: 3vmin 2vmin 2vmin;
   position: relative;
-  margin-block: 2vmin;
+  line-height: 9vmin;
+  text-align: center;
+  font-size: 3vmin;
 }
 
 .info > p {
   background-color: #eee;
   position: absolute;
+  text-align: center;
   top: -2vmin;
-  height: 4vmin;
+  height: 3vmin;
   width: 50%;
   left: 25%;
-  font-size: min(2vw, 3vh);
+  font-size: 3vmin;
+  line-height: 1.2;
+  font-weight: 600;
 }
 
 .joystick {
@@ -50,6 +88,7 @@
 .joystick > div > button {
   box-shadow: 0 0 2vmin 0 #9994;
   background-color: #c9cace !important;
+  outline: 0;
 }
 
 .shoot-button {
