@@ -11,7 +11,7 @@ export type Methods = {
   delete: {
     reqBody: {
       enemyId: string;
-      userId: UserId;
+      playerId: UserId;
     };
   };
   post: {

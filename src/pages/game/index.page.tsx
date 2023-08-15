@@ -1,6 +1,8 @@
 import type { BulletModel, EnemyModel, PlayerModel } from '$/commonTypesWithClient/models';
+import Konva from 'konva';
 import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
+import type { RefObject } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { Layer, Stage } from 'react-konva';
 import { Background } from 'src/components/Background/Background';
 import { Bullet } from 'src/components/Bullet/PlayerBullet';
@@ -8,7 +10,7 @@ import { Enemies } from 'src/components/Enemies/Enemies';
 import Lobby from 'src/components/Lobby/Lobby';
 import { Player } from 'src/components/Player/Player';
 import { apiClient } from 'src/utils/apiClient';
-import { posWithDirSpeTim } from 'src/utils/posWithDirSpeTim';
+import { collisionBullets } from 'src/utils/collision';
 import styles from './index.module.css';
 
 const Game = () => {
@@ -25,6 +27,7 @@ const Game = () => {
     const [playerBullets, setPlayerBullets] = useState<BulletModel[]>([]);
     const [enemyBullets, setEnemyBullets] = useState<BulletModel[]>([]);
     const [currentTime, setCurrentTime] = useState<number>(Date.now());
+    const ufoRefs = useRef<RefObject<Konva.Image>[]>([]);
 
     const [width, setWidth] = useState<number>(0);
     const [height, setHeight] = useState<number>(0);
@@ -51,67 +54,99 @@ const Game = () => {
       }
     };
 
-    //衝突判定の距離
-    const COLLISION_DISTANCE = 50;
-
-    //敵と弾の衝突判定
-    const checkCollisionBullet = async () => {
+    const checkCollisionPlayerBullet = useCallback(async () => {
       const remainingEnemies = [];
       for (const enemy of enemies) {
-        const hitBullet = playerBullets.find((bullet) => {
-          const bulletPosition = posWithDirSpeTim(bullet, currentTime);
-          const distanceSquared =
-            Math.pow(enemy.createdPosition.x - bulletPosition[0], 2) +
-            Math.pow(enemy.createdPosition.y - bulletPosition[1], 2);
-          return distanceSquared < COLLISION_DISTANCE ** 2;
-        });
-
-        if (hitBullet && hitBullet.playerId) {
-          await apiClient.enemy.$delete({
-            body: {
-              enemyId: enemy.id,
-              userId: hitBullet.playerId,
-            },
-          });
+        const hitBullet: BulletModel | undefined = collisionBullets(
+          enemy.createdPosition,
+          playerBullets,
+          currentTime
+        )[0];
+        if (hitBullet !== undefined && hitBullet.playerId) {
+          const body = {
+            enemyId: enemy.id,
+            playerId: hitBullet.playerId,
+          };
+          await apiClient.enemy.$delete({ body });
           await apiClient.bullet.$delete({ body: { bulletId: hitBullet.id } });
         } else {
           remainingEnemies.push(enemy);
         }
       }
-    };
+    }, [currentTime, enemies, playerBullets]);
 
-    //敵とプレイヤーの衝突判定
-    const checkCollisionPlayer = async () => {
+    const checkCollisionEnemyBullet = useCallback(async () => {
+      Promise.all(
+        players
+          .map((player) => {
+            const hitBullets = collisionBullets(player.position, enemyBullets, currentTime);
+            return hitBullets.map((bullet) =>
+              apiClient.player.delete({
+                body: { player, bulletId: bullet.id, display },
+              })
+            );
+          })
+          .flat()
+      ).then((results) =>
+        results.forEach((result) => {
+          result;
+        })
+      );
+    }, [currentTime, players, enemyBullets]);
+
+    const checkCollisionPlayerAndEnemy = useCallback(async () => {
       const remainingEnemies = [];
-
       for (const enemy of enemies) {
+        const COLLISION_DISTANCE = 100;
         const hitPlayer = players.find((player) => {
           const distanceSquared =
             Math.pow(enemy.createdPosition.x - player.position.x, 2) +
             Math.pow(enemy.createdPosition.y - player.position.y, 2);
           return distanceSquared < COLLISION_DISTANCE ** 2;
         });
-
-        if (hitPlayer) {
-          apiClient.game.$post({ body: { player: hitPlayer, enemy } });
+        if (hitPlayer !== undefined) {
+          await apiClient.game.$post({ body: { player: hitPlayer, enemy, display } });
         } else {
           remainingEnemies.push(enemy);
         }
       }
-    };
+    }, [enemies, players]);
 
     useEffect(() => {
       const cancelId = requestAnimationFrame(() => {
         fetchPlayers(display);
         fetchEnemies(display);
         fetchBullets(display);
-        checkCollisionBullet();
-        checkCollisionPlayer();
+        checkCollisionPlayerBullet();
+        checkCollisionPlayerAndEnemy();
+        checkCollisionEnemyBullet();
         setCurrentTime(Date.now());
       });
       return () => cancelAnimationFrame(cancelId);
-    });
+    }, [checkCollisionEnemyBullet, checkCollisionPlayerAndEnemy, checkCollisionPlayerBullet]);
 
+    useEffect(() => {
+      const anim = new Konva.Animation((layer) => {
+        ufoRefs.current.forEach((ufoRef) => {
+          if (ufoRef.current) {
+            ufoRef.current.offset({
+              x:
+                Math.cos(
+                  Math.floor(((layer?.time ?? 0) / 10 + ufoRef.current.x()) * Math.PI) / 100
+                ) * 5,
+              y:
+                Math.sin(
+                  Math.floor(((layer?.time ?? 0) / 10) * Math.PI + ufoRef.current.y()) / 100
+                ) * 5,
+            });
+          }
+        });
+      }, ufoRefs.current[0]?.current?.getLayer());
+      anim.start();
+      return () => {
+        anim.stop();
+      };
+    }, []);
     useEffect(() => {
       const setWindowSize = () => {
         setWidth(window.innerWidth);
