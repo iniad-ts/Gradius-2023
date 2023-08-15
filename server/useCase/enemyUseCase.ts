@@ -78,7 +78,7 @@ export const enemyUseCase = {
     );
   },
   shot2: async () => {
-    const res = await enemiesRepository.findType(2);
+    const res = await enemiesRepository.findType(1);
     Promise.all(
       res.map((enemy) =>
         bulletUseCase.createByEnemy({ x: enemy.createdPosition.x, y: enemy.createdPosition.y })
@@ -90,11 +90,14 @@ export const enemyUseCase = {
     );
   },
   shot3: async () => {
-    const res = await enemiesRepository.findType(3);
+    const res = await enemiesRepository.findType(2);
     const players = await playersRepository.findAll();
     Promise.all(
       res.map((enemy) => {
-        const lockOnPlayer = sortByDistance(players, enemy)[0];
+        const lockOnPlayer = sortByDistance(players, enemy).filter(
+          (player) => player.pos.x < enemy.createdPosition.x
+        )[0];
+        if (lockOnPlayer === undefined) return;
         const diffX = lockOnPlayer.pos.x - enemy.createdPosition.x;
         const diffY = lockOnPlayer.pos.y - enemy.createdPosition.y;
         const normalization = 1 / Math.sqrt(lockOnPlayer.distance2);
@@ -118,8 +121,8 @@ export const enemyUseCase = {
         const lockOnPlayer = sortByDistance(players, enemy)[0];
         const subShotPlaces = (numOfBullet: number) =>
           [...Array(numOfBullet)].map((_, i) => {
-            const subPlaceX = lockOnPlayer.pos.y * 0.1 * (i + 1);
-            const subPlaceY = lockOnPlayer.pos.x * 0.1 * (i + 1);
+            const subPlaceX = (lockOnPlayer.pos.y - enemy.createdPosition.y) * 0.1 * (i + 1);
+            const subPlaceY = (lockOnPlayer.pos.x - enemy.createdPosition.x) * 0.1 * (i + 1);
             return [1, -1].map((i) => ({
               x: lockOnPlayer.pos.x + subPlaceX * i,
               y: lockOnPlayer.pos.y + subPlaceY * i,
@@ -129,9 +132,11 @@ export const enemyUseCase = {
         const returnVoid = subShotPlaces(2)
           .flat()
           .map((pos) => {
-            const normalization = Math.sqrt(
-              (pos.x - enemy.createdPosition.x) ** 2 + (pos.y - enemy.createdPosition.y) ** 2
-            );
+            const normalization =
+              1 /
+              Math.sqrt(
+                (pos.x - enemy.createdPosition.x) ** 2 + (pos.y - enemy.createdPosition.y) ** 2
+              );
             const diffX = pos.x - enemy.createdPosition.x;
             const diffY = pos.y - enemy.createdPosition.y;
             return bulletUseCase.createByEnemy(

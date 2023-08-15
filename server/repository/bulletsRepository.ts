@@ -44,7 +44,12 @@ export const bulletsRepository = {
     });
     return prismaBullets.map(toBulletModel);
   },
-
+  findLatest: async () => {
+    const prismaBullets = await prismaClient.bullet.findMany({
+      orderBy: { createdAt: 'desc' },
+    });
+    return toBulletModel(prismaBullets[0]);
+  },
   find: async (id: string): Promise<BulletModel | null> => {
     const prismaBullet = await prismaClient.bullet.findUnique({ where: { id } });
     return prismaBullet !== null ? toBulletModel(prismaBullet) : null;
