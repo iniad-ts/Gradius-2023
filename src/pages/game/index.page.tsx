@@ -145,6 +145,8 @@ const Game = () => {
       return () => {
         anim.stop();
       };
+    }, []);
+    useEffect(() => {
       const setWindowSize = () => {
         setWidth(window.innerWidth);
         setHeight(window.innerHeight);
