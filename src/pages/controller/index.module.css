@@ -26,6 +26,7 @@
   background-color: #eee;
   border-radius: 1vmin;
   transition: transform 0.1s ease;
+  font-size: 3vmin;
 }
 
 .center-button:active {
