@@ -140,12 +140,12 @@ const Game = () => {
           </Layer>
           <Layer>
             {playerBullets.map((bullet) => (
-              <Bullet key={bullet.id} bullet={bullet} currentTime={currentTime} />
+              <Bullet key={bullet.id} bullet={bullet} type={1} currentTime={currentTime} />
             ))}
           </Layer>
           <Layer>
             {enemyBullets.map((bullet) => (
-              <Bullet key={bullet.id} bullet={bullet} currentTime={currentTime} />
+              <Bullet key={bullet.id} bullet={bullet} type={0} currentTime={currentTime} />
             ))}
           </Layer>
           <Layer>
