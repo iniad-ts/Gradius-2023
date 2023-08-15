@@ -1,0 +1,67 @@
+.container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 3fr;
+  height: 100dvh;
+  background-color: #eee;
+}
+
+.info {
+  grid-row: 1;
+  grid-column: 1 / span 2;
+  background-color: #ddd;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  font-size: 2rem;
+  font-weight: bold;
+  color: #333;
+}
+
+.joystick {
+  grid-row: 2;
+  align-self: center;
+  justify-self: center;
+}
+
+.button {
+  grid-row: 2;
+  display: flex;
+  justify-self: center;
+  align-self: center;
+  background-color: #ddd;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  width: 60vmin;
+  border: 5px solid #bbb;
+  transition: transform 0.2s ease-in-out;
+}
+.button:active {
+  transform: scale(0.95);
+}
+
+/* メディアクエリ: 縦画面のスタイル */
+@media (max-aspect-ratio: 1/1) {
+  .container {
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr 2fr 2fr;
+  }
+
+  .info {
+    grid-column: 1;
+    grid-row: 1;
+  }
+
+  .joystick,
+  .button {
+    grid-column: 1;
+  }
+
+  .joystick {
+    grid-row: 2;
+  }
+
+  .button {
+    grid-row: 3;
+  }
+}
