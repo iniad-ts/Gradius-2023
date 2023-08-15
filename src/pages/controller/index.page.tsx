@@ -64,6 +64,10 @@ const Controller = () => {
     await apiClient.enemy.$post();
   };
 
+  const useItem = async () => {
+    // await apiClient.item.$post();
+  };
+
   useEffect(() => {
     const intervalId = setInterval(async () => {
       const res = await apiClient.game.$put();
@@ -101,14 +105,20 @@ const Controller = () => {
         />
       </div>
       <div className={styles.center}>
-        <div className={styles.info}>
+        <div className={`${styles.info} ${styles.hp}`}>
           <p>HP</p>
           {'💛'.repeat(playerDetails?.health ?? 0)}
         </div>
-        <div className={styles.info}>
+        <div className={`${styles.info} ${styles.score}`}>
           <p>SCORE</p>
           {playerDetails?.score ?? 0}
         </div>
+        <button className={`${styles['center-button']} ${styles.enemy}`} onClick={createEnemy}>
+          👾
+        </button>
+        <button className={`${styles['center-button']} ${styles.item}`} onClick={useItem}>
+          ✨
+        </button>
       </div>
       <button
         onTouchStart={shootStart}
