@@ -38,18 +38,12 @@ export const gameUseCase = {
   update: async (id: UserId) => {
     bulletUseCase.delete();
     enemyUseCase.respawn();
-<<<<<<< HEAD
     const res = await bulletsRepository.findLatest();
     if (res.createdAt + 1000 < new Date().getTime()) {
       // enemyUseCase.shot2();
       enemyUseCase.shot3();
       enemyUseCase.shot4();
     }
-=======
-    enemyUseCase.shot2();
-    enemyUseCase.shot3();
-    // enemyUseCase.shot4();
->>>>>>> 03663785872daa6745ed7d079ca26d8a5e223177
     if (id === null) return null;
     const player = await playersRepository.find(id);
     if (player === null) return null;
