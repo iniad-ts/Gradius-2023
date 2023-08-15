@@ -2,6 +2,7 @@ import type { BulletModel, EnemyModel, PlayerModel } from '$/commonTypesWithClie
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { Layer, Stage } from 'react-konva';
+import { Background } from 'src/components/Background/Background';
 import { Bullet } from 'src/components/Bullet/PlayerBullet';
 import { Enemies } from 'src/components/Enemies/Enemies';
 import Lobby from 'src/components/Lobby/Lobby';
@@ -134,6 +135,9 @@ const Game = () => {
             /* stylelint-enable function-no-unknown */
           }}
         >
+          <Layer>
+            <Background />
+          </Layer>
           <Layer>
             {playerBullets.map((bullet) => (
               <Bullet key={bullet.id} bullet={bullet} currentTime={currentTime} />
