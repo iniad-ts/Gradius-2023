@@ -2,32 +2,26 @@
 import type { MoveDirection } from '$/Usecase/playerUsecase';
 
 import type { UserId } from '$/commonTypesWithClient/branded';
-import { useAtom } from 'jotai';
+import { UserIdParser } from '$/service/idParsers';
+import { useRouter } from 'next/router';
 import { useEffect, useRef, useState } from 'react';
 import { Joystick, JoystickShape } from 'react-joystick-component';
 import type { IJoystickUpdateEvent } from 'react-joystick-component/build/lib/Joystick';
-import { userAtom } from 'src/atoms/user';
 import { apiClient } from 'src/utils/apiClient';
 import styles from './controller.module.css';
 
 const Home = () => {
   const joystickRef = useRef<HTMLDivElement>(null);
-  const [user] = useAtom(userAtom);
   const [size, setSize] = useState<number>(0);
   const [moveIntervalId, setMoveIntervalId] = useState<NodeJS.Timeout | null>(null);
   const moveDirection = useRef<MoveDirection>({ x: 0, y: 0 });
-  const [userId, setUserId] = useState<UserId | null>(null);
-  const [isready, setIsready] = useState(false);
+  const [userId, setUserId] = useState<UserId | null>(
+    UserIdParser.parse(localStorage.getItem('userId'))
+  );
+  const router = useRouter();
 
-  const createPlayer = async () => {
-    const result = await apiClient.rooms.createPlayer.$get();
-
-    setUserId(result.userId);
-  };
-  if (!isready) {
-    //FIXME 将来的にはcookieとかで判定して、すでにプレイヤーが存在する場合はcreatePlayerしないようにする
-    createPlayer();
-    setIsready(true);
+  if (localStorage.getItem('userId') === null) {
+    router.push('/gradiusLogin');
   }
 
   const getsize = () => {
@@ -41,7 +35,6 @@ const Home = () => {
   useEffect(() => {
     const cance = setInterval(getsize, 100);
     return () => {
-      console.log('AAAAAAAAAAAAAAAAAAAAAA');
       clearInterval(cance);
     };
   }, []); // 依存性配列は空にします。getsizeが変更されるとタイマーはリセットされません
@@ -57,7 +50,6 @@ const Home = () => {
     await apiClient.rooms.control.$post({
       body: { moveDirection: moveDirection.current, userId },
     });
-    console.log('move', moveDirection.current);
   };
   const moveStart = () => {
     const intervalId = setInterval(move, 50);
@@ -92,9 +84,13 @@ const Home = () => {
               start={moveStart}
             />
           </div>
+          {/* <div className={styles.ma}>
+            <p>Score</p>
+          </div> */}
           <button className={styles.shoot} onClick={shoot} />
         </div>
       </div>
+      <p>userid:{userId}</p>
     </>
   );
 };

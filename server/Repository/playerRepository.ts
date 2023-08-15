@@ -18,6 +18,7 @@ const toPlayerModel = (prismaPlayer: Player): PlayerModel => ({
   hp: z.number().parse(prismaPlayer.hp),
   radius: z.number().parse(prismaPlayer.radius),
   score: z.number().parse(prismaPlayer.score),
+  name: z.string().parse(prismaPlayer.name),
 });
 
 export const playerRepository = {
@@ -42,6 +43,7 @@ export const playerRepository = {
         hp: player.hp,
         radius: player.radius,
         score: player.score,
+        name: player.name,
       },
     });
   },
