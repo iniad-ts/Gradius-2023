@@ -14,7 +14,7 @@ const Home = () => {
   //apiを叩いてプレイヤーと銃敵の位置を取得stateにセット
   const getPosition = useCallback(async () => {
     const new_playerPosition = await apiClient.rooms.control.$get();
-    const new_bulletPosition = await apiClient.rooms.gunPosition.$get();
+    const new_bulletPosition = await apiClient.rooms.bulletPosition.$get();
     const new_enemyPosition = await apiClient.check.$get();
 
     //DBを導入した影響で、checkCollisionが動かなくなったので、コメントアウト化
