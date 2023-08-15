@@ -16,10 +16,16 @@ const Home = () => {
   const gradiusImg = useRef(new window.Image());
   const [isGradiusLoaded, setIsGradiusLoaded] = useState(false);
   const [backgroundX, setBackgroundX] = useState(0);
+  const [imageBack, setImageBack] = useState(new window.Image());
+  const [imageTama, setImageTama] = useState(new window.Image());
+  const [score, setScore] = useState(0);
+  const [playerLife, setPlayerLife] = useState(3);
+
   const [enemies, setEnemies] = useState<{ x: number; y: number }[]>([
     { x: 5, y: 2 },
     { x: 8, y: 4 },
   ]);
+
   const [dx, setDx] = useState(-1); // x方向の移動量
   const dx2 = 1;
   const [board, setBoard] = useState([
@@ -52,9 +58,13 @@ const Home = () => {
   }, []);
 
   useEffect(() => {
-    gradiusImg.current.src = '/images/jett1.png';
-    gradiusImg.current.onload = () => {
-      setIsGradiusLoaded(true);
+    const image = new window.Image();
+    const image2 = new window.Image();
+    image.src = '/images/jett4.png';
+    image2.src = '/images/tama.png';
+    image.onload = () => {
+      setImageBack(image);
+      setImageTama(image2);
     };
   }, []);
 
@@ -211,26 +221,103 @@ const Home = () => {
     };
   }, [dx, dy, enemies.length]);
 
+  const detectCollisions = () => {
+    setbullets((prevBullets) => {
+      const newBullets = prevBullets.filter((bullet) => {
+        const bulletHitbox = {
+          x: bullet.x * 100 + 50,
+          y: bullet.y * 100 + 50,
+          radius: 10,
+        };
+
+        let bulletHitEnemy = false;
+
+        const remainingEnemies = enemies.filter((enemy) => {
+          const enemyHitbox = {
+            x: enemy.x * 100,
+            y: enemy.y * 100 + 50,
+            radius: 20,
+          };
+
+          const distance = Math.sqrt(
+            Math.pow(bulletHitbox.x - enemyHitbox.x, 2) +
+              Math.pow(bulletHitbox.y - enemyHitbox.y, 2)
+          );
+
+          const collisionDetected = distance < bulletHitbox.radius + enemyHitbox.radius;
+
+          if (collisionDetected) {
+            bulletHitEnemy = true;
+            // eslint-disable-next-line max-nested-callbacks
+            setScore((prevScore) => prevScore + 0.5);
+            console.log(score);
+            return false; // 衝突した敵は残らない
+          }
+
+          return true;
+        });
+
+        if (bulletHitEnemy) {
+          setEnemies(remainingEnemies); // 衝突した場合、敵を更新
+          return null; // 弾も消滅
+        }
+
+        return bullet;
+      });
+
+      return newBullets.filter(Boolean);
+    });
+    const playerHitbox = {
+      x: playerY * 100, // Adjust hitbox based on your player's size and position
+      y: playerX * 100, // Adjust hitbox based on your player's size and position
+      radius: 10, // Adjust based on your player's size
+    };
+    const playerCollided = enemies.some((enemy) => {
+      const enemyHitbox = {
+        x: enemy.x * 100,
+        y: enemy.y * 100,
+        radius: 20,
+      };
+
+      const distance = Math.sqrt(
+        Math.pow(playerHitbox.x - enemyHitbox.x, 2) + Math.pow(playerHitbox.y - enemyHitbox.y, 2)
+      );
+
+      return distance < playerHitbox.radius + enemyHitbox.radius;
+    });
+
+    if (playerCollided) {
+      setPlayerLife((prevLife) => prevLife - 1);
+    }
+  };
+
+  // 上記の当たり判定関数を適切なタイミングで呼び出す
+  useEffect(() => {
+    detectCollisions();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [bullet, enemies]);
   if (!hoge) return <Loading visible />;
   return (
     <>
       {/* <img src={g.src} alt="images.png" /> */}
+      <div className={styles.lifeContainer}>
+        <p className={styles.life}>Life: {playerLife}</p>
+      </div>
+      <div className={styles.scoreContainer}>
+        <p className={styles.score}>Score: {score}</p>
+      </div>
       <Stage width={1200} height={800} className={styles.background}>
         <Layer>
-          <Image
-            image={gradiusImg.current}
-            x={playerY * 100}
-            y={playerX * 100}
-            width={90}
-            height={90}
-          />
+          <Image image={imageBack} x={playerY * 100} y={playerX * 100} width={90} height={130} />
           {bullet.map((bullet, index) => (
-            <Circle
+            <Image
+              image={imageTama}
               key={index}
               x={bullet.x * 100 + 50}
               y={bullet.y * 100 + 50}
               radius={20}
-              fill="red"
+              scaleX={0.05}
+              scaleY={0.05}
             />
           ))}
           {enemies.map((enemy, index) => (

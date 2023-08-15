@@ -27,3 +27,33 @@
   background: url('../../public/utyuu2.jpg') repeat-x;
   background-size: cover;
 }
+
+.scoreContainer {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  background-color: rgba(0, 0, 0, 0.7);
+  padding: 10px;
+  border-radius: 5px;
+}
+
+.score {
+  margin: 0;
+  color: white;
+  font-size: 16px;
+}
+
+.lifeContainer {
+  position: absolute;
+  top: 20px;
+  left: 120px;
+  background-color: rgba(0, 0, 0, 0.7);
+  padding: 10px;
+  border-radius: 5px;
+}
+
+.life {
+  margin: 0;
+  color: white;
+  font-size: 16px;
+}
