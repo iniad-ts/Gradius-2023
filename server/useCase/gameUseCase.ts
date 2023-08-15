@@ -1,5 +1,3 @@
-<<<<<<< HEAD
-=======
 import type { UserId } from '$/commonTypesWithClient/branded';
 import type { EnemyModel, PlayerModel } from '$/commonTypesWithClient/models';
 import { enemiesRepository } from '$/repository/enemiesRepository';
@@ -62,4 +60,3 @@ export const gameUseCase = {
     await enemiesRepository.update(enemy.id, new Date());
   },
 };
->>>>>>> 03663785872daa6745ed7d079ca26d8a5e223177
