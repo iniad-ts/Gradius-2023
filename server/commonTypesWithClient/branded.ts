@@ -7,3 +7,5 @@ export type UserId = Branded<'UserId'>;
 export type TaskId = Branded<'TaskId'>;
 
 export type EnemyId = Branded<'EnemyId'>;
+
+export type BulletId = Branded<'BulletId'>;

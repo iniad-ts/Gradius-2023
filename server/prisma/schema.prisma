@@ -32,3 +32,10 @@ model Player {
   score  Int    @default(0)
   name   String @default("Player")
 }
+
+model Bullet {
+  bulletId String
+  userId   String @id
+  pos      Json
+  attack   Int
+}
