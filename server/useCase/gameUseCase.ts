@@ -3,6 +3,7 @@ import type { EnemyModel, PlayerModel } from '$/commonTypesWithClient/models';
 import { enemiesRepository } from '$/repository/enemiesRepository';
 import { gamesRepository } from '$/repository/gamesRepository';
 import { playersRepository } from '$/repository/playersRepository';
+import { gameOver } from '$/service/gameOver';
 import { gameIdParser } from '$/service/idParsers';
 import { randomUUID } from 'crypto';
 import { bulletUseCase } from './bulletUseCase';
@@ -23,6 +24,7 @@ export const gameUseCase = {
     },
     setup: async (displayNumber: number) => {
       const game = await gamesRepository.find();
+      await enemyUseCase.createAll(displayNumber);
       if (game === null) {
         return;
       }
@@ -37,24 +39,24 @@ export const gameUseCase = {
     enemyUseCase.respawn();
     enemyUseCase.shot2();
     enemyUseCase.shot3();
+    // enemyUseCase.shot4();
     if (id === null) return null;
     const player = await playersRepository.find(id);
     if (player === null) return null;
     return player;
   },
-  collision: async (player: PlayerModel, enemy: EnemyModel) => {
+  collision: async (player: PlayerModel, enemy: EnemyModel, displayNumber: number) => {
+    const newPlayer = {
+      ...player,
+      health: player.health - 1,
+      position: { ...player.position, x: player.position.x + 1920 * displayNumber },
+    };
+
     const enemyStatus = await enemiesRepository.find(enemy.id);
     if (enemyStatus?.deletedAt !== null) {
       return;
     }
-    let newPlayer;
-    if (player.health <= 0) {
-      const newScore = player.score - 5 >= 0 ? player.score - 5 : 0; // 仮でスコアが0以下にならないように
-      newPlayer = { ...player, health: 0, score: newScore };
-    } else {
-      newPlayer = { ...player, health: player.health - 1 };
-    }
-    await playersRepository.save(newPlayer);
+    await gameOver(player, newPlayer);
     await enemiesRepository.update(enemy.id, new Date());
   },
 };

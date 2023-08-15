@@ -64,7 +64,6 @@ const Controller = () => {
     await apiClient.enemy.$post();
   };
 
-  //プレイヤーの情報をsetIntervalで取得
   useEffect(() => {
     const intervalId = setInterval(async () => {
       const res = await apiClient.game.$put();
