@@ -70,7 +70,6 @@ export const playerUsecase = {
     await playerRepository.save(updatePlayerInfo);
   },
 
-  //残りのやることplayerを動かせるように
   getPlayerPos: async () => {
     return await playerRepository.getPlayers();
   },
