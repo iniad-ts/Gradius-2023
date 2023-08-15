@@ -127,6 +127,9 @@ const Controller = () => {
         onContextMenu={(e) => {
           e.preventDefault();
         }}
+        onMouseDown={shootStart}
+        onMouseUp={shootEnd}
+        onMouseLeave={shootEnd}
         className={styles['shoot-button']}
       >
         <div>🚀</div>
