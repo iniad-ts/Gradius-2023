@@ -76,7 +76,9 @@ const Game = () => {
           .map((player) => {
             const hitBullets = collisionBullets(player.position, enemyBullets, currentTime);
             return hitBullets.map((bullet) =>
-              apiClient.player.delete({ body: { player, bulletId: bullet.id } })
+              apiClient.player.delete({
+                body: { player, bulletId: bullet.id, display },
+              })
             );
           })
           .flat()

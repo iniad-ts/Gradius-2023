@@ -18,6 +18,7 @@ export type Methods = {
     reqBody: {
       player: PlayerModel;
       bulletId: string;
+      display: number;
     };
   };
 };

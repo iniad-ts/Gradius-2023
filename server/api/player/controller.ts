@@ -12,6 +12,6 @@ export default defineController(() => ({
   }),
   delete: async ({ body }) => ({
     status: 200,
-    body: await playerUseCase.hit(body.player, body.bulletId),
+    body: await playerUseCase.hit(body.player, body.bulletId, body.display),
   }),
 }));
