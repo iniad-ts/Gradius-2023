@@ -26,7 +26,7 @@ const Controller = () => {
   };
 
   const shootStart = () => {
-    const intervalId = setInterval(shootBullet, 200);
+    const intervalId = setInterval(shootBullet, 600);
     setShootIntervalIds([...shootIntervalIds, intervalId]);
   };
 
@@ -64,7 +64,6 @@ const Controller = () => {
     await apiClient.enemy.$post();
   };
 
-  //プレイヤーの情報をsetIntervalで取得
   useEffect(() => {
     const intervalId = setInterval(async () => {
       const res = await apiClient.game.$put();
@@ -101,17 +100,15 @@ const Controller = () => {
           start={moveStart}
         />
       </div>
-      <div className={styles.information}>
-        <p>
-          HP
-          <br />
-          {`${'💛'.repeat(playerDetails?.health ?? 0)}`}
-        </p>
-        <p>
-          SCORE
-          <br />
+      <div className={styles.center}>
+        <div className={styles.info}>
+          <p>HP</p>
+          {'💛'.repeat(playerDetails?.health ?? 0)}
+        </div>
+        <div className={styles.info}>
+          <p>SCORE</p>
           {playerDetails?.score ?? 0}
-        </p>
+        </div>
       </div>
       <button
         onTouchStart={shootStart}
@@ -122,9 +119,9 @@ const Controller = () => {
         }}
         className={styles['shoot-button']}
       >
-        🚀
+        <div>🚀</div>
       </button>
-      <button onClick={createEnemy}>敵</button>
+      {/* <button onClick={createEnemy}>敵</button> */}
     </div>
   );
 };

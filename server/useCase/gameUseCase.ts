@@ -4,6 +4,7 @@ import { bulletsRepository } from '$/repository/bulletsRepository';
 import { enemiesRepository } from '$/repository/enemiesRepository';
 import { gamesRepository } from '$/repository/gamesRepository';
 import { playersRepository } from '$/repository/playersRepository';
+import { gameOver } from '$/service/gameOver';
 import { gameIdParser } from '$/service/idParsers';
 import { randomUUID } from 'crypto';
 import { bulletUseCase } from './bulletUseCase';
@@ -37,12 +38,18 @@ export const gameUseCase = {
   update: async (id: UserId) => {
     bulletUseCase.delete();
     enemyUseCase.respawn();
+<<<<<<< HEAD
     const res = await bulletsRepository.findLatest();
     if (res.createdAt + 1000 < new Date().getTime()) {
       // enemyUseCase.shot2();
       enemyUseCase.shot3();
       enemyUseCase.shot4();
     }
+=======
+    enemyUseCase.shot2();
+    enemyUseCase.shot3();
+    // enemyUseCase.shot4();
+>>>>>>> 03663785872daa6745ed7d079ca26d8a5e223177
     if (id === null) return null;
     const player = await playersRepository.find(id);
     if (player === null) return null;
@@ -59,12 +66,7 @@ export const gameUseCase = {
     if (enemyStatus?.deletedAt !== null) {
       return;
     }
-    if (player.health <= 0) {
-      const newScore = player.score - 5 >= 0 ? player.score - 5 : 0; // 仮でスコアが0以下にならないように
-      playersRepository.save({ ...newPlayer, health: 0, score: newScore });
-    } else {
-      playersRepository.save({ ...newPlayer, health: player.health - 1 });
-    }
+    await gameOver(player, newPlayer);
     await enemiesRepository.update(enemy.id, new Date());
   },
 };
