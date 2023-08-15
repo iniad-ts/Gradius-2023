@@ -2,7 +2,7 @@ import type { BulletModel } from '$/commonTypesWithClient/models';
 
 const BULLET_SPEED = 300;
 
-export const posWithDirSpeTim = (bullet: BulletModel) => {
+export const posWithBulletModel = (bullet: BulletModel) => {
   const elapsedTime = (new Date().getTime() - bullet.createdAt) / 1000;
   const dx = BULLET_SPEED * elapsedTime * bullet.direction.x;
   const dy = BULLET_SPEED * elapsedTime * bullet.direction.y;

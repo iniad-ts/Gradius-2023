@@ -1,7 +1,7 @@
 import React from 'react';
 import { Image } from 'react-konva';
 import { staticPath } from 'src/utils/$path';
-import { posWithDirSpeTim } from 'src/utils/posWithDirSpeTim';
+import { posWithBulletModel } from 'src/utils/posWithBulletModel';
 import useImage from 'use-image';
 
 type BulletProps = {
@@ -25,7 +25,7 @@ export const Bullet: React.FC<BulletProps> = ({ bullet, type, currentTime }) => 
   const [bulletBlue] = useImage(staticPath.images.bullet_blue_png);
   const [bulletBlack] = useImage(staticPath.images.bullet_black_png);
 
-  const [x, y] = posWithDirSpeTim(bullet, currentTime);
+  const [x, y] = posWithBulletModel(bullet, currentTime);
 
   const image = [bulletBlue, bulletRed, bulletBlue][type];
 

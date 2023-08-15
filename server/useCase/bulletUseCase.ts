@@ -3,7 +3,7 @@ import { bulletsRepository } from '$/repository/bulletsRepository';
 import { gamesRepository } from '$/repository/gamesRepository';
 import { bulletIdParser } from '$/service/idParsers';
 import { isInDisplay } from '$/service/isInDisplay';
-import { posWithDirSpeTim as posWithBulletModel } from '$/service/posWithDirSpeTim';
+import { posWithBulletModel } from '$/service/posWithBulletModel';
 import { randomUUID } from 'crypto';
 
 export const bulletUseCase = {

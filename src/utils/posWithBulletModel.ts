@@ -1,6 +1,6 @@
 const BULLET_SPEED = 300;
 
-export const posWithDirSpeTim = (
+export const posWithBulletModel = (
   bullet: {
     createdAt: number;
     direction: {
