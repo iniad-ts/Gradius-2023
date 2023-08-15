@@ -1,22 +1,30 @@
-.title {
-  font-size: 80px;
-  text-align: center;
-  font-weight: bold;
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
 }
 
-.tasks {
-  width: 300px;
-  padding: 0;
-  margin: 20px auto 0;
-  list-style-type: none;
-  text-align: left;
+.buttonContainer {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1rem;
 }
 
-.tasks > li {
-  margin-top: 10px;
-  border-bottom: 1px solid #eee;
+.button {
+  background-color: #fff;
+  border: 1px solid #000;
+  border-radius: 4px;
+  color: #000;
+  cursor: pointer;
+  font-size: 1.25rem;
+  padding: 0.5rem 1rem;
+  text-decoration: none;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+  margin-top: 1rem;
 }
 
-.deleteBtn {
-  float: right;
+.button:hover {
+  box-shadow: 0px 0px 0px 3px rgba(0, 85, 255, 1); /* ホバー時の影の設定 */
 }
