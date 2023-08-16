@@ -21,11 +21,20 @@ const Home = () => {
   const inputPanel = (e: ChangeEvent<HTMLSelectElement>) => {
     setPanel(e.target.value);
   };
+
+  //部屋を読み込む
+  const fetchRooms = async () => {
+    const rooms = await apiClient.rooms.$get().catch(returnNull);
+
+    if (rooms !== null) setRooms(rooms);
+  };
+
   const fetchTasks = async () => {
     const tasks = await apiClient.tasks.$get().catch(returnNull);
 
     if (tasks !== null) setTasks(tasks);
   };
+  //部屋を作る
   const createRoom = async (e: FormEvent) => {
     e.preventDefault();
     if (!label) return;
@@ -37,7 +46,7 @@ const Home = () => {
 
     await apiClient.create.post({ body: roomData });
     setLabel('');
-    await fetchTasks();
+    await fetchRooms();
   };
   const toggleDone = async (task: TaskModel) => {
     await apiClient.tasks._taskId(task.id).patch({ body: { done: !task.done } });
@@ -50,6 +59,7 @@ const Home = () => {
 
   useEffect(() => {
     fetchTasks();
+    fetchRooms();
   }, []);
 
   if (!tasks || !user) return <Loading visible />;
@@ -60,6 +70,18 @@ const Home = () => {
       <div className={styles.title} style={{ marginTop: '160px' }}>
         Welcome to frourio!
       </div>
+      {rooms ? (
+        <ul>
+          {rooms.map((room) => (
+            <li key={room.roomId}>
+              <div>{room.roomName}</div>
+              <div>{room.screen}画面</div>
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <div>No rooms found.</div>
+      )}
 
       <form style={{ textAlign: 'center', marginTop: '80px' }} onSubmit={createRoom}>
         <input value={label} type="text" onChange={inputLabel} />

@@ -1,5 +1,22 @@
 import type { RoomModel } from '$/commonTypesWithClient/models';
+import { UserIdParser, roomIdParser } from '$/service/idParsers';
 import { prismaClient } from '$/service/prismaClient';
+import type { Room } from '@prisma/client';
+
+const toRoomModel = (prismaRoom: Room): RoomModel => ({
+  roomId: roomIdParser.parse(prismaRoom.roomId),
+  roomName: prismaRoom.roomName,
+  status: prismaRoom.status,
+  id1p: UserIdParser.parse(prismaRoom.id1p),
+  id2p: UserIdParser.parse(prismaRoom.id2p),
+  position1p: prismaRoom.position1p,
+  position2p: prismaRoom.position2p,
+  bullet: prismaRoom.bullet,
+  enemy: prismaRoom.enemy,
+  background: prismaRoom.background,
+  screen: prismaRoom.screen,
+  created: prismaRoom.createdAt,
+});
 export const roomsRepository = {
   save: async (room: RoomModel) => {
     console.log('セーブしています');
@@ -32,5 +49,11 @@ export const roomsRepository = {
         createdAt: room.created,
       },
     });
+  },
+  findLatest: async (): Promise<RoomModel[] | null> => {
+    const rooms = await prismaClient.room.findMany({
+      orderBy: { createdAt: 'desc' },
+    });
+    return rooms.length > 0 ? rooms.map((room) => toRoomModel(room)) : null;
   },
 };
