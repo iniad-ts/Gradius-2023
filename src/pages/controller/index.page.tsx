@@ -122,7 +122,7 @@ const Controller = () => {
           2️⃣
         </button>
         <button
-          className={`${styles['center-button']} ${styles.item2}`}
+          className={`${styles['center-button']} ${styles.item3}`}
           onClick={async () => await apiClient.item.post({ body: { type: 3 } })}
         >
           3️⃣

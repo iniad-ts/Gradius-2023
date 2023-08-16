@@ -58,10 +58,17 @@ export const enemiesRepository = {
     });
     return res.map(toEnemyModel);
   },
+  findNull: async () => {
+    const res = await prismaClient.enemy.findMany({ where: { deletedAt: null } });
+    return res.map(toEnemyModel);
+  },
   findType: async (type: number) => {
     const res = await prismaClient.enemy.findMany({
       where: {
-        type,
+        AND: {
+          type,
+          deletedAt: null,
+        },
       },
     });
     return res.map(toEnemyModel);
