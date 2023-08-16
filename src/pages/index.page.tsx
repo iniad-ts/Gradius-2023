@@ -49,14 +49,6 @@ const Home = () => {
     setLabel('');
     await fetchRooms();
   };
-  const toggleDone = async (task: TaskModel) => {
-    await apiClient.tasks._taskId(task.id).patch({ body: { done: !task.done } });
-    await fetchTasks();
-  };
-  const deleteTask = async (task: TaskModel) => {
-    await apiClient.tasks._taskId(task.id).delete();
-    await fetchTasks();
-  };
 
   useEffect(() => {
     fetchTasks();
