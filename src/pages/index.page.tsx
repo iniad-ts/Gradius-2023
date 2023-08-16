@@ -1,5 +1,6 @@
 import type { RoomModel, TaskModel } from '$/commonTypesWithClient/models';
 import { useAtom } from 'jotai';
+import Link from 'next/link';
 import type { ChangeEvent, FormEvent } from 'react';
 import { useEffect, useState } from 'react';
 import { Loading } from 'src/components/Loading/Loading';
@@ -67,53 +68,43 @@ const Home = () => {
   return (
     <>
       <BasicHeader user={user} />
-      <div className={styles.title} style={{ marginTop: '160px' }}>
-        Welcome to frourio!
-      </div>
+      <form style={{ textAlign: 'center', marginTop: '40px' }} onSubmit={createRoom}>
+        <input
+          className={styles.textbox001}
+          value={label}
+          type="text"
+          onChange={inputLabel}
+          placeholder="ルーム名を入力してください"
+        />
+        {/* 1~8の数字を選択できる */}
+        <label className={styles.selectbox006}>
+          <select name="number" onChange={inputPanel}>
+            <option value="1">1画面</option>
+            <option value="2">2画面</option>
+            <option value="3">3画面</option>
+            <option value="4">4画面</option>
+            <option value="5">5画面</option>
+            <option value="6">6画面</option>
+            <option value="7">7画面</option>
+            <option value="8">8画面</option>
+          </select>
+        </label>
+        <input type="submit" value="ADD" />
+      </form>
       {rooms ? (
-        <ul>
+        <div>
           {rooms.map((room) => (
-            <li key={room.roomId}>
-              <div>{room.roomName}</div>
-              <div>{room.screen}画面</div>
-            </li>
+            <Link href={`/${room.roomId}`} key={room.roomId}>
+              <div className={styles.roomlist}>
+                <div className={styles.roomname}>{room.roomName}</div>
+                <div className={styles.screencount}>{room.screen}画面</div>
+              </div>
+            </Link>
           ))}
-        </ul>
+        </div>
       ) : (
         <div>No rooms found.</div>
       )}
-
-      <form style={{ textAlign: 'center', marginTop: '80px' }} onSubmit={createRoom}>
-        <input value={label} type="text" onChange={inputLabel} />
-        {/* 1~8の数字を選択できる */}
-        <select name="number" onChange={inputPanel}>
-          <option value="1">1画面</option>
-          <option value="2">2画面</option>
-          <option value="3">3画面</option>
-          <option value="4">4画面</option>
-          <option value="5">5画面</option>
-          <option value="6">6画面</option>
-          <option value="7">7画面</option>
-          <option value="8">8画面</option>
-        </select>
-        <input type="submit" value="ADD" />
-      </form>
-      <ul className={styles.tasks}>
-        {tasks.map((task) => (
-          <li key={task.id}>
-            <label>
-              <input type="checkbox" checked={task.done} onChange={() => toggleDone(task)} />
-              <span>{task.label}</span>
-            </label>
-            <input
-              type="button"
-              value="DELETE"
-              className={styles.deleteBtn}
-              onClick={() => deleteTask(task)}
-            />
-          </li>
-        ))}
-      </ul>
     </>
   );
 };
