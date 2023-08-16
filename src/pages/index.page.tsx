@@ -25,6 +25,7 @@ const Home = () => {
     { x: 5, y: 2 },
     { x: 8, y: 4 },
   ]);
+  const enemyAnimation = useRef<Konva.Animation | null>(null);
 
   const [dx, setDx] = useState(-1); // x方向の移動量
   const dx2 = 1;
@@ -131,7 +132,7 @@ const Home = () => {
       }
     };
   }, [isMovingLeft, isMovingRight, isMovingUp, isMovingDown]);
-  //スペースで弾出すよ(打て打つほど早くなっちゃう)
+
   const tamaAnimation = useRef<Konva.Animation | null>(null);
 
   useEffect(() => {
@@ -169,57 +170,41 @@ const Home = () => {
     };
   }, [playerX, playerY]);
 
-  const findnumber = (n: number) => {
-    let count = 0;
-    for (let y = 0; y < board.length; y++) {
-      for (let x = 0; x < board[y].length; x++) {
-        // eslint-disable-next-line max-depth
-        if (board[y][x] === n) {
-          count++;
-        }
-      }
-    }
-    return count;
-  };
+  // const findnumber = (n: number) => {
+  //   let count = 0;
+  //   for (let y = 0; y < board.length; y++) {
+  //     for (let x = 0; x < board[y].length; x++) {
+  //       // eslint-disable-next-line max-depth
+  //       if (board[y][x] === n) {
+  //         count++;
+  //       }
+  //     }
+  //   }
+  //   return count;
+  // };
   useEffect(() => {
-    const moveenemy = () => {
-      if (enemies.length === 0) {
-        const addEnemy = () => {
-          const newEnemies = [
-            { x: 5, y: 2 },
-            { x: 8, y: 4 },
-          ];
-          setEnemies((prevEnemies) => [...prevEnemies, ...newEnemies]);
-        };
-        addEnemy();
-      }
-      if (enemies.length !== 0) {
-        const enemyAnimation = new Konva.Animation((enemy) => {
-          setEnemies((prevenemy) => {
-            if (enemy === undefined) {
-              console.log('error');
-              return prevenemy;
-            } else {
-              const speed = 0.1;
-              const dist = speed * (enemy.timeDiff / 1000);
-              const newenemy = prevenemy.map((enemies) => ({
-                x: enemies.x + dx * dist,
-                y: enemies.y,
-              }));
-              console.log();
-              return newenemy.filter((enemy) => enemy.x >= 0);
+    if (enemyAnimation.current === null) {
+      enemyAnimation.current = new Konva.Animation((anim) => {
+        if (anim !== undefined) {
+          setEnemies((prevEnemies) => {
+            const speed = 5;
+            const dist = speed * (anim.timeDiff / 1000);
+            const newEnemies = prevEnemies.map((enemy) => ({
+              ...enemy,
+              x: enemy.x - dist,
+            }));
+            // 新しい敵を生成
+            if (Math.random() < 0.02) {
+              newEnemies.push({ x: 10, y: Math.random() * 7 });
             }
-          });
-        });
-        enemyAnimation.start();
-      }
-    };
-    moveenemy();
 
-    return () => {
-      moveenemy();
-    };
-  }, [dx, dy, enemies.length]);
+            return newEnemies.filter((enemy) => enemy.x >= -30);
+          });
+        }
+      });
+      enemyAnimation.current.start();
+    }
+  }, [enemies]);
 
   const detectCollisions = () => {
     setbullets((prevBullets) => {
@@ -268,11 +253,12 @@ const Home = () => {
       return newBullets.filter(Boolean);
     });
     const playerHitbox = {
-      x: playerY * 100, // Adjust hitbox based on your player's size and position
-      y: playerX * 100, // Adjust hitbox based on your player's size and position
-      radius: 10, // Adjust based on your player's size
+      x: playerY * 100, // プレイヤーの位置に合わせて調整
+      y: playerX * 100, // プレイヤーの位置に合わせて調整
+      radius: 10, // プレイヤーのサイズに合わせて調整
     };
-    const playerCollided = enemies.some((enemy) => {
+
+    const remainingEnemies = enemies.filter((enemy) => {
       const enemyHitbox = {
         x: enemy.x * 100,
         y: enemy.y * 100,
@@ -283,12 +269,21 @@ const Home = () => {
         Math.pow(playerHitbox.x - enemyHitbox.x, 2) + Math.pow(playerHitbox.y - enemyHitbox.y, 2)
       );
 
-      return distance < playerHitbox.radius + enemyHitbox.radius;
+      const collisionDetected = distance < playerHitbox.radius + enemyHitbox.radius;
+
+      if (collisionDetected) {
+        // プレイヤーと敵が衝突した場合、その敵を削除する
+        return false;
+      }
+
+      return true;
     });
 
-    if (playerCollided) {
+    if (remainingEnemies.length < enemies.length) {
       setPlayerLife((prevLife) => prevLife - 1);
+      setEnemies(remainingEnemies);
     }
+
   };
 
   // 上記の当たり判定関数を適切なタイミングで呼び出す
