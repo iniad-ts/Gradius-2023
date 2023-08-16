@@ -283,7 +283,6 @@ const Home = () => {
       setPlayerLife((prevLife) => prevLife - 1);
       setEnemies(remainingEnemies);
     }
-
   };
 
   // 上記の当たり判定関数を適切なタイミングで呼び出す
