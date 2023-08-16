@@ -1,13 +1,23 @@
+/* eslint-disable complexity */
+/* eslint-disable max-lines */
+/* eslint-disable max-depth */
+/* eslint-disable max-nested-callbacks */
+/* eslint-disable react-hooks/exhaustive-deps */
+
 import { useAtom } from 'jotai';
 import Konva from 'konva';
 import { useEffect, useRef, useState } from 'react';
-import { Circle, Layer, Stage } from 'react-konva';
+import { Circle, Image, Layer, Stage } from 'react-konva';
 import { Loading } from 'src/components/Loading/Loading';
+import { staticPath } from 'src/utils/$path';
+import useImage from 'use-image';
 import { userAtom } from '../../atoms/user';
-import { spawnRandomTypeOfEnemy } from '../enemyspawn';
 import { checkCollision } from './checkCollision';
 
 const Home = () => {
+  const [enemyImage1] = useImage(staticPath.images.rensyu1_png);
+  const [enemyImage2] = useImage(staticPath.images.rensyu2_png);
+  const [enemyImage3] = useImage(staticPath.images.rensyu3_png);
   const [user] = useAtom(userAtom);
   const [gradiusPosition, setGradiusPosition] = useState([100, 300]);
   const [gradiusBullet, setGradiusBullet] = useState<{ x: number; y: number; speedX: number }[]>(
@@ -22,8 +32,13 @@ const Home = () => {
   const [bullet, setBullet] = useState(false);
   const [shottimer, setShottimer] = useState(0);
   const animationRef = useRef<Konva.Animation | null>(null);
-  const [enemy, setEnemy] = useState<{ x: number; y: number; speedX: number }[]>([
-    { x: 1000, y: 300, speedX: -120 },
+  const [enemy, setEnemy] = useState<{ x: number; y: number; speedX: number; status: number }[]>([
+    {
+      x: 1000,
+      y: 300,
+      speedX: -120,
+      status: 1,
+    },
   ]);
 
   //キーを押したときに実行される関数
@@ -99,12 +114,16 @@ const Home = () => {
       });
     });
   };
-
   useEffect(() => {
-    spawnRandomTypeOfEnemy([]);
-  });
-
-  //高速で実行される(Animation)
+    const intervalId = setInterval(() => {
+      // setEnemy(() => spawnRandomTypeOfEnemy(enemy));
+      console.table(enemy);
+    }, 200);
+    return () => {
+      clearInterval(intervalId);
+    };
+  }, [enemy]);
+  // 高速で実行される(Animation)
   useEffect(() => {
     const anim = new Konva.Animation((frame) => {
       if (!frame) return;
@@ -116,7 +135,6 @@ const Home = () => {
     });
     anim.start();
     animationRef.current = anim;
-
     return () => {
       anim.stop();
     };
@@ -184,9 +202,12 @@ const Home = () => {
           {/* 自機 */}
           <Circle fill="black" x={gradiusPosition[0]} y={gradiusPosition[1]} radius={50} />
           {/* 敵 */}
-          {enemy.map((state, index) => (
-            <Circle key={index} x={state.x} y={state.y} radius={30} fill="red" />
-          ))}
+          {enemy.map((state, index) => {
+            const image = [enemyImage1, enemyImage2, enemyImage3][state.status];
+            return (
+              <Image image={image} key={index} x={state.x} y={state.y} width={100} height={100} />
+            );
+          })}
           {gradiusBullet.map((bullet, index) => (
             <Circle key={index} x={bullet.x} y={bullet.y} radius={5} fill={'yellow'} />
           ))}
