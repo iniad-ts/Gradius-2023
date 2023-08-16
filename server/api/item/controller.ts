@@ -1,13 +1,12 @@
 import type { PlayerModel } from '$/commonTypesWithClient/models';
 import { playersRepository } from '$/repository/playersRepository';
 import { userIdParser } from '$/service/idParsers';
-import { gameUseCase } from '$/useCase/gameUseCase';
+import { playerUseCase } from '$/useCase/playerUseCase';
 import { defineController, defineHooks } from './$relay';
 
 export type AdditionalRequest = {
   player: PlayerModel;
 };
-
 export const hooks = defineHooks(() => ({
   preHandler: async (req, res) => {
     const player = await playersRepository.find(userIdParser.parse(req.cookies['session-player']));
@@ -23,9 +22,8 @@ export const hooks = defineHooks(() => ({
 }));
 
 export default defineController(() => ({
-  put: async ({ player }) => ({ status: 200, body: await gameUseCase.update(player.id) }),
-  post: ({ player, body }) => ({
+  post: async ({ player, body }) => ({
     status: 201,
-    body: gameUseCase.collision(player, body.enemy, body.display),
+    body: await playerUseCase.useItem(player, body.type),
   }),
 }));
