@@ -27,7 +27,7 @@ model Room {
   enemy      String
   background Int[]
   screen     Int[]
-  createdAt  DateTime
+  createdAt  String
 }
 
 model UserOnRoom {
