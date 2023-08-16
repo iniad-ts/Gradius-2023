@@ -1,4 +1,4 @@
-import type { TaskModel } from '$/commonTypesWithClient/models';
+import type { RoomModel, TaskModel } from '$/commonTypesWithClient/models';
 import { useAtom } from 'jotai';
 import type { ChangeEvent, FormEvent } from 'react';
 import { useEffect, useState } from 'react';
@@ -13,19 +13,29 @@ const Home = () => {
   const [user] = useAtom(userAtom);
   const [tasks, setTasks] = useState<TaskModel[]>();
   const [label, setLabel] = useState('');
+  const [panel, setPanel] = useState('1');
+  const [rooms, setRooms] = useState<RoomModel[] | undefined>(undefined);
   const inputLabel = (e: ChangeEvent<HTMLInputElement>) => {
     setLabel(e.target.value);
+  };
+  const inputPanel = (e: ChangeEvent<HTMLSelectElement>) => {
+    setPanel(e.target.value);
   };
   const fetchTasks = async () => {
     const tasks = await apiClient.tasks.$get().catch(returnNull);
 
     if (tasks !== null) setTasks(tasks);
   };
-  const createTask = async (e: FormEvent) => {
+  const createRoom = async (e: FormEvent) => {
     e.preventDefault();
     if (!label) return;
 
-    await apiClient.tasks.post({ body: { label } });
+    const roomData: Partial<RoomModel> = {
+      roomName: label,
+      screen: Number(panel),
+    };
+
+    await apiClient.create.post({ body: roomData });
     setLabel('');
     await fetchTasks();
   };
@@ -51,8 +61,19 @@ const Home = () => {
         Welcome to frourio!
       </div>
 
-      <form style={{ textAlign: 'center', marginTop: '80px' }} onSubmit={createTask}>
+      <form style={{ textAlign: 'center', marginTop: '80px' }} onSubmit={createRoom}>
         <input value={label} type="text" onChange={inputLabel} />
+        {/* 1~8の数字を選択できる */}
+        <select name="number" onChange={inputPanel}>
+          <option value="1">1画面</option>
+          <option value="2">2画面</option>
+          <option value="3">3画面</option>
+          <option value="4">4画面</option>
+          <option value="5">5画面</option>
+          <option value="6">6画面</option>
+          <option value="7">7画面</option>
+          <option value="8">8画面</option>
+        </select>
         <input type="submit" value="ADD" />
       </form>
       <ul className={styles.tasks}>
