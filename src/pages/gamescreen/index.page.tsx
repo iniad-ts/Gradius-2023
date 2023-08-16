@@ -119,11 +119,11 @@ const Home = () => {
     const intervalId = setInterval(() => {
       setEnemy(() => spawnRandomTypeOfEnemy(enemy));
       console.table(enemy);
-    }, 200);
+    }, 2000);
     return () => {
       clearInterval(intervalId);
     };
-  }, [enemy]);
+  }, []);
   // 高速で実行される(Animation)
   useEffect(() => {
     const anim = new Konva.Animation((frame) => {
