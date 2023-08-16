@@ -1,5 +1,5 @@
 import type { BulletModel } from '$/commonTypesWithClient/models';
-import { posWithDirSpeTim } from './posWithDirSpeTim';
+import { posWithBulletModel } from './posWithBulletModel';
 const COLLISION_DISTANCE = 50;
 
 export const collisionBullets = (
@@ -8,7 +8,7 @@ export const collisionBullets = (
   currentTime: number
 ) => {
   return bullets.filter((bullet) => {
-    const bulletPosition = posWithDirSpeTim(bullet, currentTime);
+    const bulletPosition = posWithBulletModel(bullet, currentTime);
     const distanceSquared =
       Math.pow(pos.x - bulletPosition[0], 2) + Math.pow(pos.y - bulletPosition[1], 2);
     return distanceSquared < COLLISION_DISTANCE ** 2;

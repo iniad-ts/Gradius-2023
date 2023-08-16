@@ -66,3 +66,8 @@ export type BulletModel = {
   playerId?: UserId;
   createdAt: number;
 };
+
+export type LockOnModel = {
+  pos: { x: number; y: number };
+  squaredDistance: number;
+};
