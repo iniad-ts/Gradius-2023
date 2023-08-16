@@ -12,6 +12,7 @@ import { Loading } from 'src/components/Loading/Loading';
 import { staticPath } from 'src/utils/$path';
 import useImage from 'use-image';
 import { userAtom } from '../../atoms/user';
+import { spawnRandomTypeOfEnemy } from '../enemyspawn';
 import { checkCollision } from './checkCollision';
 
 const Home = () => {
@@ -116,7 +117,7 @@ const Home = () => {
   };
   useEffect(() => {
     const intervalId = setInterval(() => {
-      // setEnemy(() => spawnRandomTypeOfEnemy(enemy));
+      setEnemy(() => spawnRandomTypeOfEnemy(enemy));
       console.table(enemy);
     }, 200);
     return () => {
