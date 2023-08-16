@@ -20,12 +20,13 @@ const Home = () => {
   const [imageTama, setImageTama] = useState(new window.Image());
   const [score, setScore] = useState(0);
   const [playerLife, setPlayerLife] = useState(3);
-
+  const [isGameOver, setIsGameOver] = useState(false);
   const [enemies, setEnemies] = useState<{ x: number; y: number }[]>([
     { x: 5, y: 2 },
     { x: 8, y: 4 },
   ]);
   const enemyAnimation = useRef<Konva.Animation | null>(null);
+  const [resetGame, setResetGame] = useState(false); // 追加
 
   const [dx, setDx] = useState(-1); // x方向の移動量
   const dx2 = 1;
@@ -170,6 +171,26 @@ const Home = () => {
     };
   }, [playerX, playerY]);
 
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.code === 'Enter' && isGameOver) {
+        // ゲームオーバー状態で Enter キーが押された場合
+        setPlayerX(4); // プレイヤーの初期 X 座標にリセット
+        setPlayerY(0); // プレイヤーの初期 Y 座標にリセット
+        setbullets([]); // 弾をリセット
+        setScore(0); // スコアをリセット
+        setPlayerLife(3); // ライフをリセット
+        setIsGameOver(false); // ゲームオーバーフラグをリセット
+      }
+    };
+
+    document.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [isGameOver]);
+
   // const findnumber = (n: number) => {
   //   let count = 0;
   //   for (let y = 0; y < board.length; y++) {
@@ -282,7 +303,20 @@ const Home = () => {
     if (remainingEnemies.length < enemies.length) {
       setPlayerLife((prevLife) => prevLife - 1);
       setEnemies(remainingEnemies);
+      if (playerLife - 1 <= 0) {
+        setIsGameOver(true);
+      }
     }
+  };
+  
+
+  const GameOverScreen = () => {
+    return (
+      <div className="game-over-container">
+        <p className={styles['score-text']}>Your Score: {Math.max(0, score)}</p> {/* スコア表示を修正 */}
+        <img src="images/gameover2.jpg" alt="Game Over" className={styles['game-over-image']} />
+      </div>
+    );
   };
 
   // 上記の当たり判定関数を適切なタイミングで呼び出す
@@ -293,7 +327,6 @@ const Home = () => {
   if (!hoge) return <Loading visible />;
   return (
     <>
-      {/* <img src={g.src} alt="images.png" /> */}
       <div className={styles.lifeContainer}>
         <p className={styles.life}>Life: {playerLife}</p>
       </div>
@@ -319,6 +352,11 @@ const Home = () => {
           ))}
         </Layer>
       </Stage>
+      {isGameOver && (
+        <div className={styles.gameOverOverlay}>
+          <GameOverScreen />
+        </div>
+      )}
     </>
   );
 };

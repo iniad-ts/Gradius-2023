@@ -38,22 +38,65 @@
 }
 
 .score {
-  margin: 0;
-  color: white;
-  font-size: 16px;
+  font-size: 30px;
+  font-weight: bold;
+  margin-bottom: 10px;
+  color: yellow; /* テキストの色を黄色に設定 */
+  text-shadow: 2px 2px 4px #ff1212; /* テキストに影を追加 */
+  letter-spacing: 2px; /* 文字間のスペースを調整 */
 }
 
 .lifeContainer {
   position: absolute;
   top: 20px;
-  left: 120px;
+  left: 200px;
   background-color: rgba(0, 0, 0, 0.7);
   padding: 10px;
   border-radius: 5px;
+  
 }
 
 .life {
-  margin: 0;
-  color: white;
-  font-size: 16px;
+  font-size: 30px;
+  font-weight: bold;
+  left: 100px;
+  margin-bottom: 10px;
+  color: yellow; /* テキストの色を黄色に設定 */
+  text-shadow: 2px 2px 4px #ff1212; /* テキストに影を追加 */
+  letter-spacing: 2px; /* 文字間のスペースを調整 */
+}
+
+.game-over-container {
+  text-align: center; /* 要素を中央に配置 */
+  top: 10px; /* 上側の余白 */
+}
+
+.game-over-image {
+  width: 500px; /* 画像の幅 */
+}
+.gameOverOverlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.game-over-container {
+  text-align: center;
+  margin-top: 100px;
+}
+
+/* スコア表示のテキストスタイル */
+.score-text {
+  font-size: 60px;
+  font-weight: bold;
+  margin-bottom: 10px;
+  color: yellow; /* テキストの色を黄色に設定 */
+  text-shadow: 2px 2px 4px #ff1212; /* テキストに影を追加 */
+  letter-spacing: 2px; /* 文字間のスペースを調整 */
 }
