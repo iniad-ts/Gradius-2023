@@ -17,7 +17,7 @@ export type TaskModel = {
 export type GameModel = {
   user: UserId;
   type: string;
-  id: string;
+  id: null | string;
   xyz: number[];
   vector: number[];
   speed: number;
@@ -26,7 +26,7 @@ export type GameModel = {
   end: number | null;
 };
 
-export type UserEventModel = {
+export type EventModel = {
   owner: string;
   lv: number;
   items: string[];
