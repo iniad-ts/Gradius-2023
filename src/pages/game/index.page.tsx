@@ -42,8 +42,7 @@ const Game = () => {
   });
   return (
     <div>
-      <Stage width={window.innerWidth} height={window.innerHeight}>
-        <Layer>{backgroundImageRef.current}</Layer>
+      <Stage width={1000} height={700}>
         <Layer>
           {bullets.map((bullet) => (
             <Circle
