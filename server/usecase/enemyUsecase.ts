@@ -3,9 +3,13 @@ import { enemyRepository } from '$/repository/enemyRepository';
 import { EnemyIdParser } from '$/service/idParsers';
 import { randomUUID } from 'crypto';
 
-//敵の位置を取得する際にこれを使えば、全ての敵の情報が配列で返されます
+// 仮初期値
+const enemy_first_pos_x = 1800;
+const enemy_speed = 5;
+const enemy_radius = 20;
+const enemy_hp = 10;
+
 export const enemyUsecase = {
-  //ここにあったgetEnemiesは、enemyRepositoryから呼び出す
   create_enemy: async () => {
     const new_enemy: EnemyModel = {
       id: EnemyIdParser.parse(randomUUID()),
@@ -16,8 +20,10 @@ export const enemyUsecase = {
     };
     await enemyRepository.save(new_enemy);
   },
+
   move_Enemy: async () => {
     const enemies: EnemyModel[] = await enemyRepository.getEnemies();
+
     for (const enemy of enemies) {
       const moved_enemy: EnemyModel = {
         ...enemy,
@@ -44,19 +50,11 @@ export const enemyUsecase = {
   },
 };
 
-// 仮初期値
-const enemy_first_pos_x = 1800;
-const enemy_speed = 5;
-const enemy_radius = 20;
-const enemy_hp = 10;
-
 setInterval(() => {
-  // make_enemy();
   enemyUsecase.create_enemy();
 }, 9000);
 
 setInterval(() => {
-  // move_or_delete_enemy();
-  enemyUsecase.create_enemy();
-  enemyUsecase.create_enemy();
+  enemyUsecase.move_Enemy();
+  enemyUsecase.delete_off_screen_enemy();
 }, 100);
