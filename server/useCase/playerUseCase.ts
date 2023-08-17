@@ -1,11 +1,11 @@
 import type { UserId } from '$/commonTypesWithClient/branded';
 import type { PlayerModel } from '$/commonTypesWithClient/models';
-import { bulletsRepository } from '$/repository/bulletsRepository';
 import { playersRepository } from '$/repository/playersRepository';
 import { userIdParser } from '$/service/idParsers';
 import { isInDisplay } from '$/service/isInDisplay';
 import { minmax } from '$/service/minmax';
 import { randomUUID } from 'crypto';
+import { bulletsRepository } from '../repository/bulletsRepository';
 
 export type MoveTo = {
   toX: number;
@@ -42,7 +42,7 @@ export const playerUseCase = {
         y: 350,
       },
       createdAt: Date.now(),
-      health: 5,
+      health: 100,
       score: 0,
       team: 'red',
     };
@@ -54,8 +54,10 @@ export const playerUseCase = {
     const playerInDisplay = res.filter((player) => isInDisplay(displayNumber, player.position.x));
     return playerInDisplay;
   },
-  getStatus: async (id: UserId): Promise<PlayerModel | null> => {
-    if (id === null) return null;
+  getStatus: async (id: UserId, name: string | null): Promise<PlayerModel | null> => {
+    if (name !== null) {
+      await playerUseCase.create(name);
+    }
     const player: PlayerModel | null = await playersRepository.find(id);
     if (player === null) return null;
     return player;
