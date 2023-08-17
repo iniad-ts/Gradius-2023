@@ -1,4 +1,5 @@
 import type { BulletModel, EnemyModel, PlayerModel } from '$/commonTypesWithClient/models';
+import Konva from 'konva';
 import { useRouter } from 'next/router';
 import type { RefObject } from 'react';
 import { createRef, useEffect, useRef, useState } from 'react';
@@ -26,6 +27,8 @@ const Game = () => {
     const [currentTime, setCurrentTime] = useState<number>(Date.now());
 
     const [shipImage] = useImage(staticPath.images.spaceship_png);
+    const [enemyImage1] = useImage(staticPath.images.ufo_jpg);
+    const [enemyImage2] = useImage(staticPath.images.ufo_2_PNG);
     const [enemyImage3] = useImage(staticPath.images.ufo_3_PNG);
 
     const ufoRefs = useRef<RefObject<Konva.Image>[]>([]);
@@ -114,6 +117,8 @@ const Game = () => {
     useEffect(() => {
       const anim = new Konva.Animation((layer) => {
         ufoRefs.current.forEach((ufoRef) => {
+          if (ufoRef.current) {
+            ufoRef.current.offset({
               x:
                 Math.cos(
                   Math.floor(((layer?.time ?? 0) / 10 + ufoRef.current.x()) * Math.PI) / 100
