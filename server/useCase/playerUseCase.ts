@@ -38,45 +38,6 @@ export const playerUseCase = {
     await gameOver(player, newPlayer);
     await bulletsRepository.delete(bulletId);
   },
-  trackingBullets: async (player: PlayerModel) => {
-    const res = await enemiesRepository.findNotNull();
-    const lockOnEnemies = sortByDistance(player, res).filter(
-      (enemy) => enemy.pos.x > player.position.x
-    );
-    if (lockOnEnemies.length === 0) return;
-    Promise.all(
-      lockOnEnemies.map((enemy) => {
-        const diffX = enemy.pos.x - player.position.x;
-        const diffY = enemy.pos.y - player.position.y;
-        const normalization = 1 / Math.sqrt(enemy.squaredDistance);
-        const dir = {
-          x: diffX * normalization,
-          y: diffY * normalization,
-        };
-        bulletUseCase.create(player, dir);
-      })
-    ).then((results) =>
-      results.forEach((result) => {
-        result;
-      })
-    );
-  },
-  manyBullets: async (player: PlayerModel): Promise<void> => {
-    const subShotYs = (numOfBullet: number) =>
-      [...Array(numOfBullet)].map((_, i) => [-1, 1].map((n) => i * n));
-    Promise.all(
-      subShotYs(3)
-        .flat()
-        .map((y: number) => {
-          const normalization = Math.sqrt(1 + y ** 2);
-          const dir = {
-            x: 1,
-            y: y * normalization,
-          };
-          return bulletUseCase.create(player, dir);
-        })
-    );
-  },
   create: async (userName: string): Promise<PlayerModel | null> => {
     const newPlayer: PlayerModel = {
       id: userIdParser.parse(randomUUID()),

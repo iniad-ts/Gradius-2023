@@ -41,8 +41,8 @@ export const gameUseCase = {
     const res = await bulletsRepository.findLatest();
     if (res.createdAt + 1000 < new Date().getTime()) {
       // enemyUseCase.shot2();
-      enemyUseCase.shot2();
       enemyUseCase.shot3();
+      enemyUseCase.shot4();
     }
     if (id === null) return null;
     const player = await playersRepository.find(id);
