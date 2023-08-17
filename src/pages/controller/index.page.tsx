@@ -41,7 +41,7 @@ const Home = () => {
 
   const shoot = async () => {
     if (userId === null) return;
-    await apiClient.rooms.bulletPosition.$post({
+    await apiClient.rooms.gunPosition.$post({
       body: userId,
     });
   };

@@ -47,12 +47,8 @@ export const enemyRepository = {
     });
   },
   declare: async (id: EnemyId) => {
-    await prismaClient.enemy
-      .delete({
-        where: { id },
-      })
-      .catch((err) => {
-        console.error(err);
-      });
+    await prismaClient.enemy.delete({
+      where: { id },
+    });
   },
 };

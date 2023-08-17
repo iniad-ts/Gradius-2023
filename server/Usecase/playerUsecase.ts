@@ -8,26 +8,26 @@ import type { UserId } from './../commonTypesWithClient/branded';
 export type MoveDirection = { x: number; y: number };
 
 export const position: number[][] = [[300, 500]];
-export let bulletPosition: number[][] = [[]];
+export let gunPosition: number[][] = [[]];
 
 export const gunShot = async (userId: UserId) => {
   console.log('gunShot動作');
   const recentlyPlayerInfo = await playerRepository.read(userId);
-  bulletPosition.push([recentlyPlayerInfo.pos.x, recentlyPlayerInfo.pos.y]);
+  gunPosition.push([recentlyPlayerInfo.pos.x, recentlyPlayerInfo.pos.y]);
 };
 
 setInterval(() => {
-  moveBullet();
+  moveGun();
 }, 5);
 
-const moveBullet = () => {
-  const newBulletPosition: number[][] = [];
-  for (const s of bulletPosition) {
+const moveGun = () => {
+  const newGunPosition: number[][] = [];
+  for (const s of gunPosition) {
     //TODO この5000は仮の値、将来的にはモニターサイズから逆算して出す
-    s[0] + 1 <= 15000 && newBulletPosition.push([s[0] + 1, s[1]]);
+    s[0] + 1 <= 15000 && newGunPosition.push([s[0] + 1, s[1]]);
   }
-  bulletPosition = newBulletPosition;
-  return bulletPosition;
+  gunPosition = newGunPosition;
+  return gunPosition;
 };
 
 // 仮初期値
@@ -70,6 +70,9 @@ export const playerUsecase = {
     await playerRepository.save(updatePlayerInfo);
   },
 
+  getAllPlayer: async (): Promise<PlayerModel[]> => {
+    return await playerRepository.getPlayers();
+  },
   getPlayerPos: async () => {
     return await playerRepository.getPlayers();
   },
