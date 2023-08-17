@@ -91,7 +91,6 @@ export const App = () => {
     // Layer - is an actual 2d canvas element, so you can have several layers inside the stage
     // Rect and Circle are not DOM elements. They are 2d shapes on canvas
     <>
-     <div style={{ display: 'inline-block', border: 'solid' }}>
       <Stage width={1000} height={1000} stroke="black">
         <Layer>
           <Circle x={playerX} y={playerY} stroke="black" fill="blue" radius={50} />
@@ -117,7 +116,6 @@ export const App = () => {
           ))}
         </Layer>
       </Stage>
-     </div>
       <div className={styles.board}>
         <div className={styles.container}>
           <div className={styles.button} />

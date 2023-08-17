@@ -15,11 +15,10 @@ https://nodejs.org/ja/ の左ボタン、LTS をダウンロードしてイン�
 
 フロントとバックエンドそれぞれに package.json があるので 2 回インストールが必要
 
-````sh
+```sh
 $ npm i
 $ npm i --prefix server
-```ゆおん/fork
-###こんにちはkd
+```ゆおん/プルリク
 
 ### 環境変数ファイルの作成
 
@@ -28,7 +27,7 @@ $ cp .env.example .env
 $ cp server/.env.example server/.env
 $ cp docker/dev/.env.example docker/dev/.env
 $ cp server/prisma/.env.example server/prisma/.env
-````
+```
 
 ### ミドルウェアのセットアップ
 
