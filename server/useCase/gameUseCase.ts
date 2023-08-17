@@ -42,12 +42,8 @@ export const gameUseCase = {
     if (player === null) return null;
     return player;
   },
-  collision: async (player: PlayerModel, enemy: EnemyModel, displayNumber: number) => {
-    const newPlayer = {
-      ...player,
-      health: player.health - 1,
-      position: { ...player.position, x: player.position.x + 1920 * displayNumber },
-    };
+  collision: async (player: PlayerModel, enemy: EnemyModel) => {
+    const newPlayer = { ...player, health: player.health - 1 };
     await playersRepository.save(newPlayer);
     await enemiesRepository.update(enemy.id, new Date());
   },
