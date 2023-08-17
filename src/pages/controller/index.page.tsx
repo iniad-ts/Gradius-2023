@@ -5,7 +5,6 @@ import { Joystick, JoystickShape } from 'react-joystick-component';
 import type { IJoystickUpdateEvent } from 'react-joystick-component/build/lib/Joystick';
 import { userAtom } from 'src/atoms/user';
 import { Loading } from 'src/components/Loading/Loading';
-import { apiClient } from 'src/utils/apiClient';
 import styles from './controller.module.css';
 
 const Home = () => {
@@ -45,7 +44,7 @@ const Home = () => {
   //   }
   // };
   const move = async () => {
-    await apiClient.rooms.control.$post({ body: moveDirection.current });
+    // await apiClient.move.$post({ direction: moveDirection });
     console.log('move', moveDirection.current);
   };
   const moveStart = () => {
