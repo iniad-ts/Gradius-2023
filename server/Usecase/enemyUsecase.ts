@@ -8,7 +8,6 @@ import { randomUUID } from 'crypto';
 //repositoryからgetEnemiesを直接たたくとusecaseがなぜか更新されないため1時的な回避策としてusecaseをapiでたたいて認識させてます
 export const enemyUsecase = {
   getAll_Enemies: async (): Promise<EnemyModel[]> => {
-  getAll_Enemies: async (): Promise<EnemyModel[]> => {
     return await enemyRepository.getEnemies();
   },
   delete_enemy: async (id: EnemyId) => {
@@ -31,7 +30,7 @@ setInterval(() => {
 }, 10);
 
 // 仮初期値
-const enemy_first_pos_x = 1800;
+const enemy_first_pos_x = 3000;
 const enemy_speed = 5;
 const enemy_radius = 20;
 const enemy_hp = 10;
