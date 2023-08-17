@@ -108,8 +108,18 @@ const Game = () => {
     });
 
     return (
-      <div>
-        <Stage width={1920} height={1080}>
+      <div className={styles['canvas-container']}>
+        <Stage
+          width={1920}
+          height={1080}
+          style={{
+            /* stylelint-disable function-no-unknown */
+            transform: `
+            scale( ${width / 1920}, ${height / 1080} )
+            translate(${(width - 1920) / 2}px, ${(height - 1080) / 2}px)`,
+            /* stylelint-enable function-no-unknown */
+          }}
+        >
           <Layer>
             {playerBullets.map((bullet) => (
               <Bullet key={bullet.id} bullet={bullet} currentTime={currentTime} />
