@@ -11,11 +11,11 @@
   height: 36vmin;
   display: grid;
   grid-template-rows: 1fr 1fr 1fr;
-  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-columns: 1fr 1fr;
   grid-template-areas:
-    'hp    hp    hp    '
-    'score score score'
-    'item1 item2 item3';
+    'hp    hp'
+    'score score'
+    'enemy item';
   gap: 4vmin 2vmin;
 }
 
@@ -41,16 +41,12 @@
   grid-area: score;
 }
 
-.item1 {
-  grid-area: item1;
+.enemy {
+  grid-area: enemy;
 }
 
-.item2 {
-  grid-area: item2;
-}
-
-.item3 {
-  grid-area: item3;
+.item {
+  grid-area: item;
 }
 
 .info {

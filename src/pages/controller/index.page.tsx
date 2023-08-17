@@ -64,6 +64,10 @@ const Controller = () => {
     await apiClient.enemy.$post();
   };
 
+  const useItem = async () => {
+    // await apiClient.item.$post();
+  };
+
   useEffect(() => {
     const intervalId = setInterval(async () => {
       const res = await apiClient.game.$put();
@@ -109,23 +113,11 @@ const Controller = () => {
           <p>SCORE</p>
           {playerDetails?.score ?? 0}
         </div>
-        <button
-          className={`${styles['center-button']} ${styles.item1}`}
-          onClick={async () => await apiClient.item.post({ body: { type: 1 } })}
-        >
-          1️⃣
+        <button className={`${styles['center-button']} ${styles.enemy}`} onClick={createEnemy}>
+          👾
         </button>
-        <button
-          className={`${styles['center-button']} ${styles.item2}`}
-          onClick={async () => await apiClient.item.post({ body: { type: 2 } })}
-        >
-          2️⃣
-        </button>
-        <button
-          className={`${styles['center-button']} ${styles.item3}`}
-          onClick={async () => await apiClient.item.post({ body: { type: 3 } })}
-        >
-          3️⃣
+        <button className={`${styles['center-button']} ${styles.item}`} onClick={useItem}>
+          ✨
         </button>
       </div>
       <button
@@ -142,6 +134,7 @@ const Controller = () => {
       >
         <div>🚀</div>
       </button>
+      {/* <button onClick={createEnemy}>敵</button> */}
     </div>
   );
 };

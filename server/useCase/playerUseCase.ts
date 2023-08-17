@@ -77,26 +77,15 @@ export const playerUseCase = {
       }));
     return playerInDisplay;
   },
-  useItem: async (player: PlayerModel, type: number) => {
-    if (type === 1) {
-      await playerUseCase.item.trackingBullets(player);
-    } else if (type === 2) {
-      await playerUseCase.item.manyBullets(player);
-    } else {
-      await playerUseCase.item.barrier(player);
-    }
-  },
   item: {
     trackingBullets: async (player: PlayerModel) => {
-      const res = await enemiesRepository.findNull();
+      const res = await enemiesRepository.findNotNull();
       const lockOnEnemies = sortByDistance(player, res).filter(
         (enemy) => enemy.pos.x > player.position.x
       );
-
       if (lockOnEnemies.length === 0) return;
-
       Promise.all(
-        lockOnEnemies.slice(0, Math.min(5, lockOnEnemies.length)).map((enemy) => {
+        lockOnEnemies.map((enemy) => {
           const diffX = enemy.pos.x - player.position.x;
           const diffY = enemy.pos.y - player.position.y;
           const normalization = 1 / Math.sqrt(enemy.squaredDistance);
@@ -119,10 +108,10 @@ export const playerUseCase = {
         subShotYs(3)
           .flat()
           .map((y: number) => {
-            const normalization = 1 / Math.sqrt(1 + y ** 2);
+            const normalization = Math.sqrt(1 + y ** 2);
             const dir = {
               x: 1,
-              y: 0.1 * (y * normalization) * Math.abs(y * normalization),
+              y: y * normalization,
             };
             return bulletUseCase.createByPlayer(player, dir);
           })
