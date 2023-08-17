@@ -11,10 +11,6 @@ export const enemyUsecase = {
   getAll_Enemies: async (): Promise<EnemyModel[]> => {
     return await enemyRepository.getEnemies();
   },
-  delete_enemy: async (id: EnemyId) => {
-  delete_enemy: async (id: EnemyId) => {
-    await enemyRepository.declare(id);
-  },
 };
 
 setInterval(() => {
@@ -68,7 +64,6 @@ const delete_off_screen_enemy = async () => {
       return true;
     }
   });
-
   //await Promise.allは、必要か微妙
   //await Promise.all(enemies.map((enemy) => enemyRepository.save(enemy)));
   // enemies.map((enemy) => enemyRepository.save(enemy));
