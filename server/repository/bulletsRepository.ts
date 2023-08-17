@@ -12,12 +12,7 @@ const toBulletModel = (prismaBullet: Bullet): BulletModel => ({
       y: z.number().min(0),
     })
     .parse(prismaBullet.createdPosition),
-  direction: z
-    .object({
-      x: z.number().min(-1).max(1),
-      y: z.number().min(-1).max(1),
-    })
-    .parse(prismaBullet.direction),
+  direction: z.number().min(0).max(360).parse(prismaBullet.direction),
   type: z.number().min(0).parse(prismaBullet.type),
   playerId: prismaBullet.playerId === null ? undefined : userIdParser.parse(prismaBullet.playerId),
   createdAt: prismaBullet.createdAt.getTime(),

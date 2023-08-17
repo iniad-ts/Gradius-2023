@@ -1,6 +1,6 @@
 export type Methods = {
   get: {
-    resBody: number | null;
+    resBody: number;
   };
   post: {
     reqBody: {

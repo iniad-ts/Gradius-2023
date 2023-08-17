@@ -5,10 +5,7 @@ import { posWithDirSpeTim } from 'src/utils/posWithDirSpeTim';
 type BulletProps = {
   bullet: {
     createdAt: number;
-    direction: {
-      x: number;
-      y: number;
-    };
+    direction: number;
     createdPosition: {
       x: number;
       y: number;

@@ -17,7 +17,7 @@ export const bulletUseCase = {
         createdPosition: {
           ...player.position,
         },
-        direction: { x: 1, y: 0 },
+        direction: 0,
         type: 0,
         playerId,
         createdAt: Date.now(),
@@ -27,7 +27,7 @@ export const bulletUseCase = {
     }
     return null;
   },
-  createByEnemy: async (pos: { x: number; y: number }, dir = { x: -1, y: 0 }) => {
+  createByEnemy: async (pos: { x: number; y: number }, dir = 0) => {
     const newBullet: BulletModel = {
       id: bulletIdParser.parse(randomUUID()),
       createdPosition: {

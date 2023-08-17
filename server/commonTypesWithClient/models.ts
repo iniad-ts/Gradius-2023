@@ -58,10 +58,7 @@ export type BulletModel = {
     x: number;
     y: number;
   };
-  direction: {
-    x: number;
-    y: number;
-  };
+  direction: number;
   type: number;
   playerId?: UserId;
   createdAt: number;

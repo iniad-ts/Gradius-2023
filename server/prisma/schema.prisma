@@ -42,7 +42,7 @@ model Bullet {
   id              String   @id
   createdAt       DateTime
   createdPosition Json
-  direction       Json
+  direction       Float
   type            Int
   playerId        String?
 }

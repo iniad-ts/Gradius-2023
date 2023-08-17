@@ -35,8 +35,6 @@ export const gameUseCase = {
   update: async (id: UserId) => {
     bulletUseCase.delete();
     enemyUseCase.respawn();
-    enemyUseCase.shot2();
-    enemyUseCase.shot3();
     if (id === null) return null;
     const player = await playersRepository.find(id);
     if (player === null) return null;
