@@ -1,18 +1,13 @@
 import type { BulletModel, EnemyModel, PlayerModel } from '$/commonTypesWithClient/models';
 import { useRouter } from 'next/router';
-<<<<<<< HEAD
-import { useEffect, useState } from 'react';
-import { Layer, Stage } from 'react-konva';
-=======
 import type { RefObject } from 'react';
 import { createRef, useEffect, useRef, useState } from 'react';
 import { Image, Layer, Stage } from 'react-konva';
->>>>>>> parent of a944c0e (Merge branch 'main' of INIAD-Devs/Gra23-B into hit)
 import { Bullet } from 'src/components/Bullet/PlayerBullet';
 import Lobby from 'src/components/Lobby/Lobby';
 import { staticPath } from 'src/utils/$path';
 import { apiClient } from 'src/utils/apiClient';
-import { collisionBullets } from 'src/utils/collision';
+import { posWithDirSpeTim } from 'src/utils/posWithDirSpeTim';
 import useImage from 'use-image';
 
 const Game = () => {
@@ -29,8 +24,10 @@ const Game = () => {
     const [playerBullets, setPlayerBullets] = useState<BulletModel[]>([]);
     const [enemyBullets, setEnemyBullets] = useState<BulletModel[]>([]);
     const [currentTime, setCurrentTime] = useState<number>(Date.now());
+
     const [shipImage] = useImage(staticPath.images.spaceship_png);
     const [enemyImage3] = useImage(staticPath.images.ufo_3_PNG);
+
     const ufoRefs = useRef<RefObject<Konva.Image>[]>([]);
 
     const fetchPlayers = async (display: number) => {
@@ -54,20 +51,28 @@ const Game = () => {
       }
     };
 
-    const checkCollisionPlayerBullet = async () => {
+    //衝突判定の距離
+    const COLLISION_DISTANCE = 50;
+
+    //敵と弾の衝突判定
+    const checkCollisionBullet = async () => {
       const remainingEnemies = [];
       for (const enemy of enemies) {
-        const hitBullet: BulletModel | undefined = collisionBullets(
-          enemy.createdPosition,
-          playerBullets,
-          currentTime
-        )[0];
-        if (hitBullet !== undefined && hitBullet.playerId) {
-          const body = {
-            enemyId: enemy.id,
-            playerId: hitBullet.playerId,
-          };
-          await apiClient.enemy.$delete({ body });
+        const hitBullet = playerBullets.find((bullet) => {
+          const bulletPosition = posWithDirSpeTim(bullet, currentTime);
+          const distanceSquared =
+            Math.pow(enemy.createdPosition.x - bulletPosition[0], 2) +
+            Math.pow(enemy.createdPosition.y - bulletPosition[1], 2);
+          return distanceSquared < COLLISION_DISTANCE ** 2;
+        });
+
+        if (hitBullet && hitBullet.playerId) {
+          await apiClient.enemy.$delete({
+            body: {
+              enemyId: enemy.id,
+              userId: hitBullet.playerId,
+            },
+          });
           await apiClient.bullet.$delete({ body: { bulletId: hitBullet.id } });
         } else {
           remainingEnemies.push(enemy);
@@ -75,27 +80,11 @@ const Game = () => {
       }
     };
 
-    const checkCollisionEnemyBullet = async () => {
-      Promise.all(
-        players
-          .map((player) => {
-            const hitBullets = collisionBullets(player.position, enemyBullets, currentTime);
-            return hitBullets.map((bullet) =>
-              apiClient.player.delete({ body: { player, bulletId: bullet.id } })
-            );
-          })
-          .flat()
-      ).then((results) =>
-        results.forEach((result) => {
-          result;
-        })
-      );
-    };
-
-    const checkCollisionPlayerAndEnemy = async () => {
+    //敵とプレイヤーの衝突判定
+    const checkCollisionPlayer = async () => {
       const remainingEnemies = [];
+
       for (const enemy of enemies) {
-        const COLLISION_DISTANCE = 100;
         const hitPlayer = players.find((player) => {
           const distanceSquared =
             Math.pow(enemy.createdPosition.x - player.position.x, 2) +
@@ -122,11 +111,33 @@ const Game = () => {
       return () => cancelAnimationFrame(cancelId);
     });
 
+    useEffect(() => {
+      const anim = new Konva.Animation((layer) => {
+        ufoRefs.current.forEach((ufoRef) => {
+              x:
+                Math.cos(
+                  Math.floor(((layer?.time ?? 0) / 10 + ufoRef.current.x()) * Math.PI) / 100
+                ) * 5,
+              y:
+                Math.sin(
+                  Math.floor(((layer?.time ?? 0) / 10) * Math.PI + ufoRef.current.y()) / 100
+                ) * 5,
+            });
+          }
+        });
+      }, ufoRefs.current[0]?.current?.getLayer());
+
+      anim.start();
+
+      return () => {
+        anim.stop();
+      };
+    }, []);
+
     return (
       <div>
         <Stage width={1920} height={1080}>
           <Layer>
-            {playerBullets.map((bullet) => (
               <Bullet key={bullet.id} bullet={bullet} currentTime={currentTime} />
             ))}
           </Layer>
