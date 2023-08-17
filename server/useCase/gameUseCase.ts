@@ -1,5 +1,3 @@
-<<<<<<< HEAD
-=======
 import type { UserId } from '$/commonTypesWithClient/branded';
 import type { EnemyModel, PlayerModel } from '$/commonTypesWithClient/models';
 import { enemiesRepository } from '$/repository/enemiesRepository';
@@ -41,7 +39,6 @@ export const gameUseCase = {
     enemyUseCase.respawn();
     enemyUseCase.shot2();
     enemyUseCase.shot3();
-    // enemyUseCase.shot4();
     if (id === null) return null;
     const player = await playersRepository.find(id);
     if (player === null) return null;
@@ -62,4 +59,3 @@ export const gameUseCase = {
     await enemiesRepository.update(enemy.id, new Date());
   },
 };
->>>>>>> 03663785872daa6745ed7d079ca26d8a5e223177
