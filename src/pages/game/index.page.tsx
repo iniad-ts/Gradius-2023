@@ -16,7 +16,6 @@ const Game = () => {
       const [displayNumber, setDisplayNumber] = useState<number>(0);
       const getDisplayNumber = async () => {
         const res = await apiClient.game.config.$get();
-        console.log(res);
         if (res !== null) {
           setDisplayNumber(res);
         }
