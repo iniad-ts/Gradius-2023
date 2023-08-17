@@ -72,5 +72,9 @@ export const playerUsecase = {
   getPlayers: async () => {
     return await playerRepository.getPlayers();
   },
+  getPlayers: async () => {
+    return await playerRepository.getPlayers();
+  },
+
   //スコアとかどうしよう。
 };
