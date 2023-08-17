@@ -7,18 +7,12 @@ export const Config = () => {
     setInfo(res);
   };
   const update = async (id: string) => {
-    const inputElement = document.getElementById(id) as HTMLInputElement;
-
-    const inputValue = inputElement.value;
-
-    const newInfo = {
-      ...info,
-      id: inputValue,
-    } as ConfigModel;
-
-    if (newInfo !== undefined) {
-      await apiClient.config.$post({ body: newInfo });
+    const inputElement = document.getElementById(id);
+    if (inputElement !== null) {
+      const inputValue = inputElement.value;
     }
+
+    await apiClient.config.$post({ body: newInfo });
     console.log('更新!');
   };
 
