@@ -7,11 +7,6 @@ export type Methods = {
     };
     resBody: BulletModel[];
   };
-  delete: {
-    reqBody: {
-      bulletId: string;
-    };
-  };
   post: {
     resBody: BulletModel | null;
   };

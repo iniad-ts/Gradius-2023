@@ -4,12 +4,8 @@ import { defineController } from './$relay';
 
 export default defineController(() => ({
   get: async () => ({ status: 200, body: (await enemiesRepository.findAll()) ?? [] }),
-  delete: async ({ body }) => ({
+  post: async ({ body }) => ({
     status: 200,
     body: await enemyUseCase.delete(body.enemyId, body.userId),
-  }),
-  post: async () => ({
-    status: 200,
-    body: await enemyUseCase.create(),
   }),
 }));
