@@ -162,7 +162,7 @@ const Game = () => {
             /* stylelint-disable function-no-unknown */
             transform: `
             scale( ${width / 1920}, ${height / 1080} )
-            translate(${(width - 1920) / 2}px, ${(height - 1080) / 2}px)`,
+            translate(${(width - 1920) / 2}px, ${(height - 1080) / 2}px)`
             /* stylelint-enable function-no-unknown */
           }}
         >
