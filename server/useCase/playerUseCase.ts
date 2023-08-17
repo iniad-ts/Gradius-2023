@@ -42,9 +42,9 @@ export const playerUseCase = {
     await playersRepository.save(newPlayer);
     return newPlayer;
   },
-  getStatus: async (id: UserId): Promise<PlayerModel | null> => {
-    if (id !== null) {
-      await playerUseCase.create(id);
+  getStatus: async (id: UserId, name: string | null): Promise<PlayerModel | null> => {
+    if (name !== null) {
+      await playerUseCase.create(name);
     }
     const player: PlayerModel | null = await playersRepository.find(id);
     if (player === null) return null;
