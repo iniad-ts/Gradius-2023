@@ -94,16 +94,7 @@ export const App = () => {
       <Stage width={1000} height={1000} stroke="black">
         <Layer>
           <Circle x={playerX} y={playerY} stroke="black" fill="blue" radius={50} />
-          {enemys.map((enemy, index) => (
-            <Circle
-              key={index}
-              x={enemy.EnemyPos.x}
-              y={enemy.EnemyPos.y}
-              stroke="black"
-              fill="red"
-              radius={enemy.radius}
-            />
-          ))}
+          <Circle x={enemyX} y={enemyY} stroke="black" fill="red" radius={75} />
           {bullets.map((bullet, index) => (
             <Circle
               key={index}
