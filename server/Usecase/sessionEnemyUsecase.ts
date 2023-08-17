@@ -45,6 +45,6 @@ export const sessionEnemyUsecase = {
     assert(enemy, 'enemy not found');
     const enemyData = await enemyRepository.getEnemy(enemyIdParser.parse(enemy.enemyId));
     assert(enemyData, 'enemyData not found');
-    return await gameSessionUsecase.updatescore(playerid, enemyData.score);
+    await gameSessionUsecase.updatescore(playerid, enemyData.score);
   },
 };

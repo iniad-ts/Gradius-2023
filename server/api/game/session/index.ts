@@ -1,4 +1,3 @@
-import type { UserId } from '$/commonTypesWithClient/branded';
 import type { GameSessionModel } from '$/commonTypesWithClient/models';
 
 export type Methods = {
@@ -7,7 +6,7 @@ export type Methods = {
   };
   post: {
     reqBody: {
-      playerId: UserId;
+      playerId: string;
       stageId: string;
     };
     resBody: GameSessionModel;

@@ -11,6 +11,6 @@ export default defineController(() => ({
   }),
   post: async ({ body }) => ({
     status: 201,
-    body: await playerUsecase.create(playerIdParser.parse(body.userid), body.username),
+    body: await playerUsecase.move(body.player, body.MoveInput),
   }),
 }));

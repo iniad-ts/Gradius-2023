@@ -29,12 +29,4 @@ export const enemyUsecase = {
     }
     return Enemy;
   },
-  verticalMove: (Enemy: Enemy) => {
-    Enemy.EnemyPos.y += 10;
-    return Enemy;
-  },
-  horizontalMove: (Enemy: Enemy) => {
-    Enemy.EnemyPos.x -= 10;
-    return Enemy;
-  },
 };
