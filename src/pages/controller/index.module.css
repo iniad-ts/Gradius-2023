@@ -7,13 +7,44 @@
 }
 
 .center {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 2vmin;
-  text-align: center;
-  height: 100%;
+  height: 36vmin;
+  display: grid;
+  grid-template-rows: 1fr 1fr 1fr;
+  grid-template-columns: 1fr 1fr;
+  grid-template-areas:
+    'hp    hp'
+    'score score'
+    'enemy item';
+  gap: 4vmin 2vmin;
+}
+
+.center-button {
+  display: block;
+  box-shadow: 0 0 2vmin 0 #9994, inset 0 0 0 0.6vmin #fff;
+  border: 0.2vmin solid #bbb;
+  background-color: #eee;
+  border-radius: 1vmin;
+  transition: transform 0.1s ease;
+}
+
+.center-button:active {
+  transform: scale(0.9);
+}
+
+.hp {
+  grid-area: hp;
+}
+
+.score {
+  grid-area: score;
+}
+
+.enemy {
+  grid-area: enemy;
+}
+
+.item {
+  grid-area: item;
 }
 
 .info {
