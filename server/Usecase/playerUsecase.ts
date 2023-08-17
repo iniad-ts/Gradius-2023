@@ -58,7 +58,6 @@ export const playerUsecase = {
   },
 
   getPlayerPos: async () => {
-    console.log('bbbb');
     return await playerRepository.getPlayers();
   },
   getUserId: async () => {
