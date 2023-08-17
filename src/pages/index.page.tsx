@@ -20,27 +20,17 @@ const Home = () => {
   const [imageTama, setImageTama] = useState(new window.Image());
   const [score, setScore] = useState(0);
   const [playerLife, setPlayerLife] = useState(3);
-
+  const [isGameOver, setIsGameOver] = useState(false);
   const [enemies, setEnemies] = useState<{ x: number; y: number }[]>([
     { x: 5, y: 2 },
     { x: 8, y: 4 },
   ]);
   const enemyAnimation = useRef<Konva.Animation | null>(null);
+  const [resetGame, setResetGame] = useState(false); // 追加
 
   const [dx, setDx] = useState(-1); // x方向の移動量
   const dx2 = 1;
-  const [board, setBoard] = useState([
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-  ]);
+
   const hoge = true;
   useEffect(() => {
     const animate = () => {
@@ -112,13 +102,13 @@ const Home = () => {
         setPlayerY((prevY) => Math.max(prevY - 0.05, 0));
       }
       if (isMovingRight) {
-        setPlayerY((prevY) => Math.min(prevY + 0.05, 7));
+        setPlayerY((prevY) => Math.min(prevY + 0.05, 15));
       }
       if (isMovingUp) {
         setPlayerX((prevX) => Math.max(prevX - 0.05, 0));
       }
       if (isMovingDown) {
-        setPlayerX((prevX) => Math.min(prevX + 0.05, 7));
+        setPlayerX((prevX) => Math.min(prevX + 0.05, 15));
       }
 
       animationFrameId = requestAnimationFrame(animate);
@@ -169,6 +159,26 @@ const Home = () => {
       document.removeEventListener('keydown', handleKeyDown);
     };
   }, [playerX, playerY]);
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.code === 'Enter' && isGameOver) {
+        // ゲームオーバー状態で Enter キーが押された場合
+        setPlayerX(4); // プレイヤーの初期 X 座標にリセット
+        setPlayerY(0); // プレイヤーの初期 Y 座標にリセット
+        setbullets([]); // 弾をリセット
+        setScore(0); // スコアをリセット
+        setPlayerLife(3); // ライフをリセット
+        setIsGameOver(false); // ゲームオーバーフラグをリセット
+      }
+    };
+
+    document.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [isGameOver]);
 
   // const findnumber = (n: number) => {
   //   let count = 0;
@@ -282,7 +292,20 @@ const Home = () => {
     if (remainingEnemies.length < enemies.length) {
       setPlayerLife((prevLife) => prevLife - 1);
       setEnemies(remainingEnemies);
+      if (playerLife - 1 <= 0) {
+        setIsGameOver(true);
+      }
     }
+  };
+
+  const GameOverScreen = () => {
+    return (
+      <div className="game-over-container">
+        <p className={styles['score-text']}>Your Score: {Math.max(0, score)}</p>{' '}
+        {/* スコア表示を修正 */}
+        <img src="images/gameover2.jpg" alt="Game Over" className={styles['game-over-image']} />
+      </div>
+    );
   };
 
   // 上記の当たり判定関数を適切なタイミングで呼び出す
@@ -293,16 +316,15 @@ const Home = () => {
   if (!hoge) return <Loading visible />;
   return (
     <>
-      {/* <img src={g.src} alt="images.png" /> */}
       <div className={styles.lifeContainer}>
         <p className={styles.life}>Life: {playerLife}</p>
       </div>
       <div className={styles.scoreContainer}>
         <p className={styles.score}>Score: {score}</p>
       </div>
-      <Stage width={1200} height={800} className={styles.background}>
+      <Stage width={1600} height={800} className={styles.background}>
         <Layer>
-          <Image image={imageBack} x={playerY * 100} y={playerX * 100} width={90} height={130} />
+          <Image image={imageBack} x={playerY * 100} y={playerX * 100} width={180} height={130} />
           {bullet.map((bullet, index) => (
             <Image
               image={imageTama}
@@ -319,6 +341,11 @@ const Home = () => {
           ))}
         </Layer>
       </Stage>
+      {isGameOver && (
+        <div className={styles.gameOverOverlay}>
+          <GameOverScreen />
+        </div>
+      )}
     </>
   );
 };
