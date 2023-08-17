@@ -24,5 +24,5 @@ export const gradiusUaeCase = {
   //   ownersXYZ.map((owner) => {
   //     //
   //   });
-  // },
+  },
 };
