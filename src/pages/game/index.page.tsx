@@ -81,9 +81,10 @@ const Game = () => {
       setPlayers(newPlayers);
       const updatedPlayerModel = newPlayers.find((player) => player.id === playerId);
       if (!updatedPlayerModel) return;
-      apiClient.player.$patch({
+      const res = apiClient.player.status.$post({
         body: { player: updatedPlayerModel },
       });
+      console.log(res);
     };
 
     //衝突判定の距離
@@ -116,10 +117,8 @@ const Game = () => {
     };
 
     //敵とプレイヤーの衝突判定
-    const checkCollisionPlayer = async () => {
-      const newEnemies = [];
-
-      for (const enemy of enemies) {
+    const checkCollisionPlayer = () => {
+      const newEnemies = enemies.filter((enemy) => {
         const hitPlayer = players.find((player) => {
           const distance = Math.sqrt(
             Math.pow(enemy.createdPosition.x - player.position.x, 2) +
@@ -135,11 +134,10 @@ const Game = () => {
             },
           });
           updateHealth(hitPlayer.id);
-        } else {
-          newEnemies.push(enemy);
+          return false;
         }
-      }
-
+        return true;
+      });
       setEnemies(newEnemies);
     };
 
