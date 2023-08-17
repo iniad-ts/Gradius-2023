@@ -11,8 +11,8 @@ export const enemyUseCase = {
     const newEnemy: EnemyModel = {
       id: enemyIdParser.parse(randomUUID()),
       createdPosition: {
-        x: Math.floor(Math.random() * 1920),
-        y: Math.floor(Math.random() * 1080),
+        x: Math.random() * 1920,
+        y: Math.random() * 1080,
       },
       createdAt: Date.now(),
       type: 0,
