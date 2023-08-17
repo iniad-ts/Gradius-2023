@@ -1,6 +1,5 @@
-import type { Enemy } from '$/Usecase/enemyUsecase';
 import type { Player } from '$/Usecase/playerUsecase';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Circle, Layer, Stage } from 'react-konva';
 export const App = () => {
   const [playerX, setPlayerX] = useState(0);
@@ -10,29 +9,6 @@ export const App = () => {
     setPlayerX(playerdata.PlayerPos.x);
     setPlayerY(playerdata.PlayerPos.y);
   };
-  const [enemyX, setEnemyX] = useState(500);
-  const [enemyY, setEnemyY] = useState(500);
-  //apiに変更を送信して結果をsetしなおす関数
-  const fetchEnemy = async () => {
-    //playerの際にボタンを押したタイミングでplayerオブジェクトを生成していましたが、エネミーではそれがないため、えらーだったみたいです。
-    //そのため、以下でememyを定義することによりAPIアクセス時のえらーを修正しました。
-    const enemy: Enemy = {
-      EnemyPos: {
-        x: enemyX,
-        y: enemyY,
-      },
-    };
-    const enemyData = await apiClient.enemy.$post({ body: enemy });
-    setEnemyX(enemyData.EnemyPos.x);
-    setEnemyY(enemyData.EnemyPos.y);
-  };
-  useEffect(() => {
-    const getEnemyPos = setInterval(fetchEnemy, 500);
-    return () => {
-      clearInterval(getEnemyPos);
-    };
-  });
-
   return (
     // Stage - is a div wrapper
     // Layer - is an actual 2d canvas element, so you can have several layers inside the stage
@@ -40,8 +16,7 @@ export const App = () => {
     <>
       <Stage width={720} height={720}>
         <Layer>
-          <Circle x={playerX} y={playerY} stroke="black" fill="blue" radius={100} />
-          <Circle x={enemyX} y={enemyY} stroke="black" fill="red" radius={100} />
+          <Circle x={playerX} y={playerY} stroke="black" fill="black" radius={50} />
         </Layer>
       </Stage>
       <button
