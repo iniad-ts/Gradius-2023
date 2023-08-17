@@ -24,19 +24,11 @@ export const gradiusRepository = {
     console.log(games, event);
     return { games, event };
   },
-  update: () => {
-    const currentGameModel: GameModel[] = JSON.parse(JSON.stringify(gameModels));
-    gameModels.map((gameModel, i) => {
-      const difference = (gameModel.created - currentGameModel[i].created) * 100;
-      const newXYZ = gameModel.xyz.map((d, j) => d + Math.round(gameModel.vector[j] * difference));
-      return { ...gameModel, xyz: newXYZ, created: new Date().getTime() };
-    });
-  },
-  findOfXYZ: (xyz: number[]) => gameModels.filter((gameModel) => gameModel.xyz === xyz),
-  findOfType: (type: string) => gameModels.filter((gra) => gra.type === type),
-  save: (gameModel: GameModel, user: UserId) => {
+  findWithXYZ: (xyz: number[]) => gameModels.filter((gameModel) => gameModel.xyz === xyz),
+  findWithType: (type: string) => gameModels.filter((gra) => gra.type === type),
+  save: (gameModel: GameModel, name: string) => {
     gameModels.forEach((oneGameModel, i) => {
-      if (oneGameModel.user === user) {
+      if (oneGameModel.user === name) {
         gameModels[i] = gameModel;
       }
     });

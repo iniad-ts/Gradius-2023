@@ -13,7 +13,7 @@ export const gradiusUaeCase = {
       const newXYZ = myPlane.xyz;
       newXYZ[type % 3] += (Math.floor(type / 3) - 0.5) * 2;
       const newMyPlane: GameModel = { ...myPlane, xyz: newXYZ };
-      gradiusRepository.save(newMyPlane, user);
+      gradiusRepository.save(newMyPlane, 'myPlane');
     }
   },
   beam: (user: UserId) => {
