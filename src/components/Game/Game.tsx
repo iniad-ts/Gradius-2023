@@ -79,24 +79,14 @@ const Game = ({ monitorId }: { monitorId: number }) => {
         />
 
         {newPlayerPosition.map((player, index) => (
-          <>
-            <Circle
-              key={index}
-              x={player.pos.x - monitorId * windowWidth}
-              y={player.pos.y}
-              width={50}
-              height={50}
-              fill="red"
-            />
-            <Text
-              x={player.pos.x - monitorId * windowWidth - 23}
-              y={player.pos.y - 45}
-              fontSize={15}
-              fontFamily="Arial"
-              fill="black"
-              text={player.name}
-            />
-          </>
+          <Circle
+            key={index}
+            x={player.pos.x - monitorId * windowWidth}
+            y={player.pos.y}
+            width={50}
+            height={50}
+            fill="red"
+          />
         ))}
         {newGunPosition.map((gun, index) => (
           <Circle
@@ -122,7 +112,7 @@ const Game = ({ monitorId }: { monitorId: number }) => {
               y={enemy.pos.y}
               fontSize={15}
               fontFamily="Arial"
-              cc
+              fill="white"
               text={enemy.type.toString()}
             />
           </React.Fragment>

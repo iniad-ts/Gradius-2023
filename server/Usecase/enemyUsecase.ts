@@ -23,7 +23,7 @@ export const enemyUsecase = {
 
 // 仮初期値
 export const enemyInfo = {
-  enemyFirstPos_x: 2000,
+  enemyFirstPos_x: 100,
   enemySpeed: 5,
   enemyRadius: 20,
   enemyHp: 10,
@@ -32,7 +32,7 @@ export const enemyInfo = {
 };
 
 setInterval(() => {
-  createEnemy();
+  create_enemy();
   deleteOffScreenEnemy();
 }, enemyInfo.makeEnemyFrequency);
 
@@ -41,11 +41,11 @@ setInterval(() => {
   moveEnemy();
 }, 10);
 
-const createEnemy = async () => {
+const create_enemy = async () => {
   const newEnemy: EnemyModel = {
     id: EnemyIdParser.parse(randomUUID()),
     pos: { x: enemyInfo.enemyFirstPos_x, y: Math.floor(Math.random() * 690) + 1 },
-    speed: enemyInfo.enemySpeed,
+    speed: enemyInfo.enemyHp,
     hp: enemyInfo.enemyHp,
     radius: enemyInfo.enemyRadius,
     type: 2,
@@ -77,43 +77,10 @@ const moveEnemyByPlayer = (enemy: EnemyModel): { x: number; y: number } => {
   } else if (enemy.type === 3) {
     moveToPlayer(enemy, position, 30);
     /*  return { x: enemy.pos.x - 100, y: enemy.pos.y }; */
-  } else if (enemy.type === 4) {
-    // 4というタイプを斜めの動きに使用
-    return moveEnemyDiagonal(enemy, 45);
   }
-  //  else if (enemy.type === 5) {
-  //   return moveEnemyStraight(enemy);
-  // }
-  // 複雑度エラーのため一時的にコメントアウト
   return { x: enemy.pos.x, y: enemy.pos.y };
 };
-// 敵を斜めに動かす
-const moveEnemyDiagonal = (enemy: EnemyModel, angleInDegrees: number): { x: number; y: number } => {
-  const angleInRadians = (angleInDegrees * Math.PI) / 180;
-
-  const dx = enemy.speed * Math.cos(angleInRadians);
-  const dy = enemy.speed * Math.sin(angleInRadians);
-
-  return { x: enemy.pos.x - dx, y: enemy.pos.y - dy };
-};
-
-// 敵をレンダリングするごとにランダムに直線的に上下に動かす
-type Direction = 'UP' | 'DOWN';
-const getRandomDirection = (): Direction => {
-  return Math.random() < 0.5 ? 'UP' : 'DOWN';
-};
-
-const moveEnemyStraight = (enemy: EnemyModel): { x: number; y: number } => {
-  const direction = getRandomDirection(); // レンダリングごとに方向をランダムに選択
-  let dy = enemy.speed;
-
-  if (direction === 'UP') {
-    dy = -dy;
-  }
-
-  return { x: enemy.pos.x, y: enemy.pos.y + dy };
-};
-
+//敵を動かす
 const moveEnemy = async () => {
   const enemies: EnemyModel[] = await enemyRepository.getEnemies();
 
