@@ -72,24 +72,21 @@ export const player_Usecase = {
 };
 
 // 仮初期値
-export const playerInfo = {
-  playerFirstPos_x: 300,
-  playerFirstPos_y: 300,
-  playerSpeed: 5,
-  player_radius: 20,
-  player_hp: 10,
-  player_score: 0,
-  playerSize: { h: 30, w: 40 },
-};
+const player_first_pos_x = 300;
+const player_first_pos_y = 300;
+const player_speed = 5;
+const player_radius = 20;
+const player_hp = 10;
+const player_score = 0;
 
 const create_player = async () => {
   const new_player: playerModel = {
     userId: UserIdParser.parse(randomUUID()),
-    pos: { x: playerInfo.playerFirstPos_x, y: playerInfo.playerFirstPos_y },
-    speed: playerInfo.playerSpeed,
-    hp: playerInfo.player_hp,
-    radius: playerInfo.player_radius,
-    score: playerInfo.player_score,
+    pos: { x: player_first_pos_x, y: player_first_pos_y },
+    speed: player_speed,
+    hp: player_hp,
+    radius: player_radius,
+    score: player_score,
   };
   await playerRepository.save(new_player);
 };

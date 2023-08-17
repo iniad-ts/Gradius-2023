@@ -22,16 +22,6 @@ export const enemyUsecase = {
   },
 };
 
-// 仮初期値
-export const enemyInfo = {
-  enemy_first_pos_x: 100,
-  enemy_speed: 5,
-  enemy_radius: 20,
-  enemy_hp: 10,
-  makeEnemyFrequency: 5000,
-  enemySize: { h: 30, w: 30 },
-};
-
 setInterval(() => {
   create_enemy();
   deleteOffScEreennemy();
@@ -51,10 +41,10 @@ const enemy_hp = 10;
 const create_enemy = async () => {
   const new_enemy: EnemyModel = {
     id: EnemyIdParser.parse(randomUUID()),
-    pos: { x: enemyInfo.enemy_first_pos_x, y: Math.floor(Math.random() * 690) + 1 },
-    speed: enemyInfo.enemy_speed,
-    hp: enemyInfo.enemy_hp,
-    radius: enemyInfo.enemy_radius,
+    pos: { x: enemy_first_pos_x, y: Math.floor(Math.random() * 690) + 1 },
+    speed: enemy_speed,
+    hp: enemy_hp,
+    radius: enemy_radius,
     type: 2,
     ///1-3のランダムな数値を返す
     /* type: Math.floor(Math.random() * 3) + 1, */
