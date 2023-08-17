@@ -77,12 +77,19 @@ export const playerUseCase = {
       }));
     return playerInDisplay;
   },
+  useItem: async (player: PlayerModel, type: number) => {
+    await [
+      playerUseCase.item.trackingBullets(player),
+      playerUseCase.item.manyBullets(player),
+      playerUseCase.item.barrier(player),
+    ][type];
+  },
   item: {
     trackingBullets: async (player: PlayerModel) => {
       const res = await enemiesRepository.findNotNull();
-      const lockOnEnemies = sortByDistance(player, res).filter(
-        (enemy) => enemy.pos.x > player.position.x
-      );
+      const lockOnEnemies = sortByDistance(player, res)
+        .filter((enemy) => enemy.pos.x > player.position.x)
+        .slice(0, 5);
       if (lockOnEnemies.length === 0) return;
       Promise.all(
         lockOnEnemies.map((enemy) => {
