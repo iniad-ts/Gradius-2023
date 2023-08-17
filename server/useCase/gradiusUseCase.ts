@@ -26,7 +26,7 @@ export const gradiusUaeCase = {
       {
         ...currentOwnerGameModel,
         user,
-        type: 'beam',
+        type: 'follower',
         id: randomUUID(),
         vector: [1, 0, 0],
         created: new Date().getTime(),

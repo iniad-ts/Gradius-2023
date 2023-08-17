@@ -15,7 +15,7 @@ export type TaskModel = {
 };
 
 export type GameModel = {
-  user: UserId | string;
+  user: UserId;
   type: string;
   id: string;
   xyz: number[];

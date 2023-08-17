@@ -39,7 +39,7 @@ const Home = () => {
   };
 
   const startGradius = async () => {
-    alert((await apiClient.gradius.start.post()).body ? 'already started' : 'create user');
+    alert((await apiClient.gradius.game.start.post()).body ? 'already started' : 'create user');
   };
 
   useEffect(() => {

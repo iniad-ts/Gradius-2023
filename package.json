@@ -28,7 +28,6 @@
   },
   "dependencies": {
     "@aspida/axios": "^1.11.0",
-    "arg": "^5.0.2",
     "axios": "^0.27.2",
     "canvas": "^2.11.2",
     "firebase": "^9.15.0",

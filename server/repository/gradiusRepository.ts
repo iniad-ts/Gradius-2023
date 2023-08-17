@@ -24,62 +24,25 @@ export const gradiusRepository = {
     return { games, event };
   },
   update: () => {
-    const currentGameModels: GameModel[] = JSON.parse(JSON.stringify(gameModels));
-    gameModels.forEach((gameModel, i) => {
-      const difference = new Date().getTime() - currentGameModels[i].created;
+    const currentGameModel: GameModel[] = JSON.parse(JSON.stringify(gameModels));
+    gameModels.map((gameModel, i) => {
+      const difference = new Date().getTime() - currentGameModel[i].created;
       const newXYZ = gameModel.xyz.map(
-        (d, j) => d + Math.round(gameModel.vector[j] * difference * 0.01 * gameModel.speed)
+        (d, j) => d + Math.round(gameModel.vector[j] * difference * 0.01)
       );
-      gradiusRepository.save(
-        { ...gameModel, xyz: newXYZ, created: new Date().getTime() },
-        gameModel.id
-      );
+      return { ...gameModel, xyz: newXYZ, created: new Date().getTime() };
     });
-    collision(gameModels).forEach((collision) => {
-      const myPlaneModel = gameModels.filter((gameModel) =>
-        [gameModel.user === collision?.user, gameModel.type === 'owner'].every(Boolean)
-      )[0];
-      const hit = collision?.collisionBeamIds.map(
-        (collisionBeamId) =>
-          gameModels.filter((gameModel) => gameModel.id === collisionBeamId)[0].hp
-      );
-      const hit2 = hit?.reduce((sum, element) => sum + element);
-      gradiusRepository.save({ ...myPlaneModel }, myPlaneModel.id);
-    });
-    console.table(gameModels.map((object) => [object.id, ...object.xyz]));
-    return gradiusRepository.getGameModels();
   },
   findOfXYZ: (xyz: number[]) => gameModels.filter((gameModel) => gameModel.xyz === xyz),
   findOfType: (type: string) => gameModels.filter((gra) => gra.type === type),
   save: (gameModel: GameModel, id: string) => {
     gameModels.forEach((oneGameModel, i) => {
       if (oneGameModel.id === id) {
+        console.log('a');
         gameModels[i] = gameModel;
       }
     });
   },
   getGameModels: () => gameModels,
   getEventModel: (user: UserId) => eventModels.filter((event) => event.owner === user)[0],
-};
-
-const collision = (
-  gameModels: GameModel[]
-): ({ user: UserId | string; collisionBeamIds: string[] } | null)[] => {
-  const ownerModels: GameModel[] = gameModels.filter((object) => object.type === 'owner');
-  const collisions: ({ user: UserId | string; collisionBeamIds: string[] } | null)[] = [];
-  ownerModels.forEach((myPlaneModel) => {
-    const othersBeamModels = gameModels.filter((object) =>
-      [object.user !== myPlaneModel.user, object.type === 'beam'].every(Boolean)
-    );
-    const collisionBeams = othersBeamModels.filter((otherBeam) =>
-      otherBeam.xyz
-        .map((d, i) => [d < myPlaneModel.xyz[i] + 25, d > myPlaneModel.xyz[i] - 25].every(Boolean))
-        .every(Boolean)
-    );
-    collisions.push({
-      user: myPlaneModel.user,
-      collisionBeamIds: [...collisionBeams.map((collisionBeam) => collisionBeam.id)],
-    });
-  });
-  return collisions;
 };
