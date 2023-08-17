@@ -10,7 +10,7 @@ function App() {
   const [newGunPosition, setNewGunPosition] = useState<number[][]>([]);
   //apiを叩いてプレイヤーと銃の位置を取得stateにセット
   const getPosition = useCallback(async () => {
-    const new_playerPosition = await apiClient.rooms.control.$get();
+    const new_playerPosition = await apiClient.rooms.playerPosition.$get();
     const new_gunPosition = await apiClient.rooms.gunPosition.$get();
     console.log(new_playerPosition);
     console.log(new_gunPosition);
@@ -23,19 +23,17 @@ function App() {
     const new_gunPosition = await apiClient.rooms.gunPosition.$get();
     setNewGunPosition(new_gunPosition);
   }, []);
-  // const movePlayer = useCallback(async () => {
-  //   await apiClient.rooms.control.$post({ body: 'up' });
-  // }, []);
+  const movePlayerUp = useCallback(async () => {
+    await apiClient.rooms.control.$post({ body: 'up' });
+  }, []);
 
   //apiを叩く処理を100msごとに実行
   useEffect(() => {
     const cancelId = setInterval(getPosition, 100);
-    console.log(newPlayerPosition);
-
     return () => {
       clearInterval(cancelId);
     };
-  }, [getPosition, newPlayerPosition]);
+  }, [getPosition]);
   //mapで展開してひとつずつ描画
   return (
     <Stage width={windowWidth} height={windowHeight} onClick={gunShot}>
@@ -56,7 +54,7 @@ function App() {
             width={50}
             height={50}
             fill="red"
-            // onClick={movePlayer}
+            onClick={movePlayerUp}
           />
         ))}
         {newGunPosition.map((gun, index) => (
