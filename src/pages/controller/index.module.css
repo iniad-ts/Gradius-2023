@@ -14,6 +14,25 @@
   height: 100%;
 }
 
+.info {
+  border: solid 2px #999;
+  width: 60%;
+  border-radius: 4px;
+  padding: 3vmin 2vmin 2vmin;
+  position: relative;
+  margin-block: 2vmin;
+}
+
+.info > p {
+  background-color: #eee;
+  position: absolute;
+  top: -3vmin;
+  height: 4vmin;
+  width: 50%;
+  left: 25%;
+  font-size: 3.6vmin;
+}
+
 .joystick {
   align-self: center;
   justify-self: center;
