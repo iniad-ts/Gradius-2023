@@ -14,14 +14,4 @@ export const gameUseCase = {
       createdAt: Date.now(),
     });
   },
-  update: async (displayNumber: number) => {
-    const game = await gamesRepository.find();
-    if (game === null) {
-      return;
-    }
-    await gamesRepository.save({
-      ...game,
-      displayNumber,
-    });
-  },
 };

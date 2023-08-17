@@ -19,9 +19,6 @@ const Game = () => {
         if (res !== null) {
           setDisplayNumber(res);
         }
-        if (res === 0) {
-          router.push('/game/config');
-        }
       };
 
       useEffect(() => {
@@ -85,11 +82,6 @@ const Game = () => {
       <div>
         <Stage width={1920} height={1080}>
           <Layer>
-            {bullets.map((bullet) => (
-              <Bullet key={bullet.id} bullet={bullet} currentTime={currentTime} />
-            ))}
-          </Layer>
-          <Layer>
             {players.map((player) => (
               <Image
                 image={shipImage}
@@ -113,6 +105,11 @@ const Game = () => {
                 y={enemy.createdPosition.y}
                 key={enemy.id}
               />
+            ))}
+          </Layer>
+          <Layer>
+            {bullets.map((bullet) => (
+              <Bullet key={bullet.id} bullet={bullet} currentTime={currentTime} />
             ))}
           </Layer>
         </Stage>

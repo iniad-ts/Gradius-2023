@@ -1,9 +1,7 @@
 import type { UserId } from '$/commonTypesWithClient/branded';
 import type { BulletModel } from '$/commonTypesWithClient/models';
 import { bulletsRepository } from '$/repository/bulletsRepository';
-import { gamesRepository } from '$/repository/gamesRepository';
 import { bulletIdParser } from '$/service/idParsers';
-import { posWithDirSpeTim as posWithBulletModel } from '$/service/posWithDirSpeTim';
 import { randomUUID } from 'crypto';
 import { playerUseCase } from './playerUseCase';
 
@@ -26,17 +24,5 @@ export const bulletUseCase = {
       return newBullet;
     }
     return null;
-  },
-  delete: async () => {
-    const bullets = await bulletsRepository.findAll();
-    const game = await gamesRepository.find();
-    const maxXPosition = ((game?.displayNumber ?? -1) + 1) * 1920;
-    const deleteBullets = bullets.filter((bullet) => {
-      const [x, y] = posWithBulletModel(bullet);
-      return x < 0 || maxXPosition < x || y < 0 || 1080 < y;
-    });
-    deleteBullets.forEach((bullet) => {
-      bulletsRepository.delete(bullet.id);
-    });
   },
 };
