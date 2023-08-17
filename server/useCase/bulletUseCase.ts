@@ -27,6 +27,19 @@ export const bulletUseCase = {
     }
     return null;
   },
+  createByEnemy: async (pos: { x: number; y: number }) => {
+    const newBullet: BulletModel = {
+      id: bulletIdParser.parse(randomUUID()),
+      createdPosition: {
+        ...pos,
+      },
+      direction: 0,
+      type: 0,
+      playerId: undefined,
+      createdAt: Date.now(),
+    };
+    await bulletsRepository.create(newBullet);
+  },
   delete: async () => {
     const bullets = await bulletsRepository.findAllOfPlayers();
     const game = await gamesRepository.find();

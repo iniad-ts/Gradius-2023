@@ -41,6 +41,18 @@ export const enemyUseCase = {
       })
     );
   },
+  shot2: async () => {
+    const res = await enemiesRepository.findType2();
+    Promise.all(
+      res.map((enemy) =>
+        bulletUseCase.createByEnemy({ x: enemy.createdPosition.x, y: enemy.createdPosition.y })
+      )
+    ).then((results) =>
+      results.forEach((result) => {
+        result;
+      })
+    );
+  },
   createAll: async () => {
     const res = await enemyTable();
     if (res === null) {
