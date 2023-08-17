@@ -13,8 +13,8 @@ const Home = () => {
   const [hoge, setHoge] = useState(1);
   const onclick = async () => {
     await apiClient.gradius.event.post({ body: { name: 'myPlane', level: 1 } });
-    await apiClient.gradius.event.game.post({ body: 1 });
-    await console.log(await apiClient.gradius.post({ body: 'myPlane' }));
+    await apiClient.gradius.post({ body: 1 });
+    await console.log(await apiClient.gradius.event.game.post({ body: 'myPlane' }));
     setHoge(3 - hoge);
   };
   return (
