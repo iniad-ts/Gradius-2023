@@ -1,0 +1,4 @@
+-- AlterTable
+ALTER TABLE "Player" RENAME CONSTRAINT "Plyer_pkey" TO "Player_pkey";
+ALTER TABLE "Player" ALTER COLUMN "hp" SET DEFAULT 3;
+ALTER TABLE "Player" ALTER COLUMN "score" SET DEFAULT 0;
