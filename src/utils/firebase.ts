@@ -3,12 +3,12 @@ import { initializeApp } from 'firebase/app';
 import type { Auth } from 'firebase/auth';
 import { connectAuthEmulator, getAuth } from 'firebase/auth';
 
-let cachedAuth: Auth | undefined;
+let cachedAuth: Auth;
 
 export const createAuth = () => {
-  if (cachedAuth !== undefined) return cachedAuth;
+  if (cachedAuth) return cachedAuth;
 
-  if (process.env.NEXT_PUBLIC_AUTH_EMULATOR_URL !== undefined) {
+  if (process.env.NEXT_PUBLIC_AUTH_EMULATOR_URL) {
     // https://firebase.google.com/docs/emulator-suite/connect_auth
     const auth = getAuth(initializeApp({ apiKey: 'fake-api-key', authDomain: location.hostname }));
     connectAuthEmulator(auth, process.env.NEXT_PUBLIC_AUTH_EMULATOR_URL, { disableWarnings: true });

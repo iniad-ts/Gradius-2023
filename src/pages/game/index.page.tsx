@@ -9,13 +9,13 @@ const Game = () => {
   const [bulletPosition, setbulletPosition] = useState<Bullet[]>([]);
   const fetchPosition = async () => {
     const res = await apiClient.player.$get();
-    if (res !== null) {
+    if (res) {
       setmyPosition(res);
     }
   };
   const fetchbulletPosition = async () => {
     const res = await apiClient.player.bullet.$get();
-    if (res !== null) {
+    if (res) {
       setbulletPosition(res);
     }
   };
