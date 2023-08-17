@@ -41,7 +41,6 @@ export type EnemyModel = {
   };
   type: number;
   createdAt: number;
-  deletedAt: number | null;
 };
 
 export type EnemyTableModel = {

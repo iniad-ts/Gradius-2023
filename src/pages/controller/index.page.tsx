@@ -9,8 +9,8 @@ import { apiClient } from 'src/utils/apiClient';
 import styles from './index.module.css';
 
 const Controller = () => {
-  const [shootIntervalIds, setShootIntervalIds] = useState<NodeJS.Timeout[]>([]);
-  const [moveIntervalIds, setMoveIntervalIds] = useState<NodeJS.Timeout[]>([]);
+  const [shootIntervalId, setShootIntervalId] = useState<NodeJS.Timeout | null>(null);
+  const [moveIntervalId, setMoveIntervalId] = useState<NodeJS.Timeout | null>(null);
   const moveDirection = useRef<MoveTo>({ toX: 0, toY: 0 });
   const [windowSize, setWindowSize] = useState<{ width: number; height: number }>({
     width: window.innerWidth,
@@ -25,13 +25,12 @@ const Controller = () => {
 
   const shootStart = () => {
     const intervalId = setInterval(shootBullet, 200);
-    setShootIntervalIds([...shootIntervalIds, intervalId]);
+    setShootIntervalId(intervalId);
   };
 
   const shootEnd = () => {
-    if (shootIntervalIds === null) return;
-    shootIntervalIds.forEach(clearInterval);
-    setShootIntervalIds([]);
+    if (shootIntervalId === null) return;
+    clearInterval(shootIntervalId);
   };
 
   const move = async () => {
@@ -40,13 +39,12 @@ const Controller = () => {
 
   const moveStart = () => {
     const intervalId = setInterval(move, 50);
-    setMoveIntervalIds([...moveIntervalIds, intervalId]);
+    setMoveIntervalId(intervalId);
   };
 
   const moveEnd = () => {
-    if (moveIntervalIds === null) return;
-    moveIntervalIds.forEach(clearInterval);
-    setMoveIntervalIds([]);
+    if (moveIntervalId === null) return;
+    clearInterval(moveIntervalId);
   };
 
   const handleMove = (e: IJoystickUpdateEvent) => {

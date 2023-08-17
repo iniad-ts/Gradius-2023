@@ -19,27 +19,12 @@ const toBulletModel = (prismaBullet: Bullet): BulletModel => ({
 });
 
 export const bulletsRepository = {
-  findAllOfPlayers: async (): Promise<BulletModel[]> => {
+  findAll: async (): Promise<BulletModel[]> => {
     const prismaBullets = await prismaClient.bullet.findMany({
       orderBy: { createdAt: 'desc' },
-      where: {
-        NOT: {
-          playerId: null,
-        },
-      },
     });
     return prismaBullets.map(toBulletModel);
   },
-  findAllOfEnemies: async (): Promise<BulletModel[]> => {
-    const prismaBullets = await prismaClient.bullet.findMany({
-      orderBy: { createdAt: 'desc' },
-      where: {
-        playerId: null,
-      },
-    });
-    return prismaBullets.map(toBulletModel);
-  },
-
   find: async (id: string): Promise<BulletModel | null> => {
     const prismaBullet = await prismaClient.bullet.findUnique({ where: { id } });
     return prismaBullet !== null ? toBulletModel(prismaBullet) : null;
@@ -47,8 +32,9 @@ export const bulletsRepository = {
   delete: async (id: string): Promise<void> => {
     try {
       await prismaClient.bullet.delete({ where: { id } });
+      console.log('success delete');
     } catch (error) {
-      console.error(error);
+      console.log(error);
     }
   },
   create: async (bullet: BulletModel) => {

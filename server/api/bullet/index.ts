@@ -5,7 +5,7 @@ export type Methods = {
     query: {
       display: number;
     };
-    resBody: { playerS: BulletModel[]; enemyS: BulletModel[] };
+    resBody: BulletModel[];
   };
   delete: {
     reqBody: {
