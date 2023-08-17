@@ -62,9 +62,13 @@ export const playerUsecase = {
     const updatePlayerInfo: PlayerModel = {
       userId: recentlyPlayerInfo.userId,
       pos: {
-        x: recentlyPlayerInfo.pos.x + movedirection.x * recentlyPlayerInfo.speed,
-        y: recentlyPlayerInfo.pos.y + movedirection.y * recentlyPlayerInfo.speed,
+        x: (recentlyPlayerInfo.pos.x += movedirection.x * 10),
+        y: (recentlyPlayerInfo.pos.y += movedirection.y * 10),
       },
+      speed: recentlyPlayerInfo.speed,
+      hp: recentlyPlayerInfo.hp,
+      radius: recentlyPlayerInfo.radius,
+      score: recentlyPlayerInfo.score,
     };
     await playerRepository.save(updatePlayerInfo);
   },
