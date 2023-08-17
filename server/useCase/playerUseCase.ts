@@ -2,7 +2,6 @@ import type { UserId } from '$/commonTypesWithClient/branded';
 import type { PlayerModel } from '$/commonTypesWithClient/models';
 import { playersRepository } from '$/repository/playersRepository';
 import { userIdParser } from '$/service/idParsers';
-import { minmax } from '$/service/minmax';
 import { randomUUID } from 'crypto';
 
 export type MoveTo = {
@@ -10,6 +9,9 @@ export type MoveTo = {
   toY: number;
 };
 
+const minmax = (num: number, min: number, max: number) => {
+  return Math.min(Math.max(num, min), max);
+};
 export const playerUseCase = {
   move: async (name: string, moveTo: MoveTo): Promise<PlayerModel | null> => {
     const player: PlayerModel | null = await playersRepository.find(name);
@@ -41,8 +43,8 @@ export const playerUseCase = {
     await playersRepository.save(newPlayer);
     return newPlayer;
   },
-  getStatus: async (id: UserId, name: string | null): Promise<PlayerModel | null> => {
-    name !== null && (await playerUseCase.create(name));
+  getStatus: async (id: UserId, name: string): Promise<PlayerModel | null> => {
+    await playerUseCase.create(name);
     const player: PlayerModel | null = await playersRepository.find(id);
     if (player === null) return null;
     return player;
