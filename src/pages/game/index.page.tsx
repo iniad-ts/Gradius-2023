@@ -113,27 +113,9 @@ const Game = () => {
       return () => cancelAnimationFrame(cancelId);
     });
 
-    useEffect(() => {
-      const setWindowSize = () => {
-        setWidth(window.innerWidth);
-        setHeight(window.innerHeight);
-      };
-      setWindowSize();
-      window.addEventListener('resize', setWindowSize);
-      return () => window.removeEventListener('resize', setWindowSize);
-    }, []);
-
     return (
-      <div className={styles['canvas-container']}>
-        <Stage
-          width={1920}
-          height={1080}
-          style={{
-            transform: `
-              scale(${width / 1920}, ${height / 1080})
-              translate(${(width - 1920) / 2}px, ${(height - 1080) / 2}px)`,
-          }}
-        >
+      <div>
+        <Stage width={1920} height={1080}>
           <Layer>
             {playerBullets.map((bullet) => (
               <Bullet key={bullet.id} bullet={bullet} currentTime={currentTime} />
