@@ -3,23 +3,20 @@ import { apiClient } from 'src/utils/apiClient';
 import styles from './Config.module.css';
 
 export const Config = () => {
-  const [info, setInfo] = useState<{
-    playerSpeed: number;
-    playerSize: {
-      h: number;
-      w: number;
-    };
-    makeEnemyFrequency: number;
-    enemySpeed: number;
-    enemySize: {
-      h: number;
-      w: number;
-    };
-  }>();
+  const [playerSpeed, setPlayerSpeed] = useState<number>();
+  const [playerSize, setPlayerSize] = useState<{ h: number; w: number }>();
+  const [makeEnemyFrequency, setmakeEnemyFrequency] = useState<number>();
+  const [enemySpeed, setenemyspeed] = useState<number>();
+  const [enemySize, setEnemySize] = useState<{ h: number; w: number }>();
 
   const fetchInfo = async () => {
     const res = await apiClient.config.$get();
-    setInfo(res);
+    setPlayerSpeed(res.playerSpeed);
+    setPlayerSize(res.playerSize);
+    setmakeEnemyFrequency(res.makeEnemyFrequency);
+    setenemyspeed(res.enemySpeed);
+    setEnemySize(res.enemySize);
+    console.log(res.playerSpeed);
   };
 
   useEffect(() => {
@@ -40,7 +37,7 @@ export const Config = () => {
           <tbody>
             <tr>
               <th>基本playerspeed</th>
-              <td>5/0.1秒</td>
+              <td>{playerSpeed}/0.1秒</td>
               <td>
                 <input type="text" name="PlayerSpeed" placeholder="入力してください" />
               </td>
@@ -49,7 +46,7 @@ export const Config = () => {
               <th>基本playerサイズ</th>
               <td>h:30 w:20</td>
               <td>
-                h:{info?.playerSize.h} w:{info?.playerSize.w}
+                h:{playerSize?.h} w:{playerSize?.w}
               </td>
               <td>
                 <input type="text" name="PlayerSize_h" placeholder="高さを入力してください" />
@@ -58,14 +55,14 @@ export const Config = () => {
             </tr>
             <tr>
               <th>敵の出現頻度</th>
-              <td>2/秒</td>
+              <td>1/{makeEnemyFrequency}秒</td>
               <td>
                 <input type="text" name="Enemy" placeholder="入力してください" />
               </td>
             </tr>
             <tr>
               <th>基本敵speed</th>
-              <td>10/0.1秒</td>
+              <td>{enemySpeed}/0.1秒</td>
               <td>
                 <input type="text" name="EnemySpeed" placeholder="入力してください" />
               </td>
@@ -74,7 +71,7 @@ export const Config = () => {
               <th>基本敵サイズ</th>
               <td>h:30,w:20</td>
               <td>
-                h:{info?.enemySize.h},w:{info?.enemySize.w}
+                h:{enemySize?.h},w:{enemySize?.w}
               </td>
               <td>
                 <input type="text" name="EnemySize_h" placeholder="高さを入力してください" />
