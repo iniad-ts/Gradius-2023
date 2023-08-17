@@ -23,26 +23,11 @@ export type EnemyModel = {
   type: number;
 };
 
-export type PlayerModel = {
+export type playerModel = {
   userId: UserId;
   pos: { x: number; y: number };
   speed: number;
   hp: number;
   radius: number;
   score: number;
-};
-
-export type ConfigModel = {
-  playerSpeed: number;
-  playerSize: {
-    h: number;
-    w: number;
-  };
-  makeEnemyFrequency: number;
-  enemySpeed: number;
-  enemySize: {
-    h: number;
-    w: number;
-  };
-  // creenNumber:
 };

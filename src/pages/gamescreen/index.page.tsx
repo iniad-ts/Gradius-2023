@@ -1,12 +1,9 @@
-<<<<<<< HEAD
+import type { EnemyModel, playerModel } from '$/commonTypesWithClient/models';
 import { useAtom } from 'jotai';
-import { userAtom } from 'src/atoms/user';
-import { Loading } from 'src/components/Loading/Loading';
-import App from 'src/konva/konva';
-=======
-import type { EnemyModel, PlayerModel } from '$/commonTypesWithClient/models';
 import React, { useCallback, useEffect, useState } from 'react';
 import { Circle, Layer, Rect, Stage, Text } from 'react-konva';
+import { userAtom } from 'src/atoms/user';
+import { Loading } from 'src/components/Loading/Loading';
 import { apiClient } from 'src/utils/apiClient';
 >>>>>>> parent of b855fc5 (bulletにDBを導入)
 
@@ -15,7 +12,7 @@ const Home = () => {
   const windowHeight = Number(window.innerHeight);
 
   //プレイヤーと弾敵をstateで管理
-  const [newPlayerPosition, setNewPlayerPosition] = useState<PlayerModel[]>([]);
+  const [newPlayerPosition, setNewPlayerPosition] = useState<playerModel[]>([]);
   const [newGunPosition, setNewGunPosition] = useState<number[][]>([]);
   const [newEnemyPosition, setNewEnemyPosition] = useState<EnemyModel[]>([]);
   //apiを叩いてプレイヤーと銃敵の位置を取得stateにセット
@@ -49,6 +46,7 @@ const Home = () => {
     });
   };
   //配列用の当たり判定関数
+
   /* const checkCollision = (hitlist1: EnemyModel[], hitlist2: EnemyModel[]) => {
     hitlist1.map((list1) => {
       hitlist2.map((list2) => {
@@ -72,6 +70,8 @@ const Home = () => {
     };
   }, [getPosition, newPlayerPosition]);
   //mapで展開してひとつずつ描画
+  const [user] = useAtom(userAtom);
+  if (!user) return <Loading visible />;
 
   return (
 <<<<<<< HEAD

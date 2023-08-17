@@ -1,12 +1,11 @@
 import type { UserId } from '$/commonTypesWithClient/branded';
-import type { PlayerModel } from '$/commonTypesWithClient/models';
-
+import type { playerModel } from '$/commonTypesWithClient/models';
 import { UserIdParser } from '$/service/idParsers';
 import { prismaClient } from '$/service/prismaClient';
 import type { Player } from '@prisma/client';
 import { z } from 'zod';
 
-const toPlayerModel = (prismaPlayer: Player): PlayerModel => ({
+const toPlayerModel = (prismaPlayer: Player): playerModel => ({
   userId: UserIdParser.parse(prismaPlayer.userId),
   pos: z
     .object({
@@ -21,11 +20,11 @@ const toPlayerModel = (prismaPlayer: Player): PlayerModel => ({
 });
 
 export const playerRepository = {
-  getPlayers: async (): Promise<PlayerModel[]> => {
+  getPlayers: async (): Promise<playerModel[]> => {
     const prismaPlayer = await prismaClient.player.findMany();
     return prismaPlayer.map(toPlayerModel);
   },
-  save: async (player: PlayerModel) => {
+  save: async (player: playerModel) => {
     await prismaClient.player.upsert({
       where: { userId: player.userId },
       update: {
@@ -45,7 +44,7 @@ export const playerRepository = {
       },
     });
   },
-  read: async (userId: UserId) => {
+  read: async (userId: string) => {
     const player = await prismaClient.player.findFirst({
       where: { userId },
     });

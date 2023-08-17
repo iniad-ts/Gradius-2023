@@ -1,12 +1,12 @@
 // import type { MoveDirection } from '$/usecase/playerUsecase';
 import type { MoveDirection } from '$/Usecase/playerUsecase';
 
-import type { UserId } from '$/commonTypesWithClient/branded';
 import { useAtom } from 'jotai';
 import { useEffect, useRef, useState } from 'react';
 import { Joystick, JoystickShape } from 'react-joystick-component';
 import type { IJoystickUpdateEvent } from 'react-joystick-component/build/lib/Joystick';
 import { userAtom } from 'src/atoms/user';
+import { Loading } from 'src/components/Loading/Loading';
 import { apiClient } from 'src/utils/apiClient';
 import styles from './controller.module.css';
 
@@ -16,19 +16,13 @@ const Home = () => {
   const [size, setSize] = useState<number>(0);
   const [moveIntervalId, setMoveIntervalId] = useState<NodeJS.Timeout | null>(null);
   const moveDirection = useRef<MoveDirection>({ x: 0, y: 0 });
-  const [userId, setUserId] = useState<UserId | null>(null);
-  const [isready, setIsready] = useState(false);
+  const [user_Id, setUser_Id] = useState('5679405a-ad66-4a37-a478-608ec3e464be');
 
-  const createPlayer = async () => {
-    const result = await apiClient.rooms.createPlayer.$get();
+  const getUserId = async () => {
+    const result = await apiClient.rooms.getUserId.get();
 
-    setUserId(result.userId);
+    setUser_Id(result.body.userId);
   };
-  if (!isready) {
-    //FIXME 将来的にはcookieとかで判定して、すでにプレイヤーが存在する場合はcreatePlayerしないようにする
-    createPlayer();
-    setIsready(true);
-  }
 
   const getsize = () => {
     if (joystickRef.current !== null) {
@@ -51,9 +45,8 @@ const Home = () => {
   };
 
   const move = async () => {
-    if (userId === null) return;
     await apiClient.rooms.control.$post({
-      body: { moveDirection: moveDirection.current, userId },
+      body: { moveDirection: moveDirection.current, userId: user_Id },
     });
     console.log('move', moveDirection.current);
   };
