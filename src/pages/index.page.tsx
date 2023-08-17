@@ -30,18 +30,7 @@ const Home = () => {
 
   const [dx, setDx] = useState(-1); // x方向の移動量
   const dx2 = 1;
-  const [board, setBoard] = useState([
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-  ]);
+
   const hoge = true;
   useEffect(() => {
     const animate = () => {
@@ -113,13 +102,13 @@ const Home = () => {
         setPlayerY((prevY) => Math.max(prevY - 0.05, 0));
       }
       if (isMovingRight) {
-        setPlayerY((prevY) => Math.min(prevY + 0.05, 7));
+        setPlayerY((prevY) => Math.min(prevY + 0.05, 15));
       }
       if (isMovingUp) {
         setPlayerX((prevX) => Math.max(prevX - 0.05, 0));
       }
       if (isMovingDown) {
-        setPlayerX((prevX) => Math.min(prevX + 0.05, 7));
+        setPlayerX((prevX) => Math.min(prevX + 0.05, 15));
       }
 
       animationFrameId = requestAnimationFrame(animate);
@@ -308,12 +297,12 @@ const Home = () => {
       }
     }
   };
-  
 
   const GameOverScreen = () => {
     return (
       <div className="game-over-container">
-        <p className={styles['score-text']}>Your Score: {Math.max(0, score)}</p> {/* スコア表示を修正 */}
+        <p className={styles['score-text']}>Your Score: {Math.max(0, score)}</p>{' '}
+        {/* スコア表示を修正 */}
         <img src="images/gameover2.jpg" alt="Game Over" className={styles['game-over-image']} />
       </div>
     );
@@ -333,9 +322,9 @@ const Home = () => {
       <div className={styles.scoreContainer}>
         <p className={styles.score}>Score: {score}</p>
       </div>
-      <Stage width={1200} height={800} className={styles.background}>
+      <Stage width={1600} height={800} className={styles.background}>
         <Layer>
-          <Image image={imageBack} x={playerY * 100} y={playerX * 100} width={90} height={130} />
+          <Image image={imageBack} x={playerY * 100} y={playerX * 100} width={180} height={130} />
           {bullet.map((bullet, index) => (
             <Image
               image={imageTama}
