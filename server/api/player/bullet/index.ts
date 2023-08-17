@@ -1,10 +1,11 @@
-import type { BulletModelWithPosition } from '$/usecase/bulletUseCase';
+import type { Bullet } from '$/usecase/bulletUseCase';
 
 export type Methods = {
   get: {
-    resBody: BulletModelWithPosition[];
+    resBody: Bullet[];
   };
   post: {
-    resBody: BulletModelWithPosition | null;
+    reqBody: { radius: number };
+    resBody: Bullet;
   };
 };
