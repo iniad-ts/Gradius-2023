@@ -10,7 +10,7 @@ export default defineController(() => ({
   }),
   delete: async ({ body }) => ({
     status: 200,
-    body: await enemyUseCase.kill(body.enemyId, body.playerId),
+    body: await enemyUseCase.kill(body.enemyId, body.userId),
   }),
   post: async () => ({
     status: 200,

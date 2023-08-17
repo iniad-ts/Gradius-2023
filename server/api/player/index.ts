@@ -16,12 +16,5 @@ export type Methods = {
     };
     resBody: PlayerModel | null;
   };
-  delete: {
-    reqBody: {
-      player: PlayerModel;
-      bulletId: string;
-      display: number;
-    };
-  };
 };
 >>>>>>> 03663785872daa6745ed7d079ca26d8a5e223177

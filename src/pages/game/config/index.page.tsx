@@ -7,12 +7,12 @@ import { apiClient } from 'src/utils/apiClient';
 import styles from './index.module.css';
 
 const Config = () => {
-  const [display, setDisplay] = useState<string>('');
+  const [display, setDisplay] = useState<number>(1);
 
   const fetchDisplayNumber = async () => {
     const res = await apiClient.game.config.$get();
     if (res !== null) {
-      setDisplay(String(res));
+      setDisplay(res);
     }
   };
 
@@ -24,11 +24,9 @@ const Config = () => {
   }, []);
 
   const handleChangeDisplay = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const displayNumber = Math.min(Math.max(Number(e.target.value), 1), 99);
-    if (!isNaN(displayNumber)) {
-      setDisplay(String(e.target.value === '' ? '' : displayNumber));
-      await apiClient.game.config.$post({ body: { displayNumber } });
-    }
+    const displayNumber = Math.max(Number(e.target.value), 1);
+    setDisplay(displayNumber);
+    await apiClient.game.config.$post({ body: { displayNumber } });
   };
 
   return (
@@ -40,13 +38,7 @@ const Config = () => {
         </div>
         <div className={styles.config}>
           <label>ディスプレイ枚数</label>
-          <input
-            type="text"
-            value={display}
-            inputMode="numeric"
-            onChange={handleChangeDisplay}
-            min={1}
-          />
+          <input type="number" value={display} onChange={handleChangeDisplay} min={1} />
         </div>
         <Link href="/game" className={styles.button}>
           ゲーム画面

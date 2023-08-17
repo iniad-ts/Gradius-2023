@@ -4,11 +4,13 @@
   align-items: center;
   flex-direction: column;
   width: 100vw;
-  min-height: 100dvh;
+  height: 100dvh;
+  gap: 12px;
   background-color: #111;
 }
 
 .button {
+  width: 64px;
   height: 48px;
   border-radius: 8px;
   background-color: #131313;
@@ -23,9 +25,7 @@
 }
 
 .buttons {
-  width: 64vmin;
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(64px, 1fr));
+  display: flex;
   gap: 12px;
 }
 
