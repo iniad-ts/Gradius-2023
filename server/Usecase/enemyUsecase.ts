@@ -1,5 +1,6 @@
 import { enemyRepository } from '$/Repository/enemyRepository';
-import type { EnemyModel } from '$/commonTypesWithClient/models';
+import type { EnemyId } from '$/commonTypesWithClient/branded';
+import type { ConfigModel, EnemyModel } from '$/commonTypesWithClient/models';
 
 import { EnemyIdParser } from '$/service/idParsers';
 import { randomUUID } from 'crypto';
@@ -17,6 +18,24 @@ export const enemyUsecase = {
       console.log(e);
     }
   },
+  getEnemyInfo: () => {
+    return enemyInfo;
+  },
+  updateInfo: (newInfo: ConfigModel) => {
+    enemyInfo.makeEnemyFrequency = newInfo.makeEnemyFrequency;
+    enemyInfo.enemySpeed = newInfo.enemySpeed;
+    enemyInfo.enemySize = newInfo.enemySize;
+  },
+};
+
+// 仮初期値
+const enemyInfo = {
+  enemyFirstPos_x: 100,
+  enemySpeed: 5,
+  enemyRadius: 20,
+  enemyHp: 10,
+  makeEnemyFrequency: 5000,
+  enemySize: { h: 30, w: 30 },
 };
 
 setInterval(() => {

@@ -57,12 +57,29 @@ export const playerUsecase = {
     await playerRepository.save(updatePlayerInfo);
   },
 
-  getPlayerPos: async () => {
-    return await playerRepository.getPlayers();
-  },
-  getUserId: async () => {
-    return await playerUsecase.createNewPlayer();
-  },
+    getPlayerPos: async () => {
+      return position;
+    },
+
+    getAllPlayer: async (): Promise<PlayerModel[]> => {
+      return await playerRepository.getPlayers();
+    },
+
+    getPlayerInfo: () => {
+      return playerInfo;
+    },
+  };
+})();
+
+// 仮初期値
+const playerInfo = {
+  playerFirstPos_x: 300,
+  playerFirstPos_y: 300,
+  playerSpeed: 5,
+  playerRadius: 20,
+  playerHp: 10,
+  playerScore: 0,
+  playerSize: { h: 30, w: 40 },
 };
 
 //スコアとかどうしよう。
