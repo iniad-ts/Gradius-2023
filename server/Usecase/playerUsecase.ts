@@ -63,7 +63,23 @@ export const playerUsecase = {
     await playerRepository.save(updatePlayerInfo);
   },
 
-  getPlayers: async () => {
+  getAllPlayer: async (): Promise<PlayerModel[]> => {
+    return await playerRepository.getPlayers();
+  },
+  create_player: async () => {
+    const newPlayer: PlayerModel = {
+      userId: UserIdParser.parse(randomUUID()),
+      pos: { x: playerInfo.playerFirstPos_x, y: playerInfo.playerFirstPos_y },
+      speed: playerInfo.playerSpeed,
+      hp: playerInfo.playerHp,
+      radius: playerInfo.playerRadius,
+      score: playerInfo.playerScore,
+    };
+    await playerRepository.save(newPlayer);
+  },
+
+  //残りのやることplayerを動かせるように
+  getPlayerPos: async () => {
     return await playerRepository.getPlayers();
   },
   getPlayers: async () => {

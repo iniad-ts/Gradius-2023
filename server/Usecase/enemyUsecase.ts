@@ -10,11 +10,29 @@ export const enemyUsecase = {
   getAll_Enemies: async (): Promise<EnemyModel[]> => {
     return await enemyRepository.getEnemies();
   },
+  deleteEnemy: async (id: EnemyId) => {
+    try {
+      await enemyRepository.declare(id);
+    } catch (e) {
+      console.log(e);
+    }
+  },
+};
+
+// 仮初期値
+export const enemyInfo = {
+  enemyFirstPos_x: 100,
+  enemySpeed: 5,
+  enemyRadius: 20,
+  enemyHp: 10,
+  makeEnemyFrequency: 5000,
+  enemySize: { h: 30, w: 30 },
 };
 
 setInterval(() => {
   create_enemy();
-}, 4000);
+  deleteOffScreenEnemy();
+}, enemyInfo.makeEnemyFrequency);
 
 setInterval(() => {
   // move_or_delete_enemy();
@@ -29,12 +47,15 @@ const enemy_radius = 20;
 const enemy_hp = 10;
 
 const create_enemy = async () => {
-  const new_enemy: EnemyModel = {
+  const newEnemy: EnemyModel = {
     id: EnemyIdParser.parse(randomUUID()),
-    pos: { x: enemy_first_pos_x, y: Math.floor(Math.random() * 690) + 1 },
-    speed: enemy_speed,
-    hp: enemy_hp,
-    radius: enemy_radius,
+    pos: { x: enemyInfo.enemyFirstPos_x, y: Math.floor(Math.random() * 690) + 1 },
+    speed: enemyInfo.enemyHp,
+    hp: enemyInfo.enemyHp,
+    radius: enemyInfo.enemyRadius,
+    type: 2,
+    ///1-3のランダムな数値を返す
+    /* type: Math.floor(Math.random() * 3) + 1, */
   };
   await enemyRepository.save(new_enemy);
 };
