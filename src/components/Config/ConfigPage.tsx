@@ -1,6 +1,42 @@
 import styles from './Config.module.css';
 
 export const Config = () => {
+  const [info, setInfo] = useState<ConfigModel>();
+
+  const newInfo = info;
+
+  const fetchInfo = async () => {
+    const res = await apiClient.config.$get();
+    setInfo(res);
+  };
+
+  const updatePlayerSpeed = async () => {
+    const inputElement = document.getElementById('PlayerSpeed') as HTMLInputElement;
+    const inputValue = inputElement.value;
+
+    if (newInfo !== undefined) {
+      newInfo.playerSpeed = Number(inputValue);
+      await apiClient.config.$post({ body: newInfo });
+      setInfo(newInfo);
+      console.log('送信');
+    }
+  };
+
+  const updateMakeEnemyFrequency = async () => {
+    const inputElement = document.getElementById('mEF') as HTMLInputElement;
+    const inputValue = inputElement.value;
+
+    if (newInfo !== undefined) {
+      newInfo.makeEnemyFrequency = Number(inputValue);
+      await apiClient.config.$post({ body: newInfo });
+      setInfo(newInfo);
+    }
+  };
+
+  useEffect(() => {
+    fetchInfo();
+  }, [newInfo]);
+
   return (
     <div className={styles.container}>
       <div className={styles.table}>
@@ -24,8 +60,12 @@ export const Config = () => {
               <th>基本playerサイズ</th>
               <td>h:30 w:20</td>
               <td>
+                h:{info?.playerSize.h} w:{info?.playerSize.w}
+              </td>
+              <td>
                 <input type="text" name="PlayerSize_h" placeholder="高さを入力してください" />
                 <input type="text" name="PlayerSize_w" placeholder="幅を入力してください" />
+                <button onClick={() => update()}>更新</button>
               </td>
             </tr>
             <tr>
@@ -40,14 +80,19 @@ export const Config = () => {
               <td>10/0.1秒</td>
               <td>
                 <input type="text" name="EnemySpeed" placeholder="入力してください" />
+                <button onClick={() => update()}>更新</button>
               </td>
             </tr>
             <tr>
               <th>基本敵サイズ</th>
               <td>h:30,w:20</td>
               <td>
+                h:{info?.enemySize.h},w:{info?.enemySize.w}
+              </td>
+              <td>
                 <input type="text" name="EnemySize_h" placeholder="高さを入力してください" />
                 <input type="text" name="EnemySize_w" placeholder="幅を入力してください" />
+                <button onClick={() => update()}>更新</button>
               </td>
             </tr>
             <tr>
@@ -55,6 +100,7 @@ export const Config = () => {
               <td>15</td>
               <td>
                 <input type="text" name="Screen" placeholder="入力してください" />
+                <button onClick={() => update()}>更新</button>
               </td>
             </tr>
           </tbody>
