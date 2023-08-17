@@ -9,8 +9,10 @@ import { randomUUID } from 'crypto';
 //repositoryからgetEnemiesを直接たたくとusecaseがなぜか更新されないため1時的な回避策としてusecaseをapiでたたいて認識させてます
 export const enemyUsecase = {
   getAll_Enemies: async (): Promise<EnemyModel[]> => {
+  getAll_Enemies: async (): Promise<EnemyModel[]> => {
     return await enemyRepository.getEnemies();
   },
+  delete_enemy: async (id: EnemyId) => {
   delete_enemy: async (id: EnemyId) => {
     try {
       await enemyRepository.declare(id);
@@ -22,10 +24,10 @@ export const enemyUsecase = {
 
 // 仮初期値
 export const enemyInfo = {
-  enemyFirstPos_x: 100,
-  enemySpeed: 5,
-  enemyRadius: 20,
-  enemyHp: 10,
+  enemy_first_pos_x: 100,
+  enemy_speed: 5,
+  enemy_radius: 20,
+  enemy_hp: 10,
   makeEnemyFrequency: 5000,
   enemySize: { h: 30, w: 30 },
 };
@@ -49,10 +51,10 @@ const enemy_hp = 10;
 const create_enemy = async () => {
   const new_enemy: EnemyModel = {
     id: EnemyIdParser.parse(randomUUID()),
-    pos: { x: enemy_first_pos_x, y: Math.floor(Math.random() * 690) + 1 },
-    speed: enemy_speed,
-    hp: enemy_hp,
-    radius: enemy_radius,
+    pos: { x: enemyInfo.enemy_first_pos_x, y: Math.floor(Math.random() * 690) + 1 },
+    speed: enemyInfo.enemy_speed,
+    hp: enemyInfo.enemy_hp,
+    radius: enemyInfo.enemy_radius,
     type: 2,
     ///1-3のランダムな数値を返す
     /* type: Math.floor(Math.random() * 3) + 1, */
