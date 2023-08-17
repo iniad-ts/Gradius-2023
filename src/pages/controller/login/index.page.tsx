@@ -27,17 +27,12 @@ const Login = () => {
   };
 
   return (
-    <div className={styles.all}>
-      <h1 className={styles.text}>INIAD.tsにようこそ</h1>
-      <h2 className={styles.text2}>ゲームで使用する名前を入力してください</h2>
-      <div className={styles.box}>
-        <input type="text" value={name} onChange={handleChange} className={styles.input} />
-      </div>
-      <div className={styles.box}>
-        <button onClick={login} disabled={isButtonDisabled} className={styles.button}>
-          決定
-        </button>
-      </div>
+    <div>
+      <h1>Login</h1>
+      <input type="text" value={name} onChange={handleChange} />
+      <button onClick={login} disabled={isButtonDisabled}>
+        ログイン
+      </button>
     </div>
   );
 };
