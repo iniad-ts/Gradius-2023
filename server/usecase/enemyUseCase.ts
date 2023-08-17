@@ -15,7 +15,7 @@ const spawnEnemy = async (): Promise<EnemyModel> => {
       y: randomPosY,
     },
     health: 1,
-    speed: 2,
+    speed: 5,
     radius: 20,
     direction: 0,
     type: 0,
@@ -49,14 +49,8 @@ const moveEnemy = async (enemy: EnemyModel) => {
   removeOutedEnemy(movedEnemy);
 };
 
-export const enemyUseCase = {
-  getAll: async (): Promise<EnemyModel[] | null> => {
-    const enemies: EnemyModel[] = (await enemiesRepository.getAll()) ?? [];
-    return enemies;
-  },
-  spawn: spawnEnemy,
-  moveAll: async () => {
-    const enemies: EnemyModel[] = (await enemiesRepository.getAll()) ?? [];
-    enemies.forEach(moveEnemy);
-  },
-};
+const cancelSpawnInterval = setInterval(spawnEnemy, 1000);
+const cancelMoveInterval = setInterval(async () => {
+  const enemies: EnemyModel[] = (await enemiesRepository.getAll()) ?? [];
+  enemies.forEach(moveEnemy);
+}, 10);

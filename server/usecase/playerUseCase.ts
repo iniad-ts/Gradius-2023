@@ -38,13 +38,13 @@ export const playerUseCase = {
         createdAt: Date.now(),
         updateAt: Date.now(),
         position: {
-          x: 150,
+          x: 500,
           y: 350,
         },
         health: 100,
         score: 0,
-        radius: 50,
-        speed: 5,
+        radius: 20,
+        speed: 2,
         gameId: await gameUseCase.findGameId(),
       };
       await playersRepository.save(newPlayer);
