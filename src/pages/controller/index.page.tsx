@@ -32,7 +32,7 @@ const Controller = () => {
   };
 
   const move = async () => {
-    // await apiClient.move.$post({ direction: moveDirection });
+    // await apiClient.player.$post({ moveTo: moveDirection });
     console.log('move', moveDirection.current);
   };
 
@@ -48,8 +48,8 @@ const Controller = () => {
 
   const handleMove = (e: IJoystickUpdateEvent) => {
     const moveTo = {
-      x: Math.round(e.x ?? 0),
-      y: Math.round(e.y ?? 0),
+      toX: Math.round(e.x ?? 0),
+      toY: Math.round(e.y ?? 0),
     };
     moveDirection.current = moveTo;
   };
