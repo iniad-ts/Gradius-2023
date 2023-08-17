@@ -19,6 +19,17 @@ export const enemyUseCase = {
     };
     await enemiesRepository.create(newEnemy);
   },
+  findAll: async (displayNumber: number) => {
+    const res = (await enemiesRepository.findAll()) ?? [];
+    const enemiesInDisplay = res.filter(
+      (enemy) =>
+        !(
+          1920 * displayNumber > enemy.createdPosition.x ||
+          enemy.createdPosition.x > 1920 * (displayNumber + 1)
+        )
+    );
+    return enemiesInDisplay;
+  },
   kill: async (enemyId: string, userId: UserId) => {
     await enemiesRepository.update(enemyId, new Date());
     const userStatus = await playerUseCase.getStatus(userId, null);

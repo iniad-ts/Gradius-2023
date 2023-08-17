@@ -44,7 +44,13 @@ export const bulletUseCase = {
     enemyUseCase.respawn();
     const res = (await bulletsRepository.findAll()) ?? [];
     const bulletsInDisplay = res
-      .filter((bullet) => isInDisplay(displayNumber, posWithBulletModel(bullet)[0]))
+      .filter(
+        (bullet) =>
+          !(
+            1920 * displayNumber > posWithBulletModel(bullet)[0] ||
+            posWithBulletModel(bullet)[0] > 1920 * (displayNumber + 1)
+          )
+      )
       .map((bullet) => ({
         ...bullet,
         createdPosition: {
