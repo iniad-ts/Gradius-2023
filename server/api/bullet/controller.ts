@@ -3,10 +3,7 @@ import { bulletUseCase } from '$/useCase/bulletUseCase';
 import { defineController } from './$relay';
 
 export default defineController(() => ({
-  get: async ({ query }) => ({
-    status: 200,
-    body: await bulletUseCase.findInDisplay(query.display),
-  }),
+  get: async ({ query }) => ({ status: 200, body: await bulletUseCase.getStatus(query.display) }),
   delete: async ({ body }) => ({
     status: 200,
     body: await bulletsRepository.delete(body.bulletId),

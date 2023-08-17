@@ -1,3 +1,4 @@
+import type { UserId } from '$/commonTypesWithClient/branded';
 import type { BulletModel, EnemyModel, PlayerModel } from '$/commonTypesWithClient/models';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
@@ -43,9 +44,18 @@ const Game = () => {
     const fetchBullets = async (display: number) => {
       const res = await apiClient.bullet.$get({ query: { display } });
       if (res !== null) {
-        setPlayerBullets(res.players);
-        setEnemyBullets(res.enemies);
+        setPlayerBullets(res.playerS);
+        setEnemyBullets(res.enemyS);
       }
+    };
+
+    //プレイヤーの体力を減らす
+    const updateHealth = async (playerId: UserId) => {
+      const player = players.find((player) => player.id === playerId);
+      if (!player) return;
+      await apiClient.player.status.$post({
+        body: { player: { ...player, health: player.health - 1 } },
+      });
     };
 
     //衝突判定の距離
@@ -90,7 +100,13 @@ const Game = () => {
         });
 
         if (hitPlayer) {
-          apiClient.game.$post({ body: { player: hitPlayer, enemy } });
+          await apiClient.enemy.$delete({
+            body: {
+              enemyId: enemy.id,
+              userId: hitPlayer.id,
+            },
+          });
+          updateHealth(hitPlayer.id);
         } else {
           remainingEnemies.push(enemy);
         }

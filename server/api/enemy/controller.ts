@@ -2,10 +2,7 @@ import { enemyUseCase } from '$/useCase/enemyUseCase';
 import { defineController } from './$relay';
 
 export default defineController(() => ({
-  get: async ({ query }) => ({
-    status: 200,
-    body: await enemyUseCase.findInDisplay(query.display),
-  }),
+  get: async ({ query }) => ({ status: 200, body: await enemyUseCase.findAll(query.display) }),
   delete: async ({ body }) => ({
     status: 200,
     body: await enemyUseCase.kill(body.enemyId, body.userId),
