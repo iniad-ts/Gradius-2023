@@ -88,6 +88,7 @@ const Home = () => {
               start={moveStart}
             />
           </div>
+          <div className={styles.ma}>Controller</div>
           <button className={styles.shoot} onClick={shoot} />
         </div>
       </div>
