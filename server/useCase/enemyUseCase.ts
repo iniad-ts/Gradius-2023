@@ -18,25 +18,19 @@ export const enemyUseCase = {
       createdAt: Date.now(),
       type: 0,
     };
+<<<<<<< HEAD
     await enemiesRepository.create(newEnemy);
     return newEnemy;
+=======
+    await enemiesRepository.save(newEnemy);
+>>>>>>> parent of 1458994 (add: respawn enemy)
   },
-  kill: async (enemyId: string, userId: UserId) => {
-    await enemiesRepository.update(enemyId, new Date());
-    console.log('killed');
+  delete: async (enemyId: string, userId: UserId) => {
+    await enemiesRepository.delete(enemyId);
     const userStatus = await playerUseCase.getStatus(userId, null);
     if (userStatus !== null) {
       await playersRepository.save({ ...userStatus, score: userStatus.score + 1 });
     }
-  },
-  respawn: async () => {
-    const nowTime = new Date().getTime();
-    const resS = await enemiesRepository.findNotNull();
-    resS
-      .filter((res) => nowTime - res.deletedAt.getTime() > RESPAWN_TIME)
-      .forEach(async (res) => {
-        await enemiesRepository.update(res.id, null);
-      });
   },
   createAll: async () => {
     const res = await enemyTable();
@@ -52,10 +46,9 @@ export const enemyUseCase = {
               y: table.createPosition.y,
             },
             createdAt: Date.now(),
-            deletedAt: null,
             type: table.type,
           };
-          enemiesRepository.create(newEnemy);
+          enemiesRepository.save(newEnemy);
         })
       );
     }
