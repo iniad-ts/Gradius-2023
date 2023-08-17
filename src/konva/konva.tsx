@@ -26,7 +26,7 @@ function App() {
   }, []);
   //仮の当たり判定関数
   const checkCollision = (hitlist1: EnemyModel[], hitlist2: number[][]) => {
-    const list2Radius = 20; // list2 の固定の半径
+    const list2Radius = 10; // list2 の固定の半径
 
     hitlist1.map((list1) => {
       hitlist2.map((list2: number[]) => {

@@ -40,10 +40,21 @@ const create_enemy = async () => {
     speed: enemy_speed,
     hp: enemy_hp,
     radius: enemy_radius,
+    type: Math.floor(Math.random() * 3) + 1,
   };
   await enemyRepository.save(new_enemy);
 };
-
+//typeに
+const moveEnemyByplayer = (enemy: EnemyModel): { x: number; y: number } => {
+  if (enemy.type === 1) {
+    return { x: enemy.pos.x - enemy.speed, y: enemy.pos.y };
+  } else if (enemy.type === 2) {
+    return { x: enemy.pos.x - 30, y: enemy.pos.y };
+  } else if (enemy.type === 3) {
+    return { x: enemy.pos.x - 100, y: enemy.pos.y };
+  }
+  return { x: enemy.pos.x, y: enemy.pos.y };
+};
 const move_Enemy = async () => {
   const enemies: EnemyModel[] = await enemyRepository.getEnemies();
 
@@ -56,12 +67,20 @@ const move_Enemy = async () => {
     await enemyRepository.save(moved_enemy);
   }
 };
+const EnemyExist = async (id: EnemyId): Promise<boolean> => {
+  const enemies: EnemyModel[] = await enemyRepository.getEnemies();
+  return enemies.some((enemy) => enemy.id === id);
+};
 
-  const offScreenEnemiesIds = enemies.filter((enemy) => enemy.pos.x < 50).map((enemy) => enemy.id);
+const delete_off_screen_enemy = async () => {
+  const enemies: EnemyModel[] = await enemyRepository.getEnemies();
 
-  for (const id of offScreenEnemiesIds) {
-    await deleteEnemy(id);
+  for (const enemy of enemies) {
+    if (enemy.pos.x < 50 && (await EnemyExist(enemy.id))) {
+      await enemyRepository.declare(enemy.id);
+    }
   }
+  return;
 };
 
 //await Promise.allは、必要か微妙
