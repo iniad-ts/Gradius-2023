@@ -98,6 +98,7 @@ const Game = () => {
         });
 
         if (hitPlayer) {
+<<<<<<< HEAD
           await apiClient.enemy.$delete({
             body: {
               enemyId: enemy.id,
@@ -105,6 +106,10 @@ const Game = () => {
             },
           });
           updateHealth(hitPlayer.id);
+=======
+
+          apiClient.game.$post({ body: { player: hitPlayer, enemy } });
+>>>>>>> parent of 9c10cb9 (fix lint)
         } else {
           remainingEnemies.push(enemy);
         }
