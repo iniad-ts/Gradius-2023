@@ -58,7 +58,7 @@ function App() {
 
   //apiを叩く処理を100msごとに実行
   useEffect(() => {
-    const cancelId = setInterval(getPosition, 100);
+    const cancelId = setInterval(getPosition, 50);
 
     return () => {
       clearInterval(cancelId);

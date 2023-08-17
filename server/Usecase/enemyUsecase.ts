@@ -44,7 +44,7 @@ const create_enemy = async () => {
   };
   await enemyRepository.save(new_enemy);
 };
-//typeに
+//typeによって移動速度を変える
 const moveEnemyByplayer = (enemy: EnemyModel): { x: number; y: number } => {
   if (enemy.type === 1) {
     return { x: enemy.pos.x - enemy.speed, y: enemy.pos.y };
@@ -67,22 +67,18 @@ const move_Enemy = async () => {
     await enemyRepository.save(moved_enemy);
   }
 };
-const EnemyExist = async (id: EnemyId): Promise<boolean> => {
-  const enemies: EnemyModel[] = await enemyRepository.getEnemies();
-  return enemies.some((enemy) => enemy.id === id);
-};
 
 const delete_off_screen_enemy = async () => {
-  const enemies: EnemyModel[] = await enemyRepository.getEnemies();
-
-  for (const enemy of enemies) {
-    if (enemy.pos.x < 50 && await EnemyExist(enemy.id)) {
-      await enemyRepository.declare(enemy.id);
-    } 
-  }
-  return
-};
-
+  let enemies: EnemyModel[] = await enemyRepository.getEnemies();
+  enemies = enemies.filter((enemy) => {
+    //とりあえず50です
+    if (enemy.pos.x < 50) {
+      enemyRepository.declare(enemy.id);
+      return false;
+    } else {
+      return true;
+    }
+  });
 
   //await Promise.allは、必要か微妙
   //await Promise.all(enemies.map((enemy) => enemyRepository.save(enemy)));
