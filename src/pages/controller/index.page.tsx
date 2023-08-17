@@ -8,16 +8,11 @@ import { useEffect, useRef, useState } from 'react';
 import { Joystick, JoystickShape } from 'react-joystick-component';
 import type { IJoystickUpdateEvent } from 'react-joystick-component/build/lib/Joystick';
 import { apiClient } from 'src/utils/apiClient';
-import styles from './index.module.css';
-
-interface WindowSize {
-  x: number;
-  y: number;
-}
+import styles from './controller.module.css';
 
 const Home = () => {
   const joystickRef = useRef<HTMLDivElement>(null);
-  const [windowSize, setWindowSize] = useState<WindowSize>();
+  const [size, setSize] = useState<number>(0);
   const [moveIntervalId, setMoveIntervalId] = useState<NodeJS.Timeout | null>(null);
   const moveDirection = useRef<MoveDirection>({ x: 0, y: 0 });
   const [userId, setUserId] = useState<UserId | null>(
@@ -32,19 +27,17 @@ const Home = () => {
   const getsize = () => {
     if (joystickRef.current !== null) {
       // joystickRef.currentがnullでないことをチェック
-      const windowData = {
-        x: window.innerWidth,
-        y: window.innerHeight,
-      };
-      setWindowSize(windowData);
+      const width = joystickRef.current.offsetWidth;
+      setSize(width);
     }
   };
+  // useEffectフックをトップレベルに配置します
   useEffect(() => {
     const cance = setInterval(getsize, 100);
     return () => {
       clearInterval(cance);
     };
-  }, []);
+  }, []); // 依存性配列は空にします。getsizeが変更されるとタイマーはリセットされません
 
   const shoot = async () => {
     if (userId === null) return;
@@ -77,26 +70,27 @@ const Home = () => {
   return (
     <>
       <div className={styles.container}>
-        <div className={styles.info}>
-          <p>スコア:</p>
+        {/* <button onClick={() => pushButton('up')}>kakikukeko</button> */}
+        <div className={styles.board}>
+          <div ref={joystickRef} className={styles.joystick}>
+            <Joystick
+              size={size}
+              stickSize={size / 2}
+              baseColor="gray"
+              stickColor="black"
+              baseShape={JoystickShape.Square}
+              move={handleMove}
+              stop={moveEnd}
+              start={moveStart}
+            />
+          </div>
+          {/* <div className={styles.ma}>
+            <p>Score</p>
+          </div> */}
+          <button className={styles.shoot} onClick={shoot} />
         </div>
-        <div ref={joystickRef} className={styles.joystick}>
-          <Joystick
-            size={Math.min(windowSize?.x ?? 0, windowSize?.y ?? 0) / 2}
-            baseColor="gray"
-            stickColor="lightyellow"
-            baseShape={JoystickShape.Square}
-            move={handleMove}
-            stop={moveEnd}
-            start={moveStart}
-          />
-        </div>
-        <div className={styles.button} onClick={shoot} />
       </div>
-      <details>
-        <summary>デバッグ</summary>
-        <div>userId: {userId}</div>
-      </details>
+      <p>userid:{userId}</p>
     </>
   );
 };
