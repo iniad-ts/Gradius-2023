@@ -37,6 +37,7 @@ export const gameUseCase = {
     enemyUseCase.respawn();
     enemyUseCase.shot2();
     enemyUseCase.shot3();
+    enemyUseCase.shot4();
     if (id === null) return null;
     const player = await playersRepository.find(id);
     if (player === null) return null;

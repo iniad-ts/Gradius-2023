@@ -79,29 +79,52 @@ export const enemyUseCase = {
     const players = await playersRepository.findAll();
     Promise.all(
       res.map((enemy) => {
-        const lockOnPlayer = players
-          .map((player) => ({
-            pos: { ...player.position },
-            distance:
-              (player.position.x - enemy.createdPosition.x) ** 2 +
-              (player.position.y - enemy.createdPosition.y) ** 2,
-          }))
-          .sort((a, b) => a.distance - b.distance)[0];
-
+        const lockOnPlayer = sortByDistance(players, enemy)[0];
         const diffX = lockOnPlayer.pos.x - enemy.createdPosition.x;
         const diffY = lockOnPlayer.pos.y - enemy.createdPosition.y;
-        const normalization = 1 / Math.sqrt(lockOnPlayer.distance);
+        const normalization = 1 / Math.sqrt(lockOnPlayer.distance2);
         const dir = {
           x: diffX * normalization,
           y: diffY * normalization,
         };
-        return bulletUseCase.createByEnemy(
-          {
-            x: enemy.createdPosition.x,
-            y: enemy.createdPosition.y,
-          },
-          dir
-        );
+        return bulletUseCase.createByEnemy({ ...enemy.createdPosition }, dir);
+      })
+    ).then((results) =>
+      results.forEach((result) => {
+        result;
+      })
+    );
+  },
+  shot4: async () => {
+    const res = await enemiesRepository.findType(3);
+    const players = await playersRepository.findAll();
+    Promise.all(
+      res.map((enemy) => {
+        const lockOnPlayer = sortByDistance(players, enemy)[0];
+        const subShotPlaces = (numOfBullet: number) =>
+          [...Array(numOfBullet)].map((_, i) => {
+            const subPlaceX = lockOnPlayer.pos.y * 0.1 * (i + 1);
+            const subPlaceY = lockOnPlayer.pos.x * 0.1 * (i + 1);
+            return [1, -1].map((i) => ({
+              x: lockOnPlayer.pos.x + subPlaceX * i,
+              y: lockOnPlayer.pos.y + subPlaceY * i,
+            }));
+          });
+
+        const returnVoid = subShotPlaces(2)
+          .flat()
+          .map((pos) => {
+            const normalization = Math.sqrt(
+              (pos.x - enemy.createdPosition.x) ** 2 + (pos.y - enemy.createdPosition.y) ** 2
+            );
+            const diffX = pos.x - enemy.createdPosition.x;
+            const diffY = pos.y - enemy.createdPosition.y;
+            return bulletUseCase.createByEnemy(
+              { ...enemy.createdPosition },
+              { x: diffX * normalization, y: diffY * normalization }
+            );
+          });
+        return returnVoid;
       })
     ).then((results) =>
       results.forEach((result) => {
