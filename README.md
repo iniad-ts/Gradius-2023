@@ -28,7 +28,7 @@ $ cp docker/dev/.env.example docker/dev/.env
 $ cp server/prisma/.env.example server/prisma/.env
 ```
 
-### ミドルウェアのセットアップsiko2525
+### ミドルウェアのセットアップ
 
 ```sh
 $ docker-compose up -d
