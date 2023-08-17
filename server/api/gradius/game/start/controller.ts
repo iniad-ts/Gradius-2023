@@ -6,7 +6,7 @@ export default defineController(() => ({
   post: ({ user }) => ({
     status: 201,
     body: gradiusRepository.create(
-      { ...InitGameModel, user: user.id, created: new Date().getTime() },
+      { ...InitGameModel, user: user.id, started: new Date().getTime() },
       { ...InitEventModel, owner: user.id }
     ),
   }),

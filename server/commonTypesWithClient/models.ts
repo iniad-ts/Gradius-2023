@@ -17,13 +17,11 @@ export type TaskModel = {
 export type GameModel = {
   user: UserId;
   type: string;
-  id: null | string;
   xyz: number[];
-  vector: number[];
   speed: number;
   hp: number;
   lv: number;
-  created: number;
+  started: number;
   end: number | null;
 };
 
@@ -37,14 +35,13 @@ export type EventModel = {
 
 export const InitGameModel = {
   user: null,
-  id: null,
   type: 'owner',
   xyz: [-5, 0, 0],
   vector: [0, 0, 0],
   speed: 1,
   hp: 100,
   lv: 1,
-  created: null,
+  started: null,
   end: null,
 };
 
