@@ -3,18 +3,12 @@ import { apiClient } from 'src/utils/apiClient';
 
 const Login = () => {
   const [name, setName] = useState<string>('');
-  const [isButtonDisabled, setIsButtonDisabled] = useState<boolean>(true);
-  const [player, setPlayer] = useAtom(playerAtom);
-  const router = useRouter();
-
-  if (player !== null) {
-    router.push('/controller');
-  }
-
-  const login = async () => {
-    if (isButtonDisabled) return;
-    const res = await apiClient.login.$post({ body: { name } });
-    setPlayer(res);
+  const handleLogin = async () => {
+    const res = await apiClient.login.$post({ body: { userName: name } });
+    if (res.name !== undefined && res.name !== '') {
+      alert('ログイン成功');
+      return;
+    }
   };
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setName(e.target.value);

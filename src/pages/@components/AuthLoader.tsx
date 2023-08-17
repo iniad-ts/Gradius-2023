@@ -34,13 +34,6 @@ export const AuthLoader = () => {
   }, [setUser]);
 
   useEffect(() => {
-    (async () => {
-      if (player === null) return;
-      await apiClient.session.player.$post({ body: { id: player.id } });
-    })();
-  }, [setPlayer, player]);
-
-  useEffect(() => {
     if (!isInitedAuth) return;
 
     const redirectToHome = async () => {
