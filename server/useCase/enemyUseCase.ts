@@ -18,12 +18,7 @@ export const enemyUseCase = {
       createdAt: Date.now(),
       type: 0,
     };
-<<<<<<< HEAD
-    await enemiesRepository.create(newEnemy);
-    return newEnemy;
-=======
     await enemiesRepository.save(newEnemy);
->>>>>>> parent of 1458994 (add: respawn enemy)
   },
   delete: async (enemyId: string, userId: UserId) => {
     await enemiesRepository.delete(enemyId);
