@@ -1,6 +1,7 @@
 import type { UserId } from '$/commonTypesWithClient/branded';
 import type { PlayerModel } from '$/commonTypesWithClient/models';
 import { playersRepository } from '$/repository/playersRepository';
+import { UserIdParser } from '$/service/idParsers';
 import { minmax } from '$/service/minmax';
 import { randomUUID } from 'crypto';
 
@@ -28,7 +29,7 @@ export const playerUseCase = {
   },
   create: async (userName: string): Promise<PlayerModel | null> => {
     const newPlayer: PlayerModel = {
-      id: userIdParser.parse(randomUUID()),
+      id: UserIdParser.parse(randomUUID()),
       name: userName,
       position: {
         x: 150,

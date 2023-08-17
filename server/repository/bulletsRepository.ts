@@ -1,5 +1,5 @@
 import type { BulletModel } from '$/commonTypesWithClient/models';
-import { bulletIdParser, userIdParser } from '$/service/idParsers';
+import { UserIdParser, bulletIdParser } from '$/service/idParsers';
 import { prismaClient } from '$/service/prismaClient';
 import type { Bullet } from '@prisma/client';
 import { z } from 'zod';
@@ -14,7 +14,7 @@ const toBulletModel = (prismaBullet: Bullet): BulletModel => ({
     .parse(prismaBullet.createdPosition),
   direction: z.number().min(0).max(360).parse(prismaBullet.direction),
   type: z.number().min(0).parse(prismaBullet.type),
-  playerId: prismaBullet.playerId === null ? undefined : userIdParser.parse(prismaBullet.playerId),
+  playerId: prismaBullet.playerId === null ? undefined : UserIdParser.parse(prismaBullet.playerId),
   createdAt: prismaBullet.createdAt.getTime(),
 });
 
