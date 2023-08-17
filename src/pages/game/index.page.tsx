@@ -72,23 +72,8 @@ const Game = () => {
       }
     };
 
-    const updateHealth = (playerId: string) => {
-      const newPlayers = players.map((player) => {
-        if (player.id === playerId) {
-          return { ...player, health: player.health - 1 };
-        }
-        return player;
-      });
-      setPlayers(newPlayers);
-      const updatedPlayerModel = newPlayers.find((player) => player.id === playerId);
-      if (!updatedPlayerModel) return;
-      apiClient.player.$patch({
-        body: { player: updatedPlayerModel },
-      });
-    };
-
-    //敵と弾の衝突判定
-    const checkCollisionBullet = () => {
+    //衝突判定
+    const checkCollision = () => {
       const newEnemies = enemies.filter((enemy) => {
         const hitBullet = bullets.find((bullet) => {
           const bulletPosition = posWithDirSpeTim(bullet, currentTime);
@@ -113,38 +98,12 @@ const Game = () => {
       setEnemies(newEnemies);
     };
 
-    //敵とプレイヤーの衝突判定
-    const checkCollisionPlayer = () => {
-      const newEnemies = enemies.filter((enemy) => {
-        const hitPlayer = players.find((player) => {
-          const distance = Math.sqrt(
-            Math.pow(enemy.createdPosition.x - player.position.x, 2) +
-              Math.pow(enemy.createdPosition.y - player.position.y, 2)
-          );
-          return distance < 50;
-        });
-        if (hitPlayer) {
-          apiClient.enemy.$delete({
-            body: {
-              enemyId: enemy.id,
-              userId: hitPlayer.id,
-            },
-          });
-          updateHealth(hitPlayer.id);
-          return false;
-        }
-        return true;
-      });
-      setEnemies(newEnemies);
-    };
-
     useEffect(() => {
       const cancelId = requestAnimationFrame(() => {
         fetchPlayers(display);
         fetchEnemies(display);
         fetchBullets(display);
-        checkCollisionBullet();
-        checkCollisionPlayer();
+        checkCollision();
         setCurrentTime(Date.now());
       });
       return () => cancelAnimationFrame(cancelId);

@@ -50,8 +50,4 @@ export const playerUseCase = {
     if (player === null) return null;
     return player;
   },
-  update: async (player: PlayerModel): Promise<PlayerModel | null> => {
-    await playersRepository.save(player);
-    return player;
-  },
 };
