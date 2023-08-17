@@ -1,21 +1,12 @@
-import { playerRepository } from '$/Repository/playerRepository';
-import type { PlayerModel } from '$/commonTypesWithClient/models';
-
-import { UserIdParser } from '$/service/idParsers';
-import { randomUUID } from 'crypto';
-import type { UserId } from './../commonTypesWithClient/branded';
-
 export type MoveDirection = { x: number; y: number };
 
-export const position: number[][] = [[300, 500]];
+export const position: number[][] = [[50, 500]];
 export let gunPosition: number[][] = [[]];
 
-export const gunShot = async (userId: UserId) => {
+export const gunShot = async () => {
   console.log('gunShot動作');
-  const recentlyPlayerInfo = await playerRepository.read(userId);
-  gunPosition.push([recentlyPlayerInfo.pos.x, recentlyPlayerInfo.pos.y]);
+  gunPosition.push([position[0][0] + 50, position[0][1] + 25]);
 };
-
 setInterval(() => {
   moveGun();
 }, 5);
@@ -23,8 +14,7 @@ setInterval(() => {
 const moveGun = () => {
   const newGunPosition: number[][] = [];
   for (const s of gunPosition) {
-    //TODO この5000は仮の値、将来的にはモニターサイズから逆算して出す
-    s[0] + 1 <= 15000 && newGunPosition.push([s[0] + 1, s[1]]);
+    s[0] + 1 <= 1500 && newGunPosition.push([s[0] + 1, s[1]]);
   }
   gunPosition = newGunPosition;
   return gunPosition;
