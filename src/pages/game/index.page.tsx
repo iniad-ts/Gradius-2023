@@ -93,8 +93,9 @@ const Game = () => {
             Math.pow(enemy.createdPosition.y - player.position.y, 2);
           return distanceSquared < COLLISION_DISTANCE ** 2;
         });
-        if (hitPlayer !== undefined) {
-          apiClient.game.$post({ body: { player: hitPlayer, enemy }, query: { display } });
+
+        if (hitPlayer) {
+          apiClient.game.$post({ body: { player: hitPlayer, enemy } });
         } else {
           remainingEnemies.push(enemy);
         }

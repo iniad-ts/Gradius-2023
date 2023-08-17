@@ -24,8 +24,5 @@ export const hooks = defineHooks(() => ({
 
 export default defineController(() => ({
   put: async ({ player }) => ({ status: 200, body: await gameUseCase.update(player.id) }),
-  post: ({ body, query }) => ({
-    status: 201,
-    body: gameUseCase.collision(body.player, body.enemy, query.display),
-  }),
+  post: ({ body }) => ({ status: 201, body: gameUseCase.collision(body.player, body.enemy) }),
 }));
