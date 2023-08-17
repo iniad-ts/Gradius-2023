@@ -6,3 +6,4 @@ export type Methods = {
     resBody: { games: GameModel[]; event: EventModel };
   };
 };
+//動かない場合はserver/api/$api.tsをいい感じに書き換える

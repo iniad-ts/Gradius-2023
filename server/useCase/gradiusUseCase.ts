@@ -1,6 +1,6 @@
 import type { UserId } from '$/commonTypesWithClient/branded';
 import type { GameModel } from '$/commonTypesWithClient/models';
-import { gradiusRepository } from '$/repository/gradiusRepository';
+import { gradiusRepository } from '$/repository/gradiosRepository';
 export const gradiusUaeCase = {
   input: async (type: number, user: UserId) => {
     if (type === 6) {
@@ -20,10 +20,10 @@ export const gradiusUaeCase = {
   // },
   // clash: async () => {クラッシュむずくね？？？
   //   const ownersXYZ = gradiusRepository
-  //     .findWithType('owner')
+  //     .findWithtype('owner')
   //     .map((gra) => ({ name: gra.name, xyz: gra.xyz }));
   //   const beamsXYZ = gradiusRepository
-  //     .findWithType('beam')
+  //     .findWithtype('beam')
   //     .map((gra) => ({ name: gra.name, xyz: gra.xyz, owner: gra.owner }));
   //   const othersBeamsXYZ = (name: string) =>
   //     ownersXYZ.map((owner) =>
