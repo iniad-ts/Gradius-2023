@@ -5,6 +5,7 @@ import type { RefObject } from 'react';
 import { createRef, useEffect, useRef, useState } from 'react';
 import { Image, Layer, Stage } from 'react-konva';
 import { Bullet } from 'src/components/Bullet/PlayerBullet';
+import { Enemy } from 'src/components/Enemy/Enemy';
 import Lobby from 'src/components/Lobby/Lobby';
 import { staticPath } from 'src/utils/$path';
 import { apiClient } from 'src/utils/apiClient';
@@ -165,22 +166,8 @@ const Game = () => {
             ))}
           </Layer>
           <Layer>
-            {enemies.map((enemy, i) => {
-              ufoRefs.current[i] = createRef<Konva.Image>();
-              return (
-                <Image
-                  image={
-                    enemy.type === 1 ? enemyImage1 : enemy.type === 2 ? enemyImage2 : enemyImage3
-                  }
-                  width={80}
-                  height={80}
-                  x={enemy.createdPosition.x - 40}
-                  y={enemy.createdPosition.y - 40}
-                  key={enemy.id}
-                  ref={ufoRefs.current[i]}
-                />
-              );
-            })}
+            {/* アニメーションの関係で、Enemyは中でmap */}
+            <Enemy enemies={enemies} />
           </Layer>
         </Stage>
       </div>
