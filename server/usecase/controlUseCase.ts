@@ -15,7 +15,7 @@ const player: Pos = {
 
 const playerSpeed = 10;
 
-export const playerUseCase = {
+export const controlUseCase = {
   getPosition: player,
   move: (moveTo: MoveTo): Pos => {
     player.x = Math.max(Math.min(player.x + moveTo.toX * playerSpeed, 1000), 0);

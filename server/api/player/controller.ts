@@ -1,7 +1,7 @@
-import { playerUseCase } from '$/usecase/playerUseCase';
+import { controlUseCase } from '$/usecase/controlUseCase';
 import { defineController } from './$relay';
 
 export default defineController(() => ({
-  get: () => ({ status: 200, body: playerUseCase.getPosition }),
-  post: ({ body }) => ({ status: 200, body: playerUseCase.move(body) }),
+  get: () => ({ status: 200, body: controlUseCase.getPosition }),
+  post: ({ body }) => ({ status: 200, body: controlUseCase.move(body) }),
 }));
