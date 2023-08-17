@@ -13,11 +13,7 @@ export const enemyUsecase = {
   },
   delete_enemy: async (id: EnemyId) => {
   delete_enemy: async (id: EnemyId) => {
-    try {
-      await enemyRepository.declare(id);
-    } catch (e) {
-      console.log(e);
-    }
+    await enemyRepository.declare(id);
   },
 };
 
@@ -44,6 +40,8 @@ const create_enemy = async () => {
     speed: enemy_speed,
     hp: enemy_hp,
     radius: enemy_radius,
+    ///1-3のランダムな数値を返す
+    type: Math.floor(Math.random() * 3) + 1,
   };
   await enemyRepository.save(new_enemy);
 };
@@ -61,18 +59,18 @@ const move_Enemy = async () => {
   }
 };
 
-const delete_off_screen_enemy = async () => {
-  let enemies: EnemyModel[] = await enemyRepository.getEnemies();
-  enemies = enemies.filter((enemy) => {
-    //とりあえず50です
-    if (enemy.pos.x < 50) {
-      enemyRepository.declare(enemy.id);
-      return false;
-    } else {
-      return true;
-    }
-  });
-  //await Promise.allは、必要か微妙
-  //await Promise.all(enemies.map((enemy) => enemyRepository.save(enemy)));
-  // enemies.map((enemy) => enemyRepository.save(enemy));
+  const offScreenEnemiesIds = enemies.filter((enemy) => enemy.pos.x < 50).map((enemy) => enemy.id);
+
+  for (const id of offScreenEnemiesIds) {
+    console.log('画面外delete', id);
+    await deleteEnemy(id);
+  }
 };
+
+//await Promise.allは、必要か微妙
+//await Promise.all(enemies.map((enemy) => enemyRepository.save(enemy)));
+// enemies.map((enemy) => enemyRepository.save(enemy));
+
+//await Promise.allは、必要か微妙
+//await Promise.all(enemies.map((enemy) => enemyRepository.save(enemy)));
+// enemies.map((enemy) => enemyRepository.save(enemy));
