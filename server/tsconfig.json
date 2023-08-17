@@ -8,8 +8,7 @@
     "isolatedModules": true,
     "baseUrl": ".",
     "paths": {
-      "$/*": ["./*"],
-      "$prisma/*": ["./node_modules/.prisma/*"]
+      "$/*": ["./*"]
     },
     "rootDir": ".",
     "skipLibCheck": true,
@@ -17,5 +16,7 @@
     "strictPropertyInitialization": false,
     "target": "es6",
     "incremental": true
-  }
+  },
+  "include": ["**/*.ts", "**/*.js", ".eslintrc.js"],
+  "exclude": ["node_modules"]
 }
