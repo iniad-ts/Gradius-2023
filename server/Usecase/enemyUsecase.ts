@@ -19,7 +19,8 @@ export const enemyUsecase = {
 
 setInterval(() => {
   create_enemy();
-}, 4000);
+  deleteOffScEreennemy();
+}, 1000);
 
 setInterval(() => {
   // move_or_delete_enemy();
@@ -44,6 +45,18 @@ const create_enemy = async () => {
     type: Math.floor(Math.random() * 3) + 1,
   };
   await enemyRepository.save(new_enemy);
+};
+/* const moveToplayer = (enemy: EnemyModel, player: playerModel, delay: number) => {
+  enemy.pos.x = (player.pos.x + delay * enemy.pos.x) / (delay + 1);
+  enemy.pos.y = (player.pos.y + delay * enemy.pos.y) / (delay + 1);
+  return { x: enemy.pos.x - enemy.speed, y: enemy.pos.y };
+}; */
+//y軸のみプレイヤーに追従する
+//delayは追従の遅れを表す
+const moveToplayer = (enemy: EnemyModel, player: number[][], delay: number) => {
+  enemy.pos.x = enemy.pos.x - enemy.speed;
+  enemy.pos.y = (player[0][1] + delay * enemy.pos.y) / (delay + 1);
+  return { x: enemy.pos.x - enemy.speed, y: enemy.pos.y };
 };
 
 const move_Enemy = async () => {
