@@ -1,5 +1,3 @@
-<<<<<<< HEAD
-=======
 import type { PlayerModel } from '$/commonTypesWithClient/models';
 import type { MoveTo } from '$/useCase/playerUseCase';
 import { useAtom } from 'jotai';
@@ -132,4 +130,3 @@ const Controller = () => {
 };
 
 export default Controller;
->>>>>>> 03663785872daa6745ed7d079ca26d8a5e223177

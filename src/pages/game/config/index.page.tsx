@@ -1,5 +1,3 @@
-<<<<<<< HEAD
-=======
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { SettingIcon } from 'src/components/icons/SettingIcon';
@@ -56,4 +54,3 @@ const Config = () => {
 };
 
 export default Config;
->>>>>>> 03663785872daa6745ed7d079ca26d8a5e223177
