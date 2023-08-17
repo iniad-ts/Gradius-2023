@@ -160,8 +160,6 @@ const Game = () => {
       </div>
     );
   };
-
   return <GameCanvas />;
 };
-
 export default Game;
