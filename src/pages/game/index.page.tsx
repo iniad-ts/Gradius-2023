@@ -91,10 +91,8 @@ const Game = () => {
     const collisionDistance = 50;
 
     //敵と弾の衝突判定
-    const checkCollisionBullet = async () => {
-      const newEnemies = [];
-
-      for (const enemy of enemies) {
+    const checkCollisionBullet = () => {
+      const newEnemies = enemies.filter((enemy) => {
         const hitBullet = bullets.find((bullet) => {
           const bulletPosition = posWithDirSpeTim(bullet, currentTime);
           const distance = Math.sqrt(

@@ -9,6 +9,7 @@ import { playerUseCase } from './playerUseCase';
 
 export const bulletUseCase = {
   create: async (playerId: UserId): Promise<BulletModel | null> => {
+    console.log('bulletUseCase.create');
     const player = await playerUseCase.getStatus(playerId, null);
     if (player !== null) {
       const newBullet: BulletModel = {
@@ -41,11 +42,6 @@ export const bulletUseCase = {
   getStatus: async () => {
     bulletUseCase.delete();
     enemyUseCase.respawn();
-    const res1 = await bulletsRepository.findAllOfPlayers();
-    const res2 = await bulletsRepository.findAllOfEnemies();
-    return {
-      playerS: res1 ?? [],
-      enemyS: res2 ?? [],
-    };
+    return (await bulletsRepository.findAll()) ?? [];
   },
 };
