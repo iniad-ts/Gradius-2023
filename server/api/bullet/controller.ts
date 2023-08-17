@@ -4,5 +4,5 @@ import { defineController } from './$relay';
 
 export default defineController(() => ({
   get: async () => ({ status: 200, body: (await bulletsRepository.findAll()) ?? [] }),
-  post: async ({ player }) => ({ status: 200, body: await bulletUseCase.create(player.id) }),
+  post: async ({ body }) => ({ status: 200, body: await bulletUseCase.create(body.id) }),
 }));

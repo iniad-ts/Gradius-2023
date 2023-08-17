@@ -1,4 +1,3 @@
-import type { UserId } from '$/commonTypesWithClient/branded';
 import type { PlayerModel } from '$/commonTypesWithClient/models';
 import { userIdParser } from '$/service/idParsers';
 import { prismaClient } from '$/service/prismaClient';
@@ -56,7 +55,7 @@ export const playersRepository = {
     });
     return prismaPlayers.map(toPlayerModel);
   },
-  find: async (id: UserId): Promise<PlayerModel | null> => {
+  find: async (id: string): Promise<PlayerModel | null> => {
     const prismaPlayer = await prismaClient.player.findUnique({ where: { id } });
     return prismaPlayer !== null ? toPlayerModel(prismaPlayer) : null;
   },

@@ -1,26 +1,24 @@
-import type { MoveTo } from '$/useCase/playerUseCase';
 import { useAtom } from 'jotai';
-import { useRouter } from 'next/router';
 import { useEffect, useRef, useState } from 'react';
 import { Joystick } from 'react-joystick-component';
 import type { IJoystickUpdateEvent } from 'react-joystick-component/build/lib/Joystick';
-import { playerAtom } from 'src/atoms/user';
-import { apiClient } from 'src/utils/apiClient';
+import { userAtom } from 'src/atoms/user';
+import { Loading } from 'src/components/Loading/Loading';
 import styles from './index.module.css';
 
 const Controller = () => {
   const [shootIntervalId, setShootIntervalId] = useState<NodeJS.Timeout | null>(null);
   const [moveIntervalId, setMoveIntervalId] = useState<NodeJS.Timeout | null>(null);
-  const moveDirection = useRef<MoveTo>({ toX: 0, toY: 0 });
+  const moveDirection = useRef<{ x: number; y: number }>({ x: 0, y: 0 });
   const [windowSize, setWindowSize] = useState<{ width: number; height: number }>({
     width: window.innerWidth,
     height: window.innerHeight,
   });
-  const [player] = useAtom(playerAtom);
-  const router = useRouter();
+  const [user] = useAtom(userAtom);
 
   const shootBullet = async () => {
-    await apiClient.bullet.$post();
+    // await apiClient.bullet.$post();
+    console.log('shoot');
   };
 
   const shootStart = () => {
@@ -34,7 +32,8 @@ const Controller = () => {
   };
 
   const move = async () => {
-    await apiClient.player.$post({ body: { moveTo: moveDirection.current } });
+    // await apiClient.move.$post({ direction: moveDirection });
+    console.log('move', moveDirection.current);
   };
 
   const moveStart = () => {
@@ -49,8 +48,8 @@ const Controller = () => {
 
   const handleMove = (e: IJoystickUpdateEvent) => {
     const moveTo = {
-      toX: Math.round(e.x ?? 0),
-      toY: -Math.round(e.y ?? 0),
+      x: Math.round(e.x ?? 0),
+      y: Math.round(e.y ?? 0),
     };
     moveDirection.current = moveTo;
   };
@@ -66,9 +65,7 @@ const Controller = () => {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  if (!player) {
-    router.push('/controller/login');
-  }
+  if (!user) return <Loading visible />;
 
   return (
     <div className={styles.controller}>

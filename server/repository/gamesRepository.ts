@@ -1,3 +1,4 @@
+import type { GameId } from '$/commonTypesWithClient/branded';
 import type { GameModel } from '$/commonTypesWithClient/models';
 import { gameIdParser } from '$/service/idParsers';
 import { prismaClient } from '$/service/prismaClient';
@@ -29,8 +30,8 @@ export const gamesRepository = {
     });
     return prismaGames.map(toGameModel);
   },
-  find: async (): Promise<GameModel | null> => {
-    const prismaGame = await prismaClient.game.findFirst();
+  find: async (id: GameId): Promise<GameModel | null> => {
+    const prismaGame = await prismaClient.game.findUnique({ where: { id } });
     return prismaGame !== null ? toGameModel(prismaGame) : null;
   },
 };

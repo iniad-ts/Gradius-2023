@@ -18,7 +18,9 @@ export const enemyUseCase = {
       createdAt: Date.now(),
       type: 0,
     };
-    await enemiesRepository.save(newEnemy);
+    console.log('create');
+    await enemiesRepository.create(newEnemy);
+    return newEnemy;
   },
   delete: async (enemyId: string, userId: UserId) => {
     await enemiesRepository.delete(enemyId);

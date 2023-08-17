@@ -11,11 +11,9 @@ export type MoveTo = {
 };
 
 export const playerUseCase = {
-  move: async (id: UserId, moveTo: MoveTo): Promise<PlayerModel | null> => {
-    const player: PlayerModel | null = await playersRepository.find(id);
-
+  move: async (name: string, moveTo: MoveTo): Promise<PlayerModel | null> => {
+    const player: PlayerModel | null = await playersRepository.find(name);
     if (player === null) return null;
-
     const movedPlayer: PlayerModel = {
       ...player,
       position: {
@@ -39,6 +37,7 @@ export const playerUseCase = {
       score: 0,
       team: 'red',
     };
+    console.log('create');
     await playersRepository.save(newPlayer);
     return newPlayer;
   },

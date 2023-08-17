@@ -1,6 +1,5 @@
-import { gameUseCase } from '$/useCase/gameUseCase';
 import { defineController } from './$relay';
 
 export default defineController(() => ({
-  get: async () => ({ status: 200, body: (await gameUseCase.get()).displayNumber }),
+  get: () => ({ status: 200, body: 'Hello' }),
 }));
