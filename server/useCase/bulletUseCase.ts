@@ -4,6 +4,7 @@ import { bulletsRepository } from '$/repository/bulletsRepository';
 import { bulletIdParser } from '$/service/idParsers';
 import { randomUUID } from 'crypto';
 import { playerUseCase } from './playerUseCase';
+import { gamesRepository } from '$/repository/gamesRepository';
 
 export const bulletUseCase = {
   create: async (playerId: UserId): Promise<BulletModel | null> => {
@@ -27,14 +28,10 @@ export const bulletUseCase = {
   },
   delete: async () => {
     const bullets = await bulletsRepository.findAll();
-    const game = await gamesRepository.find();
-    const maxXPosition = game?.displayNumber ?? 1 * 1920;
-    const deleteBullets = bullets.filter(
-      (bullet) =>
-        bullet.createdPosition.x + (bullet.createdAt - new Date().getTime()) * 300 > maxXPosition
+    const game = await gamesRepository.find()
+    const maxXPosition =game?.displays
+    const deleteBulleds = bullets.filter(
+      (bullet) => bullet.createdPosition.x + (bullet.createdAt - new Date().getTime()) * 300>
     );
-    deleteBullets.forEach((bullet) => {
-      bulletsRepository.delete(bullet.id);
-    });
   },
 };
