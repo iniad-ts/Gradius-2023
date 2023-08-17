@@ -18,7 +18,6 @@ export const enemyUseCase = {
       type: 0,
     };
     await enemiesRepository.create(newEnemy);
-    return newEnemy;
   },
   kill: async (enemyId: string, userId: UserId) => {
     await enemiesRepository.update(enemyId, new Date());

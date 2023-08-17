@@ -42,8 +42,15 @@ export const playerUseCase = {
     await playersRepository.save(newPlayer);
     return newPlayer;
   },
+<<<<<<< HEAD
   getStatus: async (id: UserId): Promise<PlayerModel | null> => {
     if (id === null) return null;
+=======
+  getStatus: async (id: UserId, name: string | null): Promise<PlayerModel | null> => {
+    if (name !== null) {
+      await playerUseCase.create(name);
+    }
+>>>>>>> parent of ed0da40 (Merge branch 'main' of github.com:INIAD-Developers/Gradius-2023-B)
     const player: PlayerModel | null = await playersRepository.find(id);
     if (player === null) return null;
     return player;
