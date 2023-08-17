@@ -18,55 +18,13 @@ export const enemyUseCase = {
       type: 0,
     };
     await enemiesRepository.create(newEnemy);
+    return newEnemy;
   },
-  kill: async (enemyId: string, userId: UserId) => {
-    await enemiesRepository.update(enemyId, new Date());
+  delete: async (enemyId: string, userId: UserId) => {
+    await enemiesRepository.delete(enemyId);
     const userStatus = await playerUseCase.getStatus(userId, null);
     if (userStatus !== null) {
       await playersRepository.save({ ...userStatus, score: userStatus.score + 1 });
-    }
-  },
-  respawn: async () => {
-    const nowTime = new Date().getTime();
-    const res = await enemiesRepository.findNotNull();
-    Promise.all(
-      res
-        .filter(
-          (enemy) => enemy.deletedAt !== null && nowTime - enemy.deletedAt.getTime() > RESPAWN_TIME
-        )
-        .map((enemy) => enemiesRepository.update(enemy.id, null))
-    ).then((results) =>
-      results.forEach((result) => {
-        result;
-      })
-    );
-  },
-  createAll: async () => {
-    const res = await enemyTable();
-    if (res === null) {
-      enemyUseCase.createAll();
-    } else {
-      Promise.all(
-        res.map((tables, displayNumberMinus1) =>
-          tables.map((table) => {
-            const newEnemy: EnemyModel = {
-              id: enemyIdParser.parse(randomUUID()),
-              createdPosition: {
-                x: table.createPosition.x + 1920 * displayNumberMinus1,
-                y: table.createPosition.y,
-              },
-              createdAt: Date.now(),
-              deletedAt: null,
-              type: table.type,
-            };
-            return enemiesRepository.create(newEnemy);
-          })
-        )
-      ).then((results) =>
-        results.flat().forEach((result) => {
-          result;
-        })
-      );
     }
   },
 };

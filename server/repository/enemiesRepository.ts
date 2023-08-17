@@ -38,12 +38,7 @@ export const enemiesRepository = {
     const prismaEnemy = await prismaClient.enemy.findUnique({ where: { id } });
     return prismaEnemy !== null ? toEnemyModel(prismaEnemy) : null;
   },
-  findNotNull: async () =>
-    await prismaClient.enemy.findMany({
-      where: {
-        NOT: {
-          deletedAt: null,
-        },
-      },
-    }),
+  delete: async (id: string): Promise<void> => {
+    await prismaClient.enemy.delete({ where: { id } });
+  },
 };
