@@ -13,36 +13,3 @@ model Task {
   done      Boolean
   createdAt DateTime
 }
-
-model Game {
-  id            String   @id
-  createdAt     DateTime
-  displayNumber Int
-}
-
-model Player {
-  id        String   @id
-  name      String
-  createdAt DateTime
-  position  Json
-  health    Int
-  score     Int
-  team      String
-}
-
-model Enemy {
-  id              String    @id
-  createdAt       DateTime
-  createdPosition Json
-  type            Int
-  deletedAt       DateTime?
-}
-
-model Bullet {
-  id              String   @id
-  createdAt       DateTime
-  createdPosition Json
-  direction       Json
-  type            Int
-  playerId        String?
-}
