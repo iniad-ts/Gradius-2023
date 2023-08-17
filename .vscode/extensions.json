@@ -6,7 +6,6 @@
     "prisma.prisma",
     "stylelint.vscode-stylelint",
     "styled-components.vscode-styled-components",
-    "yoavbls.pretty-ts-errors",
-    "github.copilot-chat"
+    "yoavbls.pretty-ts-errors"
   ]
 }

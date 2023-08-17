@@ -2,33 +2,35 @@
 
 フロントエンドは src ディレクトリの [Next.js](https://nextjs.org/) 、バックエンドは server ディレクトリの [frourio](https://frourio.com/) で構築された TypeScript で一気通貫開発が可能なモノレポサービス
 
+最新のコミットによるデモ - https://solufa.github.io/next-frourio-starter/
+
 ## 開発手順
 
 ### Node.js のインストール
 
 ローカルマシンに直接インストールする
-hhii;hkh;lkhsdertyu
+
 https://nodejs.org/ja/ の左ボタン、LTS をダウンロードしてインストール
 
 ### リポジトリのクローンと npm モジュールのインストール
 
-フロントとバックエンドそれぞれに package.json があるので 2 回インストールが必要
+ルートとフロントとバックエンドそれぞれに package.json があるので 3 回インストールが必要
 
 ```sh
 $ npm i
+$ npm i --prefix client
 $ npm i --prefix server
 ```
-ララです
 
 ### 環境変数ファイルの作成
 
 ```sh
-$ cp .env.example .env
+$ cp client/.env.example client/.env
 $ cp server/.env.example server/.env
 $ cp docker/dev/.env.example docker/dev/.env
 $ cp server/prisma/.env.example server/prisma/.env
 ```
-takashima
+
 ### ミドルウェアのセットアップ
 
 ```sh
