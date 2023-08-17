@@ -6,9 +6,10 @@ type SingleEnemy = {
 };
 
 const createBallEnemy = (): SingleEnemy => {
-  const randomy = Math.floor(Math.random() * (360 - 120 + 1)) + 120;
+  const randomy = Math.floor(Math.random() * window.innerHeight);
+  const randomx = Math.floor(Math.random() * window.innerWidth);
   return {
-    x: 640,
+    x: randomx,
     y: randomy,
     speedX: -120,
     status: 0,
@@ -16,22 +17,24 @@ const createBallEnemy = (): SingleEnemy => {
 };
 
 const createSneakEnemy = (): SingleEnemy => {
-  const randomy = Math.floor(Math.random() * 241);
+  const randomy = Math.floor(Math.random() * window.innerHeight);
+  const randomx = Math.floor(Math.random() * window.innerWidth);
   return {
-    x: 640,
+    x: randomx,
     y: randomy,
     speedX: -110,
-    status: 0,
+    status: 1,
   };
 };
 
 const createUpDownEnemy = (): SingleEnemy => {
-  const randomy = Math.floor(Math.random() * 241);
+  const randomy = Math.floor(Math.random() * window.innerHeight);
+  const randomx = Math.floor(Math.random() * window.innerWidth);
   return {
-    x: 640,
+    x: randomx,
     y: randomy,
     speedX: -150,
-    status: 0,
+    status: 2,
   };
 };
 const spawnRandomTypeOfEnemy = (prevEnemy: SingleEnemy[]): SingleEnemy[] => {
@@ -42,4 +45,4 @@ const spawnRandomTypeOfEnemy = (prevEnemy: SingleEnemy[]): SingleEnemy[] => {
   return [...prevEnemy, newEnemy];
 };
 
-export { spawnRandomTypeOfEnemy, createBallEnemy, createUpDownEnemy };
+export { spawnRandomTypeOfEnemy };
