@@ -3,8 +3,6 @@ import type { Enemy } from '$/Usecase/enemyUsecase';
 import type { Player } from '$/Usecase/playerUsecase';
 import { useEffect, useState } from 'react';
 import { Circle, Layer, Stage } from 'react-konva';
-import { apiClient } from 'src/utils/apiClient';
-
 export const App = () => {
   const [playerX, setPlayerX] = useState(0);
   const [playerY, setPlayerY] = useState(300);
