@@ -30,6 +30,7 @@ module.exports = {
     'react-hooks/rules-of-hooks': 'error',
     'react-hooks/exhaustive-deps': 'error',
     eqeqeq: 'error',
+    'no-param-reassign': 'error',
     'object-shorthand': ['error', 'always'],
     'prefer-template': 'error',
     '@typescript-eslint/consistent-type-imports': 'error',
@@ -39,7 +40,7 @@ module.exports = {
     complexity: ['error', 5],
     'max-depth': ['error', 2],
     'max-nested-callbacks': ['error', 3],
-    'max-lines': ['error', 400],
+    'max-lines': ['error', 200],
   },
   overrides: [
     {

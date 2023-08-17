@@ -13,8 +13,3 @@ model Task {
   done      Boolean
   createdAt DateTime
 }
-
-model game {
-  firebaseId String @id
-  position   Json
-}

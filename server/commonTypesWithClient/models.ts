@@ -13,8 +13,3 @@ export type TaskModel = {
   done: boolean;
   created: number;
 };
-
-export type RoomModel = {
-  Id: string;
-  position: { x: number; y: number };
-};
