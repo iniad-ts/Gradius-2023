@@ -1,3 +1,6 @@
+import type { TaskModel } from '$/commonTypesWithClient/models';
+import { useAtom } from 'jotai';
+import type { ChangeEvent, FormEvent } from 'react';
 import { useEffect, useState } from 'react';
 import { Circle, Layer, Rect, Stage } from 'react-konva';
 import { apiClient } from 'src/utils/apiClient';
@@ -42,7 +45,8 @@ const Home = () => {
   };
 
   useEffect(() => {
-    const timer = setInterval(updateGradiusBullet, 50);
+    fetchTasks();
+  }, []);
 
   useEffect(() => {
     const fetchplayers = setInterval(updateplayers, 50);
