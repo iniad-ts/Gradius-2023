@@ -1,5 +1,6 @@
 import { playerRepository } from '$/Repository/playerRepository';
 import type { playerModel } from '$/commonTypesWithClient/models';
+import type { playerModel } from '$/commonTypesWithClient/models';
 import { UserIdParser } from '$/service/idParsers';
 import { randomUUID } from 'crypto';
 
@@ -61,7 +62,7 @@ export const playerUsecase = {
       return position;
     },
 
-    getAllPlayer: async (): Promise<PlayerModel[]> => {
+    getAllPlayer: async (): Promise<playerModel[]> => {
       return await playerRepository.getPlayers();
     },
 
@@ -82,4 +83,15 @@ const playerInfo = {
   playerSize: { h: 30, w: 40 },
 };
 
-//スコアとかどうしよう。
+const create_player = async () => {
+  const newPlayer: playerModel = {
+    userId: UserIdParser.parse(randomUUID()),
+    pos: { x: playerInfo.playerFirstPos_x, y: playerInfo.playerFirstPos_y },
+    speed: playerInfo.playerSpeed,
+    hp: playerInfo.playerHp,
+    radius: playerInfo.playerRadius,
+    score: playerInfo.playerScore,
+  };
+  await playerRepository.save(newPlayer);
+};
+//残りのやることplayerを動かせるように
