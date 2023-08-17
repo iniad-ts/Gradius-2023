@@ -49,9 +49,9 @@ export const playerUseCase = {
     await playersRepository.save(newPlayer);
     return newPlayer;
   },
-  findInDisplay: async (displayNumber: number): Promise<PlayerModel[]> => {
-    const res = await playersRepository.findAll();
-    const playerInDisplay: PlayerModel[] = res
+  findInDisplay: async (displayNumber: number) => {
+    const res = (await playersRepository.findAll()) ?? [];
+    const playerInDisplay = res
       .filter((player) => isInDisplay(displayNumber, player.position.x))
       .map((player) => ({
         ...player,
