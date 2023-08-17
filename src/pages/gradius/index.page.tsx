@@ -2,26 +2,16 @@
 <<<<<<< HEAD
 //testCode//ここに書くのはyosuliです。
 
-import type { EventModel, GameModel } from '$/commonTypesWithClient/models';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { apiClient } from 'src/utils/apiClient';
 
 const Home = () => {
-  const [hoge, setHoge] = useState<{ games: GameModel[]; event: EventModel }>();
-
-  const fetchGradius = async () => {
-    const newHoge = (await apiClient.gradius.post()).body;
-    console.log(newHoge);
-    setHoge(newHoge);
-  };
-  useEffect(() => {
-    const cancelId = setInterval(fetchGradius, 100);
-    return () => {
-      clearInterval(cancelId);
-    };
-  });
+  const [hoge, setHoge] = useState(1);
   const onclick = async () => {
+    const newHoge = await apiClient.gradius.post();
     await apiClient.gradius.game.post({ body: 1 });
+    console.log(hoge);
+    setHoge(newHoge.body.game[0].xyz[1] % 2);
   };
 
   const onR = () => {
@@ -32,20 +22,10 @@ const Home = () => {
   };
   return (
     <div
-      style={{
-        width: '100vw',
-        height: '100vh',
-        backgroundColor:
-          hoge === null || hoge === undefined
-            ? '#080'
-            : hoge.games[0].xyz[1] % 2 === -1
-            ? '#800'
-            : '#088',
-        textAlign: 'center',
-      }}
-      key={'a'}
+      style={{ width: '100vw', height: '100vh', backgroundColor: hoge === -1 ? '#800' : '#088' }}
       onClick={() => onclick()}
       onContextMenu={() => onR()}
+<<<<<<< HEAD
     >
       {hoge?.games[0].hp}
     </div>
@@ -154,6 +134,9 @@ const Home = () => {
       {hoge?.games[0].hp}
     </div>
 >>>>>>> parent of ab96eed (フロント)
+=======
+    />
+>>>>>>> parent of a5c672b (change gR.create)
   );
 };
 

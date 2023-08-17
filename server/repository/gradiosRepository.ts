@@ -1,35 +1,45 @@
 import type { UserId } from '$/commonTypesWithClient/branded';
-import {
-  InitEventModel,
-  InitGameModel,
-  type EventModel,
-  type GameModel,
-} from '$/commonTypesWithClient/models';
+import type { EventModel, GameModel } from '$/commonTypesWithClient/models';
+
+const initGameModel = {
+  user: null,
+  type: 'owner',
+  xyz: [-5, 0, 0],
+  vector: [0, 0, 0],
+  speed: 1,
+  hp: 100,
+  lv: 1,
+  started: null,
+  end: null,
+};
+
+const initEventModel = {
+  owner: null,
+  items: [],
+  kill: 0,
+  damage: 0,
+  damaged: 0,
+};
 
 const gameModels: GameModel[] = [];
 
 const eventModels: EventModel[] = [];
 
 export const gradiusRepository = {
-  create: (game: GameModel, event: EventModel | null) => {
-    const newGameModel = { ...game };
+  create: (user: UserId) => {
+    const newGameModel = { ...initGameModel, user, started: new Date().getTime() };
+    const newEventModel = { ...initEventModel, owner: user };
     gameModels.push(newGameModel);
-    if (event !== null) {
-      const newEventModel = { ...event };
-      eventModels.push(newEventModel);
-    }
+    eventModels.push(newEventModel);
   },
-  findOfId: (user: UserId): { games: GameModel[]; event: EventModel } => {
+  findOfId: (user: UserId): { game: GameModel[]; event: EventModel } => {
     const games = gameModels.filter((gameModel) => gameModel.user === user);
     const event = eventModels.filter((eventModel) => eventModel.owner === user)[0];
     if (games.length === 0) {
-      gradiusRepository.create(
-        { ...InitGameModel, user, started: new Date().getTime() },
-        { ...InitEventModel, owner: user }
-      );
+      gradiusRepository.create(user);
     }
     console.log(games, event);
-    return { games, event };
+    return { game: games, event };
   },
   findWithXYZ: (xyz: number[]): GameModel[] => {
     return gameModels.filter((gameModel) => gameModel.xyz === xyz);
@@ -42,6 +52,4 @@ export const gradiusRepository = {
       }
     });
   },
-  getGameModels: () => gameModels,
-  getEventModel: (user: UserId) => eventModels.filter((event) => event.owner === user)[0],
 };

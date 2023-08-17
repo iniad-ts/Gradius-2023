@@ -32,23 +32,3 @@ export type EventModel = {
   damage: number;
   damaged: number;
 };
-
-export const InitGameModel = {
-  user: null,
-  type: 'owner',
-  xyz: [-5, 0, 0],
-  vector: [0, 0, 0],
-  speed: 1,
-  hp: 100,
-  lv: 1,
-  started: null,
-  end: null,
-};
-
-export const InitEventModel = {
-  owner: null,
-  items: [],
-  kill: 0,
-  damage: 0,
-  damaged: 0,
-};
