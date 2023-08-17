@@ -35,10 +35,8 @@ export const AuthLoader = () => {
 
   useEffect(() => {
     (async () => {
-      await apiClient.me.player.$get().then(setPlayer).catch(returnNull);
       if (player === null) return;
       await apiClient.session.player.$post({ body: { id: player.id } });
-      console.log('player', player);
     })();
   }, [setPlayer, player]);
 
