@@ -42,15 +42,8 @@ export const playerUseCase = {
     await playersRepository.save(newPlayer);
     return newPlayer;
   },
-  findAll: async (displayNumber: number) => {
-    const res = (await playersRepository.findAll()) ?? [];
-    const playerInDisplay = res.filter((player) => isInDisplay(displayNumber, player.position.x));
-    return playerInDisplay;
-  },
-  getStatus: async (id: UserId, name: string | null): Promise<PlayerModel | null> => {
-    if (name !== null) {
-      await playerUseCase.create(name);
-    }
+  getStatus: async (id: UserId): Promise<PlayerModel | null> => {
+    if (id === null) return null;
     const player: PlayerModel | null = await playersRepository.find(id);
     if (player === null) return null;
     return player;

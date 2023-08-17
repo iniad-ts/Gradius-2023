@@ -88,9 +88,11 @@ const Game = () => {
     };
 
     //敵と弾の衝突判定
-    const checkCollisionBullet = () => {
-      const newEnemies = enemies.filter((enemy) => {
-        const hitBullet = playerBullets.find((bullet) => {
+    const checkCollisionBullet = async () => {
+      const remainingEnemies = [];
+
+      for (const enemy of enemies) {
+        const hitBullet = bullets.find((bullet) => {
           const bulletPosition = posWithDirSpeTim(bullet, currentTime);
           const distance = Math.sqrt(
             Math.pow(enemy.createdPosition.x - bulletPosition[0], 2) +

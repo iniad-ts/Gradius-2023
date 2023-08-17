@@ -38,4 +38,9 @@ export const bulletUseCase = {
       bulletsRepository.delete(bullet.id);
     });
   },
+  getStatus: async () => {
+    bulletUseCase.delete();
+    enemyUseCase.respawn();
+    return (await bulletsRepository.findAll()) ?? [];
+  },
 };
