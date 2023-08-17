@@ -1,31 +1,13 @@
-/* eslint-disable complexity */
-/* eslint-disable max-lines */
-/* eslint-disable max-depth */
-/* eslint-disable max-nested-callbacks */
-/* eslint-disable react-hooks/exhaustive-deps */
-
-import type { RoomModel } from '$/commonTypesWithClient/models';
-import assert from 'assert';
 import { useAtom } from 'jotai';
 import Konva from 'konva';
-import { useRouter } from 'next/router';
 import { useEffect, useRef, useState } from 'react';
-import { Circle, Image, Layer, Stage } from 'react-konva';
+import { Circle, Layer, Stage } from 'react-konva';
 import { Loading } from 'src/components/Loading/Loading';
-import { staticPath } from 'src/utils/$path';
-import { apiClient } from 'src/utils/apiClient';
-import { returnNull } from 'src/utils/returnNull';
-import useImage from 'use-image';
 import { userAtom } from '../atoms/user';
-import { checkCollision } from './checkCollision';
 import { spawnRandomTypeOfEnemy } from './enemyspawn';
+import { checkCollision } from './gamescreen/checkCollision';
 
 const Home = () => {
-  const router = useRouter();
-  const { RoomId } = router.query;
-  const [enemyImage1] = useImage(staticPath.images.rensyu1_png);
-  const [enemyImage2] = useImage(staticPath.images.rensyu2_png);
-  const [enemyImage3] = useImage(staticPath.images.rensyu3_png);
   const [user] = useAtom(userAtom);
   const [gradiusPosition, setGradiusPosition] = useState([100, 300]);
   const [gradiusBullet, setGradiusBullet] = useState<{ x: number; y: number; speedX: number }[]>(
@@ -40,15 +22,9 @@ const Home = () => {
   const [bullet, setBullet] = useState(false);
   const [shottimer, setShottimer] = useState(0);
   const animationRef = useRef<Konva.Animation | null>(null);
-  const [enemy, setEnemy] = useState<{ x: number; y: number; speedX: number; status: number }[]>([
-    {
-      x: 1000,
-      y: 300,
-      speedX: -120,
-      status: 1,
-    },
+  const [enemy, setEnemy] = useState<{ x: number; y: number; speedX: number }[]>([
+    { x: 1000, y: 300, speedX: -120 },
   ]);
-  const [room, setRoom] = useState<RoomModel | undefined>(undefined);
 
   //キーを押したときに実行される関数
   const handleKeyDown = async (event: KeyboardEvent) => {
@@ -124,35 +100,11 @@ const Home = () => {
     });
   };
 
-  // const autosave = () => {
-  //   await apiClient.rooms.post({
-  //     body: {
-  //       roomId: room?.roomId,
-  //       roomName: '',
-  //       status: '',
-  //       id1p: room?.id1p,
-  //       id2p: room?.id2p ?? '',
-  //       position1p: [],
-  //       position2p: [],
-  //       bullet: '',
-  //       enemy: '',
-  //       background: [],
-  //       screen: 0,
-  //       created: ''
-  //     },
-  //   });
-
   useEffect(() => {
-    const intervalId = setInterval(() => {
-      setEnemy(() => spawnRandomTypeOfEnemy(enemy));
-      console.table(enemy);
-      // autosave();
-    }, 2000);
-    return () => {
-      clearInterval(intervalId);
-    };
-  }, []);
-  // 高速で実行される(Animation)
+    spawnRandomTypeOfEnemy([]);
+  });
+
+  //高速で実行される(Animation)
   useEffect(() => {
     const anim = new Konva.Animation((frame) => {
       if (!frame) return;
@@ -164,24 +116,11 @@ const Home = () => {
     });
     anim.start();
     animationRef.current = anim;
+
     return () => {
       anim.stop();
     };
   });
-
-  useEffect(() => {
-    const fetchRoom = async () => {
-      const roomlist = await apiClient.rooms.$get().catch(returnNull);
-      assert(roomlist, 'クリック出来てるんだからRoomが無いわけがない');
-      const rooms = roomlist.find((room) => room.roomId === RoomId);
-      if (!rooms) {
-        // fetchRoom();
-        return;
-      }
-      setRoom(rooms);
-    };
-  });
-
   const updateGradiusPosition = () => {
     setGradiusPosition((prevPosition) => {
       const newPosition = [
@@ -245,12 +184,9 @@ const Home = () => {
           {/* 自機 */}
           <Circle fill="black" x={gradiusPosition[0]} y={gradiusPosition[1]} radius={50} />
           {/* 敵 */}
-          {enemy.map((state, index) => {
-            const image = [enemyImage1, enemyImage2, enemyImage3][state.status];
-            return (
-              <Image image={image} key={index} x={state.x} y={state.y} width={100} height={100} />
-            );
-          })}
+          {enemy.map((state, index) => (
+            <Circle key={index} x={state.x} y={state.y} radius={30} fill="red" />
+          ))}
           {gradiusBullet.map((bullet, index) => (
             <Circle key={index} x={bullet.x} y={bullet.y} radius={5} fill={'yellow'} />
           ))}
