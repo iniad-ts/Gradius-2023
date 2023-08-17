@@ -22,7 +22,7 @@ export const enemyUseCase = {
       },
       createdAt: Date.now(),
       deletedAt: null,
-      type: Math.floor(Math.random() * 3) + 1,
+      type: 0,
     };
     await enemiesRepository.create(newEnemy);
   },
