@@ -1,8 +1,3 @@
-import { playerRepository } from '$/Repository/playerRepository';
-import type { playerModel } from '$/commonTypesWithClient/models';
-import { UserIdParser } from '$/service/idParsers';
-import { randomUUID } from 'crypto';
-
 export type MoveDirection = { x: number; y: number };
 
 export const position: number[][] = [[50, 500]];
@@ -35,31 +30,5 @@ export const playerUsecase = (() => {
     getPlayerPos: async () => {
       return position;
     },
-  };
-})();
-
-//kkkk
-export const player_Usecase = {
-  getAll_Player: async (): Promise<playerModel[]> => {
-    return await playerRepository.getPlayers();
-  },
-};
-
-// 仮初期値
-const player_first_pos_x = 50;
-const player_first_pos_y = 300;
-const player_speed = 5;
-const player_radius = 20;
-const player_hp = 10;
-const player_score = 0;
-
-const create_player = async () => {
-  const new_player: playerModel = {
-    userId: UserIdParser.parse(randomUUID()),
-    pos: { x: player_first_pos_x, y: player_first_pos_y },
-    speed: player_speed,
-    hp: player_hp,
-    radius: player_radius,
-    score: player_score,
   };
 })();
