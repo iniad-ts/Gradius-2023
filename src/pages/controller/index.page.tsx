@@ -42,11 +42,6 @@ const Home = () => {
   //     console.log(res);
   //   }
   // };
-
-  const shoot = async () => {
-    await apiClient.rooms.gunPosition.$post();
-  };
-
   const move = async () => {
     await apiClient.rooms.control.$post({ body: moveDirection.current });
     console.log('move', moveDirection.current);
