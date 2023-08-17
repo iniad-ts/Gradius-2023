@@ -112,6 +112,26 @@ const Game = () => {
     });
 
     useEffect(() => {
+      const anim = new Konva.Animation((layer) => {
+        ufoRefs.current.forEach((ufoRef) => {
+          if (ufoRef.current) {
+            ufoRef.current.offset({
+              x:
+                Math.cos(
+                  Math.floor(((layer?.time ?? 0) / 10 + ufoRef.current.x()) * Math.PI) / 100
+                ) * 5,
+              y:
+                Math.sin(
+                  Math.floor(((layer?.time ?? 0) / 10) * Math.PI + ufoRef.current.y()) / 100
+                ) * 5,
+            });
+          }
+        });
+      }, ufoRefs.current[0]?.current?.getLayer());
+      anim.start();
+      return () => {
+        anim.stop();
+      };
       const setWindowSize = () => {
         setWidth(window.innerWidth);
         setHeight(window.innerHeight);
