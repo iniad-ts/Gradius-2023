@@ -26,7 +26,7 @@ const Controller = () => {
   };
 
   const shootStart = () => {
-    const intervalId = setInterval(shootBullet, 600);
+    const intervalId = setInterval(shootBullet, 200);
     setShootIntervalIds([...shootIntervalIds, intervalId]);
   };
 
@@ -101,15 +101,17 @@ const Controller = () => {
           start={moveStart}
         />
       </div>
-      <div className={styles.center}>
-        <div className={styles.info}>
-          <p>HP</p>
-          {'💛'.repeat(playerDetails?.health ?? 0)}
-        </div>
-        <div className={styles.info}>
-          <p>SCORE</p>
+      <div className={styles.information}>
+        <p>
+          HP
+          <br />
+          {`${'💛'.repeat(playerDetails?.health ?? 0)}`}
+        </p>
+        <p>
+          SCORE
+          <br />
           {playerDetails?.score ?? 0}
-        </div>
+        </p>
       </div>
       <button
         onTouchStart={shootStart}
@@ -120,9 +122,9 @@ const Controller = () => {
         }}
         className={styles['shoot-button']}
       >
-        <div>🚀</div>
+        🚀
       </button>
-      {/* <button onClick={createEnemy}>敵</button> */}
+      <button onClick={createEnemy}>敵</button>
     </div>
   );
 };
