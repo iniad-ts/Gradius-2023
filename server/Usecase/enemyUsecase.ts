@@ -31,7 +31,6 @@ setInterval(() => {
   // move_or_delete_enemy();
   move_Enemy();
 }, 10);
-
 // 仮初期値
 const enemy_first_pos_x = 1800;
 const enemy_speed = 5;
