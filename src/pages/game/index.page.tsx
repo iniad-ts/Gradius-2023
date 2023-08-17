@@ -107,9 +107,8 @@ const Game = () => {
               userId: hitBullet.playerId,
             },
           });
-          await apiClient.bullet.$delete({ body: { bulletId: hitBullet.id } });
-        } else {
-          newEnemies.push(enemy);
+          apiClient.bullet.$delete({ body: { bulletId: hitBullet.id } });
+          return false;
         }
         return true;
       });
@@ -139,8 +138,8 @@ const Game = () => {
         } else {
           newEnemies.push(enemy);
         }
-        return true;
-      });
+      }
+
       setEnemies(newEnemies);
     };
 
