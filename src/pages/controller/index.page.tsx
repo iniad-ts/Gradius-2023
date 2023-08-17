@@ -1,3 +1,5 @@
+<<<<<<< HEAD
+=======
 import type { PlayerModel } from '$/commonTypesWithClient/models';
 import type { MoveTo } from '$/useCase/playerUseCase';
 import { useAtom } from 'jotai';
@@ -64,10 +66,6 @@ const Controller = () => {
     await apiClient.enemy.$post();
   };
 
-  const useItem = async () => {
-    // await apiClient.item.$post();
-  };
-
   useEffect(() => {
     const intervalId = setInterval(async () => {
       const res = await apiClient.game.$put();
@@ -105,20 +103,14 @@ const Controller = () => {
         />
       </div>
       <div className={styles.center}>
-        <div className={`${styles.info} ${styles.hp}`}>
+        <div className={styles.info}>
           <p>HP</p>
           {'💛'.repeat(playerDetails?.health ?? 0)}
         </div>
-        <div className={`${styles.info} ${styles.score}`}>
+        <div className={styles.info}>
           <p>SCORE</p>
           {playerDetails?.score ?? 0}
         </div>
-        <button className={`${styles['center-button']} ${styles.enemy}`} onClick={createEnemy}>
-          👾
-        </button>
-        <button className={`${styles['center-button']} ${styles.item}`} onClick={useItem}>
-          ✨
-        </button>
       </div>
       <button
         onTouchStart={shootStart}
@@ -127,9 +119,6 @@ const Controller = () => {
         onContextMenu={(e) => {
           e.preventDefault();
         }}
-        onMouseDown={shootStart}
-        onMouseUp={shootEnd}
-        onMouseLeave={shootEnd}
         className={styles['shoot-button']}
       >
         <div>🚀</div>
@@ -140,3 +129,4 @@ const Controller = () => {
 };
 
 export default Controller;
+>>>>>>> 03663785872daa6745ed7d079ca26d8a5e223177

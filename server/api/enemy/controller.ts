@@ -1,3 +1,5 @@
+<<<<<<< HEAD
+=======
 import { enemyUseCase } from '$/useCase/enemyUseCase';
 import { defineController } from './$relay';
 
@@ -15,3 +17,4 @@ export default defineController(() => ({
     body: await enemyUseCase.create(),
   }),
 }));
+>>>>>>> 03663785872daa6745ed7d079ca26d8a5e223177
