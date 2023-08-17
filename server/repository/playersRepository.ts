@@ -15,8 +15,6 @@ const toPlayerModel = (prismaPlayer: Player): PlayerModel => ({
     y: prismaPlayer.posY,
   },
   health: z.number().min(0).parse(prismaPlayer.health),
-  speed: z.number().min(0).parse(prismaPlayer.speed),
-  radius: z.number().min(0).parse(prismaPlayer.radius),
   score: z.number().min(0).parse(prismaPlayer.score),
   gameId: gameIdParser.parse(prismaPlayer.gameId),
 });
@@ -51,8 +49,6 @@ export const playersRepository = {
         posX: player.position.x,
         posY: player.position.y,
         health: player.health,
-        speed: player.speed,
-        radius: player.radius,
         score: player.score,
         createdAt: new Date(player.createdAt),
         updatedAt: new Date(player.updateAt),

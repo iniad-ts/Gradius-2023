@@ -1,51 +1,48 @@
-import type { EnemyModel, PlayerModel } from '$/commonTypesWithClient/models';
-import type { BulletModelWithPosition } from '$/usecase/bulletUseCase';
-import { useState } from 'react';
-import { Layer, Stage } from 'react-konva';
+import type { Bullet } from '$/usecase/bulletUseCase';
+import { useEffect, useState } from 'react';
+import { Circle, Layer, Rect, Stage, Wedge } from 'react-konva';
+import { apiClient } from 'src/utils/apiClient';
 
 const Game = () => {
-  const [players, setPlayers] = useState<PlayerModel[]>([]);
-  const [enemies, setEnemies] = useState<EnemyModel[]>([]);
-  const [bullets, setBullets] = useState<BulletModelWithPosition[]>([]);
-
-  // const fetchPosition = async () => {
-  //   const res = await apiClient.player.$get();
-  //   if (res !== null) {
-  //     setmyPosition(res);
-  //   }
-  // };
-  // const fetchbulletPosition = async () => {
-  //   const res = await apiClient.player.bullet.$get();
-  //   if (res !== null) {
-  //     setbulletPosition(res);
-  //   }
-  // };
-  // useEffect(() => {
-  //   const cancelId = requestAnimationFrame(() => {
-  //     console.log('fetch');
-  //     fetchPosition();
-  //     fetchbulletPosition();
-  //   });
-  //   return () => cancelAnimationFrame(cancelId);
-  // });
+  const [myPosition, setmyPosition] = useState({ x: 100, y: 350 });
+  const [enemyPosition, setenemyPosition] = useState({ x: 900, y: 350 });
+  const [bulletPosition, setbulletPosition] = useState<Bullet[]>([]);
+  const fetchPosition = async () => {
+    const res = await apiClient.player.$get();
+    if (res !== null) {
+      setmyPosition(res);
+    }
+  };
+  const fetchbulletPosition = async () => {
+    const res = await apiClient.player.bullet.$get();
+    if (res !== null) {
+      setbulletPosition(res);
+    }
+  };
+  useEffect(() => {
+    const cancelId = requestAnimationFrame(() => {
+      console.log('fetch');
+      fetchPosition();
+      fetchbulletPosition();
+    });
+    return () => cancelAnimationFrame(cancelId);
+  });
 
   return (
     <div>
       <Stage width={1000} height={700}>
         <Layer>
-          {/* mapで回す */}
-
-          {/* <Wedge
+          <Wedge
             fill="red"
             angle={60}
             radius={70}
             rotation={150}
             x={myPosition.x}
             y={myPosition.y}
-          /> */}
+          />
         </Layer>
         <Layer>
-          {/* {bulletPosition.map((bullet) => (
+          {bulletPosition.map((bullet) => (
             <Circle
               fill="red"
               radius={bullet.radius}
@@ -53,12 +50,13 @@ const Game = () => {
               y={bullet.position.y}
               key={bullet.id}
             />
-          ))} */}
+          ))}
         </Layer>
         <Layer>
-          {/* mapで回す */}
-
-          {/* <Circle fill="blue" x={enemyPosition.x} y={enemyPosition.y} radius={} /> */}
+          <Rect fill="blue" x={enemyPosition.x} y={enemyPosition.y} width={40} height={40} />
+        </Layer>
+        <Layer>
+          <Circle fill="blue" radius={7} x={enemyPosition.x - 100} y={enemyPosition.y} />
         </Layer>
       </Stage>
     </div>

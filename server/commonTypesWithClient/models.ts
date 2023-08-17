@@ -29,8 +29,6 @@ export type PlayerModel = {
     x: number;
     y: number;
   };
-  speed: number;
-  radius: number;
   health: number;
   score: number;
   gameId: GameId;
@@ -46,7 +44,6 @@ export type BulletModel = {
     y: number;
   };
   speed: number;
-  radius: number;
   exists: boolean;
   gameId: GameId;
   playerId: UserId | null;
@@ -62,7 +59,6 @@ export type EnemyModel = {
   };
   health: number;
   speed: number;
-  radius: number;
   direction: number;
   type: number;
   gameId: GameId;
