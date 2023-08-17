@@ -1,4 +1,5 @@
 import type { EnemyTableModel } from '$/commonTypesWithClient/models';
+import { gamesRepository } from '$/repository/gamesRepository';
 
 const firstTable = [
   { createPosition: { x: 1140, y: 60 }, type: 1 },
@@ -49,7 +50,9 @@ const finalTable = [
 
 const reversYWithI = (y: number, i: number) => (i % 2 === 0 ? y : 1080 - y);
 
-export const enemyTable = (displayNumber: number): EnemyTableModel[][] => {
+export const enemyTable = async (): Promise<EnemyTableModel[][] | null> => {
+  const displayNumber = (await gamesRepository.find())?.displayNumber;
+  if (displayNumber === undefined) return null;
   if (displayNumber === 1) return [finalTable];
   if (displayNumber === 2) return [finalTable, finalTable];
   const middle = [...Array(displayNumber - 2)].map((_, i) =>

@@ -13,7 +13,6 @@
   aspect-ratio: 16 / 9;
   background-color: #131313;
   border-radius: 2vmin;
-  backdrop-filter: blur(2vmin);
   box-shadow: 0 0 2vmin 0 #0006, inset 0 0 0 0.4vmin #222;
   border: 0.2vmin solid #030303;
   overflow: hidden;
@@ -226,6 +225,3 @@
     transform: rotate(360deg);
   }
 }
->>>>>>> 03663785872daa6745ed7d079ca26d8a5e223177
-=======
->>>>>>> parent of 5925ba6 (復元)
