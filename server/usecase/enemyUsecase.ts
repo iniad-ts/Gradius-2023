@@ -10,6 +10,8 @@ export const enemyUsecase = {
   },
 };
 
+console.log('R');
+
 setInterval(() => {
   // make_enemy();
   create_enemy();
