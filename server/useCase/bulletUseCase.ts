@@ -1,25 +1,25 @@
-import type { BulletModel, PlayerModel } from '$/commonTypesWithClient/models';
+import type { UserId } from '$/commonTypesWithClient/branded';
+import type { BulletModel } from '$/commonTypesWithClient/models';
 import { bulletsRepository } from '$/repository/bulletsRepository';
 import { gamesRepository } from '$/repository/gamesRepository';
+import { playersRepository } from '$/repository/playersRepository';
 import { bulletIdParser } from '$/service/idParsers';
 import { isInDisplay } from '$/service/isInDisplay';
-import { posWithBulletModel } from '$/service/posWithBulletModel';
+import { posWithDirSpeTim as posWithBulletModel } from '$/service/posWithDirSpeTim';
 import { randomUUID } from 'crypto';
 
 export const bulletUseCase = {
-  createByPlayer: async (
-    player: PlayerModel,
-    direction = { x: 1, y: 0 }
-  ): Promise<BulletModel | null> => {
+  create: async (playerId: UserId): Promise<BulletModel | null> => {
+    const player = await playersRepository.find(playerId);
     if (player !== null) {
       const newBullet: BulletModel = {
         id: bulletIdParser.parse(randomUUID()),
         createdPosition: {
           ...player.position,
         },
-        direction,
+        direction: { x: 1, y: 0 },
         type: 0,
-        playerId: player.id,
+        playerId,
         createdAt: Date.now(),
       };
       await bulletsRepository.create(newBullet);
@@ -40,10 +40,10 @@ export const bulletUseCase = {
     };
     await bulletsRepository.create(newBullet);
   },
-  deleteInOutside: async () => {
+  delete: async () => {
     const bullets = [
-      ...(await bulletsRepository.findAllByPlayer()),
-      ...(await bulletsRepository.findAllByEnemy()),
+      ...(await bulletsRepository.findAllOfPlayers()),
+      ...(await bulletsRepository.findAllOfEnemies()),
     ];
     const game = await gamesRepository.find();
     const maxXPosition = ((game?.displayNumber ?? -1) + 1) * 1920;
@@ -56,8 +56,8 @@ export const bulletUseCase = {
     });
   },
   findInDisplay: async (displayNumber: number) => {
-    const res1 = (await bulletsRepository.findAllByPlayer()) ?? [];
-    const res2 = (await bulletsRepository.findAllByEnemy()) ?? [];
+    const res1 = (await bulletsRepository.findAllOfPlayers()) ?? [];
+    const res2 = (await bulletsRepository.findAllOfEnemies()) ?? [];
     const [bulletsInDisplay1, bulletsInDisplay2] = [res1, res2].map((res) =>
       res
         .filter((bullet) => isInDisplay(displayNumber, posWithBulletModel(bullet)[0]))

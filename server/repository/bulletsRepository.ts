@@ -24,7 +24,7 @@ const toBulletModel = (prismaBullet: Bullet): BulletModel => ({
 });
 
 export const bulletsRepository = {
-  findAllByPlayer: async (): Promise<BulletModel[]> => {
+  findAllOfPlayers: async (): Promise<BulletModel[]> => {
     const prismaBullets = await prismaClient.bullet.findMany({
       orderBy: { createdAt: 'desc' },
       where: {
@@ -35,7 +35,7 @@ export const bulletsRepository = {
     });
     return prismaBullets.map(toBulletModel);
   },
-  findAllByEnemy: async (): Promise<BulletModel[]> => {
+  findAllOfEnemies: async (): Promise<BulletModel[]> => {
     const prismaBullets = await prismaClient.bullet.findMany({
       orderBy: { createdAt: 'desc' },
       where: {

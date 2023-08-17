@@ -5,7 +5,7 @@ import type { RefObject } from 'react';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { Layer, Stage } from 'react-konva';
 import { Background } from 'src/components/Background/Background';
-import { Bullet } from 'src/components/Bullet/Bullet';
+import { Bullet } from 'src/components/Bullet/PlayerBullet';
 import { Enemies } from 'src/components/Enemies/Enemies';
 import Lobby from 'src/components/Lobby/Lobby';
 import { Player } from 'src/components/Player/Player';

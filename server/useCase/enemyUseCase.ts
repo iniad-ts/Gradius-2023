@@ -1,5 +1,5 @@
 import type { UserId } from '$/commonTypesWithClient/branded';
-import type { EnemyModel, LockOnModel, PlayerModel } from '$/commonTypesWithClient/models';
+import type { EnemyModel, PlayerModel } from '$/commonTypesWithClient/models';
 import { enemyTable } from '$/constants/enemyTable';
 import { enemiesRepository } from '$/repository/enemiesRepository';
 import { playersRepository } from '$/repository/playersRepository';
@@ -10,15 +10,20 @@ import { bulletUseCase } from './bulletUseCase';
 
 const RESPAWN_TIME = 5000;
 
+type LockOnModel = {
+  pos: { x: number; y: number };
+  distance2: number;
+};
+
 const sortByDistance = (players: PlayerModel[], enemy: EnemyModel): LockOnModel[] =>
   players
     .map((player) => ({
       pos: { ...player.position },
-      squaredDistance:
+      distance2:
         (player.position.x - enemy.createdPosition.x) ** 2 +
         (player.position.y - enemy.createdPosition.y) ** 2,
     }))
-    .sort((a, b) => a.squaredDistance - b.squaredDistance);
+    .sort((a, b) => a.distance2 - b.distance2);
 
 export const enemyUseCase = {
   create: async () => {
@@ -34,30 +39,6 @@ export const enemyUseCase = {
       type: Math.floor(Math.random() * 3) + 1,
     };
     await enemiesRepository.create(newEnemy);
-  },
-  createAll: async (displayNumber: number) => {
-    const res = enemyTable(displayNumber);
-    Promise.all(
-      res.map((tables, displayNumZeroOrigin) =>
-        tables.map((table) => {
-          const newEnemy: EnemyModel = {
-            id: enemyIdParser.parse(randomUUID()),
-            createdPosition: {
-              x: table.createPosition.x + 1920 * displayNumZeroOrigin,
-              y: table.createPosition.y,
-            },
-            createdAt: Date.now(),
-            deletedAt: null,
-            type: table.type,
-          };
-          return enemiesRepository.create(newEnemy);
-        })
-      )
-    ).then((results) =>
-      results.flat().forEach((result) => {
-        result;
-      })
-    );
   },
   findInDisplay: async (displayNumber: number) => {
     const res = (await enemiesRepository.findAll()) ?? [];
@@ -96,81 +77,103 @@ export const enemyUseCase = {
       })
     );
   },
-  shot: {
-    normal: async () => {
-      const res = await enemiesRepository.findType(1);
-      Promise.all(
-        res.map((enemy) =>
-          bulletUseCase.createByEnemy({ x: enemy.createdPosition.x, y: enemy.createdPosition.y })
-        )
-      ).then((results) =>
-        results.forEach((result) => {
-          result;
-        })
-      );
-    },
-    tracking: async () => {
-      const res = await enemiesRepository.findType(2);
-      const players = await playersRepository.findAll();
-      Promise.all(
-        res.map((enemy) => {
-          const lockOnPlayer = sortByDistance(players, enemy).filter(
-            (player) => player.pos.x < enemy.createdPosition.x
-          )[0];
-          if (lockOnPlayer === undefined) return;
-          const diffX = lockOnPlayer.pos.x - enemy.createdPosition.x;
-          const diffY = lockOnPlayer.pos.y - enemy.createdPosition.y;
-          const normalization = 1 / Math.sqrt(lockOnPlayer.squaredDistance);
-          const dir = {
-            x: diffX * normalization,
-            y: diffY * normalization,
-          };
-          return bulletUseCase.createByEnemy({ ...enemy.createdPosition }, dir);
-        })
-      ).then((results) =>
-        results.forEach((result) => {
-          result;
-        })
-      );
-    },
-    trackingAndSpread: async () => {
-      const res = await enemiesRepository.findType(3);
-      const players = await playersRepository.findAll();
-      Promise.all(
-        res.map((enemy) => {
-          const lockOnPlayer = sortByDistance(players, enemy)[0];
-          const subShotPlaces = (numOfBullet: number) =>
-            [...Array(numOfBullet)].map((_, i) => {
-              const subPlaceX = (lockOnPlayer.pos.y - enemy.createdPosition.y) * 0.1 * (i + 1);
-              const subPlaceY = (lockOnPlayer.pos.x - enemy.createdPosition.x) * 0.1 * (i + 1);
-              return [1, -1].map((i) => ({
-                x: lockOnPlayer.pos.x + subPlaceX * i,
-                y: lockOnPlayer.pos.y + subPlaceY * i,
-              }));
-            });
+  shot2: async () => {
+    const res = await enemiesRepository.findType(1);
+    Promise.all(
+      res.map((enemy) =>
+        bulletUseCase.createByEnemy({ x: enemy.createdPosition.x, y: enemy.createdPosition.y })
+      )
+    ).then((results) =>
+      results.forEach((result) => {
+        result;
+      })
+    );
+  },
+  shot3: async () => {
+    const res = await enemiesRepository.findType(2);
+    const players = await playersRepository.findAll();
+    Promise.all(
+      res.map((enemy) => {
+        const lockOnPlayer = sortByDistance(players, enemy).filter(
+          (player) => player.pos.x < enemy.createdPosition.x
+        )[0];
+        if (lockOnPlayer === undefined) return;
+        const diffX = lockOnPlayer.pos.x - enemy.createdPosition.x;
+        const diffY = lockOnPlayer.pos.y - enemy.createdPosition.y;
+        const normalization = 1 / Math.sqrt(lockOnPlayer.distance2);
+        const dir = {
+          x: diffX * normalization,
+          y: diffY * normalization,
+        };
+        return bulletUseCase.createByEnemy({ ...enemy.createdPosition }, dir);
+      })
+    ).then((results) =>
+      results.forEach((result) => {
+        result;
+      })
+    );
+  },
+  shot4: async () => {
+    const res = await enemiesRepository.findType(3);
+    const players = await playersRepository.findAll();
+    Promise.all(
+      res.map((enemy) => {
+        const lockOnPlayer = sortByDistance(players, enemy)[0];
+        const subShotPlaces = (numOfBullet: number) =>
+          [...Array(numOfBullet)].map((_, i) => {
+            const subPlaceX = (lockOnPlayer.pos.y - enemy.createdPosition.y) * 0.1 * (i + 1);
+            const subPlaceY = (lockOnPlayer.pos.x - enemy.createdPosition.x) * 0.1 * (i + 1);
+            return [1, -1].map((i) => ({
+              x: lockOnPlayer.pos.x + subPlaceX * i,
+              y: lockOnPlayer.pos.y + subPlaceY * i,
+            }));
+          });
 
-          const returnVoid = subShotPlaces(2)
-            .flat()
-            .map((pos) => {
-              const normalization =
-                1 /
-                Math.sqrt(
-                  (pos.x - enemy.createdPosition.x) ** 2 + (pos.y - enemy.createdPosition.y) ** 2
-                );
-              const diffX = pos.x - enemy.createdPosition.x;
-              const diffY = pos.y - enemy.createdPosition.y;
-              return bulletUseCase.createByEnemy(
-                { ...enemy.createdPosition },
-                { x: diffX * normalization, y: diffY * normalization }
+        const returnVoid = subShotPlaces(2)
+          .flat()
+          .map((pos) => {
+            const normalization =
+              1 /
+              Math.sqrt(
+                (pos.x - enemy.createdPosition.x) ** 2 + (pos.y - enemy.createdPosition.y) ** 2
               );
-            });
-          return returnVoid;
+            const diffX = pos.x - enemy.createdPosition.x;
+            const diffY = pos.y - enemy.createdPosition.y;
+            return bulletUseCase.createByEnemy(
+              { ...enemy.createdPosition },
+              { x: diffX * normalization, y: diffY * normalization }
+            );
+          });
+        return returnVoid;
+      })
+    ).then((results) =>
+      results.forEach((result) => {
+        result;
+      })
+    );
+  },
+  createAll: async (displayNumber: number) => {
+    const res = enemyTable(displayNumber);
+    Promise.all(
+      res.map((tables, displayNumZeroOrigin) =>
+        tables.map((table) => {
+          const newEnemy: EnemyModel = {
+            id: enemyIdParser.parse(randomUUID()),
+            createdPosition: {
+              x: table.createPosition.x + 1920 * displayNumZeroOrigin,
+              y: table.createPosition.y,
+            },
+            createdAt: Date.now(),
+            deletedAt: null,
+            type: table.type,
+          };
+          return enemiesRepository.create(newEnemy);
         })
-      ).then((results) =>
-        results.forEach((result) => {
-          result;
-        })
-      );
-    },
+      )
+    ).then((results) =>
+      results.flat().forEach((result) => {
+        result;
+      })
+    );
   },
 };
