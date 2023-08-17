@@ -89,7 +89,7 @@ const Game = () => {
 
     //敵と弾の衝突判定
     const checkCollisionBullet = async () => {
-      const remainingEnemies = [];
+      const newEnemies = [];
 
       for (const enemy of enemies) {
         const hitBullet = bullets.find((bullet) => {
@@ -98,7 +98,7 @@ const Game = () => {
             Math.pow(enemy.createdPosition.x - bulletPosition[0], 2) +
               Math.pow(enemy.createdPosition.y - bulletPosition[1], 2)
           );
-          return distance < 50;
+          return distance < COLLISION_DISTANCE;
         });
         if (hitBullet && hitBullet.playerId) {
           apiClient.enemy.$delete({
@@ -107,8 +107,9 @@ const Game = () => {
               userId: hitBullet.playerId,
             },
           });
-          apiClient.bullet.$delete({ body: { bulletId: hitBullet.id } });
-          return false;
+          await apiClient.bullet.$delete({ body: { bulletId: hitBullet.id } });
+        } else {
+          newEnemies.push(enemy);
         }
         return true;
       });
