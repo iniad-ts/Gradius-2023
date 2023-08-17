@@ -1,16 +1,13 @@
 import type { EnemyModel, PlayerModel } from '$/commonTypesWithClient/models';
 import type { BulletModelWithPosition } from '$/usecase/bulletUseCase';
 import { useEffect, useState } from 'react';
-import { Circle, Image, Layer, Stage } from 'react-konva';
-import { staticPath } from 'src/utils/$path';
+import { Circle, Layer, Stage, Wedge } from 'react-konva';
 import { apiClient } from 'src/utils/apiClient';
-import useImage from 'use-image';
 
 const Game = () => {
   const [players, setPlayers] = useState<PlayerModel[]>([]);
   const [enemies, setEnemies] = useState<EnemyModel[]>([]);
   const [bullets, setBullets] = useState<BulletModelWithPosition[]>([]);
-  const [shipImage] = useImage(staticPath.images.spaceship_png);
 
   const fetchPlayers = async () => {
     const res = await apiClient.player.$get();
@@ -40,18 +37,19 @@ const Game = () => {
     });
     return () => cancelAnimationFrame(cancelId);
   });
+
   return (
     <div>
       <Stage width={1000} height={700}>
         <Layer>
           {players.map((player) => (
-            <Image
-              image={shipImage}
-              width={player.radius * 2}
-              height={player.radius * 2}
-              rotation={90}
-              x={player.position.x - player.radius}
-              y={player.position.y - player.radius}
+            <Wedge
+              fill="red"
+              angle={60}
+              radius={player.radius}
+              rotation={150}
+              x={player.position.x}
+              y={player.position.y}
               key={player.id}
             />
           ))}
