@@ -113,7 +113,9 @@ const Game = () => {
       <div>
         <Stage width={1920} height={1080}>
           <Layer>
-            <Bullet key={bullet.id} bullet={bullet} currentTime={currentTime} />
+            {playerBullets.map((bullet) => (
+              <Bullet key={bullet.id} bullet={bullet} currentTime={currentTime} />
+            ))}
           </Layer>
           <Layer>
             {players.map((player) => (
