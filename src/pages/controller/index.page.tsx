@@ -92,9 +92,13 @@ const Home = () => {
               start={moveStart}
             />
           </div>
+          {/* <div className={styles.ma}>
+            <p>Score</p>
+          </div> */}
           <button className={styles.shoot} onClick={shoot} />
         </div>
       </div>
+
     </>
   );
 };
