@@ -71,38 +71,11 @@ const Game = () => {
       }
     };
 
-    //衝突判定
-    const checkCollision = () => {
-      const newEnemies = enemies.filter((enemy) => {
-        const hitBullet = bullets.find((bullet) => {
-          const bulletPosition = posWithDirSpeTim(bullet, currentTime);
-          const distance = Math.sqrt(
-            Math.pow(enemy.createdPosition.x - bulletPosition[0], 2) +
-              Math.pow(enemy.createdPosition.y - bulletPosition[1], 2)
-          );
-          return distance < 50;
-        });
-        if (hitBullet && hitBullet.playerId) {
-          apiClient.enemy.$delete({
-            body: {
-              enemyId: enemy.id,
-              userId: hitBullet.playerId,
-            },
-          });
-          apiClient.bullet.$delete({ body: { bulletId: hitBullet.id } });
-          return false;
-        }
-        return true;
-      });
-      setEnemies(newEnemies);
-    };
-
     useEffect(() => {
       const cancelId = requestAnimationFrame(() => {
         fetchPlayers(display);
         fetchEnemies(display);
         fetchBullets(display);
-        checkCollision();
         setCurrentTime(Date.now());
       });
       return () => cancelAnimationFrame(cancelId);
