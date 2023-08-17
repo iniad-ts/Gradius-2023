@@ -67,4 +67,5 @@ const Home = () => {
     </>
   );
 };
-export default InputInfo;
+
+export default Home;
