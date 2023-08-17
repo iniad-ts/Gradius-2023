@@ -1,4 +1,4 @@
-import type { BulletId, EnemyId, TaskId, UserId } from './branded';
+import type { TaskId, UserId } from './branded';
 
 export type UserModel = {
   id: UserId;
@@ -12,45 +12,4 @@ export type TaskModel = {
   label: string;
   done: boolean;
   created: number;
-};
-
-export type EnemyModel = {
-  id: EnemyId;
-  pos: { x: number; y: number };
-  speed: number;
-  hp: number;
-  radius: number;
-  type: number;
-};
-
-export type PlayerModel = {
-  userId: UserId;
-  pos: { x: number; y: number };
-  speed: number;
-  hp: number;
-  radius: number;
-  score: number;
-  name: string;
-};
-
-export type BulletModel = {
-  bulletId: BulletId;
-  userId: UserId;
-  pos: { x: number; y: number };
-  attack: number;
-};
-
-export type ConfigModel = {
-  playerSpeed: number;
-  playerSize: {
-    h: number;
-    w: number;
-  };
-  makeEnemyFrequency: number;
-  enemySpeed: number;
-  enemySize: {
-    h: number;
-    w: number;
-  };
-  // creenNumber:
 };
