@@ -20,4 +20,14 @@ model Enemy {
   speed  Int
   hp     Int
   radius Int
+  type   Int
+}
+
+model Player {
+  userId String @id
+  pos    Json
+  speed  Int
+  hp     Int    @default(3)
+  radius Int
+  score  Int    @default(0)
 }
