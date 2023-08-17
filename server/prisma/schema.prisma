@@ -13,24 +13,3 @@ model Task {
   done      Boolean
   createdAt DateTime
 }
-
-// model GameModel {
-//   user    String
-//   type    String
-//   id      Null
-//   xyz     number[]
-//   vector  number[]
-//   speed   number
-//   hp      number
-//   lv      number
-//   created number
-//   end  number | null 
-// }
-
-// model EventModel {
-//   owner   string
-//   items   string[]
-//   kill    number
-//   damage  number
-//   damaged number
-// }

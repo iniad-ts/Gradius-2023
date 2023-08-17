@@ -22,13 +22,13 @@ export type GameModel = {
   vector: number[];
   speed: number;
   hp: number;
+  lv: number;
   created: number;
   end: number | null;
 };
 
 export type EventModel = {
   owner: string;
-  lv: number;
   items: string[];
   kill: number;
   damage: number;
@@ -43,13 +43,13 @@ export const InitGameModel = {
   vector: [0, 0, 0],
   speed: 1,
   hp: 100,
+  lv: 1,
   created: null,
   end: null,
 };
 
 export const InitEventModel = {
   owner: null,
-  lv: 1,
   items: [],
   kill: 0,
   damage: 0,
