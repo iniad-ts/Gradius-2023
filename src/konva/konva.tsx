@@ -46,7 +46,7 @@ function App() {
           <Rect key={index} x={player[0]} y={player[1]} width={50} height={50} fill="red" />
         ))}
         {newGunPosition.map((gun, index) => (
-          <Circle key={index} radius={10} x={gun[0]} y={gun[1]} fill="green" />
+          <Rect key={index} x={gun[0]} y={gun[1]} width={50} height={50} fill="green" />
         ))}
       </Layer>
     </Stage>
