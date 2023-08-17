@@ -25,7 +25,7 @@ export const enemiesRepository = {
   getAll: async (): Promise<EnemyModel[] | null> => {
     const prismaEnemies = await prismaClient.enemy.findMany();
 
-    return prismaEnemies.map(toEnemyModel);
+    return prismaEnemies.map(toEnemyRepository);
   },
   getUnique: async (id: EnemyId): Promise<EnemyModel | null> => {
     const prismaEnemy = await prismaClient.enemy.findUnique({
