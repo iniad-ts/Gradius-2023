@@ -116,17 +116,8 @@ const Controller = () => {
         <button className={`${styles['center-button']} ${styles.enemy}`} onClick={createEnemy}>
           👾
         </button>
-        <button
-          className={`${styles['center-button']} ${styles.item2}`}
-          onClick={async () => await apiClient.item.post({ body: { type: 2 } })}
-        >
-          2️⃣
-        </button>
-        <button
-          className={`${styles['center-button']} ${styles.item2}`}
-          onClick={async () => await apiClient.item.post({ body: { type: 3 } })}
-        >
-          3️⃣
+        <button className={`${styles['center-button']} ${styles.item}`} onClick={useItem}>
+          ✨
         </button>
       </div>
       <button
