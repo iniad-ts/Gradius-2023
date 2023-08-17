@@ -52,7 +52,7 @@ const Home = () => {
     <>
       <BasicHeader user={user} />
       <div className={styles.title} style={{ marginTop: '160px' }}>
-        <a href="./gradius/display" onClick={() => startGradius()}>
+        <a href="./gradius" onClick={() => startGradius()}>
           Click to start Gradius
         </a>
       </div>
