@@ -48,7 +48,7 @@ const Game = () => {
               radius={bullet.radius}
               x={bullet.position.x}
               y={bullet.position.y}
-              key={bullet.id}
+              key={bullet.position.x + bullet.position.y}
             />
           ))}
         </Layer>
