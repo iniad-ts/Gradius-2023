@@ -41,6 +41,10 @@ export const gameUseCase = {
     return player;
   },
   collision: async (player: PlayerModel, enemy: EnemyModel) => {
+    const enemyStatus = await enemiesRepository.find(enemy.id);
+    if (enemyStatus?.deletedAt !== null) {
+      return;
+    }
     const newPlayer = { ...player, health: player.health - 1 };
     await playersRepository.save(newPlayer);
     await enemiesRepository.update(enemy.id, new Date());
