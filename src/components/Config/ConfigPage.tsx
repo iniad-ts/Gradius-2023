@@ -2,15 +2,10 @@ import styles from './Config.module.css';
 
 export const Config = () => {
   const [info, setInfo] = useState<ConfigModel>();
+
   const fetchInfo = async () => {
     const res = await apiClient.config.$get();
     setInfo(res);
-  };
-  const update = async (newInfo: ConfigModel) => {
-    if (newInfo !== undefined) {
-      await apiClient.config.$post({ body: newInfo });
-      console.log('更新!');
-    }
   };
 
   useEffect(() => {
@@ -83,7 +78,7 @@ export const Config = () => {
 
           <tfoot />
         </table>
-        <button onClick={() => update()}>更新</button>
+        <button>更新</button>
       </div>
     </div>
   );

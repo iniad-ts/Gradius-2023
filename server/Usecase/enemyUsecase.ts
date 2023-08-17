@@ -1,6 +1,6 @@
 import { enemyRepository } from '$/Repository/enemyRepository';
 import type { EnemyId } from '$/commonTypesWithClient/branded';
-import type { ConfigModel, EnemyModel } from '$/commonTypesWithClient/models';
+import type { EnemyModel } from '$/commonTypesWithClient/models';
 
 import { EnemyIdParser } from '$/service/idParsers';
 import { randomUUID } from 'crypto';
@@ -20,11 +20,6 @@ export const enemyUsecase = {
   },
   getEnemyInfo: () => {
     return enemyInfo;
-  },
-  updateInfo: (newInfo: ConfigModel) => {
-    enemyInfo.makeEnemyFrequency = newInfo.makeEnemyFrequency;
-    enemyInfo.enemySpeed = newInfo.enemySpeed;
-    enemyInfo.enemySize = newInfo.enemySize;
   },
 };
 
