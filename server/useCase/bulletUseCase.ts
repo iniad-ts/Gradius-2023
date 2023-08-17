@@ -1,16 +1,13 @@
-import type { UserId } from '$/commonTypesWithClient/branded';
 import type { BulletModel } from '$/commonTypesWithClient/models';
 import { bulletsRepository } from '$/repository/bulletsRepository';
 import { gamesRepository } from '$/repository/gamesRepository';
-import { playersRepository } from '$/repository/playersRepository';
 import { bulletIdParser } from '$/service/idParsers';
 import { isInDisplay } from '$/service/isInDisplay';
 import { posWithDirSpeTim as posWithBulletModel } from '$/service/posWithDirSpeTim';
 import { randomUUID } from 'crypto';
 
 export const bulletUseCase = {
-  create: async (playerId: UserId): Promise<BulletModel | null> => {
-    const player = await playersRepository.find(playerId);
+  create: async (player: PlayerModel, direction = { x: 1, y: 0 }): Promise<BulletModel | null> => {
     if (player !== null) {
       const newBullet: BulletModel = {
         id: bulletIdParser.parse(randomUUID()),

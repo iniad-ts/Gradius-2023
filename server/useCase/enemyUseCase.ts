@@ -77,7 +77,7 @@ export const enemyUseCase = {
       })
     );
   },
-  shot2: async () => {
+  shot1: async () => {
     const res = await enemiesRepository.findType(1);
     Promise.all(
       res.map((enemy) =>
@@ -89,7 +89,7 @@ export const enemyUseCase = {
       })
     );
   },
-  shot3: async () => {
+  shot2: async () => {
     const res = await enemiesRepository.findType(2);
     const players = await playersRepository.findAll();
     Promise.all(
@@ -100,7 +100,7 @@ export const enemyUseCase = {
         if (lockOnPlayer === undefined) return;
         const diffX = lockOnPlayer.pos.x - enemy.createdPosition.x;
         const diffY = lockOnPlayer.pos.y - enemy.createdPosition.y;
-        const normalization = 1 / Math.sqrt(lockOnPlayer.distance2);
+        const normalization = 1 / Math.sqrt(lockOnPlayer.squaredDistance);
         const dir = {
           x: diffX * normalization,
           y: diffY * normalization,
@@ -113,7 +113,7 @@ export const enemyUseCase = {
       })
     );
   },
-  shot4: async () => {
+  shot3: async () => {
     const res = await enemiesRepository.findType(3);
     const players = await playersRepository.findAll();
     Promise.all(

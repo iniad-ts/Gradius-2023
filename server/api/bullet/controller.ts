@@ -11,5 +11,5 @@ export default defineController(() => ({
     status: 200,
     body: await bulletsRepository.delete(body.bulletId),
   }),
-  post: async ({ player }) => ({ status: 200, body: await bulletUseCase.create(player.id) }),
+  post: async ({ player }) => ({ status: 200, body: await bulletUseCase.create(player) }),
 }));
