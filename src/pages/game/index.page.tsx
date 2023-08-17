@@ -81,10 +81,9 @@ const Game = () => {
       setPlayers(newPlayers);
       const updatedPlayerModel = newPlayers.find((player) => player.id === playerId);
       if (!updatedPlayerModel) return;
-      const res = apiClient.player.status.$post({
+      apiClient.player.status.$post({
         body: { player: updatedPlayerModel },
       });
-      console.log(res);
     };
 
     //衝突判定の距離
