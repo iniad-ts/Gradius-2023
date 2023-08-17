@@ -83,13 +83,10 @@ export const enemyUseCase = {
               (player.position.y - enemy.createdPosition.y) ** 2,
           }))
           .sort((a, b) => a.distance - b.distance)[0].pos;
-        const dir =
-          (Math.atan(
-            (lockOnPlayerPos.y - enemy.createdPosition.y) /
-              (lockOnPlayerPos.x - enemy.createdPosition.x)
-          ) /
-            Math.PI) *
-          180;
+        const dir = Math.atan(
+          (lockOnPlayerPos.y - enemy.createdPosition.y) /
+            (lockOnPlayerPos.x - enemy.createdPosition.x)
+        );
         return bulletUseCase.createByEnemy(
           {
             x: enemy.createdPosition.x,

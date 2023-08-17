@@ -27,7 +27,7 @@ export const bulletUseCase = {
     }
     return null;
   },
-  createByEnemy: async (pos: { x: number; y: number }, dir = 180) => {
+  createByEnemy: async (pos: { x: number; y: number }, dir = 0) => {
     const newBullet: BulletModel = {
       id: bulletIdParser.parse(randomUUID()),
       createdPosition: {
