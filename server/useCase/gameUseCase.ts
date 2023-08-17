@@ -23,6 +23,5 @@ export const gameUseCase = {
       ...game,
       displayNumber,
     });
-    //await enemyUseCase.createAll();
   },
 };
