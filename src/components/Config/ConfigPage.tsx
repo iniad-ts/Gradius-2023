@@ -2,40 +2,29 @@ import styles from './Config.module.css';
 
 export const Config = () => {
   const [info, setInfo] = useState<ConfigModel>();
-
-  const newInfo = info;
-
   const fetchInfo = async () => {
     const res = await apiClient.config.$get();
     setInfo(res);
   };
+  const update = async (id: string) => {
+    const inputElement = document.getElementById(id) as HTMLInputElement;
 
-  const updatePlayerSpeed = async () => {
-    const inputElement = document.getElementById('PlayerSpeed') as HTMLInputElement;
     const inputValue = inputElement.value;
 
-    if (newInfo !== undefined) {
-      newInfo.playerSpeed = Number(inputValue);
-      await apiClient.config.$post({ body: newInfo });
-      setInfo(newInfo);
-      console.log('送信');
-    }
-  };
-
-  const updateMakeEnemyFrequency = async () => {
-    const inputElement = document.getElementById('mEF') as HTMLInputElement;
-    const inputValue = inputElement.value;
+    const newInfo = {
+      ...info,
+      id: inputValue,
+    } as ConfigModel;
 
     if (newInfo !== undefined) {
-      newInfo.makeEnemyFrequency = Number(inputValue);
       await apiClient.config.$post({ body: newInfo });
-      setInfo(newInfo);
     }
+    console.log('更新!');
   };
 
   useEffect(() => {
     fetchInfo();
-  }, [newInfo]);
+  }, []);
 
   return (
     <div className={styles.container}>
@@ -53,7 +42,8 @@ export const Config = () => {
               <th>基本playerspeed</th>
               <td>5/0.1秒</td>
               <td>
-                <input type="text" name="PlayerSpeed" placeholder="入力してください" />
+                <input type="text" id="PlayerSpeed" placeholder="入力してください" />
+                <button onClick={() => update('PlayerSpeed')}>更新</button>
               </td>
             </tr>
             <tr>
@@ -72,7 +62,8 @@ export const Config = () => {
               <th>敵の出現頻度</th>
               <td>2/秒</td>
               <td>
-                <input type="text" name="Enemy" placeholder="入力してください" />
+                <input id="mEF" type="text" name="Enemy" placeholder="入力してください" />
+                <button onClick={() => update()}>更新</button>
               </td>
             </tr>
             <tr>
