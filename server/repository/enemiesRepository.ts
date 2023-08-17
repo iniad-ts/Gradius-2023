@@ -1,5 +1,5 @@
 import type { EnemyModel } from '$/commonTypesWithClient/models';
-import { enemyIdParser } from '$/service/idParsers';
+import { enemyIdParser, gameIdParser } from '$/service/idParsers';
 import { prismaClient } from '$/service/prismaClient';
 import type { Enemy } from '@prisma/client';
 import { z } from 'zod';
@@ -14,6 +14,7 @@ const toEnemyModel = (prismaEnemy: Enemy): EnemyModel => ({
     .parse(prismaEnemy.createdPosition),
   type: z.number().min(0).parse(prismaEnemy.type),
   createdAt: prismaEnemy.createdAt.getTime(),
+  gameId: gameIdParser.parse(prismaEnemy.gameId),
 });
 
 export const enemiesRepository = {
@@ -24,6 +25,7 @@ export const enemiesRepository = {
         createdPosition: enemy.createdPosition,
         type: enemy.type,
         createdAt: new Date(enemy.createdAt),
+        gameId: enemy.gameId,
       },
     });
     return toEnemyModel(prismaEnemy);
