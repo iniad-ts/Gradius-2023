@@ -44,17 +44,6 @@ const Game = () => {
     <div>
       <Stage width={1000} height={700}>
         <Layer>
-          {bullets.map((bullet) => (
-            <Circle
-              fill="red"
-              radius={bullet.radius}
-              x={bullet.position.x}
-              y={bullet.position.y}
-              key={bullet.id}
-            />
-          ))}
-        </Layer>
-        <Layer>
           {players.map((player) => (
             <Image
               image={shipImage}
@@ -64,6 +53,17 @@ const Game = () => {
               x={player.position.x + player.radius}
               y={player.position.y - player.radius}
               key={player.id}
+            />
+          ))}
+        </Layer>
+        <Layer>
+          {bullets.map((bullet) => (
+            <Circle
+              fill="red"
+              radius={bullet.radius}
+              x={bullet.position.x}
+              y={bullet.position.y}
+              key={bullet.id}
             />
           ))}
         </Layer>
