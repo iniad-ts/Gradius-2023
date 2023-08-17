@@ -8,7 +8,7 @@ function App() {
   //プレイヤーと銃の位置をstateで管理
   const [newPlayerPosition, setNewPlayerPosition] = useState<number[][]>([]);
   const [newGunPosition, setNewGunPosition] = useState<number[][]>([]);
-  //apiを叩いてプレイヤーと銃の位置を取得stateにセット
+
   const getPosition = useCallback(async () => {
     {
       const new_position = await apiClient.rooms.playerPosition.$get();
