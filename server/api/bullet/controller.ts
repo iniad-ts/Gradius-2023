@@ -1,10 +1,12 @@
 import { bulletsRepository } from '$/repository/bulletsRepository';
 import { bulletUseCase } from '$/useCase/bulletUseCase';
+import { enemyUseCase } from '$/useCase/enemyUseCase';
 import { defineController } from './$relay';
 
 export default defineController(() => ({
   get: async () => {
     bulletUseCase.delete();
+    enemyUseCase.respawn();
     return { status: 200, body: (await bulletsRepository.findAll()) ?? [] };
   },
   delete: async ({ body }) => ({
