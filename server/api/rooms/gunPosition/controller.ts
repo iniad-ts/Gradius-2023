@@ -1,10 +1,9 @@
-import { gunPosition, gunShot } from '$/Usecase/playerUsecase';
+import { bulletUsecase } from '$/Usecase/bulletUsecase';
 import { defineController } from './$relay';
 
 export default defineController(() => ({
-  get: () => ({ status: 200, body: gunPosition }),
+  get: async () => ({ status: 200, body: await bulletUsecase.getBullets() }),
   post: async ({ body }) => {
-    await gunShot(body);
-    return { status: 200, body: gunPosition };
+    return { status: 200, body: await bulletUsecase.createBullet(body) };
   },
 }));
