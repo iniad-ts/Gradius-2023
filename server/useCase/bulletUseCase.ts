@@ -42,9 +42,8 @@ export const bulletUseCase = {
   getStatus: async () => {
     bulletUseCase.delete();
     enemyUseCase.respawn();
-    const res1 = (await bulletsRepository.findAllOfPlayers()) ?? [];
-    const res2 = (await bulletsRepository.findAllOfEnemies()) ?? [];
-    const bulletsInDisplay1 = res1
+    const res = (await bulletsRepository.findAll()) ?? [];
+    const bulletsInDisplay = res
       .filter((bullet) => isInDisplay(displayNumber, posWithBulletModel(bullet)[0]))
       .map((bullet) => ({
         ...bullet,
@@ -53,18 +52,6 @@ export const bulletUseCase = {
           x: bullet.createdPosition.x - 1920 * displayNumber,
         },
       }));
-    const bulletsInDisplay2 = res2
-      .filter((bullet) => isInDisplay(displayNumber, posWithBulletModel(bullet)[0]))
-      .map((bullet) => ({
-        ...bullet,
-        createdPosition: {
-          ...bullet.createdPosition,
-          x: bullet.createdPosition.x - 1920 * displayNumber,
-        },
-      }));
-    return {
-      playerS: bulletsInDisplay1,
-      enemyS: bulletsInDisplay2,
-    };
+    return bulletsInDisplay;
   },
 };
