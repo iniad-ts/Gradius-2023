@@ -21,7 +21,7 @@ const moveGun = () => {
   return gunPosition;
 };
 
-export const playerUsecase = (() => {
+export const roomUsecase = (() => {
   return {
     pushbutton: async (movedirection: MoveDirection) => {
       let result = '';
