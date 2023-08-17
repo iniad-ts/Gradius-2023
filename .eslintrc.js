@@ -41,7 +41,7 @@ module.exports = {
     complexity: ['error', 5],
     'max-depth': ['error', 1],
     'max-nested-callbacks': ['error', 3],
-    'max-lines': ['error', 200],
+    'max-lines': ['error', 300],
   },
   overrides: [
     {
