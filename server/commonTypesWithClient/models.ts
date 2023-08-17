@@ -29,7 +29,7 @@ export type GameSessionModel = {
   stageId: StageId;
   score: number;
   startTime: Date;
-  endTime: Date | null;
+  endTime?: Date | null;
 };
 
 export type PlayerModel = {
@@ -51,16 +51,16 @@ export type PowerUpModel = {
 
 export type SessionsEnemiesModel = {
   id: SessionsEnemiesId;
-  sessionId: GameSessionId;
-  enemyId: EnemyId;
+  session_id: GameSessionId;
+  enemy_id: EnemyId;
   x: number;
   y: number;
-  hitPoint: number;
-  collisionRadius: number;
+  hit_point: number;
+  collision_radius: number;
 };
 
 export type EnemyModel = {
   id: EnemyId;
-  collisionRadius: number;
+  collision_radius: number;
   score: number;
 };
