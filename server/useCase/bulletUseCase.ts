@@ -42,7 +42,6 @@ export const bulletUseCase = {
   getStatus: async () => {
     bulletUseCase.delete();
     enemyUseCase.respawn();
-
-    return (await bulletsRepository.findAllOfPlayers()) ?? [];
+    return (await bulletsRepository.findAll()) ?? [];
   },
 };
