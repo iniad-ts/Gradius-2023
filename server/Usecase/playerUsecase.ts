@@ -26,37 +26,12 @@ const moveGun = () => {
   return gunPosition;
 };
 
-export const playerUsecase = {
-  createNewPlayer: async () => {
-    //playerの初期ステータス
-    const new_player: playerModel = {
-      userId: UserIdParser.parse(randomUUID()),
-      pos: { x: 50, y: 300 },
-      speed: 5,
-      hp: 10,
-      radius: 20,
-      score: 0,
-    };
-    await playerRepository.save(new_player);
-    return new_player.userId;
-  },
-  movePlayer: async (movedirection: MoveDirection, user_Id: string) => {
-    // position[0][0] += movedirection.x * 10;
-    // position[0][1] += movedirection.y * 10;
-    const recentlyPlayerInfo = await playerRepository.read(user_Id);
-    const updatePlayerInfo: playerModel = {
-      userId: recentlyPlayerInfo.userId,
-      pos: {
-        x: (recentlyPlayerInfo.pos.x += movedirection.x * 10),
-        y: (recentlyPlayerInfo.pos.y += movedirection.y * 10),
-      },
-      speed: recentlyPlayerInfo.speed,
-      hp: recentlyPlayerInfo.hp,
-      radius: recentlyPlayerInfo.radius,
-      score: recentlyPlayerInfo.score,
-    };
-    await playerRepository.save(updatePlayerInfo);
-  },
+export const playerUsecase = (() => {
+  return {
+    movePlayer: async (movedirection: MoveDirection) => {
+      position[0][0] += movedirection.x * 10;
+      position[0][1] += movedirection.y * 10;
+    },
 
     getPlayerPos: async () => {
       return position;

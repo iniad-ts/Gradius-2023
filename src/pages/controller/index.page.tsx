@@ -16,13 +16,6 @@ const Home = () => {
   const [size, setSize] = useState<number>(0);
   const [moveIntervalId, setMoveIntervalId] = useState<NodeJS.Timeout | null>(null);
   const moveDirection = useRef<MoveDirection>({ x: 0, y: 0 });
-  const [user_Id, setUser_Id] = useState('');
-
-  const getUserId = async () => {
-    const result = await apiClient.rooms.getUserId.get();
-
-    setUser_Id(result.body.userId);
-  };
 
   const getsize = () => {
     if (joystickRef.current !== null) {
@@ -45,9 +38,7 @@ const Home = () => {
   };
 
   const move = async () => {
-    await apiClient.rooms.control.$post({
-      body: { moveDirection: moveDirection.current, userId: user_Id },
-    });
+    await apiClient.rooms.control.$post({ body: moveDirection.current });
     console.log('move', moveDirection.current);
   };
   const moveStart = () => {
