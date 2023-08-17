@@ -39,10 +39,6 @@ export const enemyUseCase = {
     return enemiesInDisplay;
   },
   kill: async (enemyId: string, userId: UserId) => {
-    const enemyStatus = await enemiesRepository.find(enemyId);
-    if (enemyStatus?.deletedAt !== null) {
-      return;
-    }
     await enemiesRepository.update(enemyId, new Date());
     const userStatus = await playersRepository.find(userId);
     if (userStatus !== null) {
