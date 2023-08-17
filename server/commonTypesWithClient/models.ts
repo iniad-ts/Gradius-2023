@@ -21,3 +21,11 @@ export type EnemyModel = {
   hp: number;
   radius: number;
 };
+
+export type playerModel = {
+  pos: { x: number; y: number };
+  hp: number;
+  score: number;
+  radius: number;
+  speed: number;
+};
