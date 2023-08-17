@@ -1,4 +1,4 @@
-import type { MoveDirection } from '$/Usecase/playerUsecase';
+import type { MoveDirection } from '$/usecase/playerUsecase';
 export type Methods = {
   post: {
     reqBody: MoveDirection;
