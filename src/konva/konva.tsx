@@ -15,43 +15,13 @@ function App() {
     const new_playerPosition = await apiClient.rooms.control.$get();
     const new_gunPosition = await apiClient.rooms.gunPosition.$get();
     const new_enemyPosition = await apiClient.check.$get();
-
-    // 例: newPlayerPosition と newEnemyPosition の間で当たり判定を行う場合
-    checkCollision(new_enemyPosition, new_gunPosition);
-
+    console.log(new_playerPosition);
+    console.log(new_gunPosition);
+    console.log(new_enemyPosition);
     setNewPlayerPosition(new_playerPosition);
     setNewGunPosition(new_gunPosition);
     setNewEnemyPosition(new_enemyPosition);
   }, []);
-  const checkCollision = (hitlist1: EnemyModel[], hitlist2: number[][]) => {
-    const list2Radius = 10; // list2 の固定の半径
-
-    hitlist1.map((list1) => {
-      hitlist2.map((list2: number[]) => {
-        const distance1to2 = Math.sqrt(
-          (list1.pos.x - list2[0]) ** 2 + (list1.pos.y - list2[1]) ** 2
-        );
-        if (distance1to2 < list1.radius + list2Radius) {
-          console.log('hit');
-          apiClient.check.$post({ body: list1.id });
-        }
-      });
-    });
-  };
-
-  /* const checkCollision = (hitlist1: EnemyModel[], hitlist2: EnemyModel[]) => {
-    hitlist1.map((list1) => {
-      hitlist2.map((list2) => {
-        const distance1to2 = Math.sqrt(
-          (list1.pos.x - list2.pos.x) ** 2 + (list1.pos.y - list2.pos.y) ** 2
-        );
-        if (distance1to2 < list1.radius + list2.radius) {
-          console.log('hit');
-          apiClient.check.$post({ body: list1.id });
-        }
-      });
-    });
-  }; */
 
   //apiを叩く処理を100msごとに実行
   useEffect(() => {
