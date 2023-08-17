@@ -10,12 +10,18 @@ function App() {
   const [newGunPosition, setNewGunPosition] = useState<number[][]>([]);
   //apiを叩いてプレイヤーと銃の位置を取得stateにセット
   const getPosition = useCallback(async () => {
-    {
-      const new_position = await apiClient.rooms.playerPosition.$get();
-      const new_gunPosition = await apiClient.rooms.gunPosition.$get();
-      setPosition(new_position);
-      setGunPosition(new_gunPosition);
-    }
+    const new_playerPosition = await apiClient.rooms.playerPosition.$get();
+    const new_gunPosition = await apiClient.rooms.gunPosition.$get();
+    console.log(new_playerPosition);
+    console.log(new_gunPosition);
+    setNewPlayerPosition(new_playerPosition);
+    setNewGunPosition(new_gunPosition);
+  }, []);
+  //APiを叩いて銃を撃つ
+  const gunShot = useCallback(async () => {
+    await apiClient.rooms.gunPosition.$post();
+    const new_gunPosition = await apiClient.rooms.gunPosition.$get();
+    setNewGunPosition(new_gunPosition);
   }, []);
 
   useEffect(() => {
@@ -28,7 +34,20 @@ function App() {
   return (
     <Stage width={1500} height={800}>
       <Layer>
-        <Rect fill="red" width={175} height={75} x={position[0]} y={position[1]} />
+        <Rect
+          stroke={'black'}
+          strokeWidth={1}
+          x={0}
+          y={0}
+          width={windowWidth}
+          height={windowHeight}
+        />
+        {newPlayerPosition.map((player, index) => (
+          <Rect key={index} x={player[0]} y={player[1]} width={50} height={50} fill="red" />
+        ))}
+        {newGunPosition.map((gun, index) => (
+          <Circle key={index} radius={10} x={gun[0]} y={gun[1]} fill="green" />
+        ))}
       </Layer>
     </Stage>
   );
