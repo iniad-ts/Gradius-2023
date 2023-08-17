@@ -65,15 +65,11 @@ export const playerUsecase = {
     getAllPlayer: async (): Promise<playerModel[]> => {
       return await playerRepository.getPlayers();
     },
-
-    getPlayerInfo: () => {
-      return playerInfo;
-    },
   };
 })();
 
 // 仮初期値
-const playerInfo = {
+export const playerInfo = {
   playerFirstPos_x: 300,
   playerFirstPos_y: 300,
   playerSpeed: 5,

@@ -18,13 +18,10 @@ export const enemyUsecase = {
       console.log(e);
     }
   },
-  getEnemyInfo: () => {
-    return enemyInfo;
-  },
 };
 
 // 仮初期値
-const enemyInfo = {
+export const enemyInfo = {
   enemyFirstPos_x: 100,
   enemySpeed: 5,
   enemyRadius: 20,
