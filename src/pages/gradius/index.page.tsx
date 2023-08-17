@@ -1,10 +1,14 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 //testCode//ここに書くのはyosuliです。
 =======
 //testCode//ここに書くのはyosuuliです。
 >>>>>>> parent of 469c1b9 (change Models)
+=======
+//testCode
+>>>>>>> parent of 60aebae (謎)
 
 import { useState } from 'react';
 import { apiClient } from 'src/utils/apiClient';
@@ -12,9 +16,8 @@ import { apiClient } from 'src/utils/apiClient';
 const Home = () => {
   const [hoge, setHoge] = useState(1);
   const onclick = async () => {
-    await apiClient.gradius.event.post({ body: { name: 'myPlane', level: 1 } });
     await apiClient.gradius.post({ body: 1 });
-    await console.log(await apiClient.gradius.event.game.post({ body: 'myPlane' }));
+    await console.log((await apiClient.gradius.get()).body);
     setHoge(3 - hoge);
   };
   return (
