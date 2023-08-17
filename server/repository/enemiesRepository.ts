@@ -31,7 +31,7 @@ export const enemiesRepository = {
       where: { id },
     });
 
-    return prismaEnemy !== null ? toEnemyRepository(prismaEnemy) : null;
+    return prismaEnemy && toEnemyRepository(prismaEnemy);
   },
   save: async (enemy: EnemyModel) => {
     await prismaClient.enemy.upsert({

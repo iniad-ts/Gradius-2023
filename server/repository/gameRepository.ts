@@ -13,6 +13,6 @@ export const gameRepository = {
   get: async (): Promise<GameModel | null> => {
     const prismaGame = await prismaClient.game.findFirst();
 
-    return prismaGame !== null ? toGameModel(prismaGame) : null;
+    return prismaGame && toGameModel(prismaGame);
   },
 };
