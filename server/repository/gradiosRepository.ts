@@ -1,8 +1,8 @@
-import type { UserId } from '$/commonTypesWithClient/branded';
 import type { EventModel, GameModel } from '$/commonTypesWithClient/models';
 
 const initGameModel = {
-  user: null,
+  name: null,
+  owner: null,
   type: 'owner',
   xyz: [-5, 0, 0],
   vector: [0, 0, 0],
@@ -26,17 +26,14 @@ const gameModels: GameModel[] = [];
 const eventModels: EventModel[] = [];
 
 export const gradiusRepository = {
-  crate: (user: UserId) => {
-    const newGameModel = { ...initGameModel, user, started: new Date().getTime() };
-    const newEventModel = { ...initEventModel, owner: user };
-    gameModels.push(newGameModel);
-    eventModels.push(newEventModel);
-  },
-  findOfId: (user: UserId): { game: GameModel[]; event: EventModel } => {
-    const games = gameModels.filter((gameModel) => gameModel.user === user);
-    const event = eventModels.filter((eventModel) => eventModel.owner === user)[0];
+  findOfName: (name: string): { game: GameModel[]; event: EventModel } => {
+    const games = gameModels.filter((gameModel) => gameModel.name === name);
+    const event = eventModels.filter((eventModel) => eventModel.owner === name)[0];
     if (games.length === 0) {
-      gradiusRepository.crate(user);
+      const newGameModel = { ...initGameModel, name, started: new Date().getTime() };
+      const newEventModel = { ...initEventModel, owner: name };
+      gameModels.push(newGameModel);
+      eventModels.push(newEventModel);
     }
     console.log(games, event);
     return { game: games, event };
@@ -47,9 +44,10 @@ export const gradiusRepository = {
   findWithtype: (type: string) => gameModels.filter((gra) => gra.type === type),
   save: (gameModel: GameModel, name: string) => {
     gameModels.forEach((oneGameModel, i) => {
-      if (oneGameModel.user === name) {
+      if (oneGameModel.name === name) {
         gameModels[i] = gameModel;
       }
     });
+    console.log(gameModels[0].xyz);
   },
 };
