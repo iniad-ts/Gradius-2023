@@ -28,7 +28,7 @@ export const bulletUseCase = {
     return null;
   },
   delete: async () => {
-    const bullets = await bulletsRepository.findAllOfPlayers();
+    const bullets = await bulletsRepository.findAll();
     const game = await gamesRepository.find();
     const maxXPosition = ((game?.displayNumber ?? -1) + 1) * 1920;
     const deleteBullets = bullets.filter((bullet) => {
