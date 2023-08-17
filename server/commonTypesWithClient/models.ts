@@ -20,14 +20,4 @@ export type EnemyModel = {
   speed: number;
   hp: number;
   radius: number;
-  type: number;
-};
-
-export type playerModel = {
-  userId: UserId;
-  pos: { x: number; y: number };
-  speed: number;
-  hp: number;
-  radius: number;
-  score: number;
 };
