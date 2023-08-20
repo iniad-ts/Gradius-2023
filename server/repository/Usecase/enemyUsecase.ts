@@ -42,15 +42,6 @@ setInterval(() => {
 // }
 
 export let enemy_list: number[][] = [];
-export type Enemy_Info = {
-  pos: { x: number; y: number };
-  speed: number;
-  // kind: number;
-  radius: number;
-  // hp: number;
-  //scole:number;
-};
-export const enemy_info: Enemy_Info[] = [];
 
 const make_enemy = () => {
   const enemy_pos_y: number = Math.floor(Math.random() * 690) + 1;
@@ -59,7 +50,7 @@ const make_enemy = () => {
 
 const move_or_delete_enemy = () => {
   const new_enemy_list = enemy_list.map((one_enemy) => {
-    one_enemy[0] -= 5;
+    one_enemy[0] -= 2;
     return one_enemy;
   });
   enemy_list = new_enemy_list.filter((one_enemy) => one_enemy[0] >= 50);
