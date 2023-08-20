@@ -43,5 +43,11 @@
   },
   "engines": {
     "node": ">=18.0.0"
+  },
+  "dependencies": {
+    "canvas": "^2.11.2",
+    "konva": "^9.2.0",
+    "react-joystick-component": "^6.2.1",
+    "react-konva": "^18.2.10"
   }
 }
