@@ -10,19 +10,20 @@ import { userAtom } from '../atoms/user';
 import styles from './index.module.css';
 
 const Home = () => {
-  const [key, setKey] = useState('');
-  // useEffect(() => {}, []);
-  const hoge = true;
-  const textarea = document.getElementById('input');
-
-  const keydown = async (e: KeyboardEvent) => {
-    const returnedKey = await apiClient.handler.$post({ body: { key: e.key } });
-    setKey(returnedKey);
+  const [user] = useAtom(userAtom);
+  const [tasks, setTasks] = useState<TaskModel[]>();
+  const [label, setLabel] = useState('');
+  const inputLabel = (e: ChangeEvent<HTMLInputElement>) => {
+    setLabel(e.target.value);
   };
   const fetchTasks = async () => {
     const tasks = await apiClient.tasks.$get().catch(returnNull);
 
-  textarea?.addEventListener('keydown', keydown);
+    if (tasks !== null) setTasks(tasks);
+  };
+  const createTask = async (e: FormEvent) => {
+    e.preventDefault();
+    if (!label) return;
 
     await apiClient.tasks.post({ body: { label } });
     setLabel('');
@@ -45,8 +46,31 @@ const Home = () => {
 
   return (
     <>
-      <textarea placeholder="ここ" id="input" />
-      <div id="key">Return{key}</div>
+      <BasicHeader user={user} />
+      <div className={styles.title} style={{ marginTop: '160px' }}>
+        Welcome to frourio!
+      </div>
+
+      <form style={{ textAlign: 'center', marginTop: '80px' }} onSubmit={createTask}>
+        <input value={label} type="text" onChange={inputLabel} />
+        <input type="submit" value="ADD" />
+      </form>
+      <ul className={styles.tasks}>
+        {tasks.map((task) => (
+          <li key={task.id}>
+            <label>
+              <input type="checkbox" checked={task.done} onChange={() => toggleDone(task)} />
+              <span>{task.label}</span>
+            </label>
+            <input
+              type="button"
+              value="DELETE"
+              className={styles.deleteBtn}
+              onClick={() => deleteTask(task)}
+            />
+          </li>
+        ))}
+      </ul>
     </>
   );
 };
