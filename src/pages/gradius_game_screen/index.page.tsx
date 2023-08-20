@@ -1,5 +1,4 @@
 //ここにゲーム画面をつくる
-import type { Enemies_Info } from '$/repository/Usecase/enemyUsecase';
 import type { Laser_Info } from '$/repository/Usecase/laserUsecase';
 import { useEffect, useState } from 'react';
 import { Layer, Rect, Stage, Wedge } from 'react-konva';
@@ -7,17 +6,16 @@ import { Loading } from 'src/components/Loading/Loading';
 import { apiClient } from 'src/utils/apiClient';
 const App = () => {
   const [fight_position, setfight_position] = useState<number[]>();
-  const [enemieies_info, setenemieies_info] = useState<Enemies_Info[]>([]);
+  const [enemies, setenemies] = useState<number[][]>([]);
   const [laseies_info, setlaseies_info] = useState<Laser_Info[]>([]);
 
   const fetchBord = async () => {
     const new_fighter_position = await apiClient.player.$get();
     const new_enemy_pos = await apiClient.enemy.$get();
-    const new_laser_pos = await apiClient.laser.$get();
-    // console.log(new_laser_pos);
+    const new_laseies_info = await apiClient.laser.$get();
     setfight_position(new_fighter_position);
     setenemies(new_enemy_pos);
-    setlaser_pos(new_laser_pos);
+    setlaseies_info(new_laseies_info);
   };
   console.log(laser_pos);
   useEffect(() => {
