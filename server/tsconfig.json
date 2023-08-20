@@ -8,8 +8,7 @@
     "isolatedModules": true,
     "baseUrl": ".",
     "paths": {
-      "$/*": ["./*"],
-      "$prisma/*": ["./node_modules/.prisma/*"]
+      "$/*": ["./*"]
     },
     "rootDir": ".",
     "skipLibCheck": true,

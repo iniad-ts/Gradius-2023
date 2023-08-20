@@ -4,5 +4,6 @@ module.exports = {
   pageExtensions: ['page.tsx'],
   basePath: process.env.GITHUB_REPOSITORY ? `/${process.env.GITHUB_REPOSITORY.split('/')[1]}` : '',
   trailingSlash: true,
+  transpilePackages: ['api'],
   eslint: { ignoreDuringBuilds: true },
 };

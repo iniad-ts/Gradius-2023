@@ -1,4 +1,4 @@
-require('dotenv').config({ path: 'server/.env' });
+require('dotenv').config({ path: '../server/.env' });
 
 module.exports = {
   input: 'server/api',
