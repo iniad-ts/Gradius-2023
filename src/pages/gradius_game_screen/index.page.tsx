@@ -4,10 +4,9 @@ import { useEffect, useState } from 'react';
 import { Layer, Rect, Stage } from 'react-konva';
 import { Loading } from 'src/components/Loading/Loading';
 import { apiClient } from 'src/utils/apiClient';
-
 const App = () => {
-  const [x_of_fighter, setx_of_fighter] = useState(0);
-  const [y_of_fighter, sety_of_fighter] = useState(0);
+  const [fight_position, setfight_position] = useState([0, 0]);
+  const [enemy_pos, setenemy_pos] = useState([0, 0]);
   const fetchBord = async () => {
     const new_fighter_position = await apiClient.game_screen.$get();
     setx_of_fighter(new_fighter_position[0]);
