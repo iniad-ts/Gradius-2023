@@ -37,9 +37,10 @@ const check_contact = () => {
     for (const one_enemy_pos of enemy_list) {
       if (
         Math.sqrt(
-          Math.pow(one_laser_pos[0] - one_enemy_pos[0], 2) +
-            Math.pow(one_laser_pos[1] - one_enemy_pos[1], 2)
-        ) <= 29
+          Math.pow(one_laser_info.pos.x - one_enemy_info.pos.x, 2) +
+            Math.pow(one_laser_info.pos.y - one_enemy_info.pos.y, 2)
+        ) <=
+        one_laser_info.radius + 20
       ) {
         laser_pos_list.splice(i, 1);
         enemy_list.splice(h, 1);
