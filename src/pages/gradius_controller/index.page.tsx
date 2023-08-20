@@ -37,32 +37,7 @@ const Home = () => {
     //何も値をpostする必要がない場合の記述方法を調べる
     //応急処置
     apiClient.controller1.laser_shot.$post({ body: [1] });
-  }, []);
-
-  useEffect(() => {
-    // eslint-disable-next-line complexity
-    window.addEventListener('keydown', (e) => {
-      switch (e.key) {
-        case 'ArrowUp':
-          order_to_direction({ move: { x: 0, y: -1 } });
-          break;
-        case 'ArrowDown':
-          order_to_direction({ move: { x: 0, y: 1 } });
-          break;
-        case 'ArrowLeft':
-          order_to_direction({ move: { x: -1, y: 0 } });
-          break;
-        case 'ArrowRight':
-          order_to_direction({ move: { x: 1, y: 0 } });
-          break;
-        case ' ':
-          order_to_shoot();
-          break;
-      }
-    });
-  }, [order_to_direction, order_to_shoot]);
-
-  if (!user) return <Loading visible />;
+  };
 
   return (
     <div className={styles.container}>
