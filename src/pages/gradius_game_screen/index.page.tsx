@@ -12,16 +12,16 @@ const App = () => {
 
   const fetchBord = async () => {
     const new_fighter_position = await apiClient.player.$get();
-    const new_enemies_info = await apiClient.enemy.$get();
-    const new_laseies_info = await apiClient.laser.$get();
-    console.log(enemieies_info);
+    const new_enemy_pos = await apiClient.enemy.$get();
+    const new_laser_pos = await apiClient.laser.$get();
+    // console.log(new_laser_pos);
     setfight_position(new_fighter_position);
     setenemies(new_enemy_pos);
     setlaser_pos(new_laser_pos);
   };
   console.log(laser_pos);
   useEffect(() => {
-    const cancellid = setInterval(fetchBord, 10);
+    const cancellid = setInterval(fetchBord, 100);
     return () => {
       clearInterval(cancellid);
     };
