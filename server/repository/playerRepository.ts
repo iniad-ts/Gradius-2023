@@ -1,9 +1,9 @@
-import type { UserId } from '$/commonTypesWithClient/branded';
-import type { PlayerModel } from '$/commonTypesWithClient/models';
-import { userIdParser } from '$/service/idParsers';
-import { prismaClient } from '$/service/prismaClient';
 import type { Player } from '@prisma/client';
 import { z } from 'zod';
+import type { UserId } from '../commonTypesWithClient/branded';
+import type { PlayerModel } from '../commonTypesWithClient/models';
+import { userIdParser } from '../service/idParsers';
+import { prismaClient } from '../service/prismaClient';
 
 const toPlayerModel = (prismaPlayer: Player): PlayerModel => ({
   userId: userIdParser.parse(prismaPlayer.userId),
