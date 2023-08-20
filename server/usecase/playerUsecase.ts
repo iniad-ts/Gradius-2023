@@ -1,9 +1,9 @@
-import type { UserId } from '$/commonTypesWithClient/branded';
-import type { PlayerModel } from '$/commonTypesWithClient/models';
-import { playerRepository } from '$/repository/playerRepository';
-import { userIdParser } from '$/service/idParsers';
 import assert from 'assert';
 import { randomUUID } from 'crypto';
+import type { UserId } from '../commonTypesWithClient/branded';
+import type { PlayerModel } from '../commonTypesWithClient/models';
+import { playerRepository } from '../repository/playerRepository';
+import { userIdParser } from '../service/idParsers';
 
 export type MoveDirection = { x: number; y: number };
 
