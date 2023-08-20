@@ -1,4 +1,7 @@
 //ここにゲーム画面をつくる
+import type { Enemy_Info } from '$/repository/Usecase/enemyUsecase';
+import type { Laser_Info } from '$/repository/Usecase/laserUsecase';
+import { player_info } from '$/repository/Usecase/playerUsecase';
 import { useEffect, useRef, useState } from 'react';
 import { Image, Layer, Rect, Stage } from 'react-konva';
 import { Loading } from 'src/components/Loading/Loading';
@@ -60,10 +63,10 @@ const App = () => {
 
         <Image
           image={fighterImgRef.current}
-          width={250}
-          height={75}
-          x={fight_position[0]}
-          y={fight_position[1]}
+          width={fighterImgRef.current.width}
+          height={fighterImgRef.current.height}
+          x={player_info.pos.x - fighterImgRef.current.width / 2}
+          y={player_info.pos.y - fighterImgRef.current.height / 2}
         />
       </Layer>
       <Layer>

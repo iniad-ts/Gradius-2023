@@ -24,14 +24,15 @@ setInterval(() => {
   check_contact();
 }, 10);
 
-//玉進める、画面外消去
-const move_laser = () => {
-  const new_laser_pos: number[][] = [];
-  for (const one_laser_pos of laser_pos_list) {
-    one_laser_pos[0] + 2 <= 1100 && new_laser_pos.push([one_laser_pos[0] + 10, one_laser_pos[1]]);
-  }
-  laser_pos_list = new_laser_pos;
-  return laser_pos_list;
+//フロント移植予定
+const move_or_delete_laser = () => {
+  laseies_info = laseies_info.filter((one_laser_info) => {
+    one_laser_info.pos.x = one_laser_info.pos.x + 10;
+    if (one_laser_info.pos.x + 2 >= 1100) {
+      return false;
+    }
+    return true;
+  });
 };
 
 //当たり判定
