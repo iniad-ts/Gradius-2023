@@ -6,7 +6,7 @@ import { defineController } from './$relay';
 export default defineController(() => ({
   get: async ({ query }) => ({
     status: 200,
-    body: playerRepository.find(userIdParser.parse(query.userid)),
+    body: await playerRepository.find(userIdParser.parse(query.userid)),
   }),
   post: async ({ body }) => ({
     status: 200,
