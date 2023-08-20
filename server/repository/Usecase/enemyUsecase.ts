@@ -23,35 +23,31 @@ setInterval(() => {
 // let timerIdMakeEnemy: number;
 // let timerIdMoveOrDeleteEnemy: number;
 
-// if (game_state === 'playing') {
-//   timerIdMakeEnemy = window.setInterval(() => {
-//     if (game_state !== 'playing') {
-//       window.clearInterval(timerIdMakeEnemy);
-//     } else {
-//       make_enemy();
-//     }
-//   }, 10000);
-
-//   timerIdMoveOrDeleteEnemy = window.setInterval(() => {
-//     if (game_state !== 'playing') {
-//       window.clearInterval(timerIdMoveOrDeleteEnemy);
-//     } else {
-//       move_or_delete_enemy();
-//     }
-//   }, 100);
-// }
-
-export let enemy_list: number[][] = [];
+//仮初期値
+const enemy_first_pos_x = 1100;
+const enemy_speed = 5;
+const enemy_radius = 20;
+export const enemies_info: Enemy_Info[] = [];
 
 const make_enemy = () => {
-  const enemy_pos_y: number = Math.floor(Math.random() * 690) + 1;
-  enemy_list.push([1110, enemy_pos_y]);
+  const new_enemy_info: Enemy_Info = {
+    pos: { x: enemy_first_pos_x, y: Math.floor(Math.random() * 690) + 1 },
+    speed: enemy_speed,
+    radius: enemy_radius,
+  };
+
+  enemies_info.push(new_enemy_info);
 };
 
 const move_or_delete_enemy = () => {
-  const new_enemy_list = enemy_list.map((one_enemy) => {
-    one_enemy[0] -= 2;
-    return one_enemy;
-  });
-  enemy_list = new_enemy_list.filter((one_enemy) => one_enemy[0] >= 50);
+  let i = 0;
+  for (const one_enemy_info of enemies_info) {
+    if (one_enemy_info.pos.x - one_enemy_info.speed < 50) {
+      enemies_info.splice(i, 1);
+      return false;
+    }
+    one_enemy_info.pos.x = one_enemy_info.pos.x - one_enemy_info.speed;
+
+    i++;
+  }
 };
