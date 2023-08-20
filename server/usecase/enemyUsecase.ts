@@ -4,7 +4,7 @@ import { enemyIdParser } from '$/service/idParsers';
 import { randomUUID } from 'crypto';
 
 export const enemyUsecase = {
-  createNewEnemy: async (name: string) => {
+  create: async (name: string) => {
     const enemyData: EnemyModel = {
       enemyId: enemyIdParser.parse(randomUUID()),
       pos: { x: 50, y: 300 },

@@ -8,7 +8,7 @@ import { randomUUID } from 'crypto';
 export type MoveDirection = { x: number; y: number };
 
 export const playerUsecase = {
-  createNewPlayer: async (name: string) => {
+  create: async (name: string): Promise<PlayerModel | null> => {
     //playerの初期ステータス(デバッグ用)
     const playerData: PlayerModel = {
       userId: userIdParser.parse(randomUUID()),
@@ -22,7 +22,7 @@ export const playerUsecase = {
     await playerRepository.save(playerData);
     return playerData;
   },
-  movePlayer: async (movedirection: MoveDirection, userid: UserId) => {
+  move: async (movedirection: MoveDirection, userid: UserId): Promise<PlayerModel | null> => {
     const recentlyPlayerInfo = await playerRepository.find(userid);
     assert(recentlyPlayerInfo);
     const updatePlayerInfo: PlayerModel = {
@@ -33,8 +33,9 @@ export const playerUsecase = {
       },
     };
     await playerRepository.save(updatePlayerInfo);
+    return updatePlayerInfo;
   },
-  addScorePlayer: async (userid: UserId, score: number) => {
+  addScore: async (userid: UserId, score: number): Promise<PlayerModel | null> => {
     const recentlyPlayerInfo = await playerRepository.find(userid);
     assert(recentlyPlayerInfo);
     const updatePlayerInfo: PlayerModel = {
@@ -42,5 +43,6 @@ export const playerUsecase = {
       score: recentlyPlayerInfo.score + score,
     };
     await playerRepository.save(updatePlayerInfo);
+    return updatePlayerInfo;
   },
 };

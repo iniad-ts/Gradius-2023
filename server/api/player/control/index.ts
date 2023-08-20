@@ -6,6 +6,6 @@ export default defineController(() => ({
   get: async () => ({ status: 200, body: (await playerRepository.findAll()) ?? [] }),
   post: async ({ body }) => ({
     status: 200,
-    body: await playerUsecase.movePlayer(body.userid, body.moveTo),
+    body: await playerUsecase.move(body.userid, body.moveTo),
   }),
 }));
