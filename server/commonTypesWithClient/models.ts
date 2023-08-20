@@ -1,4 +1,4 @@
-import type { EnemyId, TaskId, UserId } from './branded';
+import type { BulletId, EnemyId, TaskId, UserId } from './branded';
 
 export type UserModel = {
   id: UserId;
@@ -48,4 +48,20 @@ export type EnemyModel = {
     y: number;
   };
   type: number;
+};
+
+export type BulletModel = {
+  bulletId: BulletId;
+  power: number;
+  pos: {
+    x: number;
+    y: number;
+  };
+  vector: {
+    x: number;
+    y: number;
+  };
+  type: number;
+  side: 'left' | 'right';
+  shooterId: string;
 };
