@@ -16,6 +16,12 @@ const Home = () => {
   };
 
   useEffect(() => {
+    const fetchPos = async () => {
+      const res = await apiClient.handler.$get();
+      setPlayerX(playerX + res.x);
+      setPlayerY(playerY + res.y);
+      console.log('fetchPos');
+    };
     const interval = setInterval(() => {
       fetchPos();
     }, 10);
