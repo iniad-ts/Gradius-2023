@@ -3,12 +3,13 @@ import { useEffect, useState } from 'react';
 import { Layer, Rect, Stage, Wedge } from 'react-konva';
 import { Loading } from 'src/components/Loading/Loading';
 import { apiClient } from 'src/utils/apiClient';
+// import enemy01 from '../../../public/images/enemy01.png';
+// import fighter from '../../../public/images/fighter.png';
+
 const App = () => {
   const [fight_position, setfight_position] = useState<number[]>();
   const [enemies, setenemies] = useState<number[][]>([]);
   const [laser_pos, setlaser_pos] = useState<number[][]>([]);
-  const [background_pos, setbackground_pos] = useState(0);
-
   const fetchBord = async () => {
     const new_fighter_position = await apiClient.player.$get();
     const new_enemy_pos = await apiClient.enemy.$get();
@@ -43,7 +44,7 @@ const App = () => {
           <Rect
             key={index}
             id={`enemy_${index}`}
-            fill="white"
+            fill="black"
             width={40}
             height={40}
             x={enemy[0]}
