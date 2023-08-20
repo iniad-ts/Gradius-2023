@@ -2,11 +2,9 @@
 
 フロントエンドは src ディレクトリの [Next.js](https://nextjs.org/) 、バックエンドは server ディレクトリの [frourio](https://frourio.com/) で構築された TypeScript で一気通貫開発が可能なモノレポサービス
 
-## デモ環境リンク
+最新のコミットによるデモ - https://solufa.github.io/next-frourio-starter/
 
-https://solufa.github.io/next-frourio-starter/
-
-## ローカル開発
+## 開発手順
 
 ### Node.js のインストール
 
@@ -16,10 +14,11 @@ https://nodejs.org/ja/ の左ボタン、LTS をダウンロードしてイン�
 
 ### リポジトリのクローンと npm モジュールのインストール
 
-フロントとバックエンドそれぞれに package.json があるので 2 回インストールが必要
+ルートとフロントとバックエンドそれぞれに package.json があるので 3 回インストールが必要
 
 ```sh
 $ npm i
+$ npm i --prefix client
 $ npm i --prefix server
 ```
 
@@ -31,7 +30,7 @@ $ npm i --prefix server
 prisma 用の.env には自分で起動した PostgreSQL の設定を書く
 
 ```sh
-$ cp .env.example .env
+$ cp client/.env.example client/.env
 $ cp server/.env.example server/.env
 $ cp docker/dev/.env.example docker/dev/.env
 $ echo "API_DATABASE_URL=postgresql://root:root@localhost:5432/|Project Name|" >> server/prisma/.env
@@ -88,4 +87,3 @@ http://localhost:9001/
 $ cd server
 $ npx prisma studio
 ```
-
