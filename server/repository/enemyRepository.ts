@@ -25,7 +25,7 @@ const toEnemyModel = (prismaEnemy: Enemy): EnemyModel => ({
 });
 
 export const enemyRepository = {
-  save: async (enemy: EnemyModel) => {
+  save: async (enemy: EnemyModel): Promise<EnemyModel> => {
     const prismaEnemy = await prismaClient.enemy.upsert({
       where: {
         enemyId: enemy.enemyId,
@@ -46,22 +46,28 @@ export const enemyRepository = {
     });
     return toEnemyModel(prismaEnemy);
   },
-  find: async (enemyId: EnemyId) => {
+  find: async (enemyId: EnemyId): Promise<EnemyModel | null> => {
     const enemy = await prismaClient.enemy.findUnique({
       where: {
         enemyId,
       },
     });
-    if (!enemy) {
+    if (enemy === null) {
       return null;
     }
     return toEnemyModel(enemy);
   },
-  findAll: async () => {
+  findAll: async (): Promise<EnemyModel[]> => {
     const enemies = await prismaClient.enemy.findMany();
-    return enemies.map(toEnemyModel);
+    return enemies.length > 0 ? enemies.map(toEnemyModel) : [];
   },
   delete: async (enemyId: EnemyId) => {
+    const enemy = await prismaClient.enemy.findUnique({
+      where: {
+        enemyId,
+      },
+    });
+    if (enemy === null) return;
     await prismaClient.enemy.delete({
       where: {
         enemyId,
