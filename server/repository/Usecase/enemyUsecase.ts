@@ -8,7 +8,6 @@
 //     move_or_delete_enemy();
 //   }, 100);
 // }
-//
 
 setInterval(() => {
   make_enemy();
