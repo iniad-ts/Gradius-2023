@@ -1,5 +1,5 @@
 .title {
-  font-size: 30px;
+  font-size: 80px;
   text-align: center;
   font-weight: bold;
 }
@@ -19,18 +19,4 @@
 
 .deleteBtn {
   float: right;
-}
-.under {
-  display: flex;
-  justify-content: center;
-  flex-wrap: wrap;
-  gap: 7vh;
-  padding: 3vh 3vh;
-}
-
-.button {
-  background-color: aqua;
-  font-size: 40px;
-  padding: 1vh 3vh;
-  width: 50vh;
 }
