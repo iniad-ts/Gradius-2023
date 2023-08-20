@@ -5,10 +5,15 @@ import { player_now_position } from './playerUsecase';
 //コードのレファクタリング
 export let laser_pos_list: number[][] = [];
 
-// 発射した玉の位置を玉位置リストに追加
-export const make_laser = {
-  shot_laser: async () => {
-    laser_pos_list.push([player_now_position[0], player_now_position[1] - 10]);
+//そのうち、弾の種類によって情報を変更できるようにしたい
+export const add_new_laser = {
+  shot_laser: () => {
+    const new_laser: Laser_Info = {
+      pos: { x: player_info.pos.x, y: player_info.pos.y - 10 },
+      speed: laser_speed,
+      radius: laser_radious,
+    };
+    laseies_info.push(new_laser);
   },
 };
 
