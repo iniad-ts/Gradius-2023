@@ -44,7 +44,7 @@ const App = () => {
   if (!isFighterLoaded) return <Loading visible />;
   return (
     <Stage
-      width={1800}
+      width={1280}
       height={780}
       className={styles.container}
       style={{ backgroundPosition: `${background_pos}px 0` }}
@@ -57,6 +57,7 @@ const App = () => {
           x={fight_position[0]}
           y={fight_position[1]}
         />
+
         <Image
           image={fighterImgRef.current}
           width={250}
@@ -73,12 +74,11 @@ const App = () => {
             height={enemyImgRef.current.height}
             key={index}
             id={`enemy_${index}`}
+            fill="black"
             x={enemy[0]}
             y={enemy[1]}
           />
         ))}
-      </Layer>
-      <Layer>
         {laser_pos.map((laser, index) => (
           <Rect
             key={index}
