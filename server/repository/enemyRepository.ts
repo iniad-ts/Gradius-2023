@@ -8,17 +8,23 @@ import { z } from 'zod';
 const toEnemyModel = (prismaEnemy: Enemy): EnemyModel => ({
   enemyId: enemyIdParser.parse(prismaEnemy.enemyId),
   name: z.string().parse(prismaEnemy.name),
-  score: z.number().parse(prismaEnemy.score),
+  score: z.number().min(0).parse(prismaEnemy.score),
   vector: z
     .object({
       x: z.number(),
       y: z.number(),
     })
     .parse(prismaEnemy.vector),
-  type: z.number().parse(prismaEnemy.type),
+  pos: z
+    .object({
+      x: z.number(),
+      y: z.number(),
+    })
+    .parse(prismaEnemy.pos),
+  type: z.number().min(0).parse(prismaEnemy.type),
 });
 
-const enemyRepository = {
+export const enemyRepository = {
   save: async (enemy: EnemyModel) => {
     const prismaEnemy = await prismaClient.enemy.upsert({
       where: {
@@ -33,13 +39,14 @@ const enemyRepository = {
         enemyId: enemy.enemyId,
         name: enemy.name,
         score: enemy.score,
+        pos: enemy.pos,
         vector: enemy.vector,
         type: enemy.type,
       },
     });
     return toEnemyModel(prismaEnemy);
   },
-  getEnemy: async (enemyId: EnemyId) => {
+  find: async (enemyId: EnemyId) => {
     const enemy = await prismaClient.enemy.findUnique({
       where: {
         enemyId,
@@ -50,11 +57,11 @@ const enemyRepository = {
     }
     return toEnemyModel(enemy);
   },
-  getEnemies: async () => {
+  findAll: async () => {
     const enemies = await prismaClient.enemy.findMany();
     return enemies.map(toEnemyModel);
   },
-  deleteEnemy: async (enemyId: EnemyId) => {
+  delete: async (enemyId: EnemyId) => {
     await prismaClient.enemy.delete({
       where: {
         enemyId,

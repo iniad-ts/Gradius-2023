@@ -8,7 +8,13 @@ import { z } from 'zod';
 const toPlayerModel = (prismaPlayer: Player): PlayerModel => ({
   userId: userIdParser.parse(prismaPlayer.userId),
   name: z.string().parse(prismaPlayer.name),
-  score: z.number().parse(prismaPlayer.score),
+  score: z.number().min(0).parse(prismaPlayer.score),
+  pos: z
+    .object({
+      x: z.number(),
+      y: z.number(),
+    })
+    .parse(prismaPlayer.pos),
   vector: z
     .object({
       x: z.number(),
@@ -25,7 +31,7 @@ const toPlayerModel = (prismaPlayer: Player): PlayerModel => ({
   side: z.literal('left').or(z.literal('right')).parse(prismaPlayer.side),
 });
 
-const playerRepository = {
+export const playerRepository = {
   save: async (player: PlayerModel) => {
     const prismaPlayer = await prismaClient.player.upsert({
       where: {
@@ -44,12 +50,13 @@ const playerRepository = {
         score: player.score,
         vector: player.vector,
         Item: player.Items,
+        pos: player.pos,
         side: player.side,
       },
     });
     return toPlayerModel(prismaPlayer);
   },
-  getPlayer: async (userId: UserId) => {
+  find: async (userId: UserId) => {
     const player = await prismaClient.player.findUnique({
       where: {
         userId,
@@ -60,11 +67,11 @@ const playerRepository = {
     }
     return toPlayerModel(player);
   },
-  getPlayers: async () => {
+  findAll: async () => {
     const players = await prismaClient.player.findMany();
     return players.map(toPlayerModel);
   },
-  deletePlayer: async (userId: UserId) => {
+  delete: async (userId: UserId) => {
     const player = await prismaClient.player.findUnique({
       where: {
         userId,

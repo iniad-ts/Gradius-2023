@@ -17,6 +17,10 @@ export type TaskModel = {
 export type PlayerModel = {
   userId: UserId;
   name: string;
+  pos: {
+    x: number;
+    y: number;
+  };
   score: number;
   vector: {
     x: number;
@@ -33,6 +37,10 @@ export type EnemyModel = {
   enemyId: EnemyId;
   name: string;
   score: number;
+  pos: {
+    x: number;
+    y: number;
+  };
   vector: {
     x: number;
     y: number;

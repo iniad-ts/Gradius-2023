@@ -17,6 +17,7 @@ model Task {
 model Player {
   userId String @id
   name   String
+  pos    Json
   score  Int
   vector Json
   Item   Json?
@@ -26,6 +27,7 @@ model Player {
 model Enemy {
   enemyId String @id
   name    String
+  pos     Json
   score   Int
   vector  Json
   type    Int
