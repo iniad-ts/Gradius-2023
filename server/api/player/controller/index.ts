@@ -7,11 +7,11 @@ export type Methods = {
     query: {
       userid: string;
     };
-    resBody: PlayerModel;
+    resBody: PlayerModel | null;
   };
   post: {
     reqBody: {
-      moveTo: MoveDirection;
+      MoveDirection: MoveDirection;
       userId: UserId;
     };
     resBody: PlayerModel | null;
