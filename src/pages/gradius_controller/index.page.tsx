@@ -2,7 +2,7 @@
 
 import type { MoveDirection } from '$/repository/Usecase/playerUsecase';
 import { useAtom } from 'jotai';
-import { useCallback, useEffect, useState } from 'react';
+import { useState } from 'react';
 import { userAtom } from 'src/atoms/user';
 import { Loading } from 'src/components/Loading/Loading';
 import { apiClient } from 'src/utils/apiClient';
@@ -12,14 +12,15 @@ const Home = () => {
   const [user] = useAtom(userAtom);
   const [change_count, setchange_count] = useState(2);
   const game_state_list: string[] = ['playing', 'stop', 'start'];
+  if (!user) return <Loading visible />;
 
   //!userが常にfalseだから常にロードしているのではないか
 
   //移動方向serveにpost req
-  const order_to_direction = useCallback((direction: MoveDirection) => {
-    const ordered_direction = apiClient.cntroller.player.$post({ body: direction });
+  const order_to_direction = async (direction: MoveDirection) => {
+    const ordered_direction = apiClient.controller1.player.$post({ body: direction });
     console.log(ordered_direction);
-  }, []);
+  };
 
   //game_stateの変更(start|playing|stop)
   //game_stateをserverにpost req
@@ -32,65 +33,27 @@ const Home = () => {
   };
 
   //発射命令をserverにpost req
-  const order_to_shoot = useCallback(() => {
+  const order_to_shoot = async () => {
     //何も値をpostする必要がない場合の記述方法を調べる
     //応急処置
     apiClient.controller1.laser_shot.$post({ body: [1] });
-  }, []);
-
-  // キーボード操作
-  useEffect(() => {
-    // eslint-disable-next-line complexity
-    window.addEventListener('keydown', (e) => {
-      switch (e.key) {
-        case 'ArrowUp':
-          order_to_direction({ move: { x: 0, y: -1 } });
-          break;
-        case 'ArrowDown':
-          order_to_direction({ move: { x: 0, y: 1 } });
-          break;
-        case 'ArrowLeft':
-          order_to_direction({ move: { x: -1, y: 0 } });
-          break;
-        case 'ArrowRight':
-          order_to_direction({ move: { x: 1, y: 0 } });
-          break;
-        case ' ':
-          order_to_shoot();
-          break;
-      }
-    });
-  }, [order_to_direction, order_to_shoot]);
-
-  if (!user) return <Loading visible />;
+  };
 
   return (
     <div className={styles.container}>
       <div className={styles.up_down_button_board}>
-        <div
-          className={styles.up_button}
-          onClick={() => order_to_direction({ move: { x: 0, y: -1 } })}
-        >
+        <div className={styles.up_button} onClick={() => order_to_direction('up')}>
           上
         </div>
-        <div
-          className={styles.down_button}
-          onClick={() => order_to_direction({ move: { x: 0, y: 1 } })}
-        >
+        <div className={styles.down_button} onClick={() => order_to_direction('down')}>
           下
         </div>
       </div>
       <div className={styles.left_right_button_board}>
-        <div
-          className={styles.left_button}
-          onClick={() => order_to_direction({ move: { x: -1, y: 0 } })}
-        >
+        <div className={styles.left_button} onClick={() => order_to_direction('left')}>
           左
         </div>
-        <div
-          className={styles.right_button}
-          onClick={() => order_to_direction({ move: { x: 1, y: 0 } })}
-        >
+        <div className={styles.right_button} onClick={() => order_to_direction('right')}>
           右
         </div>
         <div className={styles.start_button} onClick={() => change_game_state(change_count)}>

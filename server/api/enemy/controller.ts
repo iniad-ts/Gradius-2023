@@ -1,12 +1,12 @@
-import { enemies_info } from '$/repository/Usecase/enemyUsecase';
+import { enemy_list } from '$/repository/Usecase/enemyUsecase';
 import { defineController } from './$relay';
 
 export default defineController(() => ({
   get: async () => {
-    const enemieies_info = enemies_info;
+    const enemie_pos = enemy_list;
     return {
       status: 200,
-      body: enemieies_info,
+      body: enemie_pos,
     };
   },
 }));

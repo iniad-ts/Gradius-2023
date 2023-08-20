@@ -1,6 +1,4 @@
 //ここにゲーム画面をつくる
-import type { Enemy_Info } from '$/repository/Usecase/enemyUsecase';
-import type { Laser_Info } from '$/repository/Usecase/laserUsecase';
 import { useEffect, useRef, useState } from 'react';
 import { Image, Layer, Rect, Stage } from 'react-konva';
 import { Loading } from 'src/components/Loading/Loading';
@@ -10,26 +8,25 @@ import styles from './gradius_game_screen.module.css';
 // import fighter from '../../../public/images/fighter.png';
 
 const App = () => {
-  const [fight_position, setfight_position] = useState<number[]>();
-  const [enemieies_info, setenemieies_info] = useState<Enemy_Info[]>([]);
-  const [laseies_info, setlaseies_info] = useState<Laser_Info[]>([]);
+  const [fight_position, setfight_position] = useState([0, 0]);
+  const [enemies, setenemies] = useState<number[][]>([]);
+  const [laser_pos, setlaser_pos] = useState<number[][]>([]);
   const [background_pos, setbackground_pos] = useState(0);
   const [isFighterLoaded, setIsFighterLoaded] = useState(false);
   const fighterImgRef = useRef(new window.Image());
   const enemyImgRef = useRef(new window.Image());
-  enemyImgRef.current.src = '/images/enemy_spacecraft.png';
+  enemyImgRef.current.src = '/images/GAMIRASU.jpg';
 
   const fetchBord = async () => {
     const new_fighter_position = await apiClient.player.$get();
-    const new_enemies_info = await apiClient.enemy.$get();
-    const new_laseies_info = await apiClient.laser.$get();
-
+    const new_enemy_pos = await apiClient.enemy.$get();
+    const new_laser_pos = await apiClient.laser.$get();
     setfight_position(new_fighter_position);
-    setenemieies_info(new_enemies_info);
-    setlaseies_info(new_laseies_info);
+    setenemies(new_enemy_pos);
+    setlaser_pos(new_laser_pos);
     setbackground_pos((pre_background_pos) => pre_background_pos - 1);
   };
-
+  console.log(laser_pos);
   useEffect(() => {
     const cancellid = setInterval(fetchBord, 10);
     return () => {
@@ -38,50 +35,59 @@ const App = () => {
   }, []);
 
   useEffect(() => {
-    fighterImgRef.current.src = '/images/space_uchusen_bokan.png'; // 画像ファイルの相対パスを指定
+    fighterImgRef.current.src = '/images/YAMATO.jpg'; // 画像ファイルの相対パスを指定
     fighterImgRef.current.onload = () => {
       setIsFighterLoaded(true);
     };
   }, []);
   //localhost:3000/gradius_game_screen/
-  if (!isFighterLoaded || !fight_position) return <Loading visible />;
+  if (!isFighterLoaded) return <Loading visible />;
   return (
     <Stage
-      width={1200}
-      height={800}
+      width={1800}
+      height={780}
       className={styles.container}
       style={{ backgroundPosition: `${background_pos}px 0` }}
     >
       <Layer>
+        <Rect
+          id="player"
+          stroke="black"
+          strokeWidth={1}
+          x={fight_position[0]}
+          y={fight_position[1]}
+        />
         <Image
           image={fighterImgRef.current}
-          width={fighterImgRef.current.width}
-          height={fighterImgRef.current.height}
-          x={fight_position[0] - fighterImgRef.current.width / 2}
-          y={fight_position[1] - fighterImgRef.current.height / 2}
+          width={250}
+          height={75}
+          x={fight_position[0]}
+          y={fight_position[1]}
         />
       </Layer>
       <Layer>
-        {enemieies_info.map((enemy, index) => (
+        {enemies.map((enemy, index) => (
           <Image
             image={enemyImgRef.current}
-            width={50}
-            height={50}
+            width={enemyImgRef.current.width}
+            height={enemyImgRef.current.height}
             key={index}
             id={`enemy_${index}`}
-            x={enemy.pos.x}
-            y={enemy.pos.y}
+            x={enemy[0]}
+            y={enemy[1]}
           />
         ))}
-        {laseies_info.map((laser, index) => (
+      </Layer>
+      <Layer>
+        {laser_pos.map((laser, index) => (
           <Rect
             key={index}
             id={`laser_${index}`}
             fill="blue"
             width={20}
             height={20}
-            x={laser.pos.x}
-            y={laser.pos.y}
+            x={laser[0]}
+            y={laser[1]}
           />
         ))}
       </Layer>
