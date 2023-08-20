@@ -66,6 +66,7 @@ const Home = () => {
   useEffect(() => {
     const interval = setInterval(() => {
       move();
+      attack();
     }, 100);
     return () => clearInterval(interval);
   }, [up, left, right, down]);
