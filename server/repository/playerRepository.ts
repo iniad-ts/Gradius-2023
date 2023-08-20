@@ -21,14 +21,16 @@ const toPlayerModel = (prismaPlayer: Player): PlayerModel => ({
       y: z.number(),
     })
     .parse(prismaPlayer.vector),
-  Items: z
-    .object({
-      id: z.string(),
-      name: z.string(),
-    })
-    .array()
-    .parse(prismaPlayer.Item),
-  side: z.literal('left').or(z.literal('right')).parse(prismaPlayer.side),
+  Items:
+    z
+      .object({
+        id: z.string(),
+        name: z.string(),
+      })
+      .array()
+      .nullable()
+      .parse(prismaPlayer.Item) ?? undefined,
+  side: z.enum(['left', 'right']).parse(prismaPlayer.side),
 });
 
 export const playerRepository = {
@@ -42,6 +44,7 @@ export const playerRepository = {
         score: player.score,
         vector: player.vector,
         Item: player.Items,
+        pos: player.pos,
         side: player.side,
       },
       create: {

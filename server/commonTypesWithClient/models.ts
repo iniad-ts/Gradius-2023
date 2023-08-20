@@ -26,10 +26,13 @@ export type PlayerModel = {
     x: number;
     y: number;
   };
-  Items?: {
-    id: string;
-    name: string;
-  }[];
+  Items:
+    | {
+        id: string;
+        name: string;
+      }[]
+    | undefined;
+
   side: 'left' | 'right';
 };
 
