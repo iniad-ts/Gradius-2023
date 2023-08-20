@@ -16,7 +16,7 @@ const App = () => {
   const gamirasuImgRef = useRef(new window.Image());
 
   const fetchBord = async () => {
-    const newFighterPosition = await apiClient.player.$get();
+    const newFighterPosition = await apiClient.game_screen.$get();
     const newEnemyPos = await apiClient.enemy.$get();
     setfight_position(newFighterPosition);
     setenemies(newEnemyPos);

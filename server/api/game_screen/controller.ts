@@ -5,7 +5,7 @@ export default defineController(() => ({
   get: async () => {
     const player_ps = player_now_position;
     return {
-      status: 205,
+      status: 200,
       body: player_ps,
     };
   },
