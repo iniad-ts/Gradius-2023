@@ -5,3 +5,7 @@ type Branded<T extends string> = string & z.BRAND<T>;
 export type UserId = Branded<'UserId'>;
 
 export type TaskId = Branded<'TaskId'>;
+
+export type PlayerId = Branded<'PlayerId'>;
+
+export type EnemyId = Branded<'EnemyId'>;
