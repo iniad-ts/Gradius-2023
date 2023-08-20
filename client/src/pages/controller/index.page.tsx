@@ -19,9 +19,9 @@ const Home = () => {
   const [userId, setUserId] = useState<UserId | null>(null);
 
   const getPlayerId = async () => {
-    const localStrageUserId = getUserIdFromLocalStorage();
-    if (localStrageUserId === null) return;
-    setUserId(localStrageUserId);
+    const localStorageUserId = getUserIdFromLocalStorage();
+    if (localStorageUserId === null) return;
+    setUserId(localStorageUserId);
   };
   const move = (e: IJoystickUpdateEvent) => {
     if (userId === null) {
