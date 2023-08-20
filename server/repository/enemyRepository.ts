@@ -7,7 +7,6 @@ import { z } from 'zod';
 
 const toEnemyModel = (prismaEnemy: Enemy): EnemyModel => ({
   enemyId: enemyIdParser.parse(prismaEnemy.enemyId),
-  name: z.string().parse(prismaEnemy.name),
   score: z.number().min(0).parse(prismaEnemy.score),
   vector: z
     .object({
@@ -31,13 +30,11 @@ export const enemyRepository = {
         enemyId: enemy.enemyId,
       },
       update: {
-        name: enemy.name,
         score: enemy.score,
         vector: enemy.vector,
       },
       create: {
         enemyId: enemy.enemyId,
-        name: enemy.name,
         score: enemy.score,
         pos: enemy.pos,
         vector: enemy.vector,
