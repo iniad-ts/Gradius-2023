@@ -12,6 +12,8 @@ const App = () => {
   const fetchBord = async () => {
     const new_fighter_position = await apiClient.game_screen.$get();
     const new_enemy_pos = await apiClient.enemy.$get();
+    const new_laser_pos = await apiClient.laser.$get();
+    console.log(new_enemy_pos);
     setfight_position(new_fighter_position);
     setenemies(new_enemy_pos);
   };
@@ -27,13 +29,26 @@ const App = () => {
       <Stage width={1100} height={690}>
         <Layer>
           <Rect
-            id="player"
-            stroke="black"
-            strokeWidth={1}
-            x={fight_position[0]}
-            y={fight_position[1]}
+            key={index}
+            id={`enemy_${index}`}
+            fill="black"
+            width={40}
+            height={40}
+            x={enemy[0]}
+            y={enemy[1]}
           />
         ))}
+        {/* {laser_pos.map((laser, index) => (
+          <Rect
+            key={index}
+            id={`laser_${index}`}
+            fill="yellow"
+            width={40}
+            height={40}
+            x={laser[0]}
+            y={laser[1]}
+          />
+        ))} */}
       </Layer>
     </Stage>
   );
