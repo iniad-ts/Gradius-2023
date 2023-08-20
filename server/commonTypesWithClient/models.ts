@@ -38,7 +38,6 @@ export type PlayerModel = {
 
 export type EnemyModel = {
   enemyId: EnemyId;
-  name: string;
   score: number;
   pos: {
     x: number;
