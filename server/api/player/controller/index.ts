@@ -1,8 +1,9 @@
 import type { UserId } from '$/commonTypesWithClient/branded';
 import type { PlayerModel } from '$/commonTypesWithClient/models';
 import type { MoveDirection } from '$/usecase/playerUsecase';
+import type { DefineMethods } from 'aspida';
 
-export type Methods = {
+export type Methods = DefineMethods<{
   get: {
     query: {
       userid: string;
@@ -16,4 +17,4 @@ export type Methods = {
     };
     resBody: PlayerModel | null;
   };
-};
+}>;
