@@ -14,10 +14,20 @@
     "lint:prettier": "prettier --check \"./**/*.{ts,tsx,js}\" --ignore-path .gitignore",
     "lint:style": "stylelint \"client/**/*.ts{,x}\"",
     "lint:fix": "npm run lint:js -- --fix && prettier --write \"./**/*.{ts,tsx,js}\" --ignore-path .gitignore && npm run lint:style -- --fix",
-    "test": "npm run test --prefix client && npm run test --prefix server",
-    "typecheck": "run-p typecheck:*",
-    "typecheck:client": "npm run typecheck --prefix client",
-    "typecheck:server": "npm run typecheck --prefix server"
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:updateSnapshot": "vitest -u",
+    "pretypecheck": "npm run generate && npm run generate --prefix server && npm run hcm",
+    "typecheck": "tsc --noEmit && tsc --noEmit -p server"
+  },
+  "dependencies": {
+    "@aspida/axios": "^1.11.0",
+    "axios": "^0.27.2",
+    "firebase": "^9.15.0",
+    "jotai": "^1.13.0",
+    "next": "^13.3.1",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
   },
   "devDependencies": {
     "@stylelint/postcss-css-in-js": "^0.38.0",
