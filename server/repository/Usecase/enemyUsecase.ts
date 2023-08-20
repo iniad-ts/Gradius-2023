@@ -23,11 +23,25 @@ setInterval(() => {
 // let timerIdMakeEnemy: number;
 // let timerIdMoveOrDeleteEnemy: number;
 
-//仮初期値
-const enemy_first_pos_x = 1100;
-const enemy_speed = 5;
-const enemy_radius = 20;
-export let enemies_info: Enemy_Info[] = [];
+// if (game_state === 'playing') {
+//   timerIdMakeEnemy = window.setInterval(() => {
+//     if (game_state !== 'playing') {
+//       window.clearInterval(timerIdMakeEnemy);
+//     } else {
+//       make_enemy();
+//     }
+//   }, 10000);
+
+//   timerIdMoveOrDeleteEnemy = window.setInterval(() => {
+//     if (game_state !== 'playing') {
+//       window.clearInterval(timerIdMoveOrDeleteEnemy);
+//     } else {
+//       move_or_delete_enemy();
+//     }
+//   }, 100);
+// }
+
+export let enemy_list: number[][] = [];
 
 const make_enemy = () => {
   const enemy_pos_y: number = Math.floor(Math.random() * 690) + 1;

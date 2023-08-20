@@ -5,15 +5,10 @@ import { player_now_position } from './playerUsecase';
 //コードのレファクタリング
 export let laser_pos_list: number[][] = [];
 
-//そのうち、弾の種類によって情報を変更できるようにしたい
-export const add_new_laser = {
-  shot_laser: () => {
-    const new_laser: Laser_Info = {
-      pos: { x: player_info.pos.x, y: player_info.pos.y - 10 },
-      speed: laser_speed,
-      radius: laser_radious,
-    };
-    laseies_info.push(new_laser);
+// 発射した玉の位置を玉位置リストに追加
+export const make_laser = {
+  shot_laser: async () => {
+    laser_pos_list.push([player_now_position[0], player_now_position[1] - 10]);
   },
 };
 
@@ -24,15 +19,14 @@ setInterval(() => {
   check_contact();
 }, 10);
 
-//フロント移植予定
-const move_or_delete_laser = () => {
-  laseies_info = laseies_info.filter((one_laser_info) => {
-    one_laser_info.pos.x = one_laser_info.pos.x + 10;
-    if (one_laser_info.pos.x + 2 >= 1100) {
-      return false;
-    }
-    return true;
-  });
+//玉進める、画面外消去
+const move_laser = () => {
+  const new_laser_pos: number[][] = [];
+  for (const one_laser_pos of laser_pos_list) {
+    one_laser_pos[0] + 2 <= 1100 && new_laser_pos.push([one_laser_pos[0] + 10, one_laser_pos[1]]);
+  }
+  laser_pos_list = new_laser_pos;
+  return laser_pos_list;
 };
 
 //当たり判定

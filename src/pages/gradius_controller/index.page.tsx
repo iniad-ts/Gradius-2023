@@ -14,8 +14,6 @@ const Home = () => {
   const game_state_list: string[] = ['playing', 'stop', 'start'];
   if (!user) return <Loading visible />;
 
-  //!userが常にfalseだから常にロードしているのではないか
-
   //移動方向serveにpost req
   const order_to_direction = async (direction: MoveDirection) => {
     const ordered_direction = apiClient.controller1.player.$post({ body: direction });
