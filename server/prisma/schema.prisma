@@ -13,3 +13,22 @@ model Task {
   done      Boolean
   createdAt DateTime
 }
+
+model Player {
+  userId String @id
+  name   String
+  pos    Json
+  score  Int
+  vector Json
+  Item   Json?
+  side   String
+}
+
+model Enemy {
+  enemyId String @id
+  name    String
+  pos     Json
+  score   Int
+  vector  Json
+  type    Int
+}
