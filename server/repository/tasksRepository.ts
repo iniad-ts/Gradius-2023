@@ -4,12 +4,6 @@ import { randomUUID } from 'crypto';
 import { taskIdParser } from '../service/idParsers';
 import { prismaClient } from '../service/prismaClient';
 
-export const tasksRepository = {
-  getInputKey: (key: string) => {
-    return `inputKey: '${key}'`;
-  },
-};
-
 const toModel = (prismaTask: Task): TaskModel => ({
   id: taskIdParser.parse(prismaTask.id),
   label: prismaTask.label,

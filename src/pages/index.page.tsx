@@ -1,56 +1,52 @@
-import { useState } from 'react';
+import type { TaskModel } from '$/commonTypesWithClient/models';
+import { useAtom } from 'jotai';
+import type { ChangeEvent, FormEvent } from 'react';
+import { useEffect, useState } from 'react';
 import { Loading } from 'src/components/Loading/Loading';
+import { BasicHeader } from 'src/pages/@components/BasicHeader/BasicHeader';
 import { apiClient } from 'src/utils/apiClient';
+import { returnNull } from 'src/utils/returnNull';
+import { userAtom } from '../atoms/user';
+import styles from './index.module.css';
 
 const Home = () => {
-  const [playerX, setPlayerX] = useState(0);
-  const [playerY, setPlayerY] = useState(0);
+  const [key, setKey] = useState('');
   // useEffect(() => {}, []);
   const hoge = true;
+  const textarea = document.getElementById('input');
 
-  const keydown = async (e: React.KeyboardEvent<HTMLDivElement>) => {
-    console.log(e);
-    console.log(e.code);
-    const playerPos = await apiClient.handler.$post({
-      body: { x: playerX, y: playerY, key: e.code },
-    });
-    setPlayerX(playerPos.x);
-    setPlayerY(playerPos.y);
+  const keydown = async (e: KeyboardEvent) => {
+    const returnedKey = await apiClient.handler.$post({ body: { key: e.key } });
+    setKey(returnedKey);
+  };
+  const fetchTasks = async () => {
+    const tasks = await apiClient.tasks.$get().catch(returnNull);
+
+  textarea?.addEventListener('keydown', keydown);
+
+    await apiClient.tasks.post({ body: { label } });
+    setLabel('');
+    await fetchTasks();
+  };
+  const toggleDone = async (task: TaskModel) => {
+    await apiClient.tasks._taskId(task.id).patch({ body: { done: !task.done } });
+    await fetchTasks();
+  };
+  const deleteTask = async (task: TaskModel) => {
+    await apiClient.tasks._taskId(task.id).delete();
+    await fetchTasks();
   };
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      fetchPos();
-    }, 1000);
-    return () => clearInterval(interval);
+    fetchTasks();
   }, []);
 
-  if (!hoge) return <Loading visible />;
+  if (!tasks || !user) return <Loading visible />;
 
   return (
     <>
-      <div
-        className="container"
-        onKeyDown={keydown}
-        style={{ border: 'solid' }}
-        onClick={click}
-        tabIndex={0}
-      >
-        <div id="key">X:{playerX}</div>
-        <div id="key">Y:{playerY}</div>
-        <div id="key" />
-      </div>
-      <div
-        id="player"
-        style={{
-          position: 'absolute',
-          left: `${playerX}px`,
-          top: `${playerY}px`,
-          backgroundColor: 'red',
-          width: '10px',
-          height: '10px',
-        }}
-      />
+      <textarea placeholder="ここ" id="input" />
+      <div id="key">Return{key}</div>
     </>
   );
 };
