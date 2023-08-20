@@ -39,7 +39,7 @@ const App = () => {
     };
   }, []);
 
-  if (!isFighterLoaded) return <Loading visible />;
+  if (!fight_position || !isFighterLoaded) return <Loading visible />;
   return (
     <>
       <Stage width={1100} height={690}>
