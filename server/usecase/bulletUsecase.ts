@@ -39,22 +39,15 @@ export const bulletUsecase = {
     return recentlyBulletInfo;
   },
 };
-//100msごとにUseCaseを呼び出して弾を動かす
-const moveBullet = async () => {
-  const bulletList = await bulletRepository.findAll();
-  for (const bullet of bulletList) {
-    bulletUsecase.move(bullet.bulletId);
-  }
-};
-setInterval(moveBullet, 100);
-
-//画面外に出た弾を削除する
-const deleteOffScreenBullet = async () => {
-  const bulletList = await bulletRepository.findAll();
-  for (const bullet of bulletList) {
+const getBulletList = async () => {
+  const newBulletList = await bulletRepository.findAll();
+  for (const bullet of newBulletList) {
+    //画面外に出た弾を削除する
     if (bullet.pos.x > 1920 || bullet.pos.x < 0) {
       bulletUsecase.delete(bullet.bulletId);
     }
+    //100msごとにUseCaseを呼び出して弾を動かす
+    bulletUsecase.move(bullet.bulletId);
   }
 };
-setInterval(deleteOffScreenBullet, 1000);
+setInterval(getBulletList, 100);
