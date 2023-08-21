@@ -4,7 +4,6 @@ import { bulletRepository } from '$/repository/bulletRepository';
 import { bulletIdParser } from '$/service/idParsers';
 import { randomUUID } from 'crypto';
 
-export const bulletPosition: BulletModel[] = [];
 export const bulletUsecase = {
   creat: async (shooterId: string): Promise<BulletModel> => {
     //弾の初期値
@@ -40,3 +39,22 @@ export const bulletUsecase = {
     return recentlyBulletInfo;
   },
 };
+//100msごとにUseCaseを呼び出して弾を動かす
+const moveBullet = async () => {
+  const bulletList = await bulletRepository.findAll();
+  for (const bullet of bulletList) {
+    bulletUsecase.move(bullet.bulletId);
+  }
+};
+setInterval(moveBullet, 100);
+
+//画面外に出た弾を削除する
+const deleteOffScreenBullet = async () => {
+  const bulletList = await bulletRepository.findAll();
+  for (const bullet of bulletList) {
+    if (bullet.pos.x > 1920 || bullet.pos.x < 0) {
+      bulletUsecase.delete(bullet.bulletId);
+    }
+  }
+};
+setInterval(deleteOffScreenBullet, 1000);
