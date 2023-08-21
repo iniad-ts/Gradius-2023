@@ -13,15 +13,17 @@ const Home = () => {
   });
   const [moveIntervalId, setMoveIntervalId] = useState<NodeJS.Timeout | null>(null);
   const moveDirection = useRef<{ x: number; y: number }>({ x: 0, y: 0 });
-  const shootBullet = async () => {
-    console.log('shoot');
-  };
-  const [userId, setUserId] = useState<UserId | null>(null);
 
-  const getPlayerId = async () => {
+  const [userId, setUserId] = useState<UserId | null>(null);
+  const getUserId = async () => {
     const localStorageUserId = getUserIdFromLocalStorage();
     if (localStorageUserId === null) return;
     setUserId(localStorageUserId);
+  };
+  const shootBullet = async () => {
+    if (userId === null) return;
+
+    await apiClient.bullet.$post({ body: { userId } });
   };
   const move = (e: IJoystickUpdateEvent) => {
     if (userId === null) {
@@ -38,7 +40,7 @@ const Home = () => {
     apiClient.player.control.$post({ body: { MoveDirection: moveDirection.current, userId } });
   };
   useEffect(() => {
-    getPlayerId();
+    getUserId();
   }, []);
 
   return (
