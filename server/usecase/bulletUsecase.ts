@@ -1,8 +1,8 @@
-import type { BulletId } from '$/commonTypesWithClient/branded';
-import type { BulletModel } from '$/commonTypesWithClient/models';
 import { bulletRepository } from '$/repository/bulletRepository';
 import { bulletIdParser } from '$/service/idParsers';
 import { randomUUID } from 'crypto';
+import type { BulletId } from '../commonTypesWithClient/branded';
+import type { BulletModel } from '../commonTypesWithClient/models';
 
 export const bulletUsecase = {
   create: async (shooterId: string): Promise<BulletModel> => {
