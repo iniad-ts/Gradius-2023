@@ -1,7 +1,14 @@
-import type { DefineMethods } from 'aspida';
+import type { UserId } from '$/commonTypesWithClient/branded';
+import type { BulletModel } from '$/commonTypesWithClient/models';
 
-export type Methods = DefineMethods<{
+export type Methods = {
   get: {
-    resBody: string;
+    resBody: void;
   };
-}>;
+  post: {
+    reqBody: {
+      userId: UserId;
+    };
+    resBody: BulletModel;
+  };
+};

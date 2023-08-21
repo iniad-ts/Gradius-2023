@@ -40,8 +40,16 @@ const Home = () => {
     apiClient.player.control.$post({ body: { MoveDirection: moveDirection.current, userId } });
   };
   useEffect(() => {
-    getUserId();
+    const intervalId = setInterval(() => {
+      getUserId();
+    }, 2000);
+    return () => {
+      clearInterval(intervalId);
+    };
   }, []);
+  setInterval(() => {
+    apiClient.bullet.control.$get();
+  }, 1000);
 
   return (
     <div className={styles.controller}>

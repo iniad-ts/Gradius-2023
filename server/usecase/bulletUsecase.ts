@@ -5,7 +5,7 @@ import { bulletIdParser } from '$/service/idParsers';
 import { randomUUID } from 'crypto';
 
 export const bulletUsecase = {
-  creat: async (shooterId: string): Promise<BulletModel> => {
+  create: async (shooterId: string): Promise<BulletModel> => {
     //弾の初期値
     const bulletData: BulletModel = {
       bulletId: bulletIdParser.parse(randomUUID()),
@@ -38,16 +38,17 @@ export const bulletUsecase = {
     await bulletRepository.delete(bulletId);
     return recentlyBulletInfo;
   },
-};
-const getBulletList = async () => {
-  const newBulletList = await bulletRepository.findAll();
-  for (const bullet of newBulletList) {
-    //画面外に出た弾を削除する
-    if (bullet.pos.x > 1920 || bullet.pos.x < 0) {
-      bulletUsecase.delete(bullet.bulletId);
+  update: async () => {
+    const newBulletList = await bulletRepository.findAll();
+    const updatedBulletList: BulletModel[] = [];
+    for (const bullet of newBulletList) {
+      //画面外に出た弾を削除する
+      if (bullet.pos.x > 1920 || bullet.pos.x < 0) {
+        bulletUsecase.delete(bullet.bulletId);
+      }
+      //100msごとにUseCaseを呼び出して弾を動かす
+      const updartedBullet = await bulletUsecase.move(bullet.bulletId);
+      if (updartedBullet !== null) updatedBulletList.push(updartedBullet);
     }
-    //100msごとにUseCaseを呼び出して弾を動かす
-    bulletUsecase.move(bullet.bulletId);
-  }
+  },
 };
-setInterval(getBulletList, 100);
