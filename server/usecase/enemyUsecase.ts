@@ -15,4 +15,8 @@ export const enemyUsecase = {
     await enemyRepository.save(enemyData);
     return enemyData;
   },
+  findAll: async (): Promise<EnemyModel[]> => {
+    const enemies = await enemyRepository.findAll();
+    return enemies.length > 0 ? enemies : [];
+  },
 };
