@@ -19,7 +19,7 @@ const Home = () => {
   };
   const [userId, setUserId] = useState<UserId | null>(null);
 
-  const getPlayerId = async () => {
+  const getUserId = async () => {
     const localStorageUserId = getUserIdFromLocalStorage();
     if (localStorageUserId === null) return;
     setUserId(localStorageUserId);
@@ -30,7 +30,8 @@ const Home = () => {
     }
     const moveTo = {
       x: Math.round(e.x ?? 0),
-      y: Math.round(e.y ?? 0),
+      //canvasに合わせてy軸を反転させる
+      y: Math.round((e.y ?? 0) * -1),
     };
     moveDirection.current = moveTo;
     if (moveIntervalId) {
@@ -39,7 +40,7 @@ const Home = () => {
     apiClient.player.control.$post({ body: { MoveDirection: moveDirection.current, userId } });
   };
   useEffect(() => {
-    getPlayerId();
+    getUserId();
   }, []);
 
   return (
