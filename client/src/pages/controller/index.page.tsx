@@ -18,7 +18,7 @@ const Home = () => {
   };
   const [userId, setUserId] = useState<UserId | null>(null);
 
-  const getPlayerId = async () => {
+  const getUserId = async () => {
     const localStorageUserId = getUserIdFromLocalStorage();
     if (localStorageUserId === null) return;
     setUserId(localStorageUserId);
@@ -39,7 +39,7 @@ const Home = () => {
     apiClient.player.control.$post({ body: { MoveDirection: moveDirection.current, userId } });
   };
   useEffect(() => {
-    getPlayerId();
+    getUserId();
   }, []);
 
   return (
