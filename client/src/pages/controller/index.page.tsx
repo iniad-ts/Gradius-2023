@@ -31,7 +31,8 @@ const Home = () => {
     }
     const moveTo = {
       x: Math.round(e.x ?? 0),
-      y: Math.round(e.y ?? 0),
+      //canvasに合わせてy軸を反転させる
+      y: Math.round((e.y ?? 0) * -1),
     };
     moveDirection.current = moveTo;
     if (moveIntervalId) {
