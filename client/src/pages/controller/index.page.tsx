@@ -7,6 +7,7 @@ import { getUserIdFromLocalStorage } from 'src/utils/loginWithLocalStorage';
 import styles from './controller.module.css';
 
 const Home = () => {
+  //
   const [windowsize, setWindowsize] = useState<{ width: number; height: number }>({
     width: window.innerWidth,
     height: window.innerHeight,
