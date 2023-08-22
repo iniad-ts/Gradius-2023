@@ -1,7 +1,6 @@
 import { bulletRepository } from '$/repository/bulletRepository';
 import { bulletIdParser } from '$/service/idParsers';
 import { randomUUID } from 'crypto';
-import type { BulletId } from '../commonTypesWithClient/branded';
 import type { BulletModel } from '../commonTypesWithClient/models';
 
 export const bulletUsecase = {
@@ -19,8 +18,8 @@ export const bulletUsecase = {
     await bulletRepository.save(bulletData);
     return bulletData;
   },
-  move: async (bulletId: BulletId): Promise<BulletModel | null> => {
-    const recentlyBulletInfo = await bulletRepository.find(bulletId);
+  move: async (bulletModel: BulletModel): Promise<BulletModel | null> => {
+    const recentlyBulletInfo = await bulletRepository.find(bulletModel.bulletId);
     if (recentlyBulletInfo === null) return null;
     const updateBulletInfo: BulletModel = {
       ...recentlyBulletInfo,
@@ -32,10 +31,10 @@ export const bulletUsecase = {
     await bulletRepository.save(updateBulletInfo);
     return updateBulletInfo;
   },
-  delete: async (bulletId: BulletId): Promise<BulletModel | null> => {
-    const recentlyBulletInfo = await bulletRepository.find(bulletId);
+  delete: async (bulletModel: BulletModel): Promise<BulletModel | null> => {
+    const recentlyBulletInfo = await bulletRepository.find(bulletModel.bulletId);
     if (recentlyBulletInfo === null) return null;
-    await bulletRepository.delete(bulletId);
+    await bulletRepository.delete(bulletModel.bulletId);
     return recentlyBulletInfo;
   },
   update: async () => {
@@ -44,10 +43,10 @@ export const bulletUsecase = {
     for (const bullet of newBulletList) {
       //画面外に出た弾を削除する
       if (bullet.pos.x > 1920 || bullet.pos.x < 0) {
-        bulletUsecase.delete(bullet.bulletId);
+        bulletUsecase.delete(bullet);
       }
-      //100msごとにUseCaseを呼び出して弾を動かす
-      const updartedBullet = await bulletUsecase.move(bullet.bulletId);
+      //UseCaseを呼び出して弾を動かす
+      const updartedBullet = await bulletUsecase.move(bullet);
       if (updartedBullet !== null) updatedBulletList.push(updartedBullet);
     }
   },

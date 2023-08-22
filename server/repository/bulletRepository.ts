@@ -62,7 +62,7 @@ export const bulletRepository = {
   },
   findAll: async (): Promise<BulletModel[]> => {
     const bullets = await prismaClient.bullet.findMany();
-    return bullets.length > 0 ? bullets.map(toBulletModel) : [];
+    return bullets.map(toBulletModel);
   },
   delete: async (bulletId: BulletId) => {
     const bullet = await prismaClient.bullet.findUnique({
