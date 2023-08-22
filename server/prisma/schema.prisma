@@ -26,7 +26,6 @@ model Player {
 
 model Enemy {
   enemyId String @id
-  name    String
   pos     Json
   score   Int
   vector  Json

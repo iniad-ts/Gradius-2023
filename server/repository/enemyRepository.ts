@@ -7,7 +7,6 @@ import { z } from 'zod';
 
 const toEnemyModel = (prismaEnemy: Enemy): EnemyModel => ({
   enemyId: enemyIdParser.parse(prismaEnemy.enemyId),
-  name: z.string().parse(prismaEnemy.name),
   score: z.number().min(0).parse(prismaEnemy.score),
   vector: z
     .object({
@@ -25,19 +24,17 @@ const toEnemyModel = (prismaEnemy: Enemy): EnemyModel => ({
 });
 
 export const enemyRepository = {
-  save: async (enemy: EnemyModel) => {
+  save: async (enemy: EnemyModel): Promise<EnemyModel> => {
     const prismaEnemy = await prismaClient.enemy.upsert({
       where: {
         enemyId: enemy.enemyId,
       },
       update: {
-        name: enemy.name,
         score: enemy.score,
         vector: enemy.vector,
       },
       create: {
         enemyId: enemy.enemyId,
-        name: enemy.name,
         score: enemy.score,
         pos: enemy.pos,
         vector: enemy.vector,
@@ -46,22 +43,28 @@ export const enemyRepository = {
     });
     return toEnemyModel(prismaEnemy);
   },
-  find: async (enemyId: EnemyId) => {
+  find: async (enemyId: EnemyId): Promise<EnemyModel | null> => {
     const enemy = await prismaClient.enemy.findUnique({
       where: {
         enemyId,
       },
     });
-    if (!enemy) {
+    if (enemy === null) {
       return null;
     }
     return toEnemyModel(enemy);
   },
-  findAll: async () => {
+  findAll: async (): Promise<EnemyModel[]> => {
     const enemies = await prismaClient.enemy.findMany();
-    return enemies.map(toEnemyModel);
+    return enemies.length > 0 ? enemies.map(toEnemyModel) : [];
   },
   delete: async (enemyId: EnemyId) => {
+    const enemy = await prismaClient.enemy.findUnique({
+      where: {
+        enemyId,
+      },
+    });
+    if (enemy === null) return;
     await prismaClient.enemy.delete({
       where: {
         enemyId,

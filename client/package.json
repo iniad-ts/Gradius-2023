@@ -22,12 +22,17 @@
     "api": "file:../server/api",
     "aspida": "^1.14.0",
     "axios": "^1.4.0",
+    "canvas": "^2.11.2",
     "commonTypesWithClient": "file:../server/commonTypesWithClient",
     "firebase": "^10.1.0",
     "jotai": "^2.2.3",
+    "konva": "^9.2.0",
     "next": "^13.4.12",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react-dom": "^18.2.0",
+    "react-joystick-component": "^6.2.1",
+    "react-konva": "^18.2.10",
+    "use-image": "^1.1.1"
   },
   "devDependencies": {
     "@types/react": "^18.2.18",
