@@ -1,9 +1,9 @@
-import type { EnemyId } from '$/commonTypesWithClient/branded';
 import type { EnemyModel } from '$/commonTypesWithClient/models';
 import { enemyIdParser } from '$/service/idParsers';
 import { prismaClient } from '$/service/prismaClient';
 import type { Enemy } from '@prisma/client';
 import { z } from 'zod';
+import type { EnemyId } from '../commonTypesWithClient/branded';
 
 const toEnemyModel = (prismaEnemy: Enemy): EnemyModel => ({
   enemyId: enemyIdParser.parse(prismaEnemy.enemyId),
