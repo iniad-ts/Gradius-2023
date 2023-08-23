@@ -19,35 +19,34 @@ export const bulletUsecase = {
     return bulletData;
   },
   move: async (bulletModel: BulletModel): Promise<BulletModel | null> => {
-    const recentlyBulletInfo = await bulletRepository.find(bulletModel.bulletId);
-    if (recentlyBulletInfo === null) return null;
+    const currentBulletInfo = await bulletRepository.find(bulletModel.bulletId);
+    if (currentBulletInfo === null) return null;
     const updateBulletInfo: BulletModel = {
-      ...recentlyBulletInfo,
+      ...currentBulletInfo,
       pos: {
-        x: recentlyBulletInfo.pos.x + recentlyBulletInfo.vector.x,
-        y: recentlyBulletInfo.pos.y + recentlyBulletInfo.vector.y,
+        x: currentBulletInfo.pos.x + currentBulletInfo.vector.x,
+        y: currentBulletInfo.pos.y + currentBulletInfo.vector.y,
       },
     };
     await bulletRepository.save(updateBulletInfo);
     return updateBulletInfo;
   },
   delete: async (bulletModel: BulletModel): Promise<BulletModel | null> => {
-    const recentlyBulletInfo = await bulletRepository.find(bulletModel.bulletId);
-    if (recentlyBulletInfo === null) return null;
+    const currentBulletInfo = await bulletRepository.find(bulletModel.bulletId);
+    if (currentBulletInfo === null) return null;
     await bulletRepository.delete(bulletModel.bulletId);
-    return recentlyBulletInfo;
+    return currentBulletInfo;
   },
   update: async () => {
-    const newBulletList = await bulletRepository.findAll();
-    const updatedBulletList: BulletModel[] = [];
-    for (const bullet of newBulletList) {
-      //画面外に出た弾を削除する
+    const currentBulletList = await bulletRepository.findAll();
+    const promises = currentBulletList.map((bullet) => {
+      // 画面外に出た弾を削除する、それ以外は移動する
       if (bullet.pos.x > 1920 || bullet.pos.x < 0) {
-        bulletUsecase.delete(bullet);
+        return bulletUsecase.delete(bullet);
+      } else {
+        return bulletUsecase.move(bullet);
       }
-      //UseCaseを呼び出して弾を動かす
-      const updartedBullet = await bulletUsecase.move(bullet);
-      if (updartedBullet !== null) updatedBulletList.push(updartedBullet);
-    }
+    });
+    await Promise.all(promises);
   },
 };
