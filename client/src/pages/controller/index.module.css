@@ -1,0 +1,22 @@
+.controller {
+  display: grid;
+  grid-template-columns: 1fr 256px 1fr;
+  height: 100vh;
+  align-items: center;
+  justify-items: center;
+}
+
+.joystick {
+  grid-column: 1;
+}
+
+.button {
+  grid-column: 3;
+  height: 32vmin;
+  aspect-ratio: 1;
+  font-size: 8vmin;
+  background-color: #ddd;
+  border-radius: 50%;
+  border: 5px solid #bbb;
+  transition: transform 0.2s ease-in-out;
+}
