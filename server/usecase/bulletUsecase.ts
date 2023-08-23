@@ -1,22 +1,25 @@
+import type { UserId } from '$/commonTypesWithClient/branded';
 import { bulletRepository } from '$/repository/bulletRepository';
+import { playerRepository } from '$/repository/playerRepository';
 import { bulletIdParser } from '$/service/idParsers';
 import { randomUUID } from 'crypto';
 import type { BulletModel } from '../commonTypesWithClient/models';
 
 export const bulletUsecase = {
-  create: async (shooterId: string): Promise<BulletModel> => {
-    //弾の初期値
-    const bulletData: BulletModel = {
+  create: async (shooterId: UserId): Promise<BulletModel | null> => {
+    const shooterInfo = await playerRepository.find(shooterId);
+    if (shooterInfo === null) return null;
+    const newBullet: BulletModel = {
       bulletId: bulletIdParser.parse(randomUUID()),
       shooterId,
       power: 1,
       vector: { x: 5, y: 0 },
-      pos: { x: 50, y: 300 },
+      pos: { x: shooterInfo.pos.x, y: shooterInfo.pos.y + 50 }, //プレイヤーの中央から発射する
       type: 1,
-      side: 'left',
+      side: shooterInfo.side,
     };
-    await bulletRepository.save(bulletData);
-    return bulletData;
+    await bulletRepository.save(newBullet);
+    return newBullet;
   },
   move: async (bulletModel: BulletModel): Promise<BulletModel | null> => {
     const currentBulletInfo = await bulletRepository.find(bulletModel.bulletId);

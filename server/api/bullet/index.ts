@@ -10,6 +10,6 @@ export type Methods = DefineMethods<{
     reqBody: {
       userId: UserId;
     };
-    resBody: BulletModel;
+    resBody: BulletModel | null;
   };
 }>;
