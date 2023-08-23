@@ -1,53 +1,55 @@
+import type { UserId } from '$/commonTypesWithClient/branded';
 import { bulletRepository } from '$/repository/bulletRepository';
+import { playerRepository } from '$/repository/playerRepository';
 import { bulletIdParser } from '$/service/idParsers';
 import { randomUUID } from 'crypto';
 import type { BulletModel } from '../commonTypesWithClient/models';
 
 export const bulletUsecase = {
-  create: async (shooterId: string): Promise<BulletModel> => {
-    //弾の初期値
-    const bulletData: BulletModel = {
+  create: async (shooterId: UserId): Promise<BulletModel | null> => {
+    const shooterInfo = await playerRepository.find(shooterId);
+    if (shooterInfo === null) return null;
+    const newBullet: BulletModel = {
       bulletId: bulletIdParser.parse(randomUUID()),
       shooterId,
       power: 1,
       vector: { x: 5, y: 0 },
-      pos: { x: 50, y: 300 },
+      pos: { x: shooterInfo.pos.x, y: shooterInfo.pos.y + 50 }, //プレイヤーの中央から発射する
       type: 1,
-      side: 'left',
+      side: shooterInfo.side,
     };
-    await bulletRepository.save(bulletData);
-    return bulletData;
+    await bulletRepository.save(newBullet);
+    return newBullet;
   },
   move: async (bulletModel: BulletModel): Promise<BulletModel | null> => {
-    const recentlyBulletInfo = await bulletRepository.find(bulletModel.bulletId);
-    if (recentlyBulletInfo === null) return null;
+    const currentBulletInfo = await bulletRepository.find(bulletModel.bulletId);
+    if (currentBulletInfo === null) return null;
     const updateBulletInfo: BulletModel = {
-      ...recentlyBulletInfo,
+      ...currentBulletInfo,
       pos: {
-        x: recentlyBulletInfo.pos.x + recentlyBulletInfo.vector.x,
-        y: recentlyBulletInfo.pos.y + recentlyBulletInfo.vector.y,
+        x: currentBulletInfo.pos.x + currentBulletInfo.vector.x,
+        y: currentBulletInfo.pos.y + currentBulletInfo.vector.y,
       },
     };
     await bulletRepository.save(updateBulletInfo);
     return updateBulletInfo;
   },
   delete: async (bulletModel: BulletModel): Promise<BulletModel | null> => {
-    const recentlyBulletInfo = await bulletRepository.find(bulletModel.bulletId);
-    if (recentlyBulletInfo === null) return null;
+    const currentBulletInfo = await bulletRepository.find(bulletModel.bulletId);
+    if (currentBulletInfo === null) return null;
     await bulletRepository.delete(bulletModel.bulletId);
-    return recentlyBulletInfo;
+    return currentBulletInfo;
   },
   update: async () => {
-    const newBulletList = await bulletRepository.findAll();
-    const updatedBulletList: BulletModel[] = [];
-    for (const bullet of newBulletList) {
-      //画面外に出た弾を削除する
+    const currentBulletList = await bulletRepository.findAll();
+    const promises = currentBulletList.map((bullet) => {
+      // 画面外に出た弾を削除する、それ以外は移動する
       if (bullet.pos.x > 1920 || bullet.pos.x < 0) {
-        bulletUsecase.delete(bullet);
+        return bulletUsecase.delete(bullet);
+      } else {
+        return bulletUsecase.move(bullet);
       }
-      //UseCaseを呼び出して弾を動かす
-      const updartedBullet = await bulletUsecase.move(bullet);
-      if (updartedBullet !== null) updatedBulletList.push(updartedBullet);
-    }
+    });
+    await Promise.all(promises);
   },
 };

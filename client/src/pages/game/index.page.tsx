@@ -1,6 +1,6 @@
-import type { EnemyModel, PlayerModel } from 'commonTypesWithClient/models';
+import type { BulletModel, EnemyModel, PlayerModel } from 'commonTypesWithClient/models';
 import { useEffect, useState } from 'react';
-import { Image, Layer, Stage } from 'react-konva';
+import { Circle, Image, Layer, Stage } from 'react-konva';
 import { staticPath } from 'src/utils/$path';
 import { apiClient } from 'src/utils/apiClient';
 import useImage from 'use-image';
@@ -8,6 +8,7 @@ import useImage from 'use-image';
 const Game = () => {
   const [players, setPlayers] = useState<PlayerModel[]>([]);
   const [enemies, setEnemies] = useState<EnemyModel[]>([]);
+  const [bullets, setBullets] = useState<BulletModel[]>([]);
   const [playerImage] = useImage(staticPath.images.spaceship_png);
   const [enemyImage1] = useImage(staticPath.images.ufo_jpg);
 
@@ -21,11 +22,16 @@ const Game = () => {
     setEnemies(res);
   };
 
+  const fetchBullets = async () => {
+    const res = await apiClient.bullet.$get();
+    setBullets(res);
+  };
+
   useEffect(() => {
     const cancelId = requestAnimationFrame(() => {
       fetchPlayers();
       fetchEnemies();
-      console.log(enemies);
+      fetchBullets();
     });
     return () => cancelAnimationFrame(cancelId);
   });
@@ -33,6 +39,11 @@ const Game = () => {
   return (
     <div>
       <Stage width={1920} height={1080}>
+        <Layer>
+          {bullets.map((bullet) => (
+            <Circle x={bullet.pos.x} y={bullet.pos.y} radius={5} fill="red" key={bullet.bulletId} />
+          ))}
+        </Layer>
         <Layer>
           {players.map((player) => (
             <Image
