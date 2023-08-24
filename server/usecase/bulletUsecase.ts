@@ -5,6 +5,9 @@ import { bulletIdParser } from '$/service/idParsers';
 import { randomUUID } from 'crypto';
 import type { BulletModel } from '../commonTypesWithClient/models';
 
+setInterval(() => {
+  bulletUsecase.update();
+}, 75);
 export const bulletUsecase = {
   create: async (shooterId: UserId): Promise<BulletModel | null> => {
     const shooterInfo = await playerRepository.find(shooterId);
@@ -13,7 +16,7 @@ export const bulletUsecase = {
       bulletId: bulletIdParser.parse(randomUUID()),
       shooterId,
       power: 1,
-      vector: { x: 5, y: 0 },
+      vector: { x: 10, y: 0 },
       pos: { x: shooterInfo.pos.x, y: shooterInfo.pos.y + 50 }, //プレイヤーの中央から発射する
       type: 1,
       side: shooterInfo.side,

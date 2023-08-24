@@ -7,7 +7,6 @@ import { getUserIdFromLocalStorage } from 'src/utils/loginWithLocalStorage';
 import styles from './controller.module.css';
 
 const Home = () => {
-  //
   const [windowsize, setWindowsize] = useState<{ width: number; height: number }>({
     width: window.innerWidth,
     height: window.innerHeight,
@@ -49,9 +48,6 @@ const Home = () => {
       clearInterval(intervalId);
     };
   }, []);
-  setInterval(() => {
-    apiClient.bullet.control.$get();
-  }, 1000);
 
   return (
     <div className={styles.controller}>
