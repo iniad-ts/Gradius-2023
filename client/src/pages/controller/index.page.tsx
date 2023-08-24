@@ -1,4 +1,5 @@
 import type { UserId } from 'commonTypesWithClient/branded';
+import { useRouter } from 'next/router';
 import { useEffect, useRef, useState } from 'react';
 import { Joystick } from 'react-joystick-component';
 import type { IJoystickUpdateEvent } from 'react-joystick-component/build/lib/Joystick';
@@ -14,10 +15,13 @@ const Home = () => {
   const [moveIntervalId, setMoveIntervalId] = useState<NodeJS.Timeout | null>(null);
   const moveDirection = useRef<{ x: number; y: number }>({ x: 0, y: 0 });
   const [userId, setUserId] = useState<UserId>('' as UserId);
+  const router = useRouter();
 
   const getUserId = async () => {
     const localStorageUserId = getUserIdFromLocalStorage();
-    if (localStorageUserId === null) return;
+    if (localStorageUserId === null) {
+      return console.log('ok');
+    }
     setUserId(localStorageUserId);
   };
   const shootBullet = async () => {

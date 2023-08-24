@@ -9,7 +9,7 @@ const Login = () => {
   return (
     <div
       className={styles.container}
-      style={{ background: `center/cover url('${staticPath.images.odaiba_jpg}')` }}
+      style={{ background: `center/cover url('${staticPath.images.gradius_genesis_png}')` }}
     >
       <LoginModal />
     </div>
