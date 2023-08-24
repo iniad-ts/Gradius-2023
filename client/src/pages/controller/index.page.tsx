@@ -1,5 +1,6 @@
 import type { UserId } from 'commonTypesWithClient/branded';
-import { useEffect, useRef, useState } from 'react';
+import type { PlayerModel } from 'commonTypesWithClient/models';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { Joystick } from 'react-joystick-component';
 import type { IJoystickUpdateEvent } from 'react-joystick-component/build/lib/Joystick';
 import { apiClient } from 'src/utils/apiClient';
@@ -14,12 +15,19 @@ const Home = () => {
   const [moveIntervalId, setMoveIntervalId] = useState<NodeJS.Timeout | null>(null);
   const moveDirection = useRef<{ x: number; y: number }>({ x: 0, y: 0 });
   const [userId, setUserId] = useState<UserId>('' as UserId);
+  const [playerStatus, setPlayerStatus] = useState<PlayerModel>();
 
-  const getUserId = async () => {
+  const getUserId = useCallback(async () => {
     const localStorageUserId = getUserIdFromLocalStorage();
     if (localStorageUserId === null) return;
     setUserId(localStorageUserId);
-  };
+  }, []);
+
+  const fetchPlayerStatus = useCallback(async () => {
+    const res = await apiClient.player.control.$get({ query: { userId } });
+    if (res === null) return;
+    setPlayerStatus(res);
+  }, [userId]);
 
   const shootBullet = async () => {
     if (userId === '') return;
@@ -43,16 +51,19 @@ const Home = () => {
   };
 
   useEffect(() => {
-    const intervalId = setInterval(() => {
+    const userIdIntervalId = setInterval(() => {
       getUserId();
     }, 2000);
+
+    const playerStatusIntervalId = setInterval(() => {
+      fetchPlayerStatus();
+    }, 5000);
+
     return () => {
-      clearInterval(intervalId);
+      clearInterval(userIdIntervalId);
+      clearInterval(playerStatusIntervalId);
     };
-  }, []);
-  setInterval(() => {
-    apiClient.bullet.control.$get();
-  }, 1000);
+  }, [getUserId, fetchPlayerStatus]);
 
   useEffect(() => {
     const handleResize = () => {
@@ -74,6 +85,9 @@ const Home = () => {
           stickColor="blue"
           move={handelMove}
         />
+      </div>
+      <div>
+        Score: {playerStatus?.score} <br />
       </div>
       <button className={styles.button} onClick={shootBullet}>
         🚀
