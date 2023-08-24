@@ -13,8 +13,11 @@ export const bulletUsecase = {
     }, 75);
   },
   stop() {
-    if (intervalId !== null) {
+
+    if (intervalId) {
       clearInterval(intervalId);
+      intervalId = null;
+
     }
   },
   create: async (shooterId: UserId): Promise<BulletModel | null> => {
