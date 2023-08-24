@@ -32,7 +32,6 @@ export const playerUsecase = {
     const recentlyPlayerInfo = await playerRepository.find(userId);
     if (recentlyPlayerInfo === null) return null;
     const validatedMoveDirection = MoveDirectionSchema.parse(moveDirection);
-
     const updatePlayerInfo: PlayerModel = {
       ...recentlyPlayerInfo,
       pos: {
