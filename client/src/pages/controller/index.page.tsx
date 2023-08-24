@@ -33,14 +33,14 @@ const Home = () => {
   }, [userId]);
 
   const shootBullet = async () => {
-    if (userId === '' || remainingTime > 0) {
-      setRemainingTime(INTERVAL_TIME);
+    if (userId === '' || remainingTime > 0) return;
 
-      await apiClient.bullet.$post({ body: { userId } });
-      setTimeout(() => {
-        setRemainingTime(0);
-      }, INTERVAL_TIME);
-    }
+    setRemainingTime(INTERVAL_TIME);
+
+    await apiClient.bullet.$post({ body: { userId } });
+    setTimeout(() => {
+      setRemainingTime(0);
+    }, INTERVAL_TIME);
   };
 
   const handelMove = (e: IJoystickUpdateEvent) => {
@@ -63,6 +63,7 @@ const Home = () => {
     const userIdIntervalId = setInterval(() => {
       getUserId();
     }, 2000);
+
     const remainingTimeIntervalId = setInterval(() => {
       if (remainingTime > 0) {
         setRemainingTime((prev) => prev - 100);

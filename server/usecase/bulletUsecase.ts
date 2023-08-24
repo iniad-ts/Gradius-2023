@@ -25,7 +25,7 @@ export const bulletUsecase = {
       bulletId: bulletIdParser.parse(randomUUID()),
       shooterId,
       power: 1,
-      vector: { x: 5, y: 0 },
+      vector: { x: 10, y: 0 },
       pos: { x: shooterInfo.pos.x, y: shooterInfo.pos.y + 50 }, //プレイヤーの中央から発射する
       type: 1,
       side: shooterInfo.side,
