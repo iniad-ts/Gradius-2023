@@ -5,16 +5,16 @@ import { bulletIdParser } from '$/service/idParsers';
 import { randomUUID } from 'crypto';
 import type { BulletModel } from '../commonTypesWithClient/models';
 
+let intervalId: NodeJS.Timeout | null = null;
 export const bulletUsecase = {
-  interval: null as NodeJS.Timeout | null,
   init() {
-    this.interval = setInterval(() => {
+    intervalId = setInterval(() => {
       bulletUsecase.update();
     }, 75);
   },
   stop() {
-    if (this.interval !== null) {
-      clearInterval(this.interval);
+    if (intervalId !== null) {
+      clearInterval(intervalId);
     }
   },
   create: async (shooterId: UserId): Promise<BulletModel | null> => {
