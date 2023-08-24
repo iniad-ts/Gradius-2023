@@ -14,6 +14,10 @@ const Home = () => {
   const [moveIntervalId, setMoveIntervalId] = useState<NodeJS.Timeout | null>(null);
   const moveDirection = useRef<{ x: number; y: number }>({ x: 0, y: 0 });
   const [userId, setUserId] = useState<UserId>('' as UserId);
+  const [canShoot, setCanShoot] = useState<boolean>(true);
+  const [remainingTime, setRemainingTime] = useState<number>(0);
+
+  const intervalTime = 500;
 
   const getUserId = async () => {
     const localStorageUserId = getUserIdFromLocalStorage();
@@ -22,8 +26,15 @@ const Home = () => {
   };
 
   const shootBullet = async () => {
-    if (userId === '') return;
+    if (userId === '' || !canShoot) return;
+    setCanShoot(false);
+    setRemainingTime(intervalTime);
+
     await apiClient.bullet.$post({ body: { userId } });
+    setTimeout(() => {
+      setCanShoot(true);
+      setRemainingTime(0);
+    }, intervalTime);
   };
 
   const handelMove = (e: IJoystickUpdateEvent) => {
@@ -46,13 +57,19 @@ const Home = () => {
     const intervalId = setInterval(() => {
       getUserId();
     }, 2000);
+    const remainingTimeIntervalId = setInterval(() => {
+      if (remainingTime > 0) {
+        setRemainingTime((prev) => prev - 100);
+      }
+    }, 100);
     return () => {
       clearInterval(intervalId);
+      clearInterval(remainingTimeIntervalId);
     };
-  }, []);
+  }, [remainingTime]);
   setInterval(() => {
     apiClient.bullet.control.$get();
-  }, 1000);
+  }, intervalTime);
 
   useEffect(() => {
     const handleResize = () => {
@@ -75,7 +92,11 @@ const Home = () => {
           move={handelMove}
         />
       </div>
-      <button className={styles.button} onClick={shootBullet}>
+      <button
+        className={styles.button}
+        onClick={shootBullet}
+        style={{ opacity: 1 - remainingTime / intervalTime }}
+      >
         🚀
       </button>
     </div>
