@@ -41,7 +41,7 @@ const Game = () => {
       <Stage width={1920} height={1080}>
         <Layer>
           {bullets.map((bullet) => (
-            <Circle x={bullet.pos.x} y={bullet.pos.y} radius={5} fill="red" key={bullet.bulletId} />
+            <Circle x={bullet.pos.x} y={bullet.pos.y} radius={7} fill="red" key={bullet.bulletId} />
           ))}
         </Layer>
         <Layer>

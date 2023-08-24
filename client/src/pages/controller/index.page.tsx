@@ -50,9 +50,6 @@ const Home = () => {
       clearInterval(intervalId);
     };
   }, []);
-  setInterval(() => {
-    apiClient.bullet.control.$get();
-  }, 1000);
 
   useEffect(() => {
     const handleResize = () => {
