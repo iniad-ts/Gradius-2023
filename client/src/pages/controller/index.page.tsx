@@ -68,10 +68,6 @@ const Home = () => {
     };
   }, [remainingTime]);
 
-  setInterval(() => {
-    apiClient.bullet.$get();
-  }, 100);
-
   useEffect(() => {
     const handleResize = () => {
       setWindowsize({
