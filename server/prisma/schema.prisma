@@ -31,3 +31,13 @@ model Enemy {
   vector  Json
   type    Int
 }
+
+model Bullet {
+  bulletId  String  @id
+  pos       Json
+  power     Int
+  vector    Json
+  type      Int
+  side      String
+  shooterId String?
+}
