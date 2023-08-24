@@ -1,6 +1,7 @@
 import { init } from '$/service/app';
 import { PORT } from '$/service/envValues';
 import { prismaClient } from '$/service/prismaClient';
+import { bulletUsecase } from '$/usecase/bulletUsecase';
 import { exec } from 'child_process';
 import type { FastifyInstance } from 'fastify';
 import util from 'util';
@@ -33,6 +34,7 @@ afterEach(async (info) => {
 
 afterAll(async (info) => {
   if (unneededServer(info)) return;
+  bulletUsecase.stop();
 
   await server.close();
 });
