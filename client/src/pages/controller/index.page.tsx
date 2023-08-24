@@ -4,7 +4,7 @@ import { Joystick } from 'react-joystick-component';
 import type { IJoystickUpdateEvent } from 'react-joystick-component/build/lib/Joystick';
 import { apiClient } from 'src/utils/apiClient';
 import { getUserIdFromLocalStorage } from 'src/utils/loginWithLocalStorage';
-import styles from './controller.module.css';
+import styles from './index.module.css';
 
 const Home = () => {
   const [windowsize, setWindowsize] = useState<{ width: number; height: number }>({
@@ -20,12 +20,13 @@ const Home = () => {
     if (localStorageUserId === null) return;
     setUserId(localStorageUserId);
   };
+
   const shootBullet = async () => {
     if (userId === '') return;
-
     await apiClient.bullet.$post({ body: { userId } });
   };
-  const move = (e: IJoystickUpdateEvent) => {
+
+  const handelMove = (e: IJoystickUpdateEvent) => {
     if (userId === '') {
       return;
     }
@@ -40,6 +41,7 @@ const Home = () => {
     }
     apiClient.player.control.$post({ body: { MoveDirection: moveDirection.current, userId } });
   };
+
   useEffect(() => {
     const intervalId = setInterval(() => {
       getUserId();
@@ -49,14 +51,25 @@ const Home = () => {
     };
   }, []);
 
+  useEffect(() => {
+    const handleResize = () => {
+      setWindowsize({
+        width: window.innerWidth,
+        height: window.innerHeight,
+      });
+    };
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
   return (
     <div className={styles.controller}>
       <div className={styles.joystick}>
         <Joystick
-          size={Math.min(windowsize.width, windowsize.height) * 0.1}
+          size={Math.min(windowsize.width, windowsize.height) * 0.32}
           baseColor="#000000"
           stickColor="blue"
-          move={move}
+          move={handelMove}
         />
       </div>
       <button className={styles.button} onClick={shootBullet}>
