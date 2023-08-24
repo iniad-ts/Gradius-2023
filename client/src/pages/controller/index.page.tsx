@@ -67,9 +67,10 @@ const Home = () => {
       clearInterval(remainingTimeIntervalId);
     };
   }, [remainingTime]);
+
   setInterval(() => {
-    apiClient.bullet.control.$get();
-  }, intervalTime);
+    apiClient.bullet.$get();
+  }, 100);
 
   useEffect(() => {
     const handleResize = () => {
