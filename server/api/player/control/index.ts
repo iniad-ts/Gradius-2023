@@ -5,7 +5,7 @@ import type { MoveDirection } from '../../../usecase/playerUsecase';
 export type Methods = DefineMethods<{
   get: {
     query: {
-      userid: string;
+      userId: UserId;
     };
     resBody: PlayerModel | null;
   };
