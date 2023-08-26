@@ -132,6 +132,7 @@ const Home = () => {
         onTouchCancel={stopShoot}
         onMouseDown={startShoot}
         onMouseUp={stopShoot}
+        onMouseLeave={stopShoot}
       >
         <div>🚀</div>
       </button>
