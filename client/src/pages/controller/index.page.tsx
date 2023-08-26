@@ -64,7 +64,7 @@ const Home = () => {
     };
   };
 
-  const startMove = (e: IJoystickUpdateEvent) => {
+  const startMove = () => {
     const moveInterbalId = setInterval(async () => {
       await apiClient.player.control.$post({
         body: {
