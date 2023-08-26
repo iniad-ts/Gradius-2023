@@ -1,22 +1,118 @@
 .controller {
   display: grid;
-  grid-template-columns: 1fr 256px 1fr;
-  height: 100vh;
+  grid-template-columns: repeat(3, 1fr);
+  height: 100svh;
+  width: 100vw;
   align-items: center;
   justify-items: center;
 }
 
-.joystick {
-  grid-column: 1;
+.joystick > div {
+  box-shadow: 0 0 2vmin 0 #9994, inset 0 0 0 1vmin #fff;
+  border: 0.4vmin solid #bbb;
+  box-sizing: content-box;
+}
+
+.joystick > div > button {
+  box-shadow: 0 0 2vmin 0 #9994;
+  outline: 0;
 }
 
 .button {
-  grid-column: 3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   height: 32vmin;
   aspect-ratio: 1;
-  font-size: 8vmin;
-  background-color: #ddd;
+  align-self: center;
+  justify-self: center;
+  border: 0;
   border-radius: 50%;
-  border: 5px solid #bbb;
-  transition: transform 0.2s ease-in-out;
+  font-size: 8vmin;
+  box-shadow: 0 0 2vmin 0 #9994;
+  border: 0.2vmin solid #bbb;
+  background-color: #fff;
+  transition: transform 0.1s ease;
+  box-sizing: content-box;
+  position: relative;
+  overflow: hidden;
+}
+
+.button:hover:active {
+  transform: scale(0.9);
+}
+
+.button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -50%;
+  width: 100%;
+  height: 100%;
+  background-color: #fff;
+  transform-origin: right 50%;
+  z-index: 2;
+}
+
+.button::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: -50%;
+  width: 100%;
+  height: 100%;
+  background-color: #f98;
+  transform-origin: left 50%;
+  transform: rotate(180deg);
+  z-index: 1;
+}
+
+.button:hover:active::before {
+  animation: progress-left 0.8s linear infinite;
+}
+
+.button:hover:active::after {
+  animation: progress-right 0.8s linear infinite;
+}
+
+.button > div {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: calc(100% - 2vmin);
+  width: calc(100% - 2vmin);
+  background-color: #eee;
+  border-radius: 50%;
+  position: relative;
+  z-index: 3;
+}
+
+@keyframes progress-right {
+  0% {
+    transform: rotate(180deg);
+  }
+  50% {
+    transform: rotate(360deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes progress-left {
+  0% {
+    transform: rotate(0deg);
+  }
+  50% {
+    transform: rotate(0deg);
+    background-color: #fff;
+  }
+  50.0001% {
+    transform: rotate(180deg);
+    background-color: #f98;
+  }
+  100% {
+    transform: rotate(360deg);
+    background-color: #f98;
+  }
 }

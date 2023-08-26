@@ -3,22 +3,31 @@ import type { PlayerModel } from 'commonTypesWithClient/models';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { Joystick } from 'react-joystick-component';
 import type { IJoystickUpdateEvent } from 'react-joystick-component/build/lib/Joystick';
+import { Loading } from 'src/components/Loading/Loading';
 import { apiClient } from 'src/utils/apiClient';
 import { getUserIdFromLocalStorage } from 'src/utils/loginWithLocalStorage';
 import styles from './index.module.css';
+
+type MoveTo = {
+  x: -1 | 0 | 1;
+  y: -1 | 0 | 1;
+};
 
 const Home = () => {
   const [windowsize, setWindowsize] = useState<{ width: number; height: number }>({
     width: window.innerWidth,
     height: window.innerHeight,
   });
-  const [moveIntervalId, setMoveIntervalId] = useState<NodeJS.Timeout | null>(null);
-  const moveDirection = useRef<{ x: number; y: number }>({ x: 0, y: 0 });
   const [userId, setUserId] = useState<UserId>('' as UserId);
   const [playerStatus, setPlayerStatus] = useState<PlayerModel>();
-  const [remainingTime, setRemainingTime] = useState<number>(0);
-  //今は仮置きで500msの定数にしているが、アイテムとかで変動させるのもありかも
-  const INTERVAL_TIME = 500;
+
+  const [moveIntervalId, setMoveIntervalId] = useState<NodeJS.Timeout[]>([]);
+  const moveDirection = useRef<MoveTo>({ x: 0, y: 0 });
+
+  const [shootIntervalId, setShootIntervalId] = useState<NodeJS.Timeout[]>([]);
+
+  const MOVE_INTERVAL_TIME = 20;
+  const SHOOT_INTERVAL_TIME = 800;
 
   const getUserId = useCallback(async () => {
     const localStorageUserId = getUserIdFromLocalStorage();
@@ -32,28 +41,44 @@ const Home = () => {
     setPlayerStatus(res);
   }, [userId]);
 
-  const shootBullet = async () => {
-    if (userId === '' || remainingTime > 0) return;
-    setRemainingTime(INTERVAL_TIME);
-    await apiClient.bullet.$post({ body: { userId } });
-    setTimeout(() => {
-      setRemainingTime(0);
-    }, INTERVAL_TIME);
+  const startShoot = async () => {
+    const shootInterbalId = setInterval(async () => {
+      await apiClient.bullet.$post({
+        body: {
+          userId,
+        },
+      });
+    }, SHOOT_INTERVAL_TIME);
+    setShootIntervalId((prev) => [...prev, shootInterbalId]);
+  };
+
+  const stopShoot = () => {
+    shootIntervalId.forEach((id) => clearInterval(id));
+    setShootIntervalId([]);
   };
   const handelMove = (e: IJoystickUpdateEvent) => {
-    if (userId === '') {
-      return;
-    }
-    const moveTo = {
-      x: Math.round(e.x ?? 0),
-      //canvasに合わせてy軸を反転させる
-      y: Math.round((e.y ?? 0) * -1),
+    moveDirection.current = {
+      x: Math.round(e.x ?? 0) as -1 | 0 | 1,
+      y: Math.round((e.y ?? 0) * -1) as -1 | 0 | 1,
     };
-    moveDirection.current = moveTo;
-    if (moveIntervalId) {
-      clearInterval(moveIntervalId);
-    }
-    apiClient.player.control.$post({ body: { MoveDirection: moveDirection.current, userId } });
+  };
+
+  const startMove = () => {
+    const moveInterbalId = setInterval(async () => {
+      await apiClient.player.control.$post({
+        body: {
+          userId,
+          MoveDirection: moveDirection.current,
+        },
+      });
+    }, MOVE_INTERVAL_TIME);
+    setMoveIntervalId((prev) => [...prev, moveInterbalId]);
+  };
+
+  const stopMove = () => {
+    moveDirection.current = { x: 0, y: 0 };
+    moveIntervalId.forEach((id) => clearInterval(id));
+    setMoveIntervalId([]);
   };
 
   useEffect(() => {
@@ -61,22 +86,15 @@ const Home = () => {
       getUserId();
     }, 2000);
 
-    const remainingTimeIntervalId = setInterval(() => {
-      if (remainingTime > 0) {
-        setRemainingTime((prev) => prev - 100);
-      }
-    }, 100);
-
     const playerStatusIntervalId = setInterval(() => {
       fetchPlayerStatus();
     }, 5000);
 
     return () => {
-      clearInterval(remainingTimeIntervalId);
       clearInterval(userIdIntervalId);
       clearInterval(playerStatusIntervalId);
     };
-  }, [getUserId, remainingTime, fetchPlayerStatus]);
+  }, [getUserId, fetchPlayerStatus]);
 
   useEffect(() => {
     const handleResize = () => {
@@ -89,14 +107,18 @@ const Home = () => {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
+  if (userId === '') return <Loading visible />;
+
   return (
     <div className={styles.controller}>
       <div className={styles.joystick}>
         <Joystick
           size={Math.min(windowsize.width, windowsize.height) * 0.32}
-          baseColor="#000000"
-          stickColor="blue"
+          baseColor="#eee"
+          stickColor="#d7d7d7"
+          start={startMove}
           move={handelMove}
+          stop={stopMove}
         />
       </div>
       <div>
@@ -104,10 +126,14 @@ const Home = () => {
       </div>
       <button
         className={styles.button}
-        onClick={shootBullet}
-        style={{ opacity: 1 - remainingTime / INTERVAL_TIME }}
+        onTouchStart={startShoot}
+        onTouchEnd={stopShoot}
+        onTouchCancel={stopShoot}
+        onMouseDown={startShoot}
+        onMouseUp={stopShoot}
+        onMouseLeave={stopShoot}
       >
-        🚀
+        <div>🚀</div>
       </button>
     </div>
   );
