@@ -26,9 +26,8 @@ const Home = () => {
 
   const [shootIntervalId, setShootIntervalId] = useState<NodeJS.Timeout[]>([]);
 
-  //今は仮置きで500msの定数にしているが、アイテムとかで変動させるのもありかも
   const MOVE_INTERVAL_TIME = 20;
-  const SHOOT_INTERVAL_TIME = 500;
+  const SHOOT_INTERVAL_TIME = 800;
 
   const getUserId = useCallback(async () => {
     const localStorageUserId = getUserIdFromLocalStorage();
@@ -116,8 +115,8 @@ const Home = () => {
       <div className={styles.joystick}>
         <Joystick
           size={Math.min(windowsize.width, windowsize.height) * 0.32}
-          baseColor="#000000"
-          stickColor="blue"
+          baseColor="#eee"
+          stickColor="#d7d7d7"
           start={startMove}
           move={handelMove}
           stop={stopMove}
@@ -134,7 +133,7 @@ const Home = () => {
         onMouseDown={startShoot}
         onMouseUp={stopShoot}
       >
-        🚀
+        <div>🚀</div>
       </button>
     </div>
   );
