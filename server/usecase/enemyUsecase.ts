@@ -19,28 +19,30 @@ export const enemyUsecase = {
     return enemyData;
   },
   move: async () => {
-    const currentEnemyInfos = await enemyRepository.findAll();
-    for (const currentEnemyInfo of currentEnemyInfos) {
-      if (currentEnemyInfo === null) continue;
-      const updateEnemyInfo: EnemyModel = {
-        ...currentEnemyInfo,
-        pos: {
-          x: currentEnemyInfo.pos.x + currentEnemyInfo.vector.x,
-          y: currentEnemyInfo.pos.y + currentEnemyInfo.vector.y,
-        },
-      };
-      await enemyRepository.save(updateEnemyInfo);
-    }
+    const currentEnemyInfos = await enemyUsecase.findAll();
+    const updatedEnemies = currentEnemyInfos.map((enemy) => ({
+      ...enemy,
+      pos: {
+        x: enemy.pos.x + enemy.vector.x,
+        y: enemy.pos.y + enemy.vector.y,
+      },
+    }));
+    await Promise.all(updatedEnemies.map((enemy) => enemyRepository.save(enemy)));
   },
   moveDirection: async () => {
+    const setVectorByType = (enemy: EnemyModel): void => {
+      const enemyTypeHandler = [
+        () => ({ x: -10, y: 15 }),
+        () => ({ x: -15, y: -7 }),
+        () => ({ x: 9, y: -13 }),
+      ];
+
+      enemy.vector = enemyTypeHandler[enemy.type - 1]();
+    };
     const enemies = await enemyRepository.findAll();
     for (const enemy of enemies) {
-      const enemyTypeHandler = [
-        () => (enemy.vector = { x: -10, y: 15 }),
-        () => (enemy.vector = { x: -15, y: -7 }),
-        () => (enemy.vector = { x: 9, y: -13 }),
-      ];
-      enemyTypeHandler[enemy.type - 1](), await enemyRepository.save(enemy);
+      setVectorByType(enemy);
+      await enemyRepository.save(enemy);
     }
   },
   findAll: async (): Promise<EnemyModel[]> => {
@@ -55,5 +57,8 @@ export const enemyUsecase = {
 
 // setInterval(() => {
 //   enemyUsecase.move();
-//   enemyUsecase.moveDirection();
 // }, 1000);
+
+// setInterval(() => {
+//   enemyUsecase.moveDirection();
+// }, 100);
