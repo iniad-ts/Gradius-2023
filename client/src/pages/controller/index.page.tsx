@@ -34,15 +34,12 @@ const Home = () => {
 
   const shootBullet = async () => {
     if (userId === '' || remainingTime > 0) return;
-
     setRemainingTime(INTERVAL_TIME);
-
     await apiClient.bullet.$post({ body: { userId } });
     setTimeout(() => {
       setRemainingTime(0);
     }, INTERVAL_TIME);
   };
-
   const handelMove = (e: IJoystickUpdateEvent) => {
     if (userId === '') {
       return;
