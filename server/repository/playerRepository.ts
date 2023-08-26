@@ -87,4 +87,8 @@ export const playerRepository = {
       },
     });
   },
+  count: async () => {
+    const count = prismaClient.player.count();
+    return count;
+  },
 };
