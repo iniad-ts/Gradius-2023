@@ -72,7 +72,7 @@ export const enemyRepository = {
     });
   },
   count: async () => {
-    const count = prismaClient.player.count();
+    const count = prismaClient.enemy.count();
     return count;
   },
 };
