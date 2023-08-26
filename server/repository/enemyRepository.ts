@@ -31,7 +31,7 @@ export const enemyRepository = {
       },
       update: {
         score: enemy.score,
-        vector: enemy.vector,
+        pos: enemy.pos,
       },
       create: {
         enemyId: enemy.enemyId,
