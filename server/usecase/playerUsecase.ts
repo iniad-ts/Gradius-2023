@@ -29,27 +29,32 @@ export const playerUsecase = {
     return playerData;
   },
   move: async (moveDirection: MoveDirection, userId: UserId): Promise<PlayerModel | null> => {
-    const recentlyPlayerInfo = await playerRepository.find(userId);
-    if (recentlyPlayerInfo === null) return null;
+    const currentPlayerInfo = await playerRepository.find(userId);
+    if (currentPlayerInfo === null) return null;
     const validatedMoveDirection = MoveDirectionSchema.parse(moveDirection);
     const updatePlayerInfo: PlayerModel = {
-      ...recentlyPlayerInfo,
+      ...currentPlayerInfo,
       pos: {
-        x: recentlyPlayerInfo.pos.x + validatedMoveDirection.x * recentlyPlayerInfo.vector.x,
-        y: recentlyPlayerInfo.pos.y + validatedMoveDirection.y * recentlyPlayerInfo.vector.y,
+        x: currentPlayerInfo.pos.x + validatedMoveDirection.x * currentPlayerInfo.vector.x,
+        y: currentPlayerInfo.pos.y + validatedMoveDirection.y * currentPlayerInfo.vector.y,
       },
     };
     await playerRepository.save(updatePlayerInfo);
     return updatePlayerInfo;
   },
   addScore: async (userId: UserId, score: number): Promise<PlayerModel | null> => {
-    const recentlyPlayerInfo = await playerRepository.find(userId);
-    assert(recentlyPlayerInfo);
+    const currentPlayerInfo = await playerRepository.find(userId);
+    assert(currentPlayerInfo);
     const updatePlayerInfo: PlayerModel = {
-      ...recentlyPlayerInfo,
-      score: recentlyPlayerInfo.score + score,
+      ...currentPlayerInfo,
+      score: currentPlayerInfo.score + score,
     };
     await playerRepository.save(updatePlayerInfo);
     return updatePlayerInfo;
+  },
+  getStatus: async (userId: UserId) => {
+    const currentPlayerInfo = await playerRepository.find(userId);
+    if (currentPlayerInfo === null) return null;
+    return currentPlayerInfo;
   },
 };

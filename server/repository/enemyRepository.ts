@@ -73,4 +73,8 @@ export const enemyRepository = {
       },
     });
   },
+  count: async () => {
+    const count = prismaClient.enemy.count();
+    return count;
+  },
 };
