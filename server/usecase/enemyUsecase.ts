@@ -5,12 +5,12 @@ import { randomUUID } from 'crypto';
 
 let intervalId: NodeJS.Timeout | null = null;
 export const enemyUsecase = {
-  init() {
+  init: () => {
     intervalId = setInterval(() => {
       enemyUsecase.update();
     }, 500);
   },
-  stop() {
+  stop: () => {
     if (intervalId) {
       clearInterval(intervalId);
       intervalId = null;
@@ -19,7 +19,7 @@ export const enemyUsecase = {
   create: async (): Promise<EnemyModel | null> => {
     const enemyData: EnemyModel = {
       enemyId: enemyIdParser.parse(randomUUID()),
-      pos: { x: 50, y: 300 },
+      pos: { x: 1000, y: 300 },
       score: 100,
       vector: { x: 5, y: 5 },
       type: 0,
@@ -38,7 +38,7 @@ export const enemyUsecase = {
       ...currentEnemyInfo,
       pos: {
         x: currentEnemyInfo.pos.x - currentEnemyInfo.vector.x,
-        y: currentEnemyInfo.pos.y - currentEnemyInfo.vector.y,
+        y: currentEnemyInfo.pos.y,
       },
     };
     await enemyRepository.save(updateEnemyInfo);

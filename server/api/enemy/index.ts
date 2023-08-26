@@ -5,4 +5,7 @@ export type Methods = DefineMethods<{
   get: {
     resBody: EnemyModel[];
   };
+  post: {
+    reqBody: EnemyModel;
+  };
 }>;
