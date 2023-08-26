@@ -56,7 +56,6 @@ const Home = () => {
     shootIntervalId.forEach((id) => clearInterval(id));
     setShootIntervalId([]);
   };
-
   const handelMove = (e: IJoystickUpdateEvent) => {
     moveDirection.current = {
       x: Math.round(e.x ?? 0) as -1 | 0 | 1,
