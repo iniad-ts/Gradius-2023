@@ -1,6 +1,6 @@
 import type { UserId } from 'commonTypesWithClient/branded';
 import { useRouter } from 'next/router';
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { Joystick } from 'react-joystick-component';
 import type { IJoystickUpdateEvent } from 'react-joystick-component/build/lib/Joystick';
 import { apiClient } from 'src/utils/apiClient';
@@ -17,13 +17,14 @@ const Home = () => {
   const [userId, setUserId] = useState<UserId>('' as UserId);
   const router = useRouter();
 
-  const getUserId = async () => {
+  const getUserId = useCallback(async () => {
     const localStorageUserId = getUserIdFromLocalStorage();
     if (localStorageUserId === null) {
-      return console.log('ok');
+      alert('ログインがまだ行われておりません');
+      return router.push('/login');
     }
     setUserId(localStorageUserId);
-  };
+  }, [router]);
   const shootBullet = async () => {
     if (userId === '') return;
 
@@ -51,7 +52,7 @@ const Home = () => {
     return () => {
       clearInterval(intervalId);
     };
-  }, []);
+  }, [getUserId]);
   setInterval(() => {
     apiClient.bullet.control.$get();
   }, 1000);
