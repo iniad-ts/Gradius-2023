@@ -1,21 +1,34 @@
 import type { UserId } from 'commonTypesWithClient/branded';
+import type { PlayerModel } from 'commonTypesWithClient/models';
 import { useRouter } from 'next/router';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { Joystick } from 'react-joystick-component';
 import type { IJoystickUpdateEvent } from 'react-joystick-component/build/lib/Joystick';
 import { apiClient } from 'src/utils/apiClient';
 import { getUserIdFromLocalStorage } from 'src/utils/loginWithLocalStorage';
-import styles from './controller.module.css';
+import styles from './index.module.css';
+
+type MoveTo = {
+  x: -1 | 0 | 1;
+  y: -1 | 0 | 1;
+};
 
 const Home = () => {
   const [windowsize, setWindowsize] = useState<{ width: number; height: number }>({
     width: window.innerWidth,
     height: window.innerHeight,
   });
-  const [moveIntervalId, setMoveIntervalId] = useState<NodeJS.Timeout | null>(null);
-  const moveDirection = useRef<{ x: number; y: number }>({ x: 0, y: 0 });
   const [userId, setUserId] = useState<UserId>('' as UserId);
   const router = useRouter();
+  const [playerStatus, setPlayerStatus] = useState<PlayerModel>();
+
+  const [moveIntervalId, setMoveIntervalId] = useState<NodeJS.Timeout[]>([]);
+  const moveDirection = useRef<MoveTo>({ x: 0, y: 0 });
+
+  const [shootIntervalId, setShootIntervalId] = useState<NodeJS.Timeout[]>([]);
+
+  const MOVE_INTERVAL_TIME = 20;
+  const SHOOT_INTERVAL_TIME = 800;
 
   const getUserId = useCallback(async () => {
     const localStorageUserId = getUserIdFromLocalStorage();
@@ -25,50 +38,105 @@ const Home = () => {
     }
     setUserId(localStorageUserId);
   }, [router]);
-  const shootBullet = async () => {
-    if (userId === '') return;
 
-    await apiClient.bullet.$post({ body: { userId } });
+  const fetchPlayerStatus = useCallback(async () => {
+    const res = await apiClient.player.control.$get({ query: { userId } });
+    if (res === null) return;
+    setPlayerStatus(res);
+  }, [userId]);
+
+  const startShoot = async () => {
+    const shootInterbalId = setInterval(async () => {
+      await apiClient.bullet.$post({
+        body: {
+          userId,
+        },
+      });
+    }, SHOOT_INTERVAL_TIME);
+    setShootIntervalId((prev) => [...prev, shootInterbalId]);
   };
-  const move = (e: IJoystickUpdateEvent) => {
-    if (userId === '') {
-      return;
-    }
-    const moveTo = {
-      x: Math.round(e.x ?? 0),
-      //canvasに合わせてy軸を反転させる
-      y: Math.round((e.y ?? 0) * -1),
+
+  const stopShoot = () => {
+    shootIntervalId.forEach((id) => clearInterval(id));
+    setShootIntervalId([]);
+  };
+  const handelMove = (e: IJoystickUpdateEvent) => {
+    moveDirection.current = {
+      x: Math.round(e.x ?? 0) as -1 | 0 | 1,
+      y: Math.round((e.y ?? 0) * -1) as -1 | 0 | 1,
     };
-    moveDirection.current = moveTo;
-    if (moveIntervalId) {
-      clearInterval(moveIntervalId);
-    }
-    apiClient.player.control.$post({ body: { MoveDirection: moveDirection.current, userId } });
   };
+
+  const startMove = () => {
+    const moveInterbalId = setInterval(async () => {
+      await apiClient.player.control.$post({
+        body: {
+          userId,
+          MoveDirection: moveDirection.current,
+        },
+      });
+    }, MOVE_INTERVAL_TIME);
+    setMoveIntervalId((prev) => [...prev, moveInterbalId]);
+  };
+
+  const stopMove = () => {
+    moveDirection.current = { x: 0, y: 0 };
+    moveIntervalId.forEach((id) => clearInterval(id));
+    setMoveIntervalId([]);
+  };
+
   useEffect(() => {
-    const intervalId = setInterval(() => {
+    const userIdIntervalId = setInterval(() => {
       getUserId();
     }, 2000);
+
+    const playerStatusIntervalId = setInterval(() => {
+      fetchPlayerStatus();
+    }, 5000);
+
     return () => {
-      clearInterval(intervalId);
+      clearInterval(userIdIntervalId);
+      clearInterval(playerStatusIntervalId);
     };
-  }, [getUserId]);
-  setInterval(() => {
-    apiClient.bullet.control.$get();
-  }, 1000);
+  }, [getUserId, fetchPlayerStatus]);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setWindowsize({
+        width: window.innerWidth,
+        height: window.innerHeight,
+      });
+    };
+  }, []);
+  // setInterval(() => {
+  //   apiClient.bullet.control.$get();
+  // }, 1000);
 
   return (
     <div className={styles.controller}>
       <div className={styles.joystick}>
         <Joystick
-          size={Math.min(windowsize.width, windowsize.height) * 0.1}
-          baseColor="#000000"
-          stickColor="blue"
-          move={move}
+          size={Math.min(windowsize.width, windowsize.height) * 0.32}
+          baseColor="#eee"
+          stickColor="#d7d7d7"
+          start={startMove}
+          move={handelMove}
+          stop={stopMove}
         />
       </div>
-      <button className={styles.button} onClick={shootBullet}>
-        🚀
+      <div>
+        Score: {playerStatus?.score} <br />
+      </div>
+      <button
+        className={styles.button}
+        onTouchStart={startShoot}
+        onTouchEnd={stopShoot}
+        onTouchCancel={stopShoot}
+        onMouseDown={startShoot}
+        onMouseUp={stopShoot}
+        onMouseLeave={stopShoot}
+      >
+        <div>🚀</div>
       </button>
     </div>
   );

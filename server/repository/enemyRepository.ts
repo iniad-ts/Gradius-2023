@@ -31,7 +31,7 @@ export const enemyRepository = {
       },
       update: {
         score: enemy.score,
-        vector: enemy.vector,
+        pos: enemy.pos,
       },
       create: {
         enemyId: enemy.enemyId,
@@ -70,5 +70,9 @@ export const enemyRepository = {
         enemyId,
       },
     });
+  },
+  count: async () => {
+    const count = prismaClient.enemy.count();
+    return count;
   },
 };
