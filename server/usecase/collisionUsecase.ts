@@ -5,8 +5,8 @@ let intervalId: NodeJS.Timeout | null = null;
 export const collisionUsecase = {
   init: () => {
     intervalId = setInterval(() => {
-      collisionUsecase.checkCollisonPlayerAndEnemy();
-      collisionUsecase.checkCollisonBulletAndEnemy();
+      // collisionUsecase.checkCollisonPlayerAndEnemy();
+      // collisionUsecase.checkCollisonBulletAndEnemy();
     }, 500);
   },
   stop: () => {
