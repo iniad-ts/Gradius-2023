@@ -31,24 +31,6 @@ export const enemyUsecase = {
     await enemyRepository.save(enemyData);
     return enemyData;
   },
-
-  moveDirection: async () => {
-    const amplitude = 100; // サイン波の振幅
-    const frequency = 0.01; // サイン波の周波数
-
-    const enemies = await enemyRepository.findAll();
-    for (const enemy of enemies) {
-      // x座標は一定の速度で進む
-      const nextX = enemy.pos.x + enemy.vector.x;
-
-      // y座標はサイン関数に基づいて変動する
-      const nextY = enemy.pos.y + amplitude * Math.sin(frequency * nextX);
-
-      enemy.pos = { x: nextX, y: nextY };
-
-      await enemyRepository.save(enemy);
-    }
-  },
   findAll: async (): Promise<EnemyModel[]> => {
     const enemies = await enemyRepository.findAll();
     return enemies.length > 0 ? enemies : [];
