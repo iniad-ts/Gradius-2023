@@ -1,4 +1,5 @@
 import type { PlayerModel } from 'commonTypesWithClient/models';
+import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 import { apiClient } from 'src/utils/apiClient';
 import { loginWithLocalStorage } from 'src/utils/loginWithLocalStorage';
@@ -8,11 +9,13 @@ import Modal from './Modal';
 const LoginModal: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [username, setUsername] = useState<string>('');
+  const router = useRouter();
 
   const handleButtonClick = async () => {
     const player: PlayerModel = await apiClient.player.$post({ body: { name: username } });
     loginWithLocalStorage(player.userId);
     setIsModalOpen(false);
+    router.push('/controller');
   };
   const onChangeInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     setUsername(e.target.value);
@@ -20,7 +23,9 @@ const LoginModal: React.FC = () => {
 
   return (
     <div>
-      <button onClick={() => setIsModalOpen(true)}>モーダルを開く</button>
+      <button className={styles.button} onClick={() => setIsModalOpen(true)}>
+        Play Now!
+      </button>
       <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
         <div className={styles.ModalContent}>
           <h2>Gradius</h2>

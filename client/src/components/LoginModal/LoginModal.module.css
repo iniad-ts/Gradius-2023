@@ -32,3 +32,11 @@
   margin: 10px;
   font-weight: bold;
 }
+.button {
+  font-size: 20px;
+  padding: 10px 20px;
+  background-color: #2eeaff;
+  color: white;
+  cursor: pointer;
+  border-radius: 20px;
+}

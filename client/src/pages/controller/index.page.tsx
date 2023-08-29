@@ -1,9 +1,9 @@
 import type { UserId } from 'commonTypesWithClient/branded';
 import type { PlayerModel } from 'commonTypesWithClient/models';
+import { useRouter } from 'next/router';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { Joystick } from 'react-joystick-component';
 import type { IJoystickUpdateEvent } from 'react-joystick-component/build/lib/Joystick';
-import { Loading } from 'src/components/Loading/Loading';
 import { apiClient } from 'src/utils/apiClient';
 import { getUserIdFromLocalStorage } from 'src/utils/loginWithLocalStorage';
 import styles from './index.module.css';
@@ -19,6 +19,7 @@ const Home = () => {
     height: window.innerHeight,
   });
   const [userId, setUserId] = useState<UserId>('' as UserId);
+  const router = useRouter();
   const [playerStatus, setPlayerStatus] = useState<PlayerModel>();
 
   const [moveIntervalId, setMoveIntervalId] = useState<NodeJS.Timeout[]>([]);
@@ -31,9 +32,12 @@ const Home = () => {
 
   const getUserId = useCallback(async () => {
     const localStorageUserId = getUserIdFromLocalStorage();
-    if (localStorageUserId === null) return;
+    if (localStorageUserId === null) {
+      alert('ログインがまだ行われておりません');
+      return router.push('/login');
+    }
     setUserId(localStorageUserId);
-  }, []);
+  }, [router]);
 
   const fetchPlayerStatus = useCallback(async () => {
     const res = await apiClient.player.control.$get({ query: { userId } });
@@ -103,11 +107,10 @@ const Home = () => {
         height: window.innerHeight,
       });
     };
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
   }, []);
-
-  if (userId === '') return <Loading visible />;
+  // setInterval(() => {
+  //   apiClient.bullet.control.$get();
+  // }, 1000);
 
   return (
     <div className={styles.controller}>
