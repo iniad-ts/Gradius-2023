@@ -7,9 +7,9 @@ let intervalId: NodeJS.Timeout | null = null;
 export const enemyUsecase = {
   init: () => {
     intervalId = setInterval(() => {
-      // enemyUsecase.create();
-      // enemyUsecase.update();
-    }, 75);
+      enemyUsecase.create();
+      enemyUsecase.update();
+    }, 500);
   },
   stop: () => {
     if (intervalId) {

@@ -2,6 +2,7 @@ import { init } from '$/service/app';
 import { PORT } from '$/service/envValues';
 import { prismaClient } from '$/service/prismaClient';
 import { bulletUsecase } from '$/usecase/bulletUsecase';
+import { collisionUsecase } from '$/usecase/collisionUsecase';
 import { enemyUsecase } from '$/usecase/enemyUsecase';
 import { exec } from 'child_process';
 import type { FastifyInstance } from 'fastify';
@@ -26,6 +27,7 @@ afterEach(async (info) => {
   if (unneededServer(info.meta.file)) return;
 
   await prismaClient.$disconnect();
+  collisionUsecase.stop();
   enemyUsecase.stop();
   bulletUsecase.stop();
   await server.close();
