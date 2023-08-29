@@ -1,0 +1,24 @@
+.controller {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  padding: 5vmin;
+}
+
+.joystick,
+.button {
+  width: 10vmin; /* 幅と高さを同じ値に設定 */
+  height: 10vmin; /* 幅と高さを同じ値に設定 */
+  margin: 10vmin;
+}
+
+.button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #ddd;
+  border: 5px solid #bbb;
+  border-radius: 50%;
+  transition: transform 0.2s ease-in-out;
+}
