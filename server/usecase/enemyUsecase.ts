@@ -7,9 +7,9 @@ let intervalId: NodeJS.Timeout | null = null;
 export const enemyUsecase = {
   init: () => {
     intervalId = setInterval(() => {
-      enemyUsecase.create();
-      enemyUsecase.update();
-    }, 500);
+      // enemyUsecase.create();
+      // enemyUsecase.update();
+    }, 75);
   },
   stop: () => {
     if (intervalId) {
@@ -17,14 +17,14 @@ export const enemyUsecase = {
       intervalId = null;
     }
   },
-  create: async (): Promise<EnemyModel | null | undefined> => {
+  create: async (): Promise<EnemyModel | null> => {
     const count = await enemyRepository.count();
-    if (count > 3) return;
+    if (count > 3) return null;
     const enemyData: EnemyModel = {
       enemyId: enemyIdParser.parse(randomUUID()),
       pos: { x: 1000, y: Math.floor(Math.random() * 800) },
       score: 100,
-      vector: { x: 25, y: 5 },
+      vector: { x: -2, y: 0 },
       type: 0,
     };
     await enemyRepository.save(enemyData);
@@ -40,8 +40,8 @@ export const enemyUsecase = {
     const updateEnemyInfo: EnemyModel = {
       ...currentEnemyInfo,
       pos: {
-        x: currentEnemyInfo.pos.x - currentEnemyInfo.vector.x,
-        y: currentEnemyInfo.pos.y,
+        x: currentEnemyInfo.pos.x + currentEnemyInfo.vector.x,
+        y: currentEnemyInfo.pos.y + currentEnemyInfo.vector.y,
       },
     };
     await enemyRepository.save(updateEnemyInfo);
