@@ -33,7 +33,6 @@ export const enemyRepository = {
         score: enemy.score,
         pos: enemy.pos,
         vector: enemy.vector,
-        type: enemy.type,
       },
       create: {
         enemyId: enemy.enemyId,
