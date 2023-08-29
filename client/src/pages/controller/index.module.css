@@ -9,7 +9,7 @@
 
 .joystick > div {
   box-shadow: 0 0 2vmin 0 #9994, inset 0 0 0 1vmin #fff;
-  border: 0.4vmin solid #bbb;
+  border: 0.2vmin solid #bbb;
   box-sizing: content-box;
 }
 
