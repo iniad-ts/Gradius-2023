@@ -7,12 +7,12 @@ import type { BulletModel } from '../commonTypesWithClient/models';
 
 let intervalId: NodeJS.Timeout | null = null;
 export const bulletUsecase = {
-  init() {
+  init: () => {
     intervalId = setInterval(() => {
       bulletUsecase.update();
     }, 75);
   },
-  stop() {
+  stop: () => {
     if (intervalId) {
       clearInterval(intervalId);
       intervalId = null;
