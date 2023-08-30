@@ -1,5 +1,5 @@
 import { expect, test } from 'vitest';
-import { apiClient, testUser } from './apiClient';
+import { apiAfterEach, apiBeforeEach, apiClient, testUser } from './apiClient';
 
 test('API接続確認', async () => {
   const res = await apiClient.health.$get();
@@ -9,7 +9,9 @@ test('API接続確認', async () => {
 });
 
 test('認証確認', async () => {
+  await apiBeforeEach();
   const res = await apiClient.me.$get();
 
   expect(res.email).toBe(testUser.email);
+  await apiAfterEach();
 });
