@@ -8,7 +8,6 @@ import { exec } from 'child_process';
 import type { FastifyInstance } from 'fastify';
 import util from 'util';
 import { afterEach, beforeEach } from 'vitest';
-
 let server: FastifyInstance;
 
 const unneededServer = (file: { filepath?: string } | undefined) =>

@@ -27,7 +27,7 @@ const LoginModal: React.FC = () => {
         Play Now!
       </button>
       <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
-        <div className={styles.ModalContent}>
+        <div className={styles.modalContent}>
           <h2>Gradius</h2>
           <label>ユーザー名:</label>
           <input type="text" placeholder="ユーザー名を入力してください" onChange={onChangeInput} />
