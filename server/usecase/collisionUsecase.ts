@@ -2,11 +2,11 @@ import { bulletRepository } from '$/repository/bulletRepository';
 import { enemyRepository } from '$/repository/enemyRepository';
 import { playerRepository } from '$/repository/playerRepository';
 let intervalId: NodeJS.Timeout | null = null;
-export const collisionUsecase = {
+export const collisionUseCase = {
   init: () => {
     intervalId = setInterval(() => {
-      // collisionUsecase.checkCollisonPlayerAndEnemy();
-      // collisionUsecase.checkCollisonBulletAndEnemy();
+      collisionUseCase.checkCollisionPlayerAndEnemy();
+      collisionUseCase.checkCollisionBulletAndEnemy();
     }, 500);
   },
   stop: () => {

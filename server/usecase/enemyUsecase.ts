@@ -4,12 +4,12 @@ import { enemyIdParser } from '$/service/idParsers';
 import { randomUUID } from 'crypto';
 
 let intervalId: NodeJS.Timeout | null = null;
-export const enemyUsecase = {
+export const enemyUseCase = {
   init: () => {
     intervalId = setInterval(() => {
-      // enemyUsecase.create();
-      // enemyUsecase.update();
-    }, 500);
+      enemyUseCase.create();
+      enemyUseCase.update();
+    }, 50);
   },
   stop: () => {
     if (intervalId) {
