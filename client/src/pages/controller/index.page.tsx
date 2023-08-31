@@ -1,6 +1,7 @@
 import type { UserId } from 'commonTypesWithClient/branded';
 import type { PlayerModel } from 'commonTypesWithClient/models';
 import { useRouter } from 'next/router';
+import type { MouseEvent, TouchEvent } from 'react';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { Joystick } from 'react-joystick-component';
 import type { IJoystickUpdateEvent } from 'react-joystick-component/build/lib/Joystick';
@@ -45,7 +46,11 @@ const Home = () => {
     setPlayerStatus(res);
   }, [userId]);
 
-  const startShoot = async () => {
+  const startShoot = async (e: TouchEvent<HTMLButtonElement> | MouseEvent<HTMLButtonElement>) => {
+    const target = e.target as HTMLElement;
+    const button = target.tagName === 'BUTTON' ? target : target.parentElement;
+    button?.classList.add(styles.buttonActive);
+
     const shootInterbalId = setInterval(async () => {
       await apiClient.bullet.$post({
         body: {
@@ -56,10 +61,15 @@ const Home = () => {
     setShootIntervalId((prev) => [...prev, shootInterbalId]);
   };
 
-  const stopShoot = () => {
+  const stopShoot = (e: TouchEvent<HTMLButtonElement> | MouseEvent<HTMLButtonElement>) => {
+    const target = e.target as HTMLElement;
+    const button = target.tagName === 'BUTTON' ? target : target.parentElement;
+    button?.classList.remove(styles.buttonActive);
+
     shootIntervalId.forEach((id) => clearInterval(id));
     setShootIntervalId([]);
   };
+
   const handelMove = (e: IJoystickUpdateEvent) => {
     moveDirection.current = {
       x: Math.round(e.x ?? 0) as -1 | 0 | 1,

@@ -9,7 +9,7 @@
 
 .joystick > div {
   box-sizing: content-box;
-  border: 0.4vmin solid #bbb;
+  border: 0.2vmin solid #bbb;
   box-shadow: 0 0 2vmin 0 #9994, inset 0 0 0 1vmin #fff;
 }
 
@@ -38,7 +38,7 @@
   transition: transform 0.1s ease;
 }
 
-.button:hover:active {
+.buttonActive {
   transform: scale(0.9);
 }
 
@@ -67,11 +67,11 @@
   transform-origin: left 50%;
 }
 
-.button:hover:active::before {
+.buttonActive::before {
   animation: progress-left 0.8s linear infinite;
 }
 
-.button:hover:active::after {
+.buttonActive::after {
   animation: progress-right 0.8s linear infinite;
 }
 
