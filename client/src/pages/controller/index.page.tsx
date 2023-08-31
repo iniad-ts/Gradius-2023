@@ -123,6 +123,33 @@ const Home = () => {
       window.removeEventListener('resize', handleResize);
     };
   }, []);
+
+  useEffect(() => {
+    document.body.addEventListener(
+      'touchstart',
+      (e) => {
+        e.preventDefault();
+      },
+      { passive: false }
+    );
+    document.body.addEventListener(
+      'touchmove',
+      (e) => {
+        e.preventDefault();
+      },
+      { passive: false }
+    );
+
+    return () => {
+      document.body.removeEventListener('touchstart', (e) => {
+        e.preventDefault();
+      });
+      document.body.removeEventListener('touchmove', (e) => {
+        e.preventDefault();
+      });
+    };
+  }, []);
+
   // setInterval(() => {
   //   apiClient.bullet.control.$get();
   // }, 1000);
