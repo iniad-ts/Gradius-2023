@@ -10,7 +10,7 @@ export const bulletUsecase = {
   init: () => {
     intervalId = setInterval(() => {
       bulletUsecase.update();
-    }, 75);
+    }, 25);
   },
   stop: () => {
     if (intervalId) {
