@@ -51,14 +51,14 @@ const Home = () => {
     const button = target.tagName === 'BUTTON' ? target : target.parentElement;
     button?.classList.add(styles.buttonActive);
 
-    const shootInterbalId = setInterval(async () => {
+    const shootIntervalId = setInterval(async () => {
       await apiClient.bullet.$post({
         body: {
           userId,
         },
       });
     }, SHOOT_INTERVAL_TIME);
-    setShootIntervalId((prev) => [...prev, shootInterbalId]);
+    setShootIntervalId((prev) => [...prev, shootIntervalId]);
   };
 
   const stopShoot = (e: TouchEvent<HTMLButtonElement> | MouseEvent<HTMLButtonElement>) => {
@@ -78,7 +78,7 @@ const Home = () => {
   };
 
   const startMove = () => {
-    const moveInterbalId = setInterval(async () => {
+    const moveIntervalId = setInterval(async () => {
       await apiClient.player.control.$post({
         body: {
           userId,
@@ -86,7 +86,7 @@ const Home = () => {
         },
       });
     }, MOVE_INTERVAL_TIME);
-    setMoveIntervalId((prev) => [...prev, moveInterbalId]);
+    setMoveIntervalId((prev) => [...prev, moveIntervalId]);
   };
 
   const stopMove = () => {

@@ -16,7 +16,7 @@ export const collisionUsecase = {
     }
   },
   //playerとenemyのあたり判定
-  checkCollisonPlayerAndEnemy: async () => {
+  checkCollisionPlayerAndEnemy: async () => {
     const currentPlayerInfo = await playerRepository.findAll();
     const currentEnemyInfo = await enemyRepository.findAll();
     currentPlayerInfo.forEach((player) => {
@@ -31,7 +31,7 @@ export const collisionUsecase = {
     });
   },
   //bulletとenemyのあたり判定
-  checkCollisonBulletAndEnemy: async () => {
+  checkCollisionBulletAndEnemy: async () => {
     const currentBulletInfo = await bulletRepository.findAll();
     const currentEnemyInfo = await enemyRepository.findAll();
     currentBulletInfo.forEach((bullet) => {
