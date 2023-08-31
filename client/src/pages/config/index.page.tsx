@@ -48,7 +48,7 @@ const Config = () => {
 
   useEffect(() => {
     fetchConfig();
-  });
+  }, []);
 
   return (
     <div className={styles.container}>
