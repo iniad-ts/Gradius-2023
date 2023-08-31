@@ -14,6 +14,11 @@ model Task {
   createdAt DateTime
 }
 
+model Game {
+  id            String @id
+  displayNumber Int
+}
+
 model Player {
   userId String @id
   name   String
