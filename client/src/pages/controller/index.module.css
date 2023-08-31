@@ -26,10 +26,10 @@
   align-self: center;
   justify-content: center;
   justify-self: center;
-  height: 32vmin;
+  height: 50svmin;
   aspect-ratio: 1;
   overflow: hidden;
-  font-size: 8vmin;
+  font-size: 16svmin;
   background-color: #fff;
   border: 0;
   border: 0.2vmin solid #bbb;

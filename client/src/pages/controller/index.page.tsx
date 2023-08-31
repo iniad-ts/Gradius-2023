@@ -158,7 +158,7 @@ const Home = () => {
     <div className={styles.controller}>
       <div className={styles.joystick}>
         <Joystick
-          size={Math.min(windowsize.width, windowsize.height) * 0.32}
+          size={Math.min(windowsize.width, windowsize.height) * 0.5}
           baseColor="#eee"
           stickColor="#d7d7d7"
           start={startMove}
