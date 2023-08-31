@@ -2,7 +2,7 @@ import type { UserId } from 'commonTypesWithClient/branded';
 import type { PlayerModel } from 'commonTypesWithClient/models';
 import { useRouter } from 'next/router';
 import type { MouseEvent, TouchEvent } from 'react';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Joystick } from 'react-joystick-component';
 import type { IJoystickUpdateEvent } from 'react-joystick-component/build/lib/Joystick';
 import { apiClient } from 'src/utils/apiClient';
@@ -10,8 +10,8 @@ import { getUserIdFromLocalStorage } from 'src/utils/loginWithLocalStorage';
 import styles from './index.module.css';
 
 type MoveTo = {
-  x: -1 | 0 | 1;
-  y: -1 | 0 | 1;
+  x: number;
+  y: number;
 };
 
 const Home = () => {
@@ -72,8 +72,8 @@ const Home = () => {
 
   const handelMove = (e: IJoystickUpdateEvent) => {
     moveDirection.current = {
-      x: Math.round(e.x ?? 0) as -1 | 0 | 1,
-      y: Math.round((e.y ?? 0) * -1) as -1 | 0 | 1,
+      x: e.x ?? 0,
+      y: (e.y ?? 0) * -1,
     };
   };
 
@@ -94,6 +94,15 @@ const Home = () => {
     moveIntervalId.forEach((id) => clearInterval(id));
     setMoveIntervalId([]);
   };
+
+  const joystickSize = useMemo(() => {
+    const aspectRatio = windowsize.width / windowsize.height;
+    if (aspectRatio > 3 / 4) {
+      return Math.min(windowsize.height, windowsize.width) * 0.5;
+    } else {
+      return windowsize.width * 0.5 * 0.64;
+    }
+  }, [windowsize]);
 
   useEffect(() => {
     const userIdIntervalId = setInterval(() => {
@@ -158,7 +167,7 @@ const Home = () => {
     <div className={styles.controller}>
       <div className={styles.joystick}>
         <Joystick
-          size={Math.min(windowsize.width, windowsize.height) * 0.5}
+          size={joystickSize}
           baseColor="#eee"
           stickColor="#d7d7d7"
           start={startMove}
