@@ -16,13 +16,13 @@ const Config = () => {
     const res = await apiClient.config.$get();
     if (res === null) return;
 
-    setValue(res.display);
+    setValue(res);
   };
 
   const saveConfig = async () => {
     await apiClient.config.$post({
       body: {
-        display: value,
+        displayNumber: value,
       },
     });
   };
