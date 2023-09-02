@@ -25,7 +25,7 @@ const Game = () => {
     const killedEnemies = enemies.filter((enemy) => !res.some((e) => e.enemyId === enemy.enemyId));
     if (killedEnemies.length > 0) {
       killedEnemies.forEach((enemy) => {
-        setEffectPosition((prev) => [...prev, [enemy.pos.x, enemy.pos.y]]);
+        setEffectPosition((prev) => [...prev, [enemy.pos.x - 40, enemy.pos.y - 40]]);
       });
     }
     setEnemies(res);
@@ -75,8 +75,8 @@ const Game = () => {
               width={100}
               height={100}
               rotation={player.side === 'left' ? 90 : -90}
-              x={player.pos.x}
-              y={player.pos.y}
+              x={player.pos.x - 50}
+              y={player.pos.y - 50}
               key={player.userId}
             />
           ))}
@@ -87,8 +87,8 @@ const Game = () => {
               image={enemyImage1}
               width={80}
               height={80}
-              x={enemy.pos.x}
-              y={enemy.pos.y}
+              x={enemy.pos.x - 40}
+              y={enemy.pos.y - 40}
               key={enemy.enemyId}
             />
           ))}
