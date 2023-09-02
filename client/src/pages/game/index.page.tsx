@@ -1,3 +1,4 @@
+import { BULLET_RADIUS, SCREEN_HEIGHT, SCREEN_WIDTH } from 'commonConstantsWithClient';
 import type { BulletModel, EnemyModel, PlayerModel } from 'commonTypesWithClient/models';
 import { useEffect, useState } from 'react';
 import { Circle, Image, Layer, Stage } from 'react-konva';
@@ -57,10 +58,16 @@ const Game = () => {
 
   return (
     <div>
-      <Stage width={1920} height={1080}>
+      <Stage width={SCREEN_WIDTH} height={SCREEN_HEIGHT}>
         <Layer>
           {bullets.map((bullet) => (
-            <Circle x={bullet.pos.x} y={bullet.pos.y} radius={7} fill="red" key={bullet.bulletId} />
+            <Circle
+              x={bullet.pos.x}
+              y={bullet.pos.y}
+              radius={BULLET_RADIUS}
+              fill="red"
+              key={bullet.bulletId}
+            />
           ))}
           {effectPositon.map((position, index) => (
             <Boom position={position} key={index} />
