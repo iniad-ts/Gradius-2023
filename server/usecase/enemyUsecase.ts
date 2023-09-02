@@ -9,7 +9,7 @@ export const enemyUseCase = {
     intervalId = setInterval(() => {
       enemyUseCase.create();
       enemyUseCase.update();
-    }, 50);
+    }, 100);
   },
   stop: () => {
     if (intervalId) {

@@ -3,6 +3,7 @@ import { bulletRepository } from '$/repository/bulletRepository';
 import { enemyRepository } from '$/repository/enemyRepository';
 import { gameRepository } from '$/repository/gameRepository';
 import { playerRepository } from '$/repository/playerRepository';
+import { playerUseCase } from './playerUsecase';
 
 type EntityModel = PlayerModel | EnemyModel | BulletModel;
 
@@ -13,17 +14,29 @@ const divide = async (entities: EntityModel[], displayNumber: number) => {
     return entities.filter((entity) => Math.floor(entity.pos.x / 1920) === i);
   });
 
-  const dividedEntitiesByQuad = dividedEntitiesByDisplay.flatMap((entities) => {
-    return [
-      entities.filter((entity) => Math.round(entity.pos.y / 1080) === 0),
-      entities.filter((entity) => Math.round(entity.pos.y / 1080) === 1),
-    ].flatMap((entities) => {
+  const dividedEntitiesByQuad = dividedEntitiesByDisplay
+    .flatMap((entities) => {
       return [
-        entities.filter((entity) => Math.round((entity.pos.x % 1920) / 1920) === 0),
-        entities.filter((entity) => Math.round((entity.pos.x % 1920) / 1920) === 1),
-      ];
+        entities.filter((entity) => Math.round(entity.pos.y / 1080 - 0.1) === 0),
+        entities.filter((entity) => Math.round(entity.pos.y / 1080 + 0.1) === 1),
+      ].flatMap((entities) => {
+        return [
+          entities.filter((entity) => Math.round((entity.pos.x % 1920) / 1920 - 0.1) === 0),
+          entities.filter((entity) => Math.round((entity.pos.x % 1920) / 1920 + 0.1) === 1),
+        ];
+      });
+    })
+    .flatMap((entities) => {
+      return [
+        entities.filter((entity) => Math.round((entity.pos.y % 540) / 540 - 0.1) === 0),
+        entities.filter((entity) => Math.round((entity.pos.y % 540) / 540 + 0.1) === 1),
+      ].flatMap((entities) => {
+        return [
+          entities.filter((entity) => Math.round((entity.pos.x % 960) / 960 - 0.1) === 0),
+          entities.filter((entity) => Math.round((entity.pos.x % 960) / 960 + 0.1) === 1),
+        ];
+      });
     });
-  });
 
   return dividedEntitiesByQuad;
 };
@@ -69,22 +82,39 @@ const checkCollisions = async () => {
   const collisions = dividedEntities.flatMap((entities) => {
     return entities.flatMap((entity1) => {
       return entities
-        .filter((entity2) => entity1 !== entity2)
-        .filter((entity2) => isCollision(entity1, entity2))
+        .filter((entity2) => {
+          const terms = [
+            !(entityType(entity1) === 'enemy' && entityType(entity2) === 'enemy'),
+            (entity1 as PlayerModel | BulletModel).side !==
+              (entity2 as PlayerModel | BulletModel).side,
+            isCollision(entity1, entity2),
+          ];
+          return terms.every(Boolean);
+        })
         .flatMap((entity2) => [entity1, entity2]);
     });
   });
 
   const setCollisions = collisions.filter((entity, i, self) => self.indexOf(entity) === i);
 
-  // await Promise.all(setCollisions.map((entity) => deleteEntity(entity)));
+  await Promise.all(
+    setCollisions.map((entity) => {
+      if ('userId' in entity) {
+        return playerUseCase.addScore(entity.userId, -100);
+      } else if ('enemyId' in entity) {
+        return enemyRepository.delete(entity.enemyId);
+      } else {
+        return bulletRepository.delete(entity.bulletId);
+      }
+    })
+  );
 };
 
 export const collisionUseCase = {
   init: () => {
     intervalId = setInterval(async () => {
       checkCollisions();
-    }, 1000);
+    }, 50);
   },
   stop: () => {
     if (intervalId) {
