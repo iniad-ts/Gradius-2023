@@ -88,9 +88,6 @@ const Game = () => {
           {bullets.map((bullet) => (
             <Circle x={bullet.pos.x} y={bullet.pos.y} radius={7} fill="red" key={bullet.bulletId} />
           ))}
-          {effectPosition.map((position, index) => (
-            <Boom position={position} key={index} />
-          ))}
         </Layer>
         <Layer>
           {players.map((player) => (
@@ -99,7 +96,7 @@ const Game = () => {
               width={100}
               height={100}
               rotation={player.side === 'left' ? 90 : -90}
-              x={player.pos.x - 50}
+              x={player.pos.x + 50}
               y={player.pos.y - 50}
               key={player.userId}
             />
@@ -115,6 +112,11 @@ const Game = () => {
               y={enemy.pos.y - 40}
               key={enemy.enemyId}
             />
+          ))}
+        </Layer>
+        <Layer>
+          {effectPosition.map((position, index) => (
+            <Boom position={position} key={index} />
           ))}
         </Layer>
       </Stage>
