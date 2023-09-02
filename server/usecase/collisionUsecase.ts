@@ -2,11 +2,11 @@ import { bulletRepository } from '$/repository/bulletRepository';
 import { enemyRepository } from '$/repository/enemyRepository';
 import { playerRepository } from '$/repository/playerRepository';
 let intervalId: NodeJS.Timeout | null = null;
-export const collisionUsecase = {
+export const collisionUseCase = {
   init: () => {
     intervalId = setInterval(() => {
-      // collisionUsecase.checkCollisonPlayerAndEnemy();
-      // collisionUsecase.checkCollisonBulletAndEnemy();
+      collisionUseCase.checkCollisionPlayerAndEnemy();
+      collisionUseCase.checkCollisionBulletAndEnemy();
     }, 500);
   },
   stop: () => {
@@ -16,7 +16,7 @@ export const collisionUsecase = {
     }
   },
   //playerとenemyのあたり判定
-  checkCollisonPlayerAndEnemy: async () => {
+  checkCollisionPlayerAndEnemy: async () => {
     const currentPlayerInfo = await playerRepository.findAll();
     const currentEnemyInfo = await enemyRepository.findAll();
     currentPlayerInfo.forEach((player) => {
@@ -31,7 +31,7 @@ export const collisionUsecase = {
     });
   },
   //bulletとenemyのあたり判定
-  checkCollisonBulletAndEnemy: async () => {
+  checkCollisionBulletAndEnemy: async () => {
     const currentBulletInfo = await bulletRepository.findAll();
     const currentEnemyInfo = await enemyRepository.findAll();
     currentBulletInfo.forEach((bullet) => {

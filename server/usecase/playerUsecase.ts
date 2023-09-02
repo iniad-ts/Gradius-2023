@@ -8,12 +8,12 @@ import { userIdParser } from '../service/idParsers';
 
 export type MoveDirection = { x: number; y: number };
 
-//movedirectionの値をzodでバリデーションする
+//moveDirectionの値をzodでバリデーションする
 const MoveDirectionSchema = z.object({
   x: z.number().min(-1).max(1),
   y: z.number().min(-1).max(1),
 });
-export const playerUsecase = {
+export const playerUseCase = {
   create: async (name: string): Promise<PlayerModel> => {
     //playerの初期ステータス(デバッグ用)
     const playerData: PlayerModel = {
