@@ -11,7 +11,7 @@ let intervalId: NodeJS.Timeout | null = null;
 
 const divide = async (entities: EntityModel[], displayNumber: number) => {
   const dividedEntitiesByDisplay = [...Array(displayNumber)].map((_, i) => {
-    return entities.filter((entity) => Math.abs(Math.floor(entity.pos.x / 1920) - i) < 0.1);
+    return entities.filter((entity) => Math.floor(entity.pos.x / 1920) === i);
   });
 
   const dividedEntitiesByQuad = dividedEntitiesByDisplay
