@@ -1,49 +1,95 @@
+import type { BulletModel, EnemyModel, PlayerModel } from '$/commonTypesWithClient/models';
 import { bulletRepository } from '$/repository/bulletRepository';
 import { enemyRepository } from '$/repository/enemyRepository';
+import { gameRepository } from '$/repository/gameRepository';
 import { playerRepository } from '$/repository/playerRepository';
+
+type EntityModel = PlayerModel | EnemyModel | BulletModel;
+
 let intervalId: NodeJS.Timeout | null = null;
+
+const divide = async (entities: EntityModel[], displayNumber: number) => {
+  const dividedEntitiesByDisplay = [...Array(displayNumber)].map((_, i) => {
+    return entities.filter((entity) => Math.floor(entity.pos.x / 1920) === i);
+  });
+
+  const dividedEntitiesByQuad = dividedEntitiesByDisplay.flatMap((entities) => {
+    return [
+      entities.filter((entity) => Math.round(entity.pos.y / 1080) === 0),
+      entities.filter((entity) => Math.round(entity.pos.y / 1080) === 1),
+    ].flatMap((entities) => {
+      return [
+        entities.filter((entity) => Math.round((entity.pos.x % 1920) / 1920) === 0),
+        entities.filter((entity) => Math.round((entity.pos.x % 1920) / 1920) === 1),
+      ];
+    });
+  });
+
+  return dividedEntitiesByQuad;
+};
+
+const entityType = (entity: EntityModel) => {
+  if ('userId' in entity) {
+    return 'player';
+  } else if ('enemyId' in entity) {
+    return 'enemy';
+  } else {
+    return 'bullet';
+  }
+};
+
+const isCollision = (target1: EntityModel, target2: EntityModel) => {
+  const entityRadius = {
+    player: 50,
+    enemy: 40,
+    bullet: 7,
+  };
+
+  const targetType1 = entityType(target1);
+  const targetType2 = entityType(target2);
+
+  const distanceSquared =
+    (target1.pos.x - target2.pos.x) ** 2 + (target1.pos.y - target2.pos.y) ** 2;
+  const collisionDistanceSquared = (entityRadius[targetType1] + entityRadius[targetType2]) ** 2;
+
+  return distanceSquared < collisionDistanceSquared;
+};
+
+const checkCollisions = async () => {
+  const entities = await Promise.all([
+    playerRepository.findAll(),
+    enemyRepository.findAll(),
+    bulletRepository.findAll(),
+  ]).then(([players, enemies, bullets]) => [...players, ...enemies, ...bullets]);
+
+  const displayNumber = await gameRepository.find().then((games) => games?.displayNumber ?? 1);
+
+  const dividedEntities = await divide(entities, displayNumber);
+
+  const collisions = dividedEntities.flatMap((entities) => {
+    return entities.flatMap((entity1) => {
+      return entities
+        .filter((entity2) => entity1 !== entity2)
+        .filter((entity2) => isCollision(entity1, entity2))
+        .flatMap((entity2) => [entity1, entity2]);
+    });
+  });
+
+  const setCollisions = collisions.filter((entity, i, self) => self.indexOf(entity) === i);
+
+  // await Promise.all(setCollisions.map((entity) => deleteEntity(entity)));
+};
+
 export const collisionUseCase = {
   init: () => {
-    intervalId = setInterval(() => {
-      collisionUseCase.checkCollisionPlayerAndEnemy();
-      collisionUseCase.checkCollisionBulletAndEnemy();
-    }, 500);
+    intervalId = setInterval(async () => {
+      checkCollisions();
+    }, 1000);
   },
   stop: () => {
     if (intervalId) {
       clearInterval(intervalId);
       intervalId = null;
     }
-  },
-  //playerとenemyのあたり判定
-  checkCollisionPlayerAndEnemy: async () => {
-    const currentPlayerInfo = await playerRepository.findAll();
-    const currentEnemyInfo = await enemyRepository.findAll();
-    currentPlayerInfo.forEach((player) => {
-      currentEnemyInfo.forEach((enemy) => {
-        const distanceSquared =
-          (player.pos.x - enemy.pos.x) ** 2 + (player.pos.y - enemy.pos.y) ** 2;
-        if (distanceSquared < 10000) {
-          console.log('bbbb');
-          enemyRepository.delete(enemy.enemyId);
-        }
-      });
-    });
-  },
-  //bulletとenemyのあたり判定
-  checkCollisionBulletAndEnemy: async () => {
-    const currentBulletInfo = await bulletRepository.findAll();
-    const currentEnemyInfo = await enemyRepository.findAll();
-    currentBulletInfo.forEach((bullet) => {
-      currentEnemyInfo.forEach((enemy) => {
-        const distanceSquared =
-          (bullet.pos.x - enemy.pos.x) ** 2 + (bullet.pos.y - enemy.pos.y) ** 2;
-        if (distanceSquared < 5000) {
-          console.log('bbbb');
-          enemyRepository.delete(enemy.enemyId);
-          bulletRepository.delete(bullet.bulletId);
-        }
-      });
-    });
   },
 };
