@@ -11,7 +11,7 @@ const Game = () => {
   const [enemies, setEnemies] = useState<EnemyModel[]>([]);
   const [bullets, setBullets] = useState<BulletModel[]>([]);
   //TODO: もし、これ以外のエフェクトを追加する場合は、それぞれのエフェクトを区別する型を作成する
-  const [effectPositon, setEffectPosition] = useState<number[][]>([]);
+  const [effectPosition, setEffectPosition] = useState<number[][]>([]);
   const [playerImage] = useImage(staticPath.images.spaceship_png);
   const [enemyImage1] = useImage(staticPath.images.ufo_jpg);
 
@@ -53,7 +53,7 @@ const Game = () => {
     setTimeout(() => {
       setEffectPosition((prev) => prev.slice(1));
     }, 1000);
-  }, [effectPositon]);
+  }, [effectPosition]);
 
   return (
     <div>
@@ -62,7 +62,7 @@ const Game = () => {
           {bullets.map((bullet) => (
             <Circle x={bullet.pos.x} y={bullet.pos.y} radius={7} fill="red" key={bullet.bulletId} />
           ))}
-          {effectPositon.map((position, index) => (
+          {effectPosition.map((position, index) => (
             <Boom position={position} key={index} />
           ))}
         </Layer>
