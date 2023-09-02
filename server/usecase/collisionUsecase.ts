@@ -11,7 +11,7 @@ let intervalId: NodeJS.Timeout | null = null;
 
 const divide = async (entities: EntityModel[], displayNumber: number) => {
   const dividedEntitiesByDisplay = [...Array(displayNumber)].map((_, i) => {
-    return entities.filter((entity) => Math.floor(entity.pos.x / 1920) === i);
+    return entities.filter((entity) => Math.abs(Math.floor(entity.pos.x / 1920) - i) < 0.1);
   });
 
   const dividedEntitiesByQuad = dividedEntitiesByDisplay
@@ -95,10 +95,8 @@ const checkCollisions = async () => {
     });
   });
 
-  const setCollisions = collisions.filter((entity, i, self) => self.indexOf(entity) === i);
-
   await Promise.all(
-    setCollisions.map((entity) => {
+    collisions.map((entity) => {
       if ('userId' in entity) {
         return playerUseCase.addScore(entity.userId, -100);
       } else if ('enemyId' in entity) {

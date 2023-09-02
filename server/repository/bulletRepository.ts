@@ -65,16 +65,12 @@ export const bulletRepository = {
     return bullets.map(toBulletModel);
   },
   delete: async (bulletId: BulletId) => {
-    const bullet = await prismaClient.bullet.findUnique({
-      where: {
-        bulletId,
-      },
-    });
-    if (bullet === null) return;
-    await prismaClient.bullet.delete({
-      where: {
-        bulletId,
-      },
-    });
+    try {
+      await prismaClient.bullet.delete({
+        where: { bulletId },
+      });
+    } catch (e) {
+      console.error(e);
+    }
   },
 };
