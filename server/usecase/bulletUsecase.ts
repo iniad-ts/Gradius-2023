@@ -46,11 +46,12 @@ export const bulletUseCase = {
     await bulletRepository.save(updateBulletInfo);
     return updateBulletInfo;
   },
-  delete: async (bulletModel: BulletModel): Promise<BulletModel | null> => {
-    const currentBulletInfo = await bulletRepository.find(bulletModel.bulletId);
-    if (currentBulletInfo === null) return null;
-    await bulletRepository.delete(bulletModel.bulletId);
-    return currentBulletInfo;
+  delete: async (bulletModel: BulletModel) => {
+    try {
+      await bulletRepository.delete(bulletModel.bulletId);
+    } catch (e) {
+      console.error(e);
+    }
   },
   update: async () => {
     const currentBulletList = await bulletRepository.findAll();
