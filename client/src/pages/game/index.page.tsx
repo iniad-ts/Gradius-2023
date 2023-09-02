@@ -50,9 +50,11 @@ const Game = () => {
   });
 
   useEffect(() => {
-    setTimeout(() => {
+    const timeoutId = setTimeout(() => {
       setEffectPosition((prev) => prev.slice(1));
     }, 1000);
+
+    return () => clearTimeout(timeoutId);
   }, [effectPosition]);
 
   return (
