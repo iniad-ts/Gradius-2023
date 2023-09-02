@@ -11,7 +11,7 @@ const Game = () => {
   const [enemies, setEnemies] = useState<EnemyModel[]>([]);
   const [bullets, setBullets] = useState<BulletModel[]>([]);
   //TODO: もし、これ以外のエフェクトを追加する場合は、それぞれのエフェクトを区別する型を作成する
-  const [effectPositon, setEffectPosition] = useState<number[][]>([]);
+  const [effectPosition, setEffectPosition] = useState<number[][]>([]);
   const [playerImage] = useImage(staticPath.images.spaceship_png);
   const [enemyImage1] = useImage(staticPath.images.ufo_jpg);
 
@@ -25,7 +25,7 @@ const Game = () => {
     const killedEnemies = enemies.filter((enemy) => !res.some((e) => e.enemyId === enemy.enemyId));
     if (killedEnemies.length > 0) {
       killedEnemies.forEach((enemy) => {
-        setEffectPosition((prev) => [...prev, [enemy.pos.x, enemy.pos.y]]);
+        setEffectPosition((prev) => [...prev, [enemy.pos.x - 40, enemy.pos.y - 40]]);
       });
     }
     setEnemies(res);
@@ -50,10 +50,12 @@ const Game = () => {
   });
 
   useEffect(() => {
-    setTimeout(() => {
+    const timeoutId = setTimeout(() => {
       setEffectPosition((prev) => prev.slice(1));
     }, 1000);
-  }, [effectPositon]);
+
+    return () => clearTimeout(timeoutId);
+  }, [effectPosition]);
 
   return (
     <div>
@@ -62,7 +64,7 @@ const Game = () => {
           {bullets.map((bullet) => (
             <Circle x={bullet.pos.x} y={bullet.pos.y} radius={7} fill="red" key={bullet.bulletId} />
           ))}
-          {effectPositon.map((position, index) => (
+          {effectPosition.map((position, index) => (
             <Boom position={position} key={index} />
           ))}
         </Layer>
@@ -73,8 +75,8 @@ const Game = () => {
               width={100}
               height={100}
               rotation={player.side === 'left' ? 90 : -90}
-              x={player.pos.x}
-              y={player.pos.y}
+              x={player.pos.x - 50}
+              y={player.pos.y - 50}
               key={player.userId}
             />
           ))}
@@ -85,8 +87,8 @@ const Game = () => {
               image={enemyImage1}
               width={80}
               height={80}
-              x={enemy.pos.x}
-              y={enemy.pos.y}
+              x={enemy.pos.x - 40}
+              y={enemy.pos.y - 40}
               key={enemy.enemyId}
             />
           ))}
