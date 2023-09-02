@@ -5,6 +5,7 @@ import Boom from 'src/components/Effect/Boom';
 import { staticPath } from 'src/utils/$path';
 import { apiClient } from 'src/utils/apiClient';
 import useImage from 'use-image';
+import styles from './index.module.css';
 
 const Game = () => {
   const [players, setPlayers] = useState<PlayerModel[]>([]);
@@ -14,6 +15,9 @@ const Game = () => {
   const [effectPosition, setEffectPosition] = useState<number[][]>([]);
   const [playerImage] = useImage(staticPath.images.spaceship_png);
   const [enemyImage1] = useImage(staticPath.images.ufo_jpg);
+
+  const [width, setWidth] = useState<number>(0);
+  const [height, setHeight] = useState<number>(0);
 
   const fetchPlayers = async () => {
     const res = await apiClient.player.$get();
@@ -57,9 +61,29 @@ const Game = () => {
     return () => clearTimeout(timeoutId);
   }, [effectPosition]);
 
+  useEffect(() => {
+    const setWindowSize = () => {
+      setWidth(window.innerWidth);
+      setHeight(window.innerHeight);
+    };
+    setWindowSize();
+    window.addEventListener('resize', setWindowSize);
+    return () => window.removeEventListener('resize', setWindowSize);
+  }, []);
+
   return (
-    <div>
-      <Stage width={1920} height={1080}>
+    <div className={styles.canvasContainer}>
+      <Stage
+        width={1920}
+        height={1080}
+        style={{
+          transform: `
+              scale(${width / 1920}, ${height / 1080})
+              translateX(${(width - 1920) / 2}px)
+              translateY(${(height - 1080) / 2}px)
+              `,
+        }}
+      >
         <Layer>
           {bullets.map((bullet) => (
             <Circle x={bullet.pos.x} y={bullet.pos.y} radius={7} fill="red" key={bullet.bulletId} />
