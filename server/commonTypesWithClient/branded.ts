@@ -9,3 +9,5 @@ export type TaskId = Branded<'TaskId'>;
 export type EnemyId = Branded<'EnemyId'>;
 
 export type BulletId = Branded<'BulletId'>;
+
+export type GameId = Branded<'GameId'>;

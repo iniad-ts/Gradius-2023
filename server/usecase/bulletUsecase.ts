@@ -6,10 +6,10 @@ import { randomUUID } from 'crypto';
 import type { BulletModel } from '../commonTypesWithClient/models';
 
 let intervalId: NodeJS.Timeout | null = null;
-export const bulletUsecase = {
+export const bulletUseCase = {
   init: () => {
     intervalId = setInterval(() => {
-      bulletUsecase.update();
+      bulletUseCase.update();
     }, 25);
   },
   stop: () => {
@@ -26,7 +26,7 @@ export const bulletUsecase = {
       shooterId,
       power: 1,
       vector: { x: 10, y: 0 },
-      pos: { x: shooterInfo.pos.x, y: shooterInfo.pos.y + 50 }, //プレイヤーの中央から発射する
+      pos: { x: shooterInfo.pos.x - 50, y: shooterInfo.pos.y },
       type: 1,
       side: shooterInfo.side,
     };
@@ -57,9 +57,9 @@ export const bulletUsecase = {
     const promises = currentBulletList.map((bullet) => {
       // 画面外に出た弾を削除する、それ以外は移動する
       if (bullet.pos.x > 1920 || bullet.pos.x < 0) {
-        return bulletUsecase.delete(bullet);
+        return bulletUseCase.delete(bullet);
       } else {
-        return bulletUsecase.move(bullet);
+        return bulletUseCase.move(bullet);
       }
     });
     await Promise.all(promises);

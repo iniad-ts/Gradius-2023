@@ -4,12 +4,12 @@ import { enemyIdParser } from '$/service/idParsers';
 import { randomUUID } from 'crypto';
 
 let intervalId: NodeJS.Timeout | null = null;
-export const enemyUsecase = {
+export const enemyUseCase = {
   init: () => {
     intervalId = setInterval(() => {
-      // enemyUsecase.create();
-      // enemyUsecase.update();
-    }, 500);
+      enemyUseCase.create();
+      enemyUseCase.update();
+    }, 50);
   },
   stop: () => {
     if (intervalId) {
@@ -57,9 +57,9 @@ export const enemyUsecase = {
     const currentEnemyInfos = await enemyRepository.findAll();
     const promises = currentEnemyInfos.map((enemy) => {
       if (enemy.pos.x > 1920 || enemy.pos.x < 50) {
-        return enemyUsecase.delete(enemy);
+        return enemyUseCase.delete(enemy);
       } else {
-        return enemyUsecase.move(enemy);
+        return enemyUseCase.move(enemy);
       }
     });
     await Promise.all(promises);
