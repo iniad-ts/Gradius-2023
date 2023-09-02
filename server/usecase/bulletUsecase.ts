@@ -26,7 +26,7 @@ export const bulletUseCase = {
       shooterId,
       power: 1,
       vector: { x: 10, y: 0 },
-      pos: { x: shooterInfo.pos.x - 50, y: shooterInfo.pos.y },
+      pos: { x: shooterInfo.pos.x, y: shooterInfo.pos.y },
       type: 1,
       side: shooterInfo.side,
     };

@@ -99,7 +99,7 @@ const Game = () => {
               width={100}
               height={100}
               rotation={player.side === 'left' ? 90 : -90}
-              x={player.pos.x - 50}
+              x={player.pos.x + 50}
               y={player.pos.y - 50}
               key={player.userId}
             />
