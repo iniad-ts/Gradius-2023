@@ -1,0 +1,10 @@
+.canvasContainer {
+  width: 100vw;
+  height: 100svh;
+  overflow: hidden;
+}
+
+.canvasContainer > div {
+  width: 100vw;
+  height: 100vh;
+}

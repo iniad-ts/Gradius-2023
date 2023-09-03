@@ -1,10 +1,54 @@
-.canvasContainer {
+.container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   width: 100vw;
   height: 100svh;
-  overflow: hidden;
+  background-image: url('~/public/images/gradius_genesis.png');
+  background-size: cover;
 }
 
-.canvasContainer > div {
-  width: 100vw;
-  height: 100vh;
+.container > div {
+  width: 88svmin;
+}
+
+.text {
+  margin-bottom: 1rem;
+  margin-bottom: 4svmin;
+  font-size: 2svmin;
+  font-weight: bold;
+  color: #fff;
+  text-align: center;
+  text-shadow: 0 0 0.4svmin #000;
+}
+
+.buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1svmin;
+  justify-content: center;
+}
+
+.buttons > button {
+  width: 8svmin;
+  aspect-ratio: 16 / 9;
+  font-size: 2svmin;
+  color: #fff;
+  text-shadow: 0 0 0.4svmin #000;
+  cursor: pointer;
+  background-color: #9997;
+  border: solid 0.3svmin #fff4;
+  border-radius: 1svmin;
+  transition-timing-function: ease-in-out, ease-in;
+  transition-duration: 0.2s, 0.1s;
+  transition-property: background-color, transform;
+  backdrop-filter: blur(0.8svmin);
+}
+
+.buttons > button:hover {
+  background-color: #9994;
+}
+
+.buttons > button:active {
+  transform: scale(0.9);
 }
