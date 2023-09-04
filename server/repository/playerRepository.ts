@@ -31,6 +31,7 @@ const toPlayerModel = (prismaPlayer: Player): PlayerModel => ({
       .nullable()
       .parse(prismaPlayer.Item) ?? undefined,
   side: z.enum(['left', 'right']).parse(prismaPlayer.side),
+  isPlaying: z.boolean().parse(prismaPlayer.isPlaying),
 });
 
 export const playerRepository = {
@@ -46,6 +47,7 @@ export const playerRepository = {
         Item: player.Items,
         pos: player.pos,
         side: player.side,
+        isPlaying: player.isPlaying,
       },
       create: {
         userId: player.userId,
@@ -55,8 +57,10 @@ export const playerRepository = {
         Item: player.Items,
         pos: player.pos,
         side: player.side,
+        isPlaying: player.isPlaying,
       },
     });
+
     return toPlayerModel(prismaPlayer);
   },
   find: async (userId: UserId): Promise<PlayerModel | null> => {
@@ -73,6 +77,22 @@ export const playerRepository = {
   findAll: async (): Promise<PlayerModel[]> => {
     const players = await prismaClient.player.findMany();
     return players.length > 0 ? players.map(toPlayerModel) : [];
+  },
+  findPlaying: async (): Promise<PlayerModel[]> => {
+    const players = await prismaClient.player.findMany({
+      where: {
+        isPlaying: true,
+      },
+    });
+    return players.map(toPlayerModel);
+  },
+  findDead: async (): Promise<PlayerModel[]> => {
+    const players = await prismaClient.player.findMany({
+      where: {
+        isPlaying: false,
+      },
+    });
+    return players.map(toPlayerModel);
   },
   delete: async (userId: UserId) => {
     const player = await prismaClient.player.findUnique({

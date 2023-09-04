@@ -24,6 +24,7 @@ export const playerUseCase = {
       vector: { x: 5, y: 5 },
       Items: [],
       side: 'left',
+      isPlaying: true,
     };
     await playerRepository.save(playerData);
     return playerData;
@@ -57,5 +58,18 @@ export const playerUseCase = {
     const currentPlayerInfo = await playerRepository.find(userId);
     if (currentPlayerInfo === null) return null;
     return currentPlayerInfo;
+  },
+  finishGame: async (userId: UserId) => {
+    const currentPlayerInfo = await playerRepository.find(userId);
+
+    if (currentPlayerInfo === null) return null;
+    const updatePlayerInfo: PlayerModel = {
+      ...currentPlayerInfo,
+      isPlaying: false,
+    };
+
+    await playerRepository.save(updatePlayerInfo);
+
+    return updatePlayerInfo;
   },
 };

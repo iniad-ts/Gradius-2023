@@ -37,8 +37,8 @@ export type PlayerModel = {
         name: string;
       }[]
     | undefined;
-
   side: 'left' | 'right';
+  isPlaying: boolean;
 };
 
 export type EnemyModel = {
