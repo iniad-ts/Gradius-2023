@@ -16,7 +16,7 @@ const Login = () => {
   const redirectToController = useCallback(async () => {
     const localStorageUserId = getUserIdFromLocalStorage();
     if (localStorageUserId !== null) {
-      // return router.push('/controller');
+      return router.push('/controller');
     }
   }, [router]);
 
