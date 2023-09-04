@@ -1,44 +1,88 @@
 .container {
-  position: fixed;
-  top: 0;
-  left: 0;
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
-  width: 100%;
-  height: 100%;
+  width: 100vw;
+  height: 100lvh;
+  background-image: url('~/public/images/gradius_genesis.png');
+  background-size: cover;
 }
 
-.main {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  height: 100%;
-  backdrop-filter: blur(4px);
+.card {
+  position: relative;
+  display: grid;
+  grid-template-rows: repeat(6, 1fr);
+  align-items: end;
+  justify-items: center;
+  width: 92svmin;
+  aspect-ratio: 16 / 9;
+  background-color: #fff2;
+  border: solid 0.4svmin #fff2;
+  border-radius: 2svmin;
+  backdrop-filter: blur(0.8svmin);
 }
 
 .title {
-  font-size: 80px;
-  font-weight: bold;
-  text-shadow: 1px 1px white;
+  grid-row: 2;
+  height: 100%;
+  margin: 0 auto;
+  font-size: calc(92svmin / 16 * 9 / 7);
+  line-height: calc(92svmin / 16 * 9 / 6);
+  color: transparent;
+  text-align: center;
+  background-image: linear-gradient(135deg, #fff, #c7daf7);
+  background-clip: text;
 }
 
-.btn {
-  display: flex;
-  gap: 8px;
-  align-items: center;
-  padding: 8px 12px;
-  font-size: 14px;
+.links {
+  display: contents;
+}
+
+.input {
+  display: block;
+  grid-row: 4;
+  width: 64%;
+  height: 80%;
+  padding: 0 1svmin;
+  font-size: 1.6svmin;
+  color: #fff;
+  background-color: #0000;
+  border: solid 0.2svmin #fff;
+  border-radius: 1svmin;
+}
+
+.input:focus {
+  outline: none;
+}
+
+.button {
+  display: block;
+  grid-row: 5;
+  width: 24%;
+  height: 64%;
+  font-size: 1.4svmin;
   font-weight: bold;
-  color: white;
+  color: #fff;
   cursor: pointer;
-  background: #222;
-  border-radius: 4px;
-  transition: 0.2s background;
+  background-image: linear-gradient(135deg, #2965ce, #74d3f2);
+  background-size: 200%;
+  border: 0;
+  border-radius: 1svmin;
+  transition-timing-function: ease-in-out, ease-in, ease-in-out;
+  transition-duration: 0.2s, 0.1s, 0.2s;
+  transition-property: background-position, transform, opacity;
 }
 
-.btn:hover {
-  background: #444;
+.button[disabled] {
+  pointer-events: none;
+  cursor: default;
+  opacity: 0.5;
+}
+
+.button:hover:not([disabled]) {
+  background-position: right;
+}
+
+.button:active:not([disabled]) {
+  transform: scale(0.95);
 }

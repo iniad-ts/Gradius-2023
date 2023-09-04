@@ -20,13 +20,14 @@ const Home = () => {
     height: window.innerHeight,
   });
   const [userId, setUserId] = useState<UserId>('' as UserId);
-  const router = useRouter();
   const [playerStatus, setPlayerStatus] = useState<PlayerModel>();
 
   const [moveIntervalId, setMoveIntervalId] = useState<NodeJS.Timeout[]>([]);
   const moveDirection = useRef<MoveTo>({ x: 0, y: 0 });
 
   const [shootIntervalId, setShootIntervalId] = useState<NodeJS.Timeout[]>([]);
+
+  const router = useRouter();
 
   const MOVE_INTERVAL_TIME = 20;
   const SHOOT_INTERVAL_TIME = 800;
