@@ -26,7 +26,7 @@ export const bulletUseCase = {
       shooterId,
       power: 1,
       vector: { x: 10, y: 0 },
-      pos: { x: shooterInfo.pos.x - 50, y: shooterInfo.pos.y },
+      pos: { x: shooterInfo.pos.x, y: shooterInfo.pos.y },
       type: 1,
       side: shooterInfo.side,
     };
@@ -46,11 +46,12 @@ export const bulletUseCase = {
     await bulletRepository.save(updateBulletInfo);
     return updateBulletInfo;
   },
-  delete: async (bulletModel: BulletModel): Promise<BulletModel | null> => {
-    const currentBulletInfo = await bulletRepository.find(bulletModel.bulletId);
-    if (currentBulletInfo === null) return null;
-    await bulletRepository.delete(bulletModel.bulletId);
-    return currentBulletInfo;
+  delete: async (bulletModel: BulletModel) => {
+    try {
+      await bulletRepository.delete(bulletModel.bulletId);
+    } catch (e) {
+      console.error(e);
+    }
   },
   update: async () => {
     const currentBulletList = await bulletRepository.findAll();

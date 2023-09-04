@@ -59,17 +59,15 @@ export const enemyRepository = {
     return enemies.length > 0 ? enemies.map(toEnemyModel) : [];
   },
   delete: async (enemyId: EnemyId) => {
-    const enemy = await prismaClient.enemy.findUnique({
-      where: {
-        enemyId,
-      },
-    });
-    if (enemy === null) return;
-    await prismaClient.enemy.delete({
-      where: {
-        enemyId,
-      },
-    });
+    try {
+      await prismaClient.enemy.delete({
+        where: {
+          enemyId,
+        },
+      });
+    } catch (e) {
+      console.error(e);
+    }
   },
   count: async () => {
     const count = prismaClient.enemy.count();

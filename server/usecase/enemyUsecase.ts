@@ -9,7 +9,7 @@ export const enemyUseCase = {
     intervalId = setInterval(() => {
       enemyUseCase.create();
       enemyUseCase.update();
-    }, 50);
+    }, 100);
   },
   stop: () => {
     if (intervalId) {
@@ -47,11 +47,12 @@ export const enemyUseCase = {
     await enemyRepository.save(updateEnemyInfo);
     return updateEnemyInfo;
   },
-  delete: async (enemyModel: EnemyModel): Promise<EnemyModel | null> => {
-    const currentEnemyInfo = await enemyRepository.find(enemyModel.enemyId);
-    if (currentEnemyInfo === null) return null;
-    await enemyRepository.delete(enemyModel.enemyId);
-    return currentEnemyInfo;
+  delete: async (enemyModel: EnemyModel) => {
+    try {
+      await enemyRepository.delete(enemyModel.enemyId);
+    } catch (e) {
+      console.error(e);
+    }
   },
   update: async () => {
     const currentEnemyInfos = await enemyRepository.findAll();

@@ -8,7 +8,7 @@ import { prismaClient } from '../service/prismaClient';
 const toPlayerModel = (prismaPlayer: Player): PlayerModel => ({
   userId: userIdParser.parse(prismaPlayer.userId),
   name: z.string().parse(prismaPlayer.name),
-  score: z.number().min(0).parse(prismaPlayer.score),
+  score: z.number().parse(prismaPlayer.score),
   pos: z
     .object({
       x: z.number(),

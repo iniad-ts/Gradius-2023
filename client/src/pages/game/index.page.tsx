@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import {
   BULLET_RADIUS,
   ENEMY_HALF_WIDTH,
@@ -10,22 +11,22 @@ import { useEffect, useState } from 'react';
 import { Circle, Image, Layer, Stage } from 'react-konva';
 import Boom from 'src/components/Effect/Boom';
 import { staticPath } from 'src/utils/$path';
+=======
+import { useRouter } from 'next/router';
+import { useCallback, useEffect, useState } from 'react';
+>>>>>>> upstream/develop
 import { apiClient } from 'src/utils/apiClient';
-import useImage from 'use-image';
 import styles from './index.module.css';
 
 const Game = () => {
-  const [players, setPlayers] = useState<PlayerModel[]>([]);
-  const [enemies, setEnemies] = useState<EnemyModel[]>([]);
-  const [bullets, setBullets] = useState<BulletModel[]>([]);
-  //TODO: もし、これ以外のエフェクトを追加する場合は、それぞれのエフェクトを区別する型を作成する
-  const [effectPosition, setEffectPosition] = useState<number[][]>([]);
-  const [playerImage] = useImage(staticPath.images.spaceship_png);
-  const [enemyImage1] = useImage(staticPath.images.ufo_jpg);
+  const [displayNumber, setDisplayNumber] = useState<number>(0);
+  const router = useRouter();
 
-  const [width, setWidth] = useState<number>(0);
-  const [height, setHeight] = useState<number>(0);
+  const fetchDisplayNumber = useCallback(async () => {
+    const res = await apiClient.config.$get();
+    setDisplayNumber(res ?? 0);
 
+<<<<<<< HEAD
   const fetchPlayers = async () => {
     const res = await apiClient.player.$get();
     setPlayers(res);
@@ -41,47 +42,19 @@ const Game = () => {
           [enemy.pos.x - PLAYER_HALF_WIDTH, enemy.pos.y - PLAYER_HALF_WIDTH],
         ]);
       });
+=======
+    if (res === 0) {
+      router.push('/config');
+>>>>>>> upstream/develop
     }
-    setEnemies(res);
-  };
-
-  const fetchBullets = async () => {
-    const res = await apiClient.bullet.$get();
-    if (res.length > bullets.length) {
-      const audio = new Audio(staticPath.sounds.shot_mp3);
-      audio.play();
-    }
-    setBullets(res);
-  };
+  }, [router]);
 
   useEffect(() => {
-    const cancelId = requestAnimationFrame(() => {
-      fetchPlayers();
-      fetchEnemies();
-      fetchBullets();
-    });
-    return () => cancelAnimationFrame(cancelId);
-  });
-
-  useEffect(() => {
-    const timeoutId = setTimeout(() => {
-      setEffectPosition((prev) => prev.slice(1));
-    }, 1000);
-
-    return () => clearTimeout(timeoutId);
-  }, [effectPosition]);
-
-  useEffect(() => {
-    const setWindowSize = () => {
-      setWidth(window.innerWidth);
-      setHeight(window.innerHeight);
-    };
-    setWindowSize();
-    window.addEventListener('resize', setWindowSize);
-    return () => window.removeEventListener('resize', setWindowSize);
-  }, []);
+    fetchDisplayNumber();
+  }, [fetchDisplayNumber]);
 
   return (
+<<<<<<< HEAD
     <div className={styles.canvasContainer}>
       <Stage
         width={SCREEN_WIDTH}
@@ -134,6 +107,19 @@ const Game = () => {
           ))}
         </Layer>
       </Stage>
+=======
+    <div className={styles.container}>
+      <div>
+        <p className={styles.text}>ディスプレイの位置を選択してください</p>
+        <div className={styles.buttons}>
+          {[...Array(displayNumber)].map((_, i) => (
+            <button key={i} onClick={() => router.push(`/game/${i}`)}>
+              {i + 1}
+            </button>
+          ))}
+        </div>
+      </div>
+>>>>>>> upstream/develop
     </div>
   );
 };
