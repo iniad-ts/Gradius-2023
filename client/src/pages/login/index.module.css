@@ -1,5 +1,6 @@
 .container {
   display: flex;
+  gap: 4svmin;
   align-items: center;
   justify-content: center;
   width: 100vw;
@@ -85,4 +86,54 @@
 
 .button:active:not([disabled]) {
   transform: scale(0.95);
+}
+
+.panel {
+  height: calc(92vmin / 16 * 9);
+  aspect-ratio: 2 / 3;
+  padding: 4svmin;
+  background-color: #fff3;
+  border: solid 0.4svmin #fff2;
+  border-radius: 2svmin;
+  backdrop-filter: blur(0.8svmin);
+}
+
+.panel > h2 {
+  margin-bottom: 1rem;
+  margin-bottom: 0;
+  font-size: 1.2svmin;
+  font-weight: bold;
+  color: #fff;
+  text-align: center;
+  text-shadow: 0 0 0.4svmin #000;
+}
+
+.panel > p {
+  margin: 0;
+  font-size: 1.2svmin;
+  font-weight: bold;
+  color: #fff;
+  text-align: center;
+  text-shadow: 0 0 0.4svmin #000;
+}
+
+.players {
+  margin-top: 2svmin;
+  font-size: 1.2svmin;
+  font-weight: bold;
+  color: #fff;
+  text-shadow: 0 0 0.4svmin #000;
+}
+
+.ranking {
+  margin-top: 2svmin;
+  font-size: 1.2svmin;
+  font-weight: bold;
+  color: #fff;
+  text-align: center;
+  text-shadow: 0 0 0.4svmin #000;
+}
+
+.ranking > div {
+  margin-bottom: 2svmin;
 }
