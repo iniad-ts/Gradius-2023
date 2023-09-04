@@ -14,6 +14,17 @@ const MoveDirectionSchema = z.object({
   y: z.number().min(-1).max(1),
 });
 export const playerUseCase = {
+  findMany: async (isPlaying: boolean | undefined = undefined): Promise<PlayerModel[]> => {
+    if (isPlaying === undefined) {
+      const players: PlayerModel[] = await playerRepository.findAll();
+
+      return players;
+    }
+
+    const players: PlayerModel[] = await playerRepository.findPlayingOrDead(isPlaying);
+
+    return players;
+  },
   create: async (name: string): Promise<PlayerModel> => {
     //playerの初期ステータス(デバッグ用)
     const playerData: PlayerModel = {
