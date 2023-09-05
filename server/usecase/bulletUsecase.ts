@@ -21,17 +21,31 @@ export const bulletUseCase = {
   create: async (shooterId: UserId): Promise<BulletModel | null> => {
     const shooterInfo = await playerRepository.find(shooterId);
     if (shooterInfo === null) return null;
-    const newBullet: BulletModel = {
-      bulletId: bulletIdParser.parse(randomUUID()),
-      shooterId,
-      power: 1,
-      vector: { x: 10, y: 0 },
-      pos: { x: shooterInfo.pos.x, y: shooterInfo.pos.y },
-      type: 1,
-      side: shooterInfo.side,
-    };
-    await bulletRepository.save(newBullet);
-    return newBullet;
+    if (shooterInfo.side === 'left') {
+      const newBullet: BulletModel = {
+        bulletId: bulletIdParser.parse(randomUUID()),
+        shooterId,
+        power: 1,
+        vector: { x: 10, y: 0 },
+        pos: { x: shooterInfo.pos.x, y: shooterInfo.pos.y },
+        type: 1,
+        side: shooterInfo.side,
+      };
+      await bulletRepository.save(newBullet);
+      return newBullet;
+    } else {
+      const newBullet: BulletModel = {
+        bulletId: bulletIdParser.parse(randomUUID()),
+        shooterId,
+        power: 1,
+        vector: { x: -10, y: 0 },
+        pos: { x: shooterInfo.pos.x, y: shooterInfo.pos.y },
+        type: 1,
+        side: shooterInfo.side,
+      };
+      await bulletRepository.save(newBullet);
+      return newBullet;
+    }
   },
   move: async (bulletModel: BulletModel): Promise<BulletModel | null> => {
     const currentBulletInfo = await bulletRepository.find(bulletModel.bulletId);

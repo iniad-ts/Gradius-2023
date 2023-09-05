@@ -8,8 +8,8 @@ let intervalId: NodeJS.Timeout | null = null;
 export const enemyUseCase = {
   init: () => {
     intervalId = setInterval(() => {
-      // enemyUseCase.create();
-      // enemyUseCase.update();
+      enemyUseCase.create();
+      enemyUseCase.update();
     }, 100);
   },
   stop: () => {
