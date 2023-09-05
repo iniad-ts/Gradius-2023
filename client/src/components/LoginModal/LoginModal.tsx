@@ -30,7 +30,12 @@ const LoginModal: React.FC = () => {
         <div className={styles.modalContent}>
           <h2>Gradius</h2>
           <label>ユーザー名:</label>
-          <input type="text" placeholder="ユーザー名を入力してください" onChange={onChangeInput} />
+          <input
+            className={styles.font}
+            type="text"
+            placeholder="ユーザー名を入力してください"
+            onChange={onChangeInput}
+          />
           <button onClick={handleButtonClick}>はじめる</button>
         </div>
       </Modal>
