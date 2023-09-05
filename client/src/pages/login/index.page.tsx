@@ -32,7 +32,8 @@ const Login = () => {
   };
 
   const fetchPlayers = async () => {
-    const res = await apiClient.player.$get({ query: {} });
+    //一時的にdisplayNumber:0で固定
+    const res = await apiClient.player.$get({ query: { displayNumber: 0 } });
     setPlayersPlaying(res.filter((player) => player.isPlaying));
     setPlayersDead(res.filter((player) => !player.isPlaying));
   };
