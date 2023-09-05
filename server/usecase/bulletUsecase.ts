@@ -71,12 +71,23 @@ export const bulletUseCase = {
     const currentBulletList = await bulletRepository.findAll();
     const promises = currentBulletList.map((bullet) => {
       // 画面外に出た弾を削除する、それ以外は移動する
-      if (bullet.pos.x > 1920 || bullet.pos.x < 0) {
-        return bulletUseCase.delete(bullet);
-      } else {
-        return bulletUseCase.move(bullet);
-      }
+      // if (bullet.pos.x > 1920 || bullet.pos.x < 0) {
+      //   return bulletUseCase.delete(bullet);
+      // } else {
+      //   return bulletUseCase.move(bullet);
+      // }
+      return bulletUseCase.move(bullet);
     });
     await Promise.all(promises);
+  },
+  getBulletByDisplayNumber: async (displayNumber: number) => {
+    const bullets = await bulletRepository.findAll();
+    const bulletsByDisplayNumber = bullets.filter((bullet) => {
+      if (typeof bullet.pos.x === 'number') {
+        return Math.floor(bullet.pos.x / 1920) === displayNumber;
+      }
+      return [];
+    });
+    return bulletsByDisplayNumber;
   },
 };
