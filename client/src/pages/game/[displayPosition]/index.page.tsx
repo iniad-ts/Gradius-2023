@@ -48,7 +48,9 @@ const Game = () => {
   };
 
   const fetchBullets = async () => {
-    const res = await apiClient.bullet.$get();
+    const res = await apiClient.bullet.$get({
+      query: { displayNumber: Number(displayPosition) },
+    });
     if (res.length > bullets.length) {
       const audio = new Audio(staticPath.sounds.shot_mp3);
       audio.play();
@@ -107,9 +109,18 @@ const Game = () => {
         }}
       >
         <Layer>
-          {bullets.map((bullet) => (
-            <Circle x={bullet.pos.x} y={bullet.pos.y} radius={7} fill="red" key={bullet.bulletId} />
-          ))}
+          {bullets.map(
+            (bullet) =>
+              displayPosition !== null && (
+                <Circle
+                  x={bullet.pos.x - 1920 * displayPosition}
+                  y={bullet.pos.y}
+                  radius={7}
+                  fill="red"
+                  key={bullet.bulletId}
+                />
+              )
+          )}
         </Layer>
         <Layer>
           {players.map(
