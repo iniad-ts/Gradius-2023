@@ -11,6 +11,7 @@ export type Methods = DefineMethods<{
   post: {
     reqBody: {
       name: string;
+      teamInfo: number;
     };
     resBody: PlayerModel;
   };

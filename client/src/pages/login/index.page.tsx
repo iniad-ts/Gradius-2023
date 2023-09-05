@@ -10,6 +10,7 @@ const Login = () => {
   const [name, setName] = useState<string>('');
   const [playersPlaying, setPlayersPlaying] = useState<PlayerModel[]>([]);
   const [playersDead, setPlayersDead] = useState<PlayerModel[]>([]);
+  const [team, setTeam] = useState(1);
 
   const router = useRouter();
 
@@ -25,7 +26,7 @@ const Login = () => {
   };
 
   const login = async () => {
-    const player: PlayerModel = await apiClient.player.$post({ body: { name } });
+    const player: PlayerModel = await apiClient.player.$post({ body: { name, teamInfo: team } });
     loginWithLocalStorage(player.userId);
     router.push('/controller');
   };
@@ -44,6 +45,11 @@ const Login = () => {
     const sortedPlayers = playersDead.sort((a, b) => b.score - a.score);
     return sortedPlayers.slice(0, 10);
   }, [playersDead]);
+
+  const changTeam = (type: string) => {
+    if (type === 'red') setTeam(1);
+    if (type === 'blue') setTeam(2);
+  };
 
   useEffect(() => {
     redirectToController();
