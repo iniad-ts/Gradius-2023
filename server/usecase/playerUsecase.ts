@@ -87,4 +87,14 @@ export const playerUseCase = {
 
     return updatePlayerInfo;
   },
+  getPlayersByDisplayNumber: async (displayNumber: number) => {
+    const players = await playerRepository.findAll();
+    const playersByDisplayNumber = players.filter((player) => {
+      if (typeof player.pos.x === 'number' && player.isPlaying) {
+        return Math.floor(player.pos.x / 1920) === displayNumber;
+      }
+      return [];
+    });
+    return playersByDisplayNumber;
+  },
 };

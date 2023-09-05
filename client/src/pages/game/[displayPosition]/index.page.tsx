@@ -8,9 +8,15 @@ import { apiClient } from 'src/utils/apiClient';
 import useImage from 'use-image';
 import styles from './index.module.css';
 
-const Geme = () => {
+const Game = () => {
   const router = useRouter();
-  const { displayPosition } = router.query;
+  let displayPosition: number | null = null;
+  if (typeof router.query.displayPosition === 'string') {
+    const parsed = Number(router.query.displayPosition);
+    if (!isNaN(parsed)) {
+      displayPosition = parsed;
+    }
+  }
 
   const [players, setPlayers] = useState<PlayerModel[]>([]);
   const [enemies, setEnemies] = useState<EnemyModel[]>([]);
@@ -24,7 +30,9 @@ const Geme = () => {
   const [height, setHeight] = useState<number>(0);
 
   const fetchPlayers = async () => {
-    const res = await apiClient.player.$get({ query: {} });
+    const res = await apiClient.player.$get({
+      query: { displayNumber: Number(displayPosition) },
+    });
     setPlayers(res);
   };
 
@@ -104,17 +112,20 @@ const Geme = () => {
           ))}
         </Layer>
         <Layer>
-          {players.map((player) => (
-            <Image
-              image={playerImage}
-              width={100}
-              height={100}
-              rotation={player.side === 'left' ? 90 : -90}
-              x={player.pos.x + 50}
-              y={player.pos.y - 50}
-              key={player.userId}
-            />
-          ))}
+          {players.map(
+            (player) =>
+              displayPosition !== null && (
+                <Image
+                  image={playerImage}
+                  width={100}
+                  height={100}
+                  rotation={player.side === 'left' ? 90 : -90}
+                  x={player.pos.x - 1920 * displayPosition + 50}
+                  y={player.pos.y - 50}
+                  key={player.userId}
+                />
+              )
+          )}
         </Layer>
         <Layer>
           {enemies.map((enemy) => (
@@ -138,4 +149,4 @@ const Geme = () => {
   );
 };
 
-export default Geme;
+export default Game;
