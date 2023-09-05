@@ -14,19 +14,33 @@ const MoveDirectionSchema = z.object({
   y: z.number().min(-1).max(1),
 });
 export const playerUseCase = {
-  create: async (name: string): Promise<PlayerModel> => {
+  create: async (name: string, teamInfo: number): Promise<PlayerModel> => {
     //playerの初期ステータス(デバッグ用)
-    const playerData: PlayerModel = {
-      userId: userIdParser.parse(randomUUID()),
-      pos: { x: 50, y: 300 },
-      name,
-      score: 0,
-      vector: { x: 5, y: 5 },
-      Items: [],
-      side: 'left',
-    };
-    await playerRepository.save(playerData);
-    return playerData;
+    if (teamInfo === 1) {
+      const playerData: PlayerModel = {
+        userId: userIdParser.parse(randomUUID()),
+        pos: { x: 50, y: 300 },
+        name,
+        score: 0,
+        vector: { x: 5, y: 5 },
+        Items: [],
+        side: 'left',
+      };
+      await playerRepository.save(playerData);
+      return playerData;
+    } else {
+      const playerData: PlayerModel = {
+        userId: userIdParser.parse(randomUUID()),
+        pos: { x: 1300, y: 300 },
+        name,
+        score: 0,
+        vector: { x: 5, y: 5 },
+        Items: [],
+        side: 'right',
+      };
+      await playerRepository.save(playerData);
+      return playerData;
+    }
   },
   move: async (moveDirection: MoveDirection, userId: UserId): Promise<PlayerModel | null> => {
     const currentPlayerInfo = await playerRepository.find(userId);
