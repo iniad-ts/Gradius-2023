@@ -35,7 +35,6 @@ const Game = () => {
     });
     setPlayers(res);
   };
-  console.log(players);
 
   const fetchEnemies = async () => {
     const res = await apiClient.enemy.$get();
