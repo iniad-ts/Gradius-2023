@@ -1,3 +1,4 @@
+import { SCREEN_HEIGHT } from '$/commonConstantsWithClient';
 import type { EnemyModel } from '$/commonTypesWithClient/models';
 import { enemyRepository } from '$/repository/enemyRepository';
 import { enemyIdParser } from '$/service/idParsers';
@@ -7,8 +8,8 @@ let intervalId: NodeJS.Timeout | null = null;
 export const enemyUseCase = {
   init: () => {
     intervalId = setInterval(() => {
-      enemyUseCase.create();
-      enemyUseCase.update();
+      // enemyUseCase.create();
+      // enemyUseCase.update();
     }, 100);
   },
   stop: () => {
@@ -22,7 +23,8 @@ export const enemyUseCase = {
     if (count > 3) return null;
     const enemyData: EnemyModel = {
       enemyId: enemyIdParser.parse(randomUUID()),
-      pos: { x: 1000, y: Math.floor(Math.random() * 800) },
+      //Math.random() * ( 最大値 - 最小値 ) + 最小値; 「最小値 〜 最大値」
+      pos: { x: Math.random() * (1100 - 900) + 900, y: Math.floor(Math.random() * SCREEN_HEIGHT) },
       score: 100,
       vector: { x: -2, y: 0 },
       type: 0,
