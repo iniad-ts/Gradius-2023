@@ -24,7 +24,7 @@ const Geme = () => {
   const [height, setHeight] = useState<number>(0);
 
   const fetchPlayers = async () => {
-    const res = await apiClient.player.$get();
+    const res = await apiClient.player.$get({ query: {} });
     setPlayers(res);
   };
 
