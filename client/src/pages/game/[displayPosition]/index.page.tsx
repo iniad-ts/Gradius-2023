@@ -1,11 +1,13 @@
 import type { BulletModel, EnemyModel, PlayerModel } from 'commonTypesWithClient/models';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
-import { Circle, Image, Layer, Stage } from 'react-konva';
+import { Layer, Stage } from 'react-konva';
 import Boom from 'src/components/Effect/Boom';
+import { Bullet } from 'src/components/Entity/Bullet';
+import { Enemy } from 'src/components/Entity/Enemy';
+import { Player } from 'src/components/Entity/Player';
 import { staticPath } from 'src/utils/$path';
 import { apiClient } from 'src/utils/apiClient';
-import useImage from 'use-image';
 import styles from './index.module.css';
 
 const Game = () => {
@@ -23,8 +25,6 @@ const Game = () => {
   const [bullets, setBullets] = useState<BulletModel[]>([]);
   //TODO: もし、これ以外のエフェクトを追加する場合は、それぞれのエフェクトを区別する型を作成する
   const [effectPosition, setEffectPosition] = useState<number[][]>([]);
-  const [playerImage] = useImage(staticPath.images.spaceship_png);
-  const [enemyImage1] = useImage(staticPath.images.ufo_jpg);
 
   const [width, setWidth] = useState<number>(0);
   const [height, setHeight] = useState<number>(0);
@@ -108,36 +108,17 @@ const Game = () => {
       >
         <Layer>
           {bullets.map((bullet) => (
-            <Circle x={bullet.pos.x} y={bullet.pos.y} radius={7} fill="red" key={bullet.bulletId} />
+            <Bullet displayPosition={displayPosition ?? 0} bullet={bullet} key={bullet.bulletId} />
           ))}
         </Layer>
         <Layer>
-          {players.map(
-            (player) =>
-              displayPosition !== null && (
-                <Image
-                  image={playerImage}
-                  width={100}
-                  height={100}
-                  rotation={player.side === 'left' ? 90 : -90}
-                  x={player.pos.x - 1920 * displayPosition + 50}
-                  y={player.pos.y + (player.side === 'left' ? -50 : 50)}
-                  key={player.userId}
-                />
-              )
-          )}
+          {players.map((player) => (
+            <Player displayPosition={displayPosition ?? 0} player={player} key={player.userId} />
+          ))}
         </Layer>
-
         <Layer>
           {enemies.map((enemy) => (
-            <Image
-              image={enemyImage1}
-              width={80}
-              height={80}
-              x={enemy.pos.x - 40}
-              y={enemy.pos.y - 40}
-              key={enemy.enemyId}
-            />
+            <Enemy displayPosition={displayPosition ?? 0} enemy={enemy} key={enemy.enemyId} />
           ))}
         </Layer>
         <Layer>
