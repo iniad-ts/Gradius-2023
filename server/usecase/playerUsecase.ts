@@ -75,10 +75,7 @@ export const playerUseCase = {
     if (currentPlayerInfo === null) return null;
     return currentPlayerInfo;
   },
-  getAllStatus: async () => {
-    const currentPlayersInfo: PlayerModel[] = await playerRepository.findAll();
-    return currentPlayersInfo;
-  },
+
   finishGame: async (userId: UserId) => {
     const currentPlayerInfo = await playerRepository.find(userId);
 
