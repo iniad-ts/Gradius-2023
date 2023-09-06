@@ -1,0 +1,14 @@
+.container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100svh;
+  background-image: url('~/public/images/gradius_genesis.png');
+  filter: hue-rotate(-20deg);
+  background-size: cover;
+}
+
+.container > canvas {
+  mix-blend-mode: exclusion;
+  backdrop-filter: blur(0.6svmin) hue-rotate(190deg);
+}
