@@ -121,12 +121,13 @@ const Game = () => {
                   height={100}
                   rotation={player.side === 'left' ? 90 : -90}
                   x={player.pos.x - 1920 * displayPosition + 50}
-                  y={player.pos.y - 50}
+                  y={player.pos.y + (player.side === 'left' ? -50 : 50)}
                   key={player.userId}
                 />
               )
           )}
         </Layer>
+
         <Layer>
           {enemies.map((enemy) => (
             <Image
