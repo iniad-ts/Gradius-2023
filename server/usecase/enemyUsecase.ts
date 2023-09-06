@@ -1,6 +1,7 @@
-import { SCREEN_HEIGHT } from '$/commonConstantsWithClient';
+import { SCREEN_HEIGHT, SCREEN_WIDTH } from '$/commonConstantsWithClient';
 import type { EnemyModel } from '$/commonTypesWithClient/models';
 import { enemyRepository } from '$/repository/enemyRepository';
+import { gameRepository } from '$/repository/gameRepository';
 import { enemyIdParser } from '$/service/idParsers';
 import { randomUUID } from 'crypto';
 
@@ -20,14 +21,22 @@ export const enemyUseCase = {
   },
   create: async (): Promise<EnemyModel | null> => {
     const count = await enemyRepository.count();
-    if (count > 3) return null;
+    const displayNumber = (await gameRepository.find().then((game) => game?.displayNumber)) ?? 1;
+
+    if (count > 7) return null;
     const enemyData: EnemyModel = {
       enemyId: enemyIdParser.parse(randomUUID()),
       //Math.random() * ( 最大値 - 最小値 ) + 最小値; 「最小値 〜 最大値」
-      pos: { x: Math.random() * (1100 - 900) + 900, y: Math.floor(Math.random() * SCREEN_HEIGHT) },
+      pos: {
+        x: Math.random() * (SCREEN_WIDTH * displayNumber - 1000) + 500,
+        y: Math.floor(Math.random() * SCREEN_HEIGHT),
+      },
       score: 100,
-      vector: { x: -2, y: 0 },
-      type: 0,
+      vector: {
+        x: 2 * (Math.random() > 0.5 ? 1 : -1),
+        y: 0,
+      },
+      type: Math.floor(Math.random() * 3),
     };
     await enemyRepository.save(enemyData);
     return enemyData;
@@ -57,14 +66,28 @@ export const enemyUseCase = {
     }
   },
   update: async () => {
-    const currentEnemyInfos = await enemyRepository.findAll();
-    const promises = currentEnemyInfos.map((enemy) => {
-      if (enemy.pos.x > 1920 || enemy.pos.x < 50) {
-        return enemyUseCase.delete(enemy);
-      } else {
-        return enemyUseCase.move(enemy);
-      }
-    });
-    await Promise.all(promises);
+    const currentEnemyList = await enemyRepository.findAll();
+    const displayNumber = (await gameRepository.find().then((game) => game?.displayNumber)) ?? 1;
+
+    const outOfDisplay = (pos: { x: number; y: number }) => {
+      const terms = [
+        pos.x < 0,
+        pos.y < 0,
+        pos.x > displayNumber * SCREEN_WIDTH,
+        pos.y > SCREEN_HEIGHT,
+      ];
+
+      return terms.some(Boolean);
+    };
+
+    await Promise.all(
+      currentEnemyList.map((enemy) => {
+        if (outOfDisplay(enemy.pos)) {
+          return enemyUseCase.delete(enemy);
+        } else {
+          return enemyUseCase.move(enemy);
+        }
+      })
+    );
   },
 };
