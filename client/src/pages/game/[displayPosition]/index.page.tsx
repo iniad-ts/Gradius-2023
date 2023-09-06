@@ -2,13 +2,14 @@ import { ENEMY_HALF_WIDTH, SCREEN_HEIGHT, SCREEN_WIDTH } from 'commonConstantsWi
 import type { BulletModel, EnemyModel, PlayerModel } from 'commonTypesWithClient/models';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
-import { Layer, Stage } from 'react-konva';
+import { Image, Layer, Stage } from 'react-konva';
 import Boom from 'src/components/Effect/Boom';
 import { Bullet } from 'src/components/Entity/Bullet';
 import { Enemy } from 'src/components/Entity/Enemy';
 import { Player } from 'src/components/Entity/Player';
 import { staticPath } from 'src/utils/$path';
 import { apiClient } from 'src/utils/apiClient';
+import useImage from 'use-image';
 import styles from './index.module.css';
 
 type WindowSize = {
@@ -36,6 +37,8 @@ const Game = () => {
     width: window.innerWidth,
     height: window.innerHeight,
   });
+
+  const [backgroundImage] = useImage(staticPath.images.odaiba_jpg);
 
   const fetchPlayers = async () => {
     const res = await apiClient.player.$get({
@@ -117,6 +120,16 @@ const Game = () => {
               `,
         }}
       >
+        <Layer>
+          <Image
+            image={backgroundImage}
+            width={SCREEN_WIDTH}
+            height={SCREEN_HEIGHT}
+            x={0}
+            y={0}
+            opacity={0.8}
+          />
+        </Layer>
         <Layer>
           {bullets.map((bullet) => (
             <Bullet displayPosition={displayPosition ?? 0} bullet={bullet} key={bullet.bulletId} />
