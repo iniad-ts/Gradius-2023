@@ -1,5 +1,6 @@
 import type { UserId } from '$/commonTypesWithClient/branded';
 import { bulletRepository } from '$/repository/bulletRepository';
+import { gameRepository } from '$/repository/gameRepository';
 import { playerRepository } from '$/repository/playerRepository';
 import { bulletIdParser } from '$/service/idParsers';
 import { randomUUID } from 'crypto';
@@ -69,14 +70,13 @@ export const bulletUseCase = {
   },
   update: async () => {
     const currentBulletList = await bulletRepository.findAll();
+    const game = await gameRepository.find();
     const promises = currentBulletList.map((bullet) => {
-      // 画面外に出た弾を削除する、それ以外は移動する
-      // if (bullet.pos.x > 1920 || bullet.pos.x < 0) {
-      //   return bulletUseCase.delete(bullet);
-      // } else {
-      //   return bulletUseCase.move(bullet);
-      // }
-      return bulletUseCase.move(bullet);
+      if (bullet.pos.x > 1920 * (game?.displayNumber ?? 0)) {
+        return bulletUseCase.delete(bullet);
+      } else {
+        return bulletUseCase.move(bullet);
+      }
     });
     await Promise.all(promises);
   },
