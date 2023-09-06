@@ -16,6 +16,7 @@ const MoveDirectionSchema = z.object({
 export const playerUseCase = {
   create: async (name: string, teamInfo: number): Promise<PlayerModel> => {
     //playerの初期ステータス(デバッグ用)
+    console.log(teamInfo);
     if (teamInfo === 1) {
       const playerData: PlayerModel = {
         userId: userIdParser.parse(randomUUID()),
@@ -73,6 +74,10 @@ export const playerUseCase = {
     const currentPlayerInfo = await playerRepository.find(userId);
     if (currentPlayerInfo === null) return null;
     return currentPlayerInfo;
+  },
+  getAllStatus: async () => {
+    const currentPlayersInfo: PlayerModel[] = await playerRepository.findAll();
+    return currentPlayersInfo;
   },
   finishGame: async (userId: UserId) => {
     const currentPlayerInfo = await playerRepository.find(userId);
