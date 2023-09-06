@@ -1,14 +1,64 @@
+.bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100svh;
+  background-image: url('~/public/images/gradius_genesis.png');
+  filter: hue-rotate(-20deg);
+  background-size: cover;
+  transition: opacity 0.5s ease-in-out;
+}
+
 .container {
   display: flex;
   align-items: center;
   justify-content: center;
   height: 100svh;
-  background-image: url('~/public/images/gradius_genesis.png');
-  filter: hue-rotate(-20deg);
-  background-size: cover;
+}
+
+.simpleContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100svh;
 }
 
 .container > canvas {
   mix-blend-mode: exclusion;
   backdrop-filter: blur(0.6svmin) hue-rotate(190deg);
+}
+
+.button {
+  position: fixed;
+  right: 2svmin;
+  bottom: 2svmin;
+  width: 10svmin;
+  height: 4svmin;
+  cursor: pointer;
+  background-color: #eef;
+  border: 0.4svmin solid #fff;
+  border-radius: 2svmin;
+  box-shadow: inset 0 0 1svmin #3336, 0 0 1svmin #0002;
+}
+
+.button::before {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  font-size: 1.6svmin;
+  content: '🚀';
+}
+
+.button > div {
+  position: absolute;
+  top: 0.6svmin;
+  width: 2.2svmin;
+  height: 2.2svmin;
+  background-color: #fff;
+  border-radius: 50%;
+  box-shadow: 0 0 1svmin #3336;
+  transition: left 0.2s ease-in;
 }

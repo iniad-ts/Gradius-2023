@@ -10,6 +10,7 @@ type Size = {
 
 const QRCode = () => {
   const [ip, setIp] = useState<string>('');
+  const [isSimple, setIsSimple] = useState<boolean>(true);
   const [windowSize, setWindowSize] = useState<Size>({
     width: window.innerWidth,
     height: window.innerHeight,
@@ -49,6 +50,7 @@ const QRCode = () => {
 
   return (
     <div className={styles.container}>
+      <div className={styles.bg} style={{ opacity: isSimple ? '0' : '1' }} />
       {ip !== '' && (
         <Canvas
           text={`${ip}/login`}
@@ -60,6 +62,9 @@ const QRCode = () => {
           }}
         />
       )}
+      <div onClick={() => setIsSimple(!isSimple)} className={styles.button}>
+        <div style={{ left: isSimple ? '0.6svmin' : 'calc(100% - 2.8svmin)' }} />
+      </div>
     </div>
   );
 };
