@@ -112,7 +112,7 @@ const Home = () => {
 
     const playerStatusIntervalId = setInterval(() => {
       fetchPlayerStatus();
-    }, 5000);
+    }, 500);
 
     return () => {
       clearInterval(userIdIntervalId);
