@@ -1,5 +1,7 @@
+import { SCREEN_HEIGHT, SCREEN_WIDTH } from '$/commonConstantsWithClient';
 import type { UserId } from '$/commonTypesWithClient/branded';
 import { bulletRepository } from '$/repository/bulletRepository';
+import { gameRepository } from '$/repository/gameRepository';
 import { playerRepository } from '$/repository/playerRepository';
 import { bulletIdParser } from '$/service/idParsers';
 import { randomUUID } from 'crypto';
@@ -69,14 +71,27 @@ export const bulletUseCase = {
   },
   update: async () => {
     const currentBulletList = await bulletRepository.findAll();
-    const promises = currentBulletList.map((bullet) => {
-      // 画面外に出た弾を削除する、それ以外は移動する
-      if (bullet.pos.x > 1920 || bullet.pos.x < 0) {
-        return bulletUseCase.delete(bullet);
-      } else {
-        return bulletUseCase.move(bullet);
-      }
-    });
-    await Promise.all(promises);
+    const displayNumber = (await gameRepository.find().then((game) => game?.displayNumber)) ?? 1;
+
+    const outOfDisplay = (pos: { x: number; y: number }) => {
+      const terms = [
+        pos.x < 0,
+        pos.y < 0,
+        pos.x > displayNumber * SCREEN_WIDTH,
+        pos.y > SCREEN_HEIGHT,
+      ];
+
+      return terms.some(Boolean);
+    };
+
+    await Promise.all(
+      currentBulletList.map((bullet) => {
+        if (outOfDisplay(bullet.pos)) {
+          return bulletUseCase.delete(bullet);
+        } else {
+          return bulletUseCase.move(bullet);
+        }
+      })
+    );
   },
 };
