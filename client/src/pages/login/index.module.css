@@ -5,13 +5,16 @@
   justify-content: center;
   width: 100vw;
   height: 100lvh;
+  overflow: hidden;
   background-image: url('~/public/images/gradius_genesis.png');
   background-size: cover;
+  perspective: 200dvmax;
 }
 
 .card {
   position: relative;
   display: grid;
+  flex-shrink: 0;
   grid-template-rows: repeat(6, 1fr);
   align-items: end;
   justify-items: center;
@@ -98,10 +101,22 @@
   backdrop-filter: blur(0.8svmin);
 }
 
+.panel:first-child {
+  transform: rotateY(30deg);
+  transform-origin: 100% 50%;
+}
+
+.panel:last-child {
+  transform: rotateY(-30deg);
+  transform-origin: 0% 50%;
+}
+
 .panel > h2 {
-  margin-bottom: 1rem;
-  margin-bottom: 0;
-  font-size: 1.2svmin;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 3svmin;
+  font-size: 2svmin;
   font-weight: bold;
   color: #fff;
   text-align: center;
@@ -109,8 +124,12 @@
 }
 
 .panel > p {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 3svmin;
   margin: 0;
-  font-size: 1.2svmin;
+  font-size: 1.6svmin;
   font-weight: bold;
   color: #fff;
   text-align: center;
@@ -118,16 +137,28 @@
 }
 
 .players {
-  margin-top: 2svmin;
+  display: grid;
+  grid-template-rows: repeat(10, 1fr);
+  height: calc(100% - 8svmin);
+  margin: 2svmin 0 0;
   font-size: 1.2svmin;
   font-weight: bold;
   color: #fff;
   text-shadow: 0 0 0.4svmin #000;
 }
 
+.players > div {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.6svmin;
+}
+
 .ranking {
-  margin-top: 2svmin;
-  font-size: 1.2svmin;
+  display: grid;
+  grid-template-rows: repeat(6, 1fr);
+  height: calc(100% - 5svmin);
+  margin: 2svmin 0 0;
   font-weight: bold;
   color: #fff;
   text-align: center;
@@ -135,5 +166,35 @@
 }
 
 .ranking > div {
-  margin-bottom: 2svmin;
+  height: 100%;
+  font-size: 1.2svmin;
+}
+
+.ranking > div > div {
+  height: 50%;
+}
+
+.ranking > div > div:first-child::first-letter {
+  font-size: 2.4svmin;
+}
+
+.ranking > div:nth-child(1) > div:first-child::first-letter {
+  color: transparent;
+  text-shadow: none;
+  background-image: linear-gradient(45deg, #ebd300, #eb9900, #ffc559, #af8943);
+  background-clip: text;
+}
+
+.ranking > div:nth-child(2) > div:first-child::first-letter {
+  color: transparent;
+  text-shadow: none;
+  background-image: linear-gradient(45deg, #949ba7, #bad1fa);
+  background-clip: text;
+}
+
+.ranking > div:nth-child(3) > div:first-child::first-letter {
+  color: transparent;
+  text-shadow: none;
+  background-image: linear-gradient(45deg, #a77044, #f7c46c);
+  background-clip: text;
 }
