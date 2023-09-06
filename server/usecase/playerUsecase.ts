@@ -92,6 +92,9 @@ export const playerUseCase = {
 
     return updatePlayerInfo;
   },
+  getAllStatus: async () => {
+    return await playerRepository.findAll();
+  },
   getPlayersByDisplayNumber: async (displayNumber: number) => {
     const players = await playerRepository.findAll();
     const playersByDisplayNumber = players.filter((player) => {
