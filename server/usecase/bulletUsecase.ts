@@ -1,4 +1,4 @@
-import { SCREEN_HEIGHT, SCREEN_WIDTH } from '$/commonConstantsWithClient';
+import { PLAYER_HALF_WIDTH, SCREEN_HEIGHT, SCREEN_WIDTH } from '$/commonConstantsWithClient';
 import type { UserId } from '$/commonTypesWithClient/branded';
 import { bulletRepository } from '$/repository/bulletRepository';
 import { gameRepository } from '$/repository/gameRepository';
@@ -23,31 +23,20 @@ export const bulletUseCase = {
   create: async (shooterId: UserId): Promise<BulletModel | null> => {
     const shooterInfo = await playerRepository.find(shooterId);
     if (shooterInfo === null) return null;
-    if (shooterInfo.side === 'left') {
-      const newBullet: BulletModel = {
-        bulletId: bulletIdParser.parse(randomUUID()),
-        shooterId,
-        power: 1,
-        vector: { x: 10, y: 0 },
-        pos: { x: shooterInfo.pos.x, y: shooterInfo.pos.y },
-        type: 1,
-        side: shooterInfo.side,
-      };
-      await bulletRepository.save(newBullet);
-      return newBullet;
-    } else {
-      const newBullet: BulletModel = {
-        bulletId: bulletIdParser.parse(randomUUID()),
-        shooterId,
-        power: 1,
-        vector: { x: -10, y: 0 },
-        pos: { x: shooterInfo.pos.x, y: shooterInfo.pos.y },
-        type: 1,
-        side: shooterInfo.side,
-      };
-      await bulletRepository.save(newBullet);
-      return newBullet;
-    }
+    const newBullet: BulletModel = {
+      bulletId: bulletIdParser.parse(randomUUID()),
+      shooterId,
+      power: 1,
+      vector: { x: 10 * (shooterInfo.side === 'left' ? 1 : -1), y: 0 },
+      pos: {
+        x: shooterInfo.pos.x + PLAYER_HALF_WIDTH * (shooterInfo.side === 'left' ? 1 : -1),
+        y: shooterInfo.pos.y,
+      },
+      type: 1,
+      side: shooterInfo.side,
+    };
+    await bulletRepository.save(newBullet);
+    return newBullet;
   },
   move: async (bulletModel: BulletModel): Promise<BulletModel | null> => {
     const currentBulletInfo = await bulletRepository.find(bulletModel.bulletId);
