@@ -1,6 +1,7 @@
 import { SCREEN_HEIGHT } from '$/commonConstantsWithClient';
 import type { EnemyModel } from '$/commonTypesWithClient/models';
 import { enemyRepository } from '$/repository/enemyRepository';
+import { gameRepository } from '$/repository/gameRepository';
 import { enemyIdParser } from '$/service/idParsers';
 import { randomUUID } from 'crypto';
 
@@ -21,10 +22,14 @@ export const enemyUseCase = {
   create: async (): Promise<EnemyModel | null> => {
     const count = await enemyRepository.count();
     if (count > 3) return null;
+    //TODO: 敵の出現頻度や場所を考える必要がある
+    const game = await gameRepository.find();
+    const MAX_X = 1920 * (game?.displayNumber ?? 0) - 500;
+    const MIN_X = 300;
     const enemyData: EnemyModel = {
       enemyId: enemyIdParser.parse(randomUUID()),
       //Math.random() * ( 最大値 - 最小値 ) + 最小値; 「最小値 〜 最大値」
-      pos: { x: Math.random() * (1100 - 900) + 900, y: Math.floor(Math.random() * SCREEN_HEIGHT) },
+      pos: { x: Math.random() * (MAX_X - MIN_X), y: Math.floor(Math.random() * SCREEN_HEIGHT) },
       score: 100,
       vector: { x: -2, y: 0 },
       type: 0,
@@ -58,8 +63,9 @@ export const enemyUseCase = {
   },
   update: async () => {
     const currentEnemyInfos = await enemyRepository.findAll();
+    const game = await gameRepository.find();
     const promises = currentEnemyInfos.map((enemy) => {
-      if (enemy.pos.x > 1920 || enemy.pos.x < 50) {
+      if (enemy.pos.x > 1920 * (game?.displayNumber ?? 0) || enemy.pos.x < 50) {
         return enemyUseCase.delete(enemy);
       } else {
         return enemyUseCase.move(enemy);

@@ -38,10 +38,14 @@ const Game = () => {
 
   const fetchEnemies = async () => {
     const res = await apiClient.enemy.$get();
+    const display = Number(displayPosition);
     const killedEnemies = enemies.filter((enemy) => !res.some((e) => e.enemyId === enemy.enemyId));
     if (killedEnemies.length > 0) {
       killedEnemies.forEach((enemy) => {
-        setEffectPosition((prev) => [...prev, [enemy.pos.x - 40, enemy.pos.y - 40]]);
+        setEffectPosition((prev) => [
+          ...prev,
+          [enemy.pos.x - 1920 * display - 40, enemy.pos.y - 40],
+        ]);
       });
     }
     setEnemies(res);
@@ -139,16 +143,19 @@ const Game = () => {
           )}
         </Layer>
         <Layer>
-          {enemies.map((enemy) => (
-            <Image
-              image={enemyImage1}
-              width={80}
-              height={80}
-              x={enemy.pos.x - 40}
-              y={enemy.pos.y - 40}
-              key={enemy.enemyId}
-            />
-          ))}
+          {enemies.map(
+            (enemy) =>
+              displayPosition !== null && (
+                <Image
+                  image={enemyImage1}
+                  width={80}
+                  height={80}
+                  x={enemy.pos.x - 1920 * displayPosition - 40}
+                  y={enemy.pos.y - 40}
+                  key={enemy.enemyId}
+                />
+              )
+          )}
         </Layer>
         <Layer>
           {effectPosition.map((position, index) => (
