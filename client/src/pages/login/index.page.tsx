@@ -1,9 +1,9 @@
 import type { PlayerModel } from 'commonTypesWithClient/models';
 import { useRouter } from 'next/router';
 import type { ChangeEvent } from 'react';
-import { useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { apiClient } from 'src/utils/apiClient';
-import { loginWithLocalStorage } from 'src/utils/loginWithLocalStorage';
+import { getUserIdFromLocalStorage, loginWithLocalStorage } from 'src/utils/loginWithLocalStorage';
 import styles from './index.module.css';
 
 const Login = () => {
@@ -14,12 +14,12 @@ const Login = () => {
 
   const router = useRouter();
 
-  // const redirectToController = useCallback(async () => {
-  //   const localStorageUserId = getUserIdFromLocalStorage();
-  //   if (localStorageUserId !== null) {
-  //     return router.push('/controller');
-  //   }
-  // }, [router]);
+  const redirectToController = useCallback(async () => {
+    const localStorageUserId = getUserIdFromLocalStorage();
+    if (localStorageUserId !== null) {
+      return router.push('/controller');
+    }
+  }, [router]);
 
   const handleInput = (e: ChangeEvent<HTMLInputElement>) => {
     setName(e.target.value);
@@ -59,9 +59,9 @@ const Login = () => {
     return sortedPlayers.slice(0, 10);
   }, [playersDead]);
 
-  // useEffect(() => {
-  //   redirectToController();
-  // }, [redirectToController]);
+  useEffect(() => {
+    redirectToController();
+  }, [redirectToController]);
 
   useEffect(() => {
     const cancelId = requestAnimationFrame(() => {
