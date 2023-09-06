@@ -1,3 +1,4 @@
+import { ENEMY_HALF_WIDTH, SCREEN_HEIGHT, SCREEN_WIDTH } from 'commonConstantsWithClient';
 import type { BulletModel, EnemyModel, PlayerModel } from 'commonTypesWithClient/models';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
@@ -9,6 +10,11 @@ import { Player } from 'src/components/Entity/Player';
 import { staticPath } from 'src/utils/$path';
 import { apiClient } from 'src/utils/apiClient';
 import styles from './index.module.css';
+
+type WindowSize = {
+  width: number;
+  height: number;
+};
 
 const Game = () => {
   const router = useRouter();
@@ -26,8 +32,10 @@ const Game = () => {
   //TODO: もし、これ以外のエフェクトを追加する場合は、それぞれのエフェクトを区別する型を作成する
   const [effectPosition, setEffectPosition] = useState<number[][]>([]);
 
-  const [width, setWidth] = useState<number>(0);
-  const [height, setHeight] = useState<number>(0);
+  const [windowSize, setWindowSize] = useState<WindowSize>({
+    width: window.innerWidth,
+    height: window.innerHeight,
+  });
 
   const fetchPlayers = async () => {
     const res = await apiClient.player.$get({
@@ -41,7 +49,10 @@ const Game = () => {
     const killedEnemies = enemies.filter((enemy) => !res.some((e) => e.enemyId === enemy.enemyId));
     if (killedEnemies.length > 0) {
       killedEnemies.forEach((enemy) => {
-        setEffectPosition((prev) => [...prev, [enemy.pos.x - 40, enemy.pos.y - 40]]);
+        setEffectPosition((prev) => [
+          ...prev,
+          [enemy.pos.x - ENEMY_HALF_WIDTH, enemy.pos.y - ENEMY_HALF_WIDTH],
+        ]);
       });
     }
     setEnemies(res);
@@ -57,10 +68,8 @@ const Game = () => {
   };
 
   useEffect(() => {
-    const cancelId = requestAnimationFrame(() => {
-      fetchPlayers();
-      fetchEnemies();
-      fetchBullets();
+    const cancelId = requestAnimationFrame(async () => {
+      await Promise.all([fetchPlayers(), fetchEnemies(), fetchBullets()]);
     });
     return () => cancelAnimationFrame(cancelId);
   });
@@ -74,13 +83,15 @@ const Game = () => {
   }, [effectPosition]);
 
   useEffect(() => {
-    const setWindowSize = () => {
-      setWidth(window.innerWidth);
-      setHeight(window.innerHeight);
+    const set = () => {
+      setWindowSize({
+        width: window.innerWidth,
+        height: window.innerHeight,
+      });
     };
-    setWindowSize();
-    window.addEventListener('resize', setWindowSize);
-    return () => window.removeEventListener('resize', setWindowSize);
+
+    window.addEventListener('resize', set);
+    return () => window.removeEventListener('resize', set);
   }, []);
 
   useEffect(() => {
@@ -96,13 +107,13 @@ const Game = () => {
   return (
     <div className={styles.canvasContainer}>
       <Stage
-        width={1920}
-        height={1080}
+        width={SCREEN_WIDTH}
+        height={SCREEN_HEIGHT}
         style={{
           transform: `
-              scale(${width / 1920}, ${height / 1080})
-              translateX(${(width - 1920) / 2}px)
-              translateY(${(height - 1080) / 2}px)
+              scale(${windowSize.width / SCREEN_WIDTH}, ${windowSize.height / SCREEN_HEIGHT})
+              translateX(${(windowSize.width - SCREEN_WIDTH) / 2}px)
+              translateY(${(windowSize.height - SCREEN_HEIGHT) / 2}px)
               `,
         }}
       >
@@ -123,7 +134,7 @@ const Game = () => {
         </Layer>
         <Layer>
           {effectPosition.map((position, index) => (
-            <Boom position={position} key={index} />
+            <Boom displayPosition={displayPosition ?? 0} position={position} key={index} />
           ))}
         </Layer>
       </Stage>
