@@ -7,6 +7,7 @@ import { randomUUID } from 'crypto';
 import type { BulletModel } from '../commonTypesWithClient/models';
 
 let intervalId: NodeJS.Timeout | null = null;
+const SCREEN_WIDTH = 1920;
 export const bulletUseCase = {
   init: () => {
     intervalId = setInterval(() => {
@@ -72,7 +73,7 @@ export const bulletUseCase = {
     const currentBulletList = await bulletRepository.findAll();
     const game = await gameRepository.find();
     const promises = currentBulletList.map((bullet) => {
-      if (bullet.pos.x > 1920 * (game?.displayNumber ?? 0)) {
+      if (bullet.pos.x > SCREEN_WIDTH * (game?.displayNumber ?? 0)) {
         return bulletUseCase.delete(bullet);
       } else {
         return bulletUseCase.move(bullet);
@@ -84,7 +85,7 @@ export const bulletUseCase = {
     const bullets = await bulletRepository.findAll();
     const bulletsByDisplayNumber = bullets.filter((bullet) => {
       if (typeof bullet.pos.x === 'number') {
-        return Math.floor(bullet.pos.x / 1920) === displayNumber;
+        return Math.floor(bullet.pos.x / SCREEN_WIDTH) === displayNumber;
       }
       return [];
     });

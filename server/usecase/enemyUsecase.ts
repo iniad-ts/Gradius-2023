@@ -6,6 +6,7 @@ import { enemyIdParser } from '$/service/idParsers';
 import { randomUUID } from 'crypto';
 
 let intervalId: NodeJS.Timeout | null = null;
+const SCREEN_WIDTH = 1920;
 export const enemyUseCase = {
   init: () => {
     intervalId = setInterval(() => {
@@ -24,7 +25,7 @@ export const enemyUseCase = {
     if (count > 3) return null;
     //TODO: 敵の出現頻度や場所を考える必要がある
     const game = await gameRepository.find();
-    const MAX_X = 1920 * (game?.displayNumber ?? 0) - 500;
+    const MAX_X = SCREEN_WIDTH * (game?.displayNumber ?? 0) - 500;
     const MIN_X = 300;
     const enemyData: EnemyModel = {
       enemyId: enemyIdParser.parse(randomUUID()),
@@ -65,7 +66,7 @@ export const enemyUseCase = {
     const currentEnemyInfos = await enemyRepository.findAll();
     const game = await gameRepository.find();
     const promises = currentEnemyInfos.map((enemy) => {
-      if (enemy.pos.x > 1920 * (game?.displayNumber ?? 0) || enemy.pos.x < 50) {
+      if (enemy.pos.x > SCREEN_WIDTH * (game?.displayNumber ?? 0) || enemy.pos.x < 50) {
         return enemyUseCase.delete(enemy);
       } else {
         return enemyUseCase.move(enemy);

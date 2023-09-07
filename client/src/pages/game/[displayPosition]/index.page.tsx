@@ -28,6 +28,7 @@ const Game = () => {
 
   const [width, setWidth] = useState<number>(0);
   const [height, setHeight] = useState<number>(0);
+  const SCREEN_WIDTH = 1920;
 
   const fetchPlayers = async () => {
     const res = await apiClient.player.$get({
@@ -117,7 +118,7 @@ const Game = () => {
             (bullet) =>
               displayPosition !== null && (
                 <Circle
-                  x={bullet.pos.x - 1920 * displayPosition}
+                  x={bullet.pos.x - SCREEN_WIDTH * displayPosition}
                   y={bullet.pos.y}
                   radius={7}
                   fill="red"
@@ -135,7 +136,7 @@ const Game = () => {
                   width={100}
                   height={100}
                   rotation={player.side === 'left' ? 90 : -90}
-                  x={player.pos.x - 1920 * displayPosition + 50}
+                  x={player.pos.x - SCREEN_WIDTH * displayPosition + 50}
                   y={player.pos.y - 50}
                   key={player.userId}
                 />
@@ -150,7 +151,7 @@ const Game = () => {
                   image={enemyImage1}
                   width={80}
                   height={80}
-                  x={enemy.pos.x - 1920 * displayPosition - 40}
+                  x={enemy.pos.x - SCREEN_WIDTH * displayPosition - 40}
                   y={enemy.pos.y - 40}
                   key={enemy.enemyId}
                 />
