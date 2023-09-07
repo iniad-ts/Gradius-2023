@@ -1,9 +1,15 @@
+import { ENEMY_HALF_WIDTH, SCREEN_WIDTH } from 'commonConstantsWithClient';
 import { useEffect, useState } from 'react';
 import { Image } from 'react-konva';
 import { staticPath } from 'src/utils/$path';
 import useImage from 'use-image';
 
-const Boom = ({ position }: { position: number[] }) => {
+type Props = {
+  displayPosition: number;
+  position: number[];
+};
+
+const Boom = ({ displayPosition, position }: Props) => {
   const imagePaths = [
     staticPath.images.Effect.boom.boom1_png,
     staticPath.images.Effect.boom.boom2_png,
@@ -24,6 +30,11 @@ const Boom = ({ position }: { position: number[] }) => {
 
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
+  const relativePos = {
+    x: position[0] - displayPosition * SCREEN_WIDTH,
+    y: position[1],
+  };
+
   useEffect(() => {
     const updateBoomImage = () => {
       if (currentImageIndex + 1 === boomImages.length) {
@@ -43,10 +54,10 @@ const Boom = ({ position }: { position: number[] }) => {
   return (
     <Image
       image={boomImages[currentImageIndex]}
-      x={position[0]}
-      y={position[1]}
-      width={100}
-      height={100}
+      x={relativePos.x}
+      y={relativePos.y}
+      width={ENEMY_HALF_WIDTH * 2 * 1.2}
+      height={ENEMY_HALF_WIDTH * 2 * 1.2}
     />
   );
 };
