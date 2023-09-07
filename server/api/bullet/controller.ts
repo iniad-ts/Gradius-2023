@@ -4,7 +4,7 @@ import { defineController } from './$relay';
 export default defineController(() => ({
   get: async ({ query }) => ({
     status: 200,
-    body: (await bulletUseCase.getBulletByDisplayNumber(query.displayNumber)) ?? [],
+    body: (await bulletUseCase.getBulletInDisplay(query.displayNumber)) ?? [],
   }),
   post: async ({ body }) => ({ status: 200, body: await bulletUseCase.create(body.userId) }),
 }));

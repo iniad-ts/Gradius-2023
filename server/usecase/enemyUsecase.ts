@@ -5,66 +5,58 @@ import { gameRepository } from '$/repository/gameRepository';
 import { enemyIdParser } from '$/service/idParsers';
 import { randomUUID } from 'crypto';
 
-let intervalId: NodeJS.Timeout | null = null;
+const updateIntervalId: NodeJS.Timeout[] = [];
+const createIntervalId: NodeJS.Timeout[] = [];
+const ENEMY_UPDATE_INTERVAL = 100;
+const ENEMY_CREATE_INTERVAL = 1000;
+
 export const enemyUseCase = {
   init: () => {
-    intervalId = setInterval(() => {
-      enemyUseCase.create();
-      enemyUseCase.update();
-    }, 100);
+    updateIntervalId.push(
+      setInterval(() => {
+        enemyUseCase.update();
+      }, ENEMY_UPDATE_INTERVAL)
+    );
+
+    createIntervalId.push(
+      setInterval(() => {
+        enemyUseCase.create();
+      }, ENEMY_CREATE_INTERVAL)
+    );
   },
+
   stop: () => {
-    if (intervalId) {
-      clearInterval(intervalId);
-      intervalId = null;
+    if (updateIntervalId.length > 0) {
+      updateIntervalId.forEach(clearInterval);
+    }
+    if (createIntervalId.length > 0) {
+      createIntervalId.forEach(clearInterval);
     }
   },
+
   create: async (): Promise<EnemyModel | null> => {
     const count = await enemyRepository.count();
     const displayNumber = (await gameRepository.find().then((game) => game?.displayNumber)) ?? 1;
 
     if (count > 12) return null;
-    const enemyData: EnemyModel = {
-      enemyId: enemyIdParser.parse(randomUUID()),
-      //Math.random() * ( 最大値 - 最小値 ) + 最小値; 「最小値 〜 最大値」
-      pos: {
-        x: Math.random() * (SCREEN_WIDTH * displayNumber - 1000) + 500,
-        y: Math.floor(Math.random() * SCREEN_HEIGHT),
-      },
-      score: 100,
-      vector: {
+
+    const newEnemy = await enemyRepository.create({
+      id: enemyIdParser.parse(randomUUID()),
+      direction: {
         x: 2 * (Math.random() > 0.5 ? 1 : -1),
         y: 0,
       },
-      type: Math.floor(Math.random() * 3),
-    };
-    await enemyRepository.save(enemyData);
-    return enemyData;
-  },
-  findAll: async (): Promise<EnemyModel[]> => {
-    const enemies = await enemyRepository.findAll();
-    return enemies.length > 0 ? enemies : [];
-  },
-  move: async (enemyModel: EnemyModel): Promise<EnemyModel | null> => {
-    const currentEnemyInfo = await enemyRepository.find(enemyModel.enemyId);
-    if (currentEnemyInfo === null) return null;
-    const updateEnemyInfo: EnemyModel = {
-      ...currentEnemyInfo,
-      pos: {
-        x: currentEnemyInfo.pos.x + currentEnemyInfo.vector.x,
-        y: currentEnemyInfo.pos.y + currentEnemyInfo.vector.y,
+      createdPos: {
+        x: Math.random() * (SCREEN_WIDTH * displayNumber - 1000) + 500,
+        y: Math.floor(Math.random() * SCREEN_HEIGHT),
       },
-    };
-    await enemyRepository.save(updateEnemyInfo);
-    return updateEnemyInfo;
+      createdAt: Date.now(),
+      type: Math.floor(Math.random() * 3),
+    });
+
+    return newEnemy;
   },
-  delete: async (enemyModel: EnemyModel) => {
-    try {
-      await enemyRepository.delete(enemyModel.enemyId);
-    } catch (e) {
-      console.error(e);
-    }
-  },
+
   update: async () => {
     const currentEnemyList = await enemyRepository.findAll();
     const displayNumber = (await gameRepository.find().then((game) => game?.displayNumber)) ?? 1;
@@ -82,11 +74,9 @@ export const enemyUseCase = {
 
     await Promise.all(
       currentEnemyList.map((enemy) => {
-        if (outOfDisplay(enemy.pos)) {
-          return enemyUseCase.delete(enemy);
-        } else {
-          return enemyUseCase.move(enemy);
-        }
+        // if (outOfDisplay(enemy.pos)) {
+        //   return enemyRepository.delete(enemy.id);
+        // }
       })
     );
   },

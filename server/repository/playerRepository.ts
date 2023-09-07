@@ -6,7 +6,7 @@ import { userIdParser } from '../service/idParsers';
 import { prismaClient } from '../service/prismaClient';
 
 const toPlayerModel = (prismaPlayer: Player): PlayerModel => ({
-  userId: userIdParser.parse(prismaPlayer.userId),
+  id: userIdParser.parse(prismaPlayer.userId),
   name: z.string().parse(prismaPlayer.name),
   score: z.number().parse(prismaPlayer.score),
   pos: z
@@ -14,13 +14,10 @@ const toPlayerModel = (prismaPlayer: Player): PlayerModel => ({
       x: z.number(),
       y: z.number(),
     })
-    .parse(prismaPlayer.pos),
-  vector: z
-    .object({
-      x: z.number(),
-      y: z.number(),
-    })
-    .parse(prismaPlayer.vector),
+    .parse({
+      x: prismaPlayer.x,
+      y: prismaPlayer.y,
+    }),
   Items:
     z
       .object({
@@ -38,24 +35,22 @@ export const playerRepository = {
   save: async (player: PlayerModel): Promise<PlayerModel> => {
     const prismaPlayer = await prismaClient.player.upsert({
       where: {
-        userId: player.userId,
+        userId: player.id,
       },
       update: {
-        name: player.name,
         score: player.score,
-        vector: player.vector,
         Item: player.Items,
-        pos: player.pos,
-        side: player.side,
+        x: player.pos.x,
+        y: player.pos.y,
         isPlaying: player.isPlaying,
       },
       create: {
-        userId: player.userId,
+        userId: player.id,
         name: player.name,
         score: player.score,
-        vector: player.vector,
         Item: player.Items,
-        pos: player.pos,
+        x: player.pos.x,
+        y: player.pos.y,
         side: player.side,
         isPlaying: player.isPlaying,
       },
@@ -63,20 +58,19 @@ export const playerRepository = {
 
     return toPlayerModel(prismaPlayer);
   },
+
   find: async (userId: UserId): Promise<PlayerModel | null> => {
     const player = await prismaClient.player.findUnique({
       where: {
         userId,
       },
     });
-    if (player === null) {
-      return null;
-    }
-    return toPlayerModel(player);
+    return player !== null ? toPlayerModel(player) : null;
   },
+
   findAll: async (): Promise<PlayerModel[]> => {
     const players = await prismaClient.player.findMany();
-    return players.length > 0 ? players.map(toPlayerModel) : [];
+    return players.map(toPlayerModel);
   },
 
   findPlayingOrDead: async (isPlaying: boolean): Promise<PlayerModel[]> => {
@@ -85,23 +79,27 @@ export const playerRepository = {
         isPlaying,
       },
     });
+
     return players.map(toPlayerModel);
   },
+
   delete: async (userId: UserId) => {
-    const player = await prismaClient.player.findUnique({
-      where: {
-        userId,
-      },
-    });
-    if (player === null) return;
-    await prismaClient.player.delete({
+    await prismaClient.player.deleteMany({
       where: {
         userId,
       },
     });
   },
+
   count: async () => {
-    const count = prismaClient.player.count();
+    const count = await prismaClient.player.count();
+    return count;
+  },
+
+  countInSide: async (side: 'left' | 'right') => {
+    const count = await prismaClient.player.count({
+      where: { side },
+    });
     return count;
   },
 };

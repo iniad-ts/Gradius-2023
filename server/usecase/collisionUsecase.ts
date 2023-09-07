@@ -100,23 +100,6 @@ const isOtherSide = (target1: EntityModel, target2: EntityModel) => {
   );
 };
 
-const isAnotherEntity = (target1: EntityModel, target2: EntityModel) => {
-  const id1 =
-    'userId' in target1
-      ? target1.userId
-      : 'enemyId' in target1
-      ? target1.enemyId
-      : target1.bulletId;
-  const id2 =
-    'userId' in target2
-      ? target2.userId
-      : 'enemyId' in target2
-      ? target2.enemyId
-      : target2.bulletId;
-
-  return id1 !== id2;
-};
-
 const checkCollisions = async () => {
   const entities = await Promise.all([
     playerRepository.findAll(),
@@ -133,7 +116,7 @@ const checkCollisions = async () => {
       return entities
         .filter((entity2) => {
           const terms = [
-            isAnotherEntity(entity1, entity2),
+            entity1.id !== entity2.id,
             isOtherSide(entity1, entity2),
             isCollision(entity1, entity2),
           ];
@@ -145,12 +128,12 @@ const checkCollisions = async () => {
 
   await Promise.all(
     collisions.map((entity) => {
-      if ('userId' in entity) {
-        return playerUseCase.addScore(entity.userId, -100);
-      } else if ('enemyId' in entity) {
-        return enemyRepository.delete(entity.enemyId);
+      if ('score' in entity) {
+        return playerUseCase.addScore(entity.id, -100);
+      } else if ('side' in entity) {
+        return bulletRepository.delete(entity.id);
       } else {
-        return bulletRepository.delete(entity.bulletId);
+        return enemyRepository.delete(entity.id);
       }
     })
   );
