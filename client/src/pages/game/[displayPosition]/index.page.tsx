@@ -32,7 +32,6 @@ const Game = () => {
   const [bullets, setBullets] = useState<BulletModel[]>([]);
   //TODO: もし、これ以外のエフェクトを追加する場合は、それぞれのエフェクトを区別する型を作成する
   const [effectPosition, setEffectPosition] = useState<number[][]>([]);
-
   const [windowSize, setWindowSize] = useState<WindowSize>({
     width: window.innerWidth,
     height: window.innerHeight,
@@ -49,6 +48,7 @@ const Game = () => {
 
   const fetchEnemies = async () => {
     const res = await apiClient.enemy.$get();
+    const display = Number(displayPosition);
     const killedEnemies = enemies.filter((enemy) => !res.some((e) => e.enemyId === enemy.enemyId));
     if (killedEnemies.length > 0) {
       killedEnemies.forEach((enemy) => {
@@ -62,7 +62,9 @@ const Game = () => {
   };
 
   const fetchBullets = async () => {
-    const res = await apiClient.bullet.$get();
+    const res = await apiClient.bullet.$get({
+      query: { displayNumber: Number(displayPosition) },
+    });
     if (res.length > bullets.length) {
       const audio = new Audio(staticPath.sounds.shot_mp3);
       audio.play();
