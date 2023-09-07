@@ -1,3 +1,4 @@
+import { SCREEN_WIDTH } from '$/commonConstantsWithClient';
 import assert from 'assert';
 import { randomUUID } from 'crypto';
 import { z } from 'zod';
@@ -8,6 +9,15 @@ import { userIdParser } from '../service/idParsers';
 
 export type MoveDirection = { x: number; y: number };
 
+const judgment = (currentPlayerInfo: PlayerModel, newPos: { x: number; y: number }) => {
+  if (
+    (currentPlayerInfo.side === 'left' && newPos.x > SCREEN_WIDTH) ||
+    (currentPlayerInfo.side === 'right' && newPos.x < 0)
+  ) {
+    playerUseCase.finishGame(currentPlayerInfo);
+    return null;
+  }
+};
 //moveDirectionの値をzodでバリデーションする
 const MoveDirectionSchema = z.object({
   x: z.number().min(-1).max(1),
@@ -54,12 +64,7 @@ export const playerUseCase = {
       x: currentPlayerInfo.pos.x + validatedMoveDirection.x * currentPlayerInfo.vector.x,
       y: currentPlayerInfo.pos.y + validatedMoveDirection.y * currentPlayerInfo.vector.y,
     };
-
-    if (newPos.x > 1300) {
-      playerUseCase.finishGame(currentPlayerInfo);
-      return null;
-    }
-
+    if (judgment(currentPlayerInfo, newPos) === null) return null;
     const updatePlayerInfo: PlayerModel = {
       ...currentPlayerInfo,
       pos: newPos,
@@ -83,10 +88,10 @@ export const playerUseCase = {
     return currentPlayerInfo;
   },
 
-  finishGame: async (currentPlayerInfoyer: PlayerModel) => {
-    if (currentPlayerInfoyer === null) return null;
+  finishGame: async (currentPlayerInfo: PlayerModel) => {
+    if (currentPlayerInfo === null) return null;
     const updatePlayerInfo: PlayerModel = {
-      ...currentPlayerInfoyer,
+      ...currentPlayerInfo,
       isPlaying: false,
     };
 
