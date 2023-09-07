@@ -1,0 +1,44 @@
+.controller {
+  display: flex;
+  flex-direction: column;
+  gap: 4svmin;
+  align-items: center;
+  justify-content: center;
+  height: 100svmin;
+  overflow: hidden;
+  font-size: 6svmin;
+  color: #fff;
+  background-image: url('~/public/images/gradius_genesis.png');
+  background-size: cover;
+}
+
+.controller > h1::before,
+.controller > h1::after {
+  margin-inline: 2svmin;
+  font-size: 8svmin;
+  content: '🎉';
+}
+
+.button {
+  display: block;
+  padding: 1svmin 3svmin;
+  font-size: 2.4svmin;
+  font-weight: bold;
+  color: #fff;
+  cursor: pointer;
+  background-image: linear-gradient(45deg, #2965ce, #74d3f2);
+  background-size: 200%;
+  border: 0;
+  border-radius: 4svmin;
+  transition-timing-function: ease-in-out, ease-in;
+  transition-duration: 0.4s, 0.1s;
+  transition-property: background-position, transform;
+}
+
+.button:hover {
+  background-position: right;
+}
+
+.button:active {
+  transform: scale(0.95);
+}

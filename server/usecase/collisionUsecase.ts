@@ -1,3 +1,10 @@
+import {
+  BULLET_RADIUS,
+  ENEMY_HALF_WIDTH,
+  PLAYER_HALF_WIDTH,
+  SCREEN_HEIGHT,
+  SCREEN_WIDTH,
+} from '$/commonConstantsWithClient';
 import type { BulletModel, EnemyModel, PlayerModel } from '$/commonTypesWithClient/models';
 import { bulletRepository } from '$/repository/bulletRepository';
 import { enemyRepository } from '$/repository/enemyRepository';
@@ -11,29 +18,45 @@ let intervalId: NodeJS.Timeout | null = null;
 
 const divide = async (entities: EntityModel[], displayNumber: number) => {
   const dividedEntitiesByDisplay = [...Array(displayNumber)].map((_, i) => {
-    return entities.filter((entity) => Math.floor(entity.pos.x / 1920) === i);
+    return entities.filter((entity) => Math.floor(entity.pos.x / SCREEN_WIDTH) === i);
   });
 
   const dividedEntitiesByQuad = dividedEntitiesByDisplay
     .flatMap((entities) => {
       return [
-        entities.filter((entity) => Math.round(entity.pos.y / 1080 - 0.1) === 0),
-        entities.filter((entity) => Math.round(entity.pos.y / 1080 + 0.1) === 1),
+        entities.filter((entity) => Math.round(entity.pos.y / SCREEN_HEIGHT - 0.1) === 0),
+        entities.filter((entity) => Math.round(entity.pos.y / SCREEN_HEIGHT + 0.1) === 1),
       ].flatMap((entities) => {
         return [
-          entities.filter((entity) => Math.round((entity.pos.x % 1920) / 1920 - 0.1) === 0),
-          entities.filter((entity) => Math.round((entity.pos.x % 1920) / 1920 + 0.1) === 1),
+          entities.filter(
+            (entity) => Math.round((entity.pos.x % SCREEN_WIDTH) / SCREEN_WIDTH - 0.1) === 0
+          ),
+          entities.filter(
+            (entity) => Math.round((entity.pos.x % SCREEN_WIDTH) / SCREEN_WIDTH + 0.1) === 1
+          ),
         ];
       });
     })
     .flatMap((entities) => {
       return [
-        entities.filter((entity) => Math.round((entity.pos.y % 540) / 540 - 0.1) === 0),
-        entities.filter((entity) => Math.round((entity.pos.y % 540) / 540 + 0.1) === 1),
+        entities.filter(
+          (entity) =>
+            Math.round((entity.pos.y % (SCREEN_HEIGHT / 2)) / (SCREEN_HEIGHT / 2) - 0.1) === 0
+        ),
+        entities.filter(
+          (entity) =>
+            Math.round((entity.pos.y % (SCREEN_HEIGHT / 2)) / (SCREEN_HEIGHT / 2) + 0.1) === 1
+        ),
       ].flatMap((entities) => {
         return [
-          entities.filter((entity) => Math.round((entity.pos.x % 960) / 960 - 0.1) === 0),
-          entities.filter((entity) => Math.round((entity.pos.x % 960) / 960 + 0.1) === 1),
+          entities.filter(
+            (entity) =>
+              Math.round((entity.pos.x % (SCREEN_WIDTH / 2)) / (SCREEN_WIDTH / 2) - 0.1) === 0
+          ),
+          entities.filter(
+            (entity) =>
+              Math.round((entity.pos.x % (SCREEN_WIDTH / 2)) / (SCREEN_WIDTH / 2) + 0.1) === 1
+          ),
         ];
       });
     });
@@ -53,9 +76,9 @@ const entityType = (entity: EntityModel) => {
 
 const isCollision = (target1: EntityModel, target2: EntityModel) => {
   const entityRadius = {
-    player: 50,
-    enemy: 40,
-    bullet: 7,
+    player: PLAYER_HALF_WIDTH,
+    enemy: ENEMY_HALF_WIDTH,
+    bullet: BULLET_RADIUS,
   };
 
   const targetType1 = entityType(target1);
@@ -66,6 +89,32 @@ const isCollision = (target1: EntityModel, target2: EntityModel) => {
   const collisionDistanceSquared = (entityRadius[targetType1] + entityRadius[targetType2]) ** 2;
 
   return distanceSquared < collisionDistanceSquared;
+};
+
+const isOtherSide = (target1: EntityModel, target2: EntityModel) => {
+  const types = [target1, target2].map(entityType);
+  if (types.includes('enemy')) return true;
+
+  return (
+    (target1 as PlayerModel | BulletModel).side !== (target2 as PlayerModel | BulletModel).side
+  );
+};
+
+const isAnotherEntity = (target1: EntityModel, target2: EntityModel) => {
+  const id1 =
+    'userId' in target1
+      ? target1.userId
+      : 'enemyId' in target1
+      ? target1.enemyId
+      : target1.bulletId;
+  const id2 =
+    'userId' in target2
+      ? target2.userId
+      : 'enemyId' in target2
+      ? target2.enemyId
+      : target2.bulletId;
+
+  return id1 !== id2;
 };
 
 const checkCollisions = async () => {
@@ -84,9 +133,8 @@ const checkCollisions = async () => {
       return entities
         .filter((entity2) => {
           const terms = [
-            !(entityType(entity1) === 'enemy' && entityType(entity2) === 'enemy'),
-            (entity1 as PlayerModel | BulletModel).side !==
-              (entity2 as PlayerModel | BulletModel).side,
+            isAnotherEntity(entity1, entity2),
+            isOtherSide(entity1, entity2),
             isCollision(entity1, entity2),
           ];
           return terms.every(Boolean);

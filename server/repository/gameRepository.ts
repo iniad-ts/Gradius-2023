@@ -1,8 +1,8 @@
-import type { GameModel } from '$/commonTypesWithClient/models';
-import { gameIdParser } from '$/service/idParsers';
-import { prismaClient } from '$/service/prismaClient';
 import type { Game } from '@prisma/client';
 import { z } from 'zod';
+import type { GameModel } from '../commonTypesWithClient/models';
+import { gameIdParser } from '../service/idParsers';
+import { prismaClient } from '../service/prismaClient';
 
 const toGameModel = (prismaGame: Game): GameModel => ({
   id: gameIdParser.parse(prismaGame.id),
