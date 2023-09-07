@@ -50,12 +50,19 @@ export const playerUseCase = {
     if (currentPlayerInfo === null) return null;
     const validatedMoveDirection = MoveDirectionSchema.parse(moveDirection);
 
+    const newPos = {
+      x: currentPlayerInfo.pos.x + validatedMoveDirection.x * currentPlayerInfo.vector.x,
+      y: currentPlayerInfo.pos.y + validatedMoveDirection.y * currentPlayerInfo.vector.y,
+    };
+
+    if (newPos.x > 1300) {
+      playerUseCase.finishGame(currentPlayerInfo);
+      return null;
+    }
+
     const updatePlayerInfo: PlayerModel = {
       ...currentPlayerInfo,
-      pos: {
-        x: currentPlayerInfo.pos.x + validatedMoveDirection.x * currentPlayerInfo.vector.x,
-        y: currentPlayerInfo.pos.y + validatedMoveDirection.y * currentPlayerInfo.vector.y,
-      },
+      pos: newPos,
     };
     await playerRepository.save(updatePlayerInfo);
     return updatePlayerInfo;
@@ -76,12 +83,10 @@ export const playerUseCase = {
     return currentPlayerInfo;
   },
 
-  finishGame: async (userId: UserId) => {
-    const currentPlayerInfo = await playerRepository.find(userId);
-
-    if (currentPlayerInfo === null) return null;
+  finishGame: async (currentPlayerInfoyer: PlayerModel) => {
+    if (currentPlayerInfoyer === null) return null;
     const updatePlayerInfo: PlayerModel = {
-      ...currentPlayerInfo,
+      ...currentPlayerInfoyer,
       isPlaying: false,
     };
 
@@ -102,4 +107,7 @@ export const playerUseCase = {
     });
     return playersByDisplayNumber;
   },
+  // getIsPlayingPlayer: async () => {
+  //   return await playerRepository.findPlayingOrDead(true);
+  // },
 };
