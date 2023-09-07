@@ -162,10 +162,6 @@ const Home = () => {
     };
   }, []);
 
-  // setInterval(() => {
-  //   apiClient.bullet.control.$get();
-  // }, 1000);
-
   if (!(playerStatus?.isPlaying ?? true)) return <GameClear />;
 
   return (
