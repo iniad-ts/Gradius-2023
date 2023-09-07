@@ -69,12 +69,7 @@ export const playerUseCase = {
     const currentPlayer = await playerRepository.find(userId);
     if (currentPlayer === null) return null;
 
-    const updatePlayerInfo: PlayerModel = {
-      ...currentPlayer,
-      score: currentPlayer.score + score,
-    };
-
-    return await playerRepository.save(updatePlayerInfo);
+    return await playerRepository.saveScore(userId, currentPlayer.score + score);
   },
 
   finishGame: async (currentPlayerInfo: PlayerModel) => {

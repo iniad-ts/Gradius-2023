@@ -58,6 +58,36 @@ export const playerRepository = {
 
     return toPlayerModel(prismaPlayer);
   },
+  saveScore: async (playerId: UserId, score: number) => {
+    const prismaPlayer = await prismaClient.player.update({
+      where: {
+        userId: playerId,
+      },
+      data: {
+        score,
+      },
+    });
+
+    return toPlayerModel(prismaPlayer);
+  },
+  saveItem: async (
+    playerId: UserId,
+    Item: {
+      id: string;
+      name: string;
+    }[]
+  ) => {
+    const prismaPlayer = await prismaClient.player.update({
+      where: {
+        userId: playerId,
+      },
+      data: {
+        Item,
+      },
+    });
+
+    return toPlayerModel(prismaPlayer);
+  },
 
   find: async (userId: UserId): Promise<PlayerModel | null> => {
     const player = await prismaClient.player.findUnique({
