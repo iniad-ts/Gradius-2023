@@ -8,6 +8,7 @@ import { randomUUID } from 'crypto';
 import type { BulletModel } from '../commonTypesWithClient/models';
 
 let intervalId: NodeJS.Timeout | null = null;
+const SCREEN_WIDTH = 1920;
 export const bulletUseCase = {
   init: () => {
     intervalId = setInterval(() => {
@@ -82,5 +83,15 @@ export const bulletUseCase = {
         }
       })
     );
+  },
+  getBulletByDisplayNumber: async (displayNumber: number) => {
+    const bullets = await bulletRepository.findAll();
+    const bulletsByDisplayNumber = bullets.filter((bullet) => {
+      if (typeof bullet.pos.x === 'number') {
+        return Math.floor(bullet.pos.x / SCREEN_WIDTH) === displayNumber;
+      }
+      return [];
+    });
+    return bulletsByDisplayNumber;
   },
 };
