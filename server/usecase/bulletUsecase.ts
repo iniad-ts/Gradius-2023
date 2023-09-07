@@ -3,6 +3,7 @@ import type { UserId } from '$/commonTypesWithClient/branded';
 import { bulletRepository } from '$/repository/bulletRepository';
 import { gameRepository } from '$/repository/gameRepository';
 import { playerRepository } from '$/repository/playerRepository';
+import { computePosition } from '$/service/computePositions';
 import { bulletIdParser } from '$/service/idParsers';
 import { randomUUID } from 'crypto';
 import type { BulletModel } from '../commonTypesWithClient/models';
@@ -31,11 +32,11 @@ export const bulletUseCase = {
     const newBullet: BulletModel = {
       id: bulletIdParser.parse(randomUUID()),
       direction: {
-        x: 10 * (shooterInfo.side === 'left' ? 1 : -1),
+        x: shooterInfo.side === 'left' ? 1 : -1,
         y: 0,
       },
       createdPos: {
-        x: shooterInfo.pos.x + PLAYER_HALF_WIDTH * (shooterInfo.side === 'left' ? 1 : -1),
+        x: shooterInfo.pos.x + PLAYER_HALF_WIDTH * (shooterInfo.side === 'left' ? -1 : 1),
         y: shooterInfo.pos.y,
       },
       createdAt: Date.now(),
@@ -65,19 +66,22 @@ export const bulletUseCase = {
       return terms.some(Boolean);
     };
 
-    // await Promise.all(
-    //   currentBulletList.filter((bullet) => outOfDisplay(bullet.pos)).map(bulletUseCase.delete)
-    // );
+    await Promise.all(
+      currentBulletList
+        .filter((bullet) => {
+          const pos = computePosition(bullet);
+          return outOfDisplay(pos);
+        })
+        .map(bulletUseCase.delete)
+    );
   },
 
   getBulletInDisplay: async (displayNumber: number) => {
     const bullets = await bulletRepository.findAll();
-    // const bulletsByDisplayNumber = bullets.filter((bullet) => {
-    //   if (typeof bullet.pos.x === 'number') {
-    //     return Math.floor(bullet.pos.x / SCREEN_WIDTH) === displayNumber;
-    //   }
-    //   return [];
-    // });
-    // return bulletsByDisplayNumber;
+    const bulletsByDisplayNumber = bullets.filter((bullet) => {
+      const pos = computePosition(bullet);
+      return Math.floor(pos.x / SCREEN_WIDTH) === displayNumber;
+    });
+    return bulletsByDisplayNumber;
   },
 };

@@ -9,6 +9,7 @@ import { Enemy } from 'src/components/Entity/Enemy';
 import { Player } from 'src/components/Entity/Player';
 import { staticPath } from 'src/utils/$path';
 import { apiClient } from 'src/utils/apiClient';
+import { computePosition } from 'src/utils/computePosition';
 import useImage from 'use-image';
 import styles from './index.module.css';
 
@@ -48,13 +49,13 @@ const Game = () => {
 
   const fetchEnemies = async () => {
     const res = await apiClient.enemy.$get();
-    const display = Number(displayPosition);
     const killedEnemies = enemies.filter((enemy) => !res.some((e) => e.id === enemy.id));
     if (killedEnemies.length > 0) {
       killedEnemies.forEach((enemy) => {
+        const pos = computePosition(enemy.createdPos, enemy.createdAt, enemy.direction);
         setEffectPosition((prev) => [
           ...prev,
-          [enemy.pos.x - ENEMY_HALF_WIDTH, enemy.pos.y - ENEMY_HALF_WIDTH],
+          [pos.x - ENEMY_HALF_WIDTH, pos.y - ENEMY_HALF_WIDTH],
         ]);
       });
     }

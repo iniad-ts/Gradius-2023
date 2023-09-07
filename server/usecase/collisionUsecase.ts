@@ -10,15 +10,29 @@ import { bulletRepository } from '$/repository/bulletRepository';
 import { enemyRepository } from '$/repository/enemyRepository';
 import { gameRepository } from '$/repository/gameRepository';
 import { playerRepository } from '$/repository/playerRepository';
+import { computePosition } from '$/service/computePositions';
 import { playerUseCase } from './playerUsecase';
 
 type EntityModel = PlayerModel | EnemyModel | BulletModel;
 
 let intervalId: NodeJS.Timeout | null = null;
 
+const givePosition = (entity: EntityModel) => {
+  const pos = computePosition(entity);
+
+  if ('pos' in entity) return entity;
+
+  return {
+    ...entity,
+    pos,
+  };
+};
+
 const divide = async (entities: EntityModel[], displayNumber: number) => {
   const dividedEntitiesByDisplay = [...Array(displayNumber)].map((_, i) => {
-    return entities.filter((entity) => Math.floor(entity.pos.x / SCREEN_WIDTH) === i);
+    return entities
+      .map(givePosition)
+      .filter((entity) => Math.floor(entity.pos.x / SCREEN_WIDTH) === i);
   });
 
   const dividedEntitiesByQuad = dividedEntitiesByDisplay
@@ -65,12 +79,12 @@ const divide = async (entities: EntityModel[], displayNumber: number) => {
 };
 
 const entityType = (entity: EntityModel) => {
-  if ('userId' in entity) {
+  if ('pos' in entity) {
     return 'player';
-  } else if ('enemyId' in entity) {
-    return 'enemy';
-  } else {
+  } else if ('side' in entity) {
     return 'bullet';
+  } else {
+    return 'enemy';
   }
 };
 
@@ -84,8 +98,10 @@ const isCollision = (target1: EntityModel, target2: EntityModel) => {
   const targetType1 = entityType(target1);
   const targetType2 = entityType(target2);
 
-  const distanceSquared =
-    (target1.pos.x - target2.pos.x) ** 2 + (target1.pos.y - target2.pos.y) ** 2;
+  const pos1 = computePosition(target1);
+  const pos2 = computePosition(target2);
+
+  const distanceSquared = (pos1.x - pos2.x) ** 2 + (pos1.y - pos2.y) ** 2;
   const collisionDistanceSquared = (entityRadius[targetType1] + entityRadius[targetType2]) ** 2;
 
   return distanceSquared < collisionDistanceSquared;

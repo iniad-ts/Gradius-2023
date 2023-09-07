@@ -31,7 +31,7 @@ const Home = () => {
   const router = useRouter();
 
   const MOVE_INTERVAL_TIME = 20;
-  const SHOOT_INTERVAL_TIME = 800;
+  const SHOOT_INTERVAL_TIME = 50;
 
   const getUserId = useCallback(async () => {
     const localStorageUserId = getUserIdFromLocalStorage();

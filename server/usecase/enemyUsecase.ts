@@ -2,6 +2,7 @@ import { SCREEN_HEIGHT, SCREEN_WIDTH } from '$/commonConstantsWithClient';
 import type { EnemyModel } from '$/commonTypesWithClient/models';
 import { enemyRepository } from '$/repository/enemyRepository';
 import { gameRepository } from '$/repository/gameRepository';
+import { computePosition } from '$/service/computePositions';
 import { enemyIdParser } from '$/service/idParsers';
 import { randomUUID } from 'crypto';
 
@@ -43,7 +44,7 @@ export const enemyUseCase = {
     const newEnemy = await enemyRepository.create({
       id: enemyIdParser.parse(randomUUID()),
       direction: {
-        x: 2 * (Math.random() > 0.5 ? 1 : -1),
+        x: (Math.random() > 0.5 ? 1 : -1) * 0.5,
         y: 0,
       },
       createdPos: {
@@ -74,9 +75,10 @@ export const enemyUseCase = {
 
     await Promise.all(
       currentEnemyList.map((enemy) => {
-        // if (outOfDisplay(enemy.pos)) {
-        //   return enemyRepository.delete(enemy.id);
-        // }
+        const pos = computePosition(enemy);
+        if (outOfDisplay(pos)) {
+          return enemyRepository.delete(enemy.id);
+        }
       })
     );
   },

@@ -3,6 +3,7 @@ import type { BulletModel } from 'commonTypesWithClient/models';
 import { useMemo } from 'react';
 import { Image } from 'react-konva';
 import { staticPath } from 'src/utils/$path';
+import { computePosition } from 'src/utils/computePosition';
 import useImage from 'use-image';
 
 type Props = {
@@ -16,16 +17,18 @@ export const Bullet = ({ displayPosition, bullet }: Props) => {
 
   const images = [bulletImage1, bulletImage2];
 
+  const pos = computePosition(bullet.createdPos, bullet.createdAt, bullet.direction);
+
   const ownerType = useMemo(() => {
     return bullet.side === 'left' ? 0 : 1;
   }, [bullet.side]);
 
   const relativePos = useMemo(() => {
     return {
-      x: bullet.pos.x - BULLET_RADIUS - displayPosition * SCREEN_WIDTH,
-      y: bullet.pos.y - BULLET_RADIUS,
+      x: pos.x - BULLET_RADIUS - displayPosition * SCREEN_WIDTH,
+      y: pos.y - BULLET_RADIUS,
     };
-  }, [bullet.pos, displayPosition]);
+  }, [pos, displayPosition]);
 
   return (
     <Image
