@@ -71,9 +71,9 @@ export const enemyUseCase = {
 
     const outOfDisplay = (pos: { x: number; y: number }) => {
       const terms = [
-        pos.x < 0,
+        pos.x < -100,
         pos.y < 0,
-        pos.x > displayNumber * SCREEN_WIDTH,
+        pos.x > displayNumber * SCREEN_WIDTH + 100,
         pos.y > SCREEN_HEIGHT,
       ];
 
