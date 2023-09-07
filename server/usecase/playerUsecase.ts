@@ -8,6 +8,15 @@ import { userIdParser } from '../service/idParsers';
 
 export type MoveDirection = { x: number; y: number };
 
+const judgment = (currentPlayerInfo: PlayerModel, newPos: { x: number; y: number }) => {
+  if (
+    (currentPlayerInfo.side === 'left' && newPos.x > 1920) ||
+    (currentPlayerInfo.side === 'right' && newPos.x < 0)
+  ) {
+    playerUseCase.finishGame(currentPlayerInfo);
+    return null;
+  }
+};
 //moveDirectionの値をzodでバリデーションする
 const MoveDirectionSchema = z.object({
   x: z.number().min(-1).max(1),
@@ -16,6 +25,7 @@ const MoveDirectionSchema = z.object({
 export const playerUseCase = {
   create: async (name: string, teamInfo: number): Promise<PlayerModel> => {
     //playerの初期ステータス(デバッグ用)
+    console.log(teamInfo);
     if (teamInfo === 1) {
       const playerData: PlayerModel = {
         userId: userIdParser.parse(randomUUID()),
@@ -49,12 +59,14 @@ export const playerUseCase = {
     if (currentPlayerInfo === null) return null;
     const validatedMoveDirection = MoveDirectionSchema.parse(moveDirection);
 
+    const newPos = {
+      x: currentPlayerInfo.pos.x + validatedMoveDirection.x * currentPlayerInfo.vector.x,
+      y: currentPlayerInfo.pos.y + validatedMoveDirection.y * currentPlayerInfo.vector.y,
+    };
+    if (judgment(currentPlayerInfo, newPos) === null) return null;
     const updatePlayerInfo: PlayerModel = {
       ...currentPlayerInfo,
-      pos: {
-        x: currentPlayerInfo.pos.x + validatedMoveDirection.x * currentPlayerInfo.vector.x,
-        y: currentPlayerInfo.pos.y + validatedMoveDirection.y * currentPlayerInfo.vector.y,
-      },
+      pos: newPos,
     };
     await playerRepository.save(updatePlayerInfo);
     return updatePlayerInfo;
@@ -74,9 +86,8 @@ export const playerUseCase = {
     if (currentPlayerInfo === null) return null;
     return currentPlayerInfo;
   },
-  finishGame: async (userId: UserId) => {
-    const currentPlayerInfo = await playerRepository.find(userId);
 
+  finishGame: async (currentPlayerInfo: PlayerModel) => {
     if (currentPlayerInfo === null) return null;
     const updatePlayerInfo: PlayerModel = {
       ...currentPlayerInfo,
@@ -100,4 +111,7 @@ export const playerUseCase = {
     });
     return playersByDisplayNumber;
   },
+  // getIsPlayingPlayer: async () => {
+  //   return await playerRepository.findPlayingOrDead(true);
+  // },
 };
