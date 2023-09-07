@@ -1,3 +1,4 @@
+import { gameRepository } from '$/repository/gameRepository';
 import assert from 'assert';
 import { randomUUID } from 'crypto';
 import { z } from 'zod';
@@ -8,9 +9,11 @@ import { userIdParser } from '../service/idParsers';
 
 export type MoveDirection = { x: number; y: number };
 
-const judgment = (currentPlayerInfo: PlayerModel, newPos: { x: number; y: number }) => {
+// eslint-disable-next-line complexity
+const judgment = async (currentPlayerInfo: PlayerModel, newPos: { x: number; y: number }) => {
+  const displayNUmber = (await gameRepository.find().then((game) => game?.displayNumber)) ?? 1;
   if (
-    (currentPlayerInfo.side === 'left' && newPos.x > 1920) ||
+    (currentPlayerInfo.side === 'left' && newPos.x > 1920 * displayNUmber) ||
     (currentPlayerInfo.side === 'right' && newPos.x < 0)
   ) {
     playerUseCase.finishGame(currentPlayerInfo);

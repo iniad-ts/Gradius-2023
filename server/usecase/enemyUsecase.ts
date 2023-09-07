@@ -24,7 +24,7 @@ export const enemyUseCase = {
     const count = await enemyRepository.count();
     const displayNumber = (await gameRepository.find().then((game) => game?.displayNumber)) ?? 1;
 
-    if (count > 7) return null;
+    if (count > 12) return null;
     const enemyData: EnemyModel = {
       enemyId: enemyIdParser.parse(randomUUID()),
       //Math.random() * ( 最大値 - 最小値 ) + 最小値; 「最小値 〜 最大値」
