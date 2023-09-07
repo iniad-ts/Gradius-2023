@@ -78,6 +78,7 @@ export const playerRepository = {
     const players = await prismaClient.player.findMany();
     return players.length > 0 ? players.map(toPlayerModel) : [];
   },
+
   findPlayingOrDead: async (isPlaying: boolean): Promise<PlayerModel[]> => {
     const players = await prismaClient.player.findMany({
       where: {
