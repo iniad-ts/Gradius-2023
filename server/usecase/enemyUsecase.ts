@@ -44,7 +44,7 @@ export const enemyUseCase = {
     const newEnemy = await enemyRepository.create({
       id: enemyIdParser.parse(randomUUID()),
       direction: {
-        x: (Math.random() > 0.5 ? 1 : -1) * 0.5,
+        x: (Math.random() >= 0.5 ? 1 : -1) * 0.5,
         y: 0,
       },
       createdPos: {
