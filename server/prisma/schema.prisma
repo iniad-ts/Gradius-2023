@@ -40,7 +40,6 @@ model Enemy {
 
 model Bullet {
   bulletId   String   @id
-  pos        Json
   direction  Json
   createdAt  DateTime
   createdPos Json
