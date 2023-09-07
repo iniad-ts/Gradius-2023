@@ -1,44 +1,200 @@
 .container {
-  position: fixed;
-  top: 0;
-  left: 0;
   display: flex;
-  flex-direction: column;
+  gap: 4svmin;
   align-items: center;
   justify-content: center;
-  width: 100%;
-  height: 100%;
+  width: 100vw;
+  height: 100lvh;
+  overflow: hidden;
+  background-image: url('~/public/images/gradius_genesis.png');
+  background-size: cover;
+  perspective: 200dvmax;
 }
 
-.main {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  height: 100%;
-  backdrop-filter: blur(4px);
+.card {
+  position: relative;
+  display: grid;
+  flex-shrink: 0;
+  grid-template-rows: repeat(6, 1fr);
+  align-items: end;
+  justify-items: center;
+  width: 92svmin;
+  aspect-ratio: 16 / 9;
+  background-color: #fff2;
+  border: solid 0.4svmin #fff2;
+  border-radius: 2svmin;
+  backdrop-filter: blur(0.8svmin);
 }
 
 .title {
-  font-size: 80px;
-  font-weight: bold;
-  text-shadow: 1px 1px white;
+  grid-row: 2;
+  height: 100%;
+  margin: 0 auto;
+  font-size: calc(92svmin / 16 * 9 / 7);
+  line-height: calc(92svmin / 16 * 9 / 6);
+  color: transparent;
+  text-align: center;
+  background-image: linear-gradient(135deg, #fff, #c7daf7);
+  background-clip: text;
 }
 
-.btn {
-  display: flex;
-  gap: 8px;
-  align-items: center;
-  padding: 8px 12px;
-  font-size: 14px;
+.links {
+  display: contents;
+}
+
+.input {
+  display: block;
+  grid-row: 4;
+  width: 64%;
+  height: 80%;
+  padding: 0 1svmin;
+  font-size: 1.6svmin;
+  color: #fff;
+  background-color: #0000;
+  border: solid 0.2svmin #fff;
+  border-radius: 1svmin;
+}
+
+.input:focus {
+  outline: none;
+}
+
+.button {
+  display: block;
+  grid-row: 5;
+  width: 24%;
+  height: 64%;
+  font-size: 1.4svmin;
   font-weight: bold;
-  color: white;
+  color: #fff;
   cursor: pointer;
-  background: #222;
-  border-radius: 4px;
-  transition: 0.2s background;
+  background-image: linear-gradient(135deg, #2965ce, #74d3f2);
+  background-size: 200%;
+  border: 0;
+  border-radius: 1svmin;
+  transition-timing-function: ease-in-out, ease-in, ease-in-out;
+  transition-duration: 0.2s, 0.1s, 0.2s;
+  transition-property: background-position, transform, opacity;
 }
 
-.btn:hover {
-  background: #444;
+.button[disabled] {
+  pointer-events: none;
+  cursor: default;
+  opacity: 0.5;
+}
+
+.button:hover:not([disabled]) {
+  background-position: right;
+}
+
+.button:active:not([disabled]) {
+  transform: scale(0.95);
+}
+
+.panel {
+  height: calc(92vmin / 16 * 9);
+  aspect-ratio: 2 / 3;
+  padding: 4svmin;
+  background-color: #fff3;
+  border: solid 0.4svmin #fff2;
+  border-radius: 2svmin;
+  backdrop-filter: blur(0.8svmin);
+}
+
+.panel:first-child {
+  transform: rotateY(30deg);
+  transform-origin: 100% 50%;
+}
+
+.panel:last-child {
+  transform: rotateY(-30deg);
+  transform-origin: 0% 50%;
+}
+
+.panel > h2 {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 3svmin;
+  font-size: 2svmin;
+  font-weight: bold;
+  color: #fff;
+  text-align: center;
+  text-shadow: 0 0 0.4svmin #000;
+}
+
+.panel > p {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 3svmin;
+  margin: 0;
+  font-size: 1.6svmin;
+  font-weight: bold;
+  color: #fff;
+  text-align: center;
+  text-shadow: 0 0 0.4svmin #000;
+}
+
+.players {
+  display: grid;
+  grid-template-rows: repeat(10, 1fr);
+  height: calc(100% - 8svmin);
+  margin: 2svmin 0 0;
+  font-size: 1.2svmin;
+  font-weight: bold;
+  color: #fff;
+  text-shadow: 0 0 0.4svmin #000;
+}
+
+.players > div {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.6svmin;
+}
+
+.ranking {
+  display: grid;
+  grid-template-rows: repeat(6, 1fr);
+  height: calc(100% - 5svmin);
+  margin: 2svmin 0 0;
+  font-weight: bold;
+  color: #fff;
+  text-align: center;
+  text-shadow: 0 0 0.4svmin #000;
+}
+
+.ranking > div {
+  height: 100%;
+  font-size: 1.2svmin;
+}
+
+.ranking > div > div {
+  height: 50%;
+}
+
+.ranking > div > div:first-child::first-letter {
+  font-size: 2.4svmin;
+}
+
+.ranking > div:nth-child(1) > div:first-child::first-letter {
+  color: transparent;
+  text-shadow: none;
+  background-image: linear-gradient(45deg, #ebd300, #eb9900, #ffc559, #af8943);
+  background-clip: text;
+}
+
+.ranking > div:nth-child(2) > div:first-child::first-letter {
+  color: transparent;
+  text-shadow: none;
+  background-image: linear-gradient(45deg, #949ba7, #bad1fa);
+  background-clip: text;
+}
+
+.ranking > div:nth-child(3) > div:first-child::first-letter {
+  color: transparent;
+  text-shadow: none;
+  background-image: linear-gradient(45deg, #a77044, #f7c46c);
+  background-clip: text;
 }
