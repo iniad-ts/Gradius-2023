@@ -6,7 +6,6 @@ import { enemyIdParser } from '$/service/idParsers';
 import { randomUUID } from 'crypto';
 
 let intervalId: NodeJS.Timeout | null = null;
-const SCREEN_WIDTH = 1920;
 export const enemyUseCase = {
   init: () => {
     intervalId = setInterval(() => {

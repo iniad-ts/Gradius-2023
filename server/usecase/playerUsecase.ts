@@ -1,9 +1,9 @@
-import { gameRepository } from '$/repository/gameRepository';
 import assert from 'assert';
 import { randomUUID } from 'crypto';
 import { z } from 'zod';
 import type { UserId } from '../commonTypesWithClient/branded';
 import type { PlayerModel } from '../commonTypesWithClient/models';
+import { gameRepository } from '../repository/gameRepository';
 import { playerRepository } from '../repository/playerRepository';
 import { userIdParser } from '../service/idParsers';
 

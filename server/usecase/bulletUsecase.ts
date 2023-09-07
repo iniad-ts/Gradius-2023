@@ -8,7 +8,7 @@ import { randomUUID } from 'crypto';
 import type { BulletModel } from '../commonTypesWithClient/models';
 
 let intervalId: NodeJS.Timeout | null = null;
-const SCREEN_WIDTH = 1920;
+
 export const bulletUseCase = {
   init: () => {
     intervalId = setInterval(() => {
