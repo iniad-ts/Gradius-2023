@@ -20,17 +20,13 @@ export type GameModel = {
 };
 
 export type PlayerModel = {
-  userId: UserId;
+  id: UserId;
   name: string;
   pos: {
     x: number;
     y: number;
   };
   score: number;
-  vector: {
-    x: number;
-    y: number;
-  };
   Items:
     | {
         id: string;
@@ -42,31 +38,30 @@ export type PlayerModel = {
 };
 
 export type EnemyModel = {
-  enemyId: EnemyId;
-  score: number;
-  pos: {
+  id: EnemyId;
+  direction: {
     x: number;
     y: number;
   };
-  vector: {
+  createdPos: {
     x: number;
     y: number;
   };
+  createdAt: number;
   type: number;
 };
 
 export type BulletModel = {
-  bulletId: BulletId;
-  power: number;
-  pos: {
+  id: BulletId;
+  direction: {
     x: number;
     y: number;
   };
-  vector: {
+  createdPos: {
     x: number;
     y: number;
   };
-  type: number;
+  createdAt: number;
   side: 'left' | 'right';
   shooterId: string;
 };
