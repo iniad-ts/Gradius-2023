@@ -1,4 +1,3 @@
-import { SCREEN_WIDTH } from '$/commonConstantsWithClient';
 import assert from 'assert';
 import { randomUUID } from 'crypto';
 import { z } from 'zod';
@@ -11,7 +10,7 @@ export type MoveDirection = { x: number; y: number };
 
 const judgment = (currentPlayerInfo: PlayerModel, newPos: { x: number; y: number }) => {
   if (
-    (currentPlayerInfo.side === 'left' && newPos.x > SCREEN_WIDTH) ||
+    (currentPlayerInfo.side === 'left' && newPos.x > 1920) ||
     (currentPlayerInfo.side === 'right' && newPos.x < 0)
   ) {
     playerUseCase.finishGame(currentPlayerInfo);
