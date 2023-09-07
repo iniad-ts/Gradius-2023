@@ -22,28 +22,28 @@ model Game {
 model Player {
   userId    String  @id
   name      String
-  pos       Json
+  x         Int
+  y         Int
   score     Int
-  vector    Json
   Item      Json?
   side      String
   isPlaying Boolean
 }
 
 model Enemy {
-  enemyId String @id
-  pos     Json
-  score   Int
-  vector  Json
-  type    Int
+  enemyId    String   @id
+  direction  Json
+  createdAt  DateTime
+  createdPos Json
+  type       Int
 }
 
 model Bullet {
-  bulletId  String  @id
-  pos       Json
-  power     Int
-  vector    Json
-  type      Int
-  side      String
-  shooterId String?
+  bulletId   String   @id
+  pos        Json
+  direction  Json
+  createdAt  DateTime
+  createdPos Json
+  side       String
+  shooterId  String
 }
