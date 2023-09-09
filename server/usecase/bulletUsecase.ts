@@ -36,8 +36,8 @@ export const bulletUseCase = {
         y: 0,
       },
       createdPos: {
-        x: shooterInfo.pos.x + PLAYER_HALF_WIDTH * (shooterInfo.side === 'left' ? -1 : 1),
-        y: shooterInfo.pos.y,
+        x: shooterInfo.x + PLAYER_HALF_WIDTH * (shooterInfo.side === 'left' ? -1 : 1),
+        y: shooterInfo.y,
       },
       createdAt: Date.now(),
       side: shooterInfo.side,

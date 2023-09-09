@@ -22,10 +22,8 @@ export type GameModel = {
 export type PlayerModel = {
   id: UserId;
   name: string;
-  pos: {
-    x: number;
-    y: number;
-  };
+  x: number;
+  y: number;
   score: number;
   Items:
     | {
@@ -63,5 +61,5 @@ export type BulletModel = {
   };
   createdAt: number;
   side: 'left' | 'right';
-  shooterId: string;
+  shooterId: UserId;
 };

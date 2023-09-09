@@ -1,7 +1,9 @@
 import type { BulletModel, EnemyModel, PlayerModel } from '$/commonTypesWithClient/models';
 
 export const computePosition = (entity: PlayerModel | EnemyModel | BulletModel) => {
-  if ('pos' in entity) return entity.pos;
+  if ('name' in entity) {
+    return { x: entity.x, y: entity.y };
+  }
 
   const now = Date.now();
   const timeDiff = now - entity.createdAt;

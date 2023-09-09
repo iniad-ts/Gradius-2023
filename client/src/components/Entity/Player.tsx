@@ -16,12 +16,12 @@ export const Player = ({ displayPosition: displayNumber, player }: Props) => {
   const relativePos = useMemo(() => {
     return {
       x:
-        player.pos.x -
+        player.x -
         displayNumber * SCREEN_WIDTH +
         PLAYER_HALF_WIDTH * (player.side === 'left' ? 1 : -1),
-      y: player.pos.y + PLAYER_HALF_WIDTH * (player.side === 'left' ? -1 : 1),
+      y: player.y + PLAYER_HALF_WIDTH * (player.side === 'left' ? -1 : 1),
     };
-  }, [displayNumber, player.pos.x, player.pos.y, player.side]);
+  }, [displayNumber, player.x, player.y, player.side]);
 
   const rotation = useMemo(() => {
     return player.side === 'left' ? 90 : -90;

@@ -17,7 +17,8 @@ export const playerUseCase = {
 
     const playerData: PlayerModel = {
       id: userIdParser.parse(randomUUID()),
-      pos: { x: 50, y: SCREEN_HEIGHT / 2 },
+      x: 50,
+      y: SCREEN_HEIGHT / 2,
       name,
       score: 0,
       Items: [],
@@ -46,11 +47,8 @@ export const playerUseCase = {
     if (currentPlayer === null) return null;
 
     const newPos = {
-      x: Math.min(
-        Math.max(currentPlayer.pos.x + moveDirection.x * 5, 0),
-        SCREEN_WIDTH * displayNumber
-      ),
-      y: Math.min(Math.max(currentPlayer.pos.y + moveDirection.y * 5, 0), SCREEN_HEIGHT),
+      x: Math.min(Math.max(currentPlayer.x + moveDirection.x * 5, 0), SCREEN_WIDTH * displayNumber),
+      y: Math.min(Math.max(currentPlayer.y + moveDirection.y * 5, 0), SCREEN_HEIGHT),
     };
 
     if (isOutOfDisplay(newPos, currentPlayer.side, displayNumber)) {
@@ -59,7 +57,8 @@ export const playerUseCase = {
     }
     const updatePlayerInfo: PlayerModel = {
       ...currentPlayer,
-      pos: newPos,
+      x: newPos.x,
+      y: newPos.y,
     };
 
     return await playerRepository.save(updatePlayerInfo);
@@ -88,7 +87,7 @@ export const playerUseCase = {
     const players = await playerRepository.findAll();
 
     const playersInDisplay = players.filter((player) => {
-      return isInDisplay(player.pos.x, displayNumber) && player.isPlaying;
+      return isInDisplay(player.x, displayNumber) && player.isPlaying;
     });
 
     return playersInDisplay;

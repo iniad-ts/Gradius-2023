@@ -20,8 +20,6 @@ let intervalId: NodeJS.Timeout | null = null;
 const givePosition = (entity: EntityModel) => {
   const pos = computePosition(entity);
 
-  if ('pos' in entity) return entity;
-
   return {
     ...entity,
     pos,

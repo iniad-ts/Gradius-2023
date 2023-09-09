@@ -9,15 +9,8 @@ const toPlayerModel = (prismaPlayer: Player): PlayerModel => ({
   id: userIdParser.parse(prismaPlayer.userId),
   name: z.string().parse(prismaPlayer.name),
   score: z.number().parse(prismaPlayer.score),
-  pos: z
-    .object({
-      x: z.number(),
-      y: z.number(),
-    })
-    .parse({
-      x: prismaPlayer.x,
-      y: prismaPlayer.y,
-    }),
+  x: z.number().parse(prismaPlayer.x),
+  y: z.number().parse(prismaPlayer.y),
   Items:
     z
       .object({
@@ -40,8 +33,8 @@ export const playerRepository = {
       update: {
         score: player.score,
         Item: player.Items,
-        x: player.pos.x,
-        y: player.pos.y,
+        x: player.x,
+        y: player.y,
         isPlaying: player.isPlaying,
       },
       create: {
@@ -49,8 +42,8 @@ export const playerRepository = {
         name: player.name,
         score: player.score,
         Item: player.Items,
-        x: player.pos.x,
-        y: player.pos.y,
+        x: player.x,
+        y: player.y,
         side: player.side,
         isPlaying: player.isPlaying,
       },
