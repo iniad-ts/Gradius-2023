@@ -5,6 +5,7 @@ export const gameUseCase = {
     const game = await gameRepository.find();
     return game?.displayNumber ?? null;
   },
+
   update: async (displayNumber: number) => {
     const game = await gameRepository.find();
     if (game === null) return;

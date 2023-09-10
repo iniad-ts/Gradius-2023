@@ -1,77 +1,85 @@
-import { SCREEN_HEIGHT } from '$/commonConstantsWithClient';
+import { SCREEN_HEIGHT, SCREEN_WIDTH } from '$/commonConstantsWithClient';
 import type { EnemyModel } from '$/commonTypesWithClient/models';
 import { enemyRepository } from '$/repository/enemyRepository';
 import { gameRepository } from '$/repository/gameRepository';
+import { computePosition } from '$/service/computePositions';
 import { enemyIdParser } from '$/service/idParsers';
 import { randomUUID } from 'crypto';
 
-let intervalId: NodeJS.Timeout | null = null;
-const SCREEN_WIDTH = 1920;
+const updateIntervalId: NodeJS.Timeout[] = [];
+const createIntervalId: NodeJS.Timeout[] = [];
+const ENEMY_UPDATE_INTERVAL = 100;
+const ENEMY_CREATE_INTERVAL = 1000;
+
 export const enemyUseCase = {
   init: () => {
-    intervalId = setInterval(() => {
-      enemyUseCase.create();
-      enemyUseCase.update();
-    }, 100);
+    updateIntervalId.push(
+      setInterval(() => {
+        enemyUseCase.update();
+      }, ENEMY_UPDATE_INTERVAL)
+    );
+
+    createIntervalId.push(
+      setInterval(() => {
+        enemyUseCase.create();
+      }, ENEMY_CREATE_INTERVAL)
+    );
   },
+
   stop: () => {
-    if (intervalId) {
-      clearInterval(intervalId);
-      intervalId = null;
+    if (updateIntervalId.length > 0) {
+      updateIntervalId.forEach(clearInterval);
+    }
+    if (createIntervalId.length > 0) {
+      createIntervalId.forEach(clearInterval);
     }
   },
+
   create: async (): Promise<EnemyModel | null> => {
     const count = await enemyRepository.count();
-    if (count > 3) return null;
-    //TODO: 敵の出現頻度や場所を考える必要がある
-    const game = await gameRepository.find();
-    const MAX_X = SCREEN_WIDTH * (game?.displayNumber ?? 0) - 500;
-    const MIN_X = 300;
-    const enemyData: EnemyModel = {
-      enemyId: enemyIdParser.parse(randomUUID()),
-      //Math.random() * ( 最大値 - 最小値 ) + 最小値; 「最小値 〜 最大値」
-      pos: { x: Math.random() * (MAX_X - MIN_X), y: Math.floor(Math.random() * SCREEN_HEIGHT) },
-      score: 100,
-      vector: { x: -2, y: 0 },
-      type: 0,
-    };
-    await enemyRepository.save(enemyData);
-    return enemyData;
-  },
-  findAll: async (): Promise<EnemyModel[]> => {
-    const enemies = await enemyRepository.findAll();
-    return enemies.length > 0 ? enemies : [];
-  },
-  move: async (enemyModel: EnemyModel): Promise<EnemyModel | null> => {
-    const currentEnemyInfo = await enemyRepository.find(enemyModel.enemyId);
-    if (currentEnemyInfo === null) return null;
-    const updateEnemyInfo: EnemyModel = {
-      ...currentEnemyInfo,
-      pos: {
-        x: currentEnemyInfo.pos.x + currentEnemyInfo.vector.x,
-        y: currentEnemyInfo.pos.y + currentEnemyInfo.vector.y,
+    const displayNumber = (await gameRepository.find().then((game) => game?.displayNumber)) ?? 1;
+
+    if (count > 12) return null;
+
+    const newEnemy = await enemyRepository.create({
+      id: enemyIdParser.parse(randomUUID()),
+      direction: {
+        x: (Math.random() >= 0.5 ? 1 : -1) * 0.5,
+        y: 0,
       },
-    };
-    await enemyRepository.save(updateEnemyInfo);
-    return updateEnemyInfo;
-  },
-  delete: async (enemyModel: EnemyModel) => {
-    try {
-      await enemyRepository.delete(enemyModel.enemyId);
-    } catch (e) {
-      console.error(e);
-    }
-  },
-  update: async () => {
-    const currentEnemyInfos = await enemyRepository.findAll();
-    const game = await gameRepository.find();
-    const promises = currentEnemyInfos.map((enemy) => {
-      if (enemy.pos.x > SCREEN_WIDTH * (game?.displayNumber ?? 0) || enemy.pos.x < 50) {
-        return enemyUseCase.delete(enemy);
-      } else {
-        return enemyUseCase.move(enemy);
-      }
+      createdPos: {
+        x: Math.random() * (SCREEN_WIDTH * displayNumber - 1000) + 500,
+        y: Math.floor(Math.random() * SCREEN_HEIGHT),
+      },
+      createdAt: Date.now(),
+      type: Math.floor(Math.random() * 3),
     });
-    await Promise.all(promises);
+
+    return newEnemy;
+  },
+
+  update: async () => {
+    const currentEnemyList = await enemyRepository.findAll();
+    const displayNumber = (await gameRepository.find().then((game) => game?.displayNumber)) ?? 1;
+
+    const outOfDisplay = (pos: { x: number; y: number }) => {
+      const terms = [
+        pos.x < -100,
+        pos.y < 0,
+        pos.x > displayNumber * SCREEN_WIDTH + 100,
+        pos.y > SCREEN_HEIGHT,
+      ];
+
+      return terms.some(Boolean);
+    };
+
+    await Promise.all(
+      currentEnemyList.map((enemy) => {
+        const pos = computePosition(enemy);
+        if (outOfDisplay(pos)) {
+          return enemyRepository.delete(enemy.id);
+        }
+      })
+    );
   },
 };

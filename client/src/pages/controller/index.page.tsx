@@ -5,6 +5,7 @@ import type { MouseEvent, TouchEvent } from 'react';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Joystick } from 'react-joystick-component';
 import type { IJoystickUpdateEvent } from 'react-joystick-component/build/lib/Joystick';
+import GameClear from 'src/components/GameClear/GameClear';
 import { apiClient } from 'src/utils/apiClient';
 import { getUserIdFromLocalStorage } from 'src/utils/loginWithLocalStorage';
 import styles from './index.module.css';
@@ -30,16 +31,17 @@ const Home = () => {
   const router = useRouter();
 
   const MOVE_INTERVAL_TIME = 20;
-  const SHOOT_INTERVAL_TIME = 800;
+  const SHOOT_INTERVAL_TIME = 50;
 
   const getUserId = useCallback(async () => {
     const localStorageUserId = getUserIdFromLocalStorage();
+    if (!(playerStatus?.isPlaying ?? true)) return;
     if (localStorageUserId === null) {
       alert('ログインがまだ行われておりません');
       return router.push('/login');
     }
     setUserId(localStorageUserId);
-  }, [router]);
+  }, [router, playerStatus?.isPlaying]);
 
   const fetchPlayerStatus = useCallback(async () => {
     const res = await apiClient.player.control.$get({ query: { userId } });
@@ -112,7 +114,7 @@ const Home = () => {
 
     const playerStatusIntervalId = setInterval(() => {
       fetchPlayerStatus();
-    }, 5000);
+    }, 500);
 
     return () => {
       clearInterval(userIdIntervalId);
@@ -160,9 +162,7 @@ const Home = () => {
     };
   }, []);
 
-  // setInterval(() => {
-  //   apiClient.bullet.control.$get();
-  // }, 1000);
+  if (!(playerStatus?.isPlaying ?? true)) return <GameClear />;
 
   return (
     <div className={styles.controller}>

@@ -1,4 +1,4 @@
-import { bulletIdParser } from '$/service/idParsers';
+import { bulletIdParser, userIdParser } from '$/service/idParsers';
 import { prismaClient } from '$/service/prismaClient';
 import type { Bullet } from '@prisma/client';
 import { z } from 'zod';
@@ -6,71 +6,57 @@ import type { BulletId } from '../commonTypesWithClient/branded';
 import type { BulletModel } from '../commonTypesWithClient/models';
 
 const toBulletModel = (prismaBullet: Bullet): BulletModel => ({
-  bulletId: bulletIdParser.parse(prismaBullet.bulletId),
-  shooterId: z.string().parse(prismaBullet.shooterId),
-  power: z.number().min(0).parse(prismaBullet.power),
-  pos: z
+  id: bulletIdParser.parse(prismaBullet.bulletId),
+  direction: z
     .object({
       x: z.number(),
       y: z.number(),
     })
-    .parse(prismaBullet.pos),
-
-  vector: z
+    .parse(prismaBullet.direction),
+  createdPos: z
     .object({
       x: z.number(),
       y: z.number(),
     })
-    .parse(prismaBullet.vector),
-  type: z.number().parse(prismaBullet.type),
+    .parse(prismaBullet.createdPos),
+  createdAt: prismaBullet.createdAt.getTime(),
   side: z.enum(['left', 'right']).parse(prismaBullet.side),
+  shooterId: userIdParser.parse(prismaBullet.shooterId),
 });
 
 export const bulletRepository = {
-  save: async (bullet: BulletModel): Promise<BulletModel> => {
-    const prismaBullet = await prismaClient.bullet.upsert({
-      where: {
-        bulletId: bullet.bulletId,
-      },
-      update: {
-        power: bullet.power,
-        vector: bullet.vector,
-        pos: bullet.pos,
-        type: bullet.type,
+  create: async (bullet: BulletModel): Promise<BulletModel> => {
+    const prismaBullet = await prismaClient.bullet.create({
+      data: {
+        bulletId: bullet.id,
+        direction: bullet.direction,
+        createdPos: bullet.createdPos,
+        createdAt: new Date(bullet.createdAt),
         side: bullet.side,
-      },
-      create: {
-        bulletId: bullet.bulletId,
         shooterId: bullet.shooterId,
-        power: bullet.power,
-        vector: bullet.vector,
-        pos: bullet.pos,
-        type: bullet.type,
-        side: bullet.side,
       },
     });
+
     return toBulletModel(prismaBullet);
   },
+
   find: async (bulletId: BulletId): Promise<BulletModel | null> => {
     const bullet = await prismaClient.bullet.findUnique({
       where: {
         bulletId,
       },
     });
-    if (bullet === null) return null;
-    return toBulletModel(bullet);
+    return bullet !== null ? toBulletModel(bullet) : null;
   },
+
   findAll: async (): Promise<BulletModel[]> => {
     const bullets = await prismaClient.bullet.findMany();
     return bullets.map(toBulletModel);
   },
+
   delete: async (bulletId: BulletId) => {
-    try {
-      await prismaClient.bullet.delete({
-        where: { bulletId },
-      });
-    } catch (e) {
-      console.error(e);
-    }
+    await prismaClient.bullet.deleteMany({
+      where: { bulletId },
+    });
   },
 };

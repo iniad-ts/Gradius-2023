@@ -3,6 +3,7 @@ import type { EnemyModel } from 'commonTypesWithClient/models';
 import { useMemo } from 'react';
 import { Image } from 'react-konva';
 import { staticPath } from 'src/utils/$path';
+import { computePosition } from 'src/utils/computePosition';
 import useImage from 'use-image';
 
 type Props = {
@@ -17,12 +18,14 @@ export const Enemy = ({ displayPosition, enemy }: Props) => {
 
   const images = [enemyImage1, enemyImage2, enemyImage3];
 
+  const pos = computePosition(enemy.createdPos, enemy.createdAt, enemy.direction);
+
   const relativePos = useMemo(() => {
     return {
-      x: enemy.pos.x - ENEMY_HALF_WIDTH - displayPosition * SCREEN_WIDTH,
-      y: enemy.pos.y - ENEMY_HALF_WIDTH,
+      x: pos.x - ENEMY_HALF_WIDTH - displayPosition * SCREEN_WIDTH,
+      y: pos.y - ENEMY_HALF_WIDTH,
     };
-  }, [displayPosition, enemy.pos]);
+  }, [displayPosition, pos]);
 
   return (
     <Image
