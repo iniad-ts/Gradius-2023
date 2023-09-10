@@ -7,7 +7,7 @@ import { Joystick } from 'react-joystick-component';
 import type { IJoystickUpdateEvent } from 'react-joystick-component/build/lib/Joystick';
 import GameClear from 'src/components/GameClear/GameClear';
 import { apiClient } from 'src/utils/apiClient';
-import { getUserIdFromLocalStorage } from 'src/utils/loginWithLocalStorage';
+import { getUserIdFromLocalStorage, logoutWithLocalStorage } from 'src/utils/loginWithLocalStorage';
 import styles from './index.module.css';
 
 type MoveTo = {
@@ -178,6 +178,7 @@ const Home = () => {
       </div>
       <div>
         Score: {playerStatus?.score} <br />
+        <button onClick={logoutWithLocalStorage}>logout</button>
       </div>
       <button
         className={styles.button}
