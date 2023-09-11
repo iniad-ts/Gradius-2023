@@ -36,8 +36,8 @@ export const playerUseCase = {
       displayNumber: number
     ) => {
       const terms = [
-        side === 'left' && pos.x > 1920 * displayNumber,
-        side === 'right' && pos.x < 0,
+        side === 'left' && pos.x >= SCREEN_WIDTH * displayNumber,
+        side === 'right' && pos.x <= 0,
       ];
       return terms.some(Boolean);
     };
