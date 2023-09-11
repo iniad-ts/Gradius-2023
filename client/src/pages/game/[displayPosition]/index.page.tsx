@@ -1,8 +1,8 @@
 import { ENEMY_HALF_WIDTH, SCREEN_HEIGHT, SCREEN_WIDTH } from 'commonConstantsWithClient';
 import type { BulletModel, EnemyModel, PlayerModel } from 'commonTypesWithClient/models';
 import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
-import { Image, Layer, Stage } from 'react-konva';
+import React, { useEffect, useState } from 'react';
+import { Image, Layer, Stage, Text } from 'react-konva';
 import Boom from 'src/components/Effect/Boom';
 import { Bullet } from 'src/components/Entity/Bullet';
 import { Enemy } from 'src/components/Entity/Enemy';
@@ -140,7 +140,10 @@ const Game = () => {
         </Layer>
         <Layer>
           {players.map((player) => (
-            <Player displayPosition={displayPosition ?? 0} player={player} key={player.id} />
+            <React.Fragment key={player.id}>
+              <Text x={player.pos.x} y={player.pos.y - 80} text={player.name} fontSize={30} />
+              <Player displayPosition={displayPosition ?? 0} player={player} />
+            </React.Fragment>
           ))}
         </Layer>
         <Layer>
