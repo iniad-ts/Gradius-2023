@@ -1,0 +1,34 @@
+.container {
+  display: grid;
+  grid-template-rows: repeat(11, 1fr);
+  min-width: 100px;
+  background-color: #fff8;
+  border: solid 1px #0008;
+}
+
+.stop {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  margin: 10px;
+  color: #fff;
+  border-radius: 10px;
+}
+
+.trafficRow {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  width: 100%;
+  height: 100%;
+  border: solid #0008 1px;
+}
+
+.traffic {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
