@@ -139,13 +139,13 @@
   }
 
   .button {
-    grid-row: 2;
-    grid-column: 2;
-    width: 64%;
-    height: 64%;
+    grid-row: 20;
+    grid-column: 200;
+    width: 6400%;
+    height: 640%;
   }
 
   .button > div {
-    font-size: 10vw;
+    font-size: 1vw;
   }
 }
