@@ -27,7 +27,6 @@ const Game = () => {
       displayPosition = parsed;
     }
   }
-  console.log(displayPosition);
 
   const [players, setPlayers] = useState<PlayerModel[]>([]);
   const [enemies, setEnemies] = useState<EnemyModel[]>([]);

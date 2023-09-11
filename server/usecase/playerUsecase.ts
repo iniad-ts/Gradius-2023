@@ -10,18 +10,22 @@ export type MoveDirection = { x: number; y: number };
 
 export const playerUseCase = {
   create: async (name: string): Promise<PlayerModel> => {
+    const game = await gameRepository.find();
+    const displayNumber = game?.displayNumber ?? 1;
     const [leftCount, rightCount] = await Promise.all([
       playerRepository.countInSide('left'),
       playerRepository.countInSide('right'),
     ]);
+    const side = leftCount <= rightCount ? 'left' : 'right';
+    const x = side === 'left' ? 50 : SCREEN_WIDTH * displayNumber - 50;
 
     const playerData: PlayerModel = {
       id: userIdParser.parse(randomUUID()),
-      pos: { x: 50, y: SCREEN_HEIGHT / 2 },
+      pos: { x, y: SCREEN_HEIGHT / 2 },
       name,
       score: 0,
       Items: [],
-      side: leftCount <= rightCount ? 'left' : 'right',
+      side,
       isPlaying: true,
     };
 
