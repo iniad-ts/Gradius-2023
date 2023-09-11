@@ -27,6 +27,7 @@ const Game = () => {
       displayPosition = parsed;
     }
   }
+  console.log(displayPosition);
 
   const [players, setPlayers] = useState<PlayerModel[]>([]);
   const [enemies, setEnemies] = useState<EnemyModel[]>([]);
@@ -141,7 +142,12 @@ const Game = () => {
         <Layer>
           {players.map((player) => (
             <React.Fragment key={player.id}>
-              <Text x={player.pos.x} y={player.pos.y - 80} text={player.name} fontSize={30} />
+              <Text
+                x={player.pos.x - SCREEN_WIDTH * (displayPosition ?? 0)}
+                y={player.pos.y - 80}
+                text={player.name}
+                fontSize={30}
+              />
               <Player displayPosition={displayPosition ?? 0} player={player} />
             </React.Fragment>
           ))}
