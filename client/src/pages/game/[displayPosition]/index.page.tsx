@@ -82,14 +82,6 @@ const Game = () => {
   });
 
   useEffect(() => {
-    const timeoutId = setTimeout(() => {
-      setEffectPosition((prev) => prev.slice(1));
-    }, 1000);
-
-    return () => clearTimeout(timeoutId);
-  }, [effectPosition]);
-
-  useEffect(() => {
     const set = () => {
       setWindowSize({
         width: window.innerWidth,
