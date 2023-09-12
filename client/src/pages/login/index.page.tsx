@@ -70,9 +70,11 @@ const Login = () => {
       </div>
       <div className={styles.card}>
         <h1 className={styles.title}>Gradius</h1>
+        <span />
+        <p className={styles.announcement}>ニックネームを入力してください</p>
         <input
           type="text"
-          placeholder="名前を入力してください"
+          placeholder="ここに入力"
           className={styles.input}
           value={name}
           onChange={handleInput}
@@ -80,19 +82,7 @@ const Login = () => {
         <button className={styles.button} disabled={name === ''} onClick={login}>
           プレイ
         </button>
-      </div>
-      <div className={styles.panel}>
-        <h2>ランキング</h2>
-        <div className={styles.ranking}>
-          {playerRanking.map((player, i) => (
-            <div key={player.id}>
-              <div>
-                {i + 1}位 ({player.score}点)
-              </div>
-              <div>{player.name}</div>
-            </div>
-          ))}
-        </div>
+        <p className={styles.announcement}>※ニックネームはランキングなどに使用されます</p>
       </div>
     </div>
   );
