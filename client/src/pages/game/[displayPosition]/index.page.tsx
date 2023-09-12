@@ -1,5 +1,4 @@
-import { ENEMY_HALF_WIDTH, SCREEN_HEIGHT, SCREEN_WIDTH } from 'commonConstantsWithClient';
-import type { BulletModel, EnemyModel, PlayerModel } from 'commonTypesWithClient/models';
+import { SCREEN_HEIGHT, SCREEN_WIDTH } from 'commonConstantsWithClient';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { Image, Layer, Stage } from 'react-konva';
@@ -7,9 +6,9 @@ import Boom from 'src/components/Effect/Boom';
 import { Bullet } from 'src/components/Entity/Bullet';
 import { Enemy } from 'src/components/Entity/Enemy';
 import { Player } from 'src/components/Entity/Player';
+import { useGame } from 'src/hooks/useGame';
 import { staticPath } from 'src/utils/$path';
 import { apiClient } from 'src/utils/apiClient';
-import { computePosition } from 'src/utils/computePosition';
 import useImage from 'use-image';
 import styles from './index.module.css';
 
@@ -20,7 +19,9 @@ type WindowSize = {
 
 const Game = () => {
   const router = useRouter();
+
   let displayPosition: number | null = null;
+
   if (typeof router.query.displayPosition === 'string') {
     const parsed = Number(router.query.displayPosition);
     if (!isNaN(parsed)) {
@@ -28,11 +29,6 @@ const Game = () => {
     }
   }
 
-  const [players, setPlayers] = useState<PlayerModel[]>([]);
-  const [enemies, setEnemies] = useState<EnemyModel[]>([]);
-  const [bullets, setBullets] = useState<BulletModel[]>([]);
-  //TODO: もし、これ以外のエフェクトを追加する場合は、それぞれのエフェクトを区別する型を作成する
-  const [effectPosition, setEffectPosition] = useState<number[][]>([]);
   const [windowSize, setWindowSize] = useState<WindowSize>({
     width: window.innerWidth,
     height: window.innerHeight,
@@ -40,53 +36,7 @@ const Game = () => {
 
   const [backgroundImage] = useImage(staticPath.images.odaiba_jpg);
 
-  const fetchPlayers = async () => {
-    const res = await apiClient.player.$get({
-      query: { displayNumber: Number(displayPosition) },
-    });
-    setPlayers(res);
-  };
-
-  const fetchEnemies = async () => {
-    const res = await apiClient.enemy.$get();
-    const killedEnemies = enemies.filter((enemy) => !res.some((e) => e.id === enemy.id));
-    if (killedEnemies.length > 0) {
-      killedEnemies.forEach((enemy) => {
-        const pos = computePosition(enemy.createdPos, enemy.createdAt, enemy.direction);
-        setEffectPosition((prev) => [
-          ...prev,
-          [pos.x - ENEMY_HALF_WIDTH, pos.y - ENEMY_HALF_WIDTH],
-        ]);
-      });
-    }
-    setEnemies(res);
-  };
-
-  const fetchBullets = async () => {
-    const res = await apiClient.bullet.$get({
-      query: { displayNumber: Number(displayPosition) },
-    });
-    if (res.length > bullets.length) {
-      const audio = new Audio(staticPath.sounds.shot_mp3);
-      audio.play();
-    }
-    setBullets(res);
-  };
-
-  useEffect(() => {
-    const cancelId = requestAnimationFrame(async () => {
-      await Promise.all([fetchPlayers(), fetchEnemies(), fetchBullets()]);
-    });
-    return () => cancelAnimationFrame(cancelId);
-  });
-
-  useEffect(() => {
-    const timeoutId = setTimeout(() => {
-      setEffectPosition((prev) => prev.slice(1));
-    }, 1000);
-
-    return () => clearTimeout(timeoutId);
-  }, [effectPosition]);
+  const { players, enemies, bullets, effectPosition } = useGame(displayPosition ?? 0);
 
   useEffect(() => {
     const set = () => {
