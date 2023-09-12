@@ -77,7 +77,7 @@ const Login = () => {
   }, []);
 
   return (
-    <div className={styles.container}>
+    <div className={styles.container} data-style={'blur'}>
       <div className={styles.panel}>
         <h2>現在のプレイヤー</h2>
         <p>{playerCount}人</p>
@@ -87,14 +87,19 @@ const Login = () => {
           ))}
         </div>
       </div>
-      <div className={styles.alertcard}>
-        <div className={styles.smartphone}>
-          <div className={styles.screen} />
-          <div className={styles.smartPhoneButton} />
-          <div className={styles.speaker} />
-        </div>
-        <p>横画面にしてください</p>
+      <div>
+        {check && (
+          <div className={styles.alertcard}>
+            <div className={styles.smartphone}>
+              <div className={styles.screen} />
+              <div className={styles.smartPhoneButton} />
+              <div className={styles.speaker} />
+            </div>
+            <p>横画面にしてください</p>
+          </div>
+        )}
       </div>
+
       <div className={styles.titlecard}>
         <h1 className={styles.title}>Gradius</h1>
         <div>{check ? <p>横画面です。</p> : <p>縦画面です。</p>}</div>
