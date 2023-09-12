@@ -198,3 +198,15 @@
   background-image: linear-gradient(45deg, #a77044, #f7c46c);
   background-clip: text;
 }
+
+.container::before {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1; /* 他の要素よりも前面に表示 */
+  width: 100%;
+  height: 100%;
+  content: '';
+  background: rgb(0 0 0 / 50%); /* 半透明の背景 */
+  backdrop-filter: blur(5px); /* ぼかしをかける */
+}

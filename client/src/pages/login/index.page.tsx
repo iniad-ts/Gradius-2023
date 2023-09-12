@@ -25,6 +25,14 @@ const Login = () => {
     setName(e.target.value);
   };
 
+  const checkOrientation = () => {
+    if (window.innerWidth > window.innerHeight) {
+      setCheck(true);
+    } else {
+      setCheck(false);
+    }
+  };
+
   const login = async () => {
     const player: PlayerModel = await apiClient.player.$post({ body: { name } });
     loginWithLocalStorage(player.id);
@@ -48,16 +56,6 @@ const Login = () => {
   }, [playersDead]);
 
   useEffect(() => {
-    const checkOrientation = () => {
-      if (window.innerWidth > window.innerHeight) {
-        setCheck(true);
-      } else {
-        setCheck(false);
-      }
-    };
-
-    checkOrientation();
-
     window.addEventListener('resize', checkOrientation);
     window.addEventListener('orientationchange', checkOrientation);
 
@@ -99,7 +97,7 @@ const Login = () => {
           value={name}
           onChange={handleInput}
         />
-        <button className={styles.button} disabled={name === ''} onClick={login}>
+        <button className={styles.button} disabled={name === ''} onClick={checkOrientation}>
           プレイ
         </button>
       </div>
