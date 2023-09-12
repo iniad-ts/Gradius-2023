@@ -25,31 +25,26 @@ const Login = () => {
     setName(e.target.value);
   };
 
-  const checkOrientation = () => {
-    if (window.innerWidth > window.innerHeight) {
-      setCheck(true);
-      const container = document.querySelector('.container');
-      container?.classList.remove('blur');
-      const titleCard = document.querySelector('.titlecard') as HTMLElement | null;
-      if (titleCard) {
-        titleCard.style.display = 'block';
-      }
-    } else {
+  const login = useCallback(async () => {
+    const player: PlayerModel = await apiClient.player.$post({ body: { name } });
+    loginWithLocalStorage(player.id);
+    router.push('/controller');
+  }, [name, router]);
+
+  const checkOrientation = useCallback(() => {
+    if (window.innerWidth > window.innerHeight && name !== '') {
+      login();
+    } else if (name !== '') {
       setCheck(false);
       const container = document.querySelector('.container');
       container?.classList.add('blur');
       const titleCard = document.querySelector('.titlecard') as HTMLElement | null;
+
       if (titleCard) {
         titleCard.style.display = 'none';
       }
     }
-  };
-
-  const login = async () => {
-    const player: PlayerModel = await apiClient.player.$post({ body: { name } });
-    loginWithLocalStorage(player.id);
-    router.push('/controller');
-  };
+  }, [name, login]);
 
   const fetchPlayers = async () => {
     //一時的にdisplayNumber:0で固定
@@ -75,7 +70,7 @@ const Login = () => {
       window.removeEventListener('resize', checkOrientation);
       window.removeEventListener('orientationchange', checkOrientation);
     };
-  }, []);
+  }, [checkOrientation]);
 
   useEffect(() => {
     redirectToController();
