@@ -87,7 +87,15 @@ const Login = () => {
           ))}
         </div>
       </div>
-      <div className={styles.card}>
+      <div className={styles.alertcard}>
+        <div className={styles.smartphone}>
+          <div className={styles.screen} />
+          <div className={styles.smartPhoneButton} />
+          <div className={styles.speaker} />
+        </div>
+        <p>横画面にしてください</p>
+      </div>
+      <div className={styles.titlecard}>
         <h1 className={styles.title}>Gradius</h1>
         <div>{check ? <p>横画面です。</p> : <p>縦画面です。</p>}</div>
         <input

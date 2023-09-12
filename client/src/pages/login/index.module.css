@@ -11,9 +11,10 @@
   perspective: 200dvmax;
 }
 
-.card {
+.titlecard {
   position: relative;
   display: grid;
+  display: none;
   flex-shrink: 0;
   grid-template-rows: repeat(6, 1fr);
   align-items: end;
@@ -24,6 +25,88 @@
   border: solid 0.4svmin #fff2;
   border-radius: 2svmin;
   backdrop-filter: blur(0.8svmin);
+}
+
+.alertcard {
+  position: relative;
+  z-index: 3;
+  display: grid;
+  flex-shrink: 0;
+  grid-template-rows: repeat(6, 1fr);
+  justify-items: center;
+  width: 60svmin;
+  height: 100svmin;
+  padding-top: 10svmin;
+  background-color: rgb(255 255 255 / 29.8%);
+  border: solid 0.4svmin #fff2;
+  border-radius: 2svmin;
+  backdrop-filter: blur(0.8svmin);
+}
+
+.smartphone {
+  position: relative;
+  width: 25svmin;
+  height: 50svmin;
+  overflow: hidden;
+  border: 0.3svmin solid #000;
+  border-radius: 2svmin;
+  box-shadow: 0 0 2svmin rgb(0 0 0 / 50%);
+  animation: rotate-animation 4s infinite;
+}
+
+.screen {
+  position: absolute;
+  top: 25svmin;
+  left: 50%;
+  width: 23svmin;
+  height: 40svmin;
+  background-color: #00000043;
+  border: 0.3svmin solid #000;
+  transform: translate(-50%, -50%);
+}
+
+.smartPhoneButton {
+  position: absolute;
+  bottom: 1.5svmin;
+  left: 50%;
+  width: 4svmin;
+  height: 1svmin;
+  border: 0.3svmin solid #000;
+  border-radius: 1svmin;
+  transform: translateX(-50%);
+}
+
+.speaker {
+  position: absolute;
+  top: 2svmin;
+  left: 50%;
+  width: 15svmin;
+  height: 1svmin;
+  border: 0.3svmin solid #000;
+  border-radius: 1svmin;
+  transform: translateX(-50%);
+}
+
+@keyframes rotate-animation {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  80%,
+  30% {
+    transform: rotate(90deg);
+  }
+
+  100% {
+    transform: rotate(0deg);
+  }
+}
+
+.alertcard > p {
+  margin-top: 5svmin;
+  font-size: 5svmin;
+  font-weight: bold;
+  color: #fff;
 }
 
 .title {
@@ -203,10 +286,10 @@
   position: fixed;
   top: 0;
   left: 0;
-  z-index: 1; /* 他の要素よりも前面に表示 */
+  z-index: 2;
   width: 100%;
   height: 100%;
   content: '';
-  background: rgb(0 0 0 / 50%); /* 半透明の背景 */
-  backdrop-filter: blur(5px); /* ぼかしをかける */
+  background: rgb(0 0 0 / 50%);
+  backdrop-filter: blur(5px);
 }
