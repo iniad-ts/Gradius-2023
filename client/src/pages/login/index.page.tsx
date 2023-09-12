@@ -25,38 +25,6 @@ const Login = () => {
     setName(e.target.value);
   };
 
-  // const checkScreenDirection = async () => {
-  //   if (window.innerHeight > window.innerWidth) {
-  //     alert('横画面にしてください');
-  //   }
-  //   setCheckScreen(true);
-  // };
-
-  // useEffect(() => {
-  //   // 画面の向きをチェックする関数
-  //   const checkOrientation = () => {
-  //     if (window.innerWidth > window.innerHeight) {
-  //       // 横画面の場合
-  //       setCheck(true);
-  //     } else {
-  //       // 縦画面の場合
-  //       setCheck(false);
-  //     }
-  //   };
-
-  //   // 初回実行
-  //   checkOrientation();
-
-  //   // イベントリスナーの追加
-  //   window.addEventListener('resize', checkOrientation);
-  //   window.addEventListener('orientationchange', checkOrientation);
-
-  //   // クリーンアップ関数: イベントリスナーの削除
-  //   return () => {
-  //     window.removeEventListener('resize', checkOrientation);
-  //     window.removeEventListener('orientationchange', checkOrientation);
-  //   };
-  // }, []);
   const login = async () => {
     const player: PlayerModel = await apiClient.player.$post({ body: { name } });
     loginWithLocalStorage(player.id);
@@ -78,6 +46,26 @@ const Login = () => {
     const sortedPlayers = playersDead.sort((a, b) => b.score - a.score);
     return sortedPlayers.slice(0, 6);
   }, [playersDead]);
+
+  useEffect(() => {
+    const checkOrientation = () => {
+      if (window.innerWidth > window.innerHeight) {
+        setCheck(true);
+      } else {
+        setCheck(false);
+      }
+    };
+
+    checkOrientation();
+
+    window.addEventListener('resize', checkOrientation);
+    window.addEventListener('orientationchange', checkOrientation);
+
+    return () => {
+      window.removeEventListener('resize', checkOrientation);
+      window.removeEventListener('orientationchange', checkOrientation);
+    };
+  }, []);
 
   useEffect(() => {
     redirectToController();
