@@ -10,6 +10,7 @@ const Login = () => {
   const [name, setName] = useState<string>('');
   const [playersPlaying, setPlayersPlaying] = useState<PlayerModel[]>([]);
   const [playersDead, setPlayersDead] = useState<PlayerModel[]>([]);
+  const [check, setCheck] = useState(false);
 
   const router = useRouter();
 
@@ -24,6 +25,38 @@ const Login = () => {
     setName(e.target.value);
   };
 
+  // const checkScreenDirection = async () => {
+  //   if (window.innerHeight > window.innerWidth) {
+  //     alert('横画面にしてください');
+  //   }
+  //   setCheckScreen(true);
+  // };
+
+  // useEffect(() => {
+  //   // 画面の向きをチェックする関数
+  //   const checkOrientation = () => {
+  //     if (window.innerWidth > window.innerHeight) {
+  //       // 横画面の場合
+  //       setCheck(true);
+  //     } else {
+  //       // 縦画面の場合
+  //       setCheck(false);
+  //     }
+  //   };
+
+  //   // 初回実行
+  //   checkOrientation();
+
+  //   // イベントリスナーの追加
+  //   window.addEventListener('resize', checkOrientation);
+  //   window.addEventListener('orientationchange', checkOrientation);
+
+  //   // クリーンアップ関数: イベントリスナーの削除
+  //   return () => {
+  //     window.removeEventListener('resize', checkOrientation);
+  //     window.removeEventListener('orientationchange', checkOrientation);
+  //   };
+  // }, []);
   const login = async () => {
     const player: PlayerModel = await apiClient.player.$post({ body: { name } });
     loginWithLocalStorage(player.id);
@@ -70,6 +103,7 @@ const Login = () => {
       </div>
       <div className={styles.card}>
         <h1 className={styles.title}>Gradius</h1>
+        <div>{check ? <p>横画面です。</p> : <p>縦画面です。</p>}</div>
         <input
           type="text"
           placeholder="名前を入力してください"
