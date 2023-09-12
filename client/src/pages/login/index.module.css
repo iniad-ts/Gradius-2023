@@ -30,7 +30,7 @@
   grid-template-rows: repeat(6, 1fr);
   align-items: end;
   justify-items: center;
-  width: 92svmin;
+  width: 100svmin;
   aspect-ratio: 16 / 9;
   background-color: #fff2;
   border: solid 0.4svmin #fff2;
@@ -130,6 +130,16 @@
   text-align: center;
   background-image: linear-gradient(135deg, #fff, #c7daf7);
   background-clip: text;
+}
+
+.announcement {
+  height: 100%;
+  margin: 0 auto;
+  font-size: calc(92svmin / 30);
+  line-height: calc(92svmin / 16 * 9 / 6);
+  color: transparent;
+  color: #fff;
+  text-align: center;
 }
 
 .links {
@@ -246,49 +256,4 @@
   align-items: center;
   justify-content: center;
   font-size: 1.6svmin;
-}
-
-.ranking {
-  display: grid;
-  grid-template-rows: repeat(6, 1fr);
-  height: calc(100% - 5svmin);
-  margin: 2svmin 0 0;
-  font-weight: bold;
-  color: #fff;
-  text-align: center;
-  text-shadow: 0 0 0.4svmin #000;
-}
-
-.ranking > div {
-  height: 100%;
-  font-size: 1.2svmin;
-}
-
-.ranking > div > div {
-  height: 50%;
-}
-
-.ranking > div > div:first-child::first-letter {
-  font-size: 2.4svmin;
-}
-
-.ranking > div:nth-child(1) > div:first-child::first-letter {
-  color: transparent;
-  text-shadow: none;
-  background-image: linear-gradient(45deg, #ebd300, #eb9900, #ffc559, #af8943);
-  background-clip: text;
-}
-
-.ranking > div:nth-child(2) > div:first-child::first-letter {
-  color: transparent;
-  text-shadow: none;
-  background-image: linear-gradient(45deg, #949ba7, #bad1fa);
-  background-clip: text;
-}
-
-.ranking > div:nth-child(3) > div:first-child::first-letter {
-  color: transparent;
-  text-shadow: none;
-  background-image: linear-gradient(45deg, #a77044, #f7c46c);
-  background-clip: text;
 }

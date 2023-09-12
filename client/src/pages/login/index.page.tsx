@@ -85,15 +85,6 @@ const Login = () => {
 
   return (
     <div className={styles.container}>
-      <div className={styles.panel}>
-        <h2>現在のプレイヤー</h2>
-        <p>{playerCount}人</p>
-        <div className={styles.players}>
-          {playersPlaying.slice(0, 10).map((player) => (
-            <div key={player.id}>{player.name}</div>
-          ))}
-        </div>
-      </div>
       <div>
         {check !== undefined && check === false && (
           <div className={styles.alertcard}>
@@ -123,20 +114,6 @@ const Login = () => {
             </button>
           </div>
         )}
-      </div>
-
-      <div className={styles.panel}>
-        <h2>ランキング</h2>
-        <div className={styles.ranking}>
-          {playerRanking.map((player, i) => (
-            <div key={player.id}>
-              <div>
-                {i + 1}位 ({player.score}点)
-              </div>
-              <div>{player.name}</div>
-            </div>
-          ))}
-        </div>
       </div>
     </div>
   );

@@ -11,7 +11,11 @@ type Props = {
 };
 
 export const Player = ({ displayPosition: displayNumber, player }: Props) => {
-  const [playerImage] = useImage(staticPath.images.entity.spaceship_png);
+  const imageUrl =
+    player.side === 'left'
+      ? staticPath.images.entity.blue_spaceship_png
+      : staticPath.images.entity.red_spaceship_png;
+  const [playerImage] = useImage(imageUrl);
 
   const relativePos = useMemo(() => {
     return {
