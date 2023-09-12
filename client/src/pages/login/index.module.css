@@ -26,7 +26,6 @@
 .titlecard {
   position: relative;
   display: grid;
-  display: none;
   flex-shrink: 0;
   grid-template-rows: repeat(6, 1fr);
   align-items: end;

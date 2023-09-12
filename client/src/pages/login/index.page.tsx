@@ -10,7 +10,7 @@ const Login = () => {
   const [name, setName] = useState<string>('');
   const [playersPlaying, setPlayersPlaying] = useState<PlayerModel[]>([]);
   const [playersDead, setPlayersDead] = useState<PlayerModel[]>([]);
-  const [check, setCheck] = useState(false);
+  const [check, setCheck] = useState<boolean>();
 
   const router = useRouter();
 
@@ -28,8 +28,20 @@ const Login = () => {
   const checkOrientation = () => {
     if (window.innerWidth > window.innerHeight) {
       setCheck(true);
+      const container = document.querySelector('.container');
+      container?.classList.remove('blur');
+      const titleCard = document.querySelector('.titlecard') as HTMLElement | null;
+      if (titleCard) {
+        titleCard.style.display = 'block';
+      }
     } else {
       setCheck(false);
+      const container = document.querySelector('.container');
+      container?.classList.add('blur');
+      const titleCard = document.querySelector('.titlecard') as HTMLElement | null;
+      if (titleCard) {
+        titleCard.style.display = 'none';
+      }
     }
   };
 
@@ -77,7 +89,7 @@ const Login = () => {
   }, []);
 
   return (
-    <div className={styles.container} data-style={'blur'}>
+    <div className={styles.container}>
       <div className={styles.panel}>
         <h2>現在のプレイヤー</h2>
         <p>{playerCount}人</p>
@@ -88,7 +100,7 @@ const Login = () => {
         </div>
       </div>
       <div>
-        {check && (
+        {check !== undefined && check === false && (
           <div className={styles.alertcard}>
             <div className={styles.smartphone}>
               <div className={styles.screen} />
@@ -100,20 +112,24 @@ const Login = () => {
         )}
       </div>
 
-      <div className={styles.titlecard}>
-        <h1 className={styles.title}>Gradius</h1>
-        <div>{check ? <p>横画面です。</p> : <p>縦画面です。</p>}</div>
-        <input
-          type="text"
-          placeholder="名前を入力してください"
-          className={styles.input}
-          value={name}
-          onChange={handleInput}
-        />
-        <button className={styles.button} disabled={name === ''} onClick={checkOrientation}>
-          プレイ
-        </button>
+      <div>
+        {(check === undefined || check === true) && (
+          <div className={styles.titlecard}>
+            <h1 className={styles.title}>Gradius</h1>
+            <input
+              type="text"
+              placeholder="名前を入力してください"
+              className={styles.input}
+              value={name}
+              onChange={handleInput}
+            />
+            <button className={styles.button} disabled={name === ''} onClick={checkOrientation}>
+              プレイ
+            </button>
+          </div>
+        )}
       </div>
+
       <div className={styles.panel}>
         <h2>ランキング</h2>
         <div className={styles.ranking}>
