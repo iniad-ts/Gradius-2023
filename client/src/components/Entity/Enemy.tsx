@@ -9,16 +9,17 @@ import useImage from 'use-image';
 type Props = {
   displayPosition: number;
   enemy: EnemyModel;
+  timeDiffFix: number;
 };
 
-export const Enemy = ({ displayPosition, enemy }: Props) => {
+export const Enemy = ({ displayPosition, enemy, timeDiffFix }: Props) => {
   const [enemyImage1] = useImage(staticPath.images.entity.ufo_1_png);
   const [enemyImage2] = useImage(staticPath.images.entity.ufo_2_png);
   const [enemyImage3] = useImage(staticPath.images.entity.ufo_3_png);
 
   const images = [enemyImage1, enemyImage2, enemyImage3];
 
-  const pos = computePosition(enemy.createdPos, enemy.createdAt, enemy.direction);
+  const pos = computePosition(enemy.createdPos, enemy.createdAt, enemy.direction, timeDiffFix);
 
   const relativePos = useMemo(() => {
     return {

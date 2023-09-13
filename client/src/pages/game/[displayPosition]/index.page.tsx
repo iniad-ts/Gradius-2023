@@ -28,9 +28,13 @@ const Game = () => {
     }
   }
 
+  //ANCHOR - state
   const [players, setPlayers] = useState<PlayerModel[]>([]);
   const [enemies, setEnemies] = useState<EnemyModel[]>([]);
   const [bullets, setBullets] = useState<BulletModel[]>([]);
+
+  const [timeDiffFix, setTimeDiffFix] = useState<number>();
+
   //TODO: もし、これ以外のエフェクトを追加する場合は、それぞれのエフェクトを区別する型を作成する
   const [effectPosition, setEffectPosition] = useState<number[][][]>([[[]]]);
   const [windowSize, setWindowSize] = useState<WindowSize>({
@@ -40,6 +44,7 @@ const Game = () => {
 
   const [backgroundImage] = useImage(staticPath.images.odaiba_jpg);
 
+  //ANCHOR - fetch
   const fetchPlayers = async () => {
     const res = await apiClient.player.$get({
       query: { displayNumber: Number(displayPosition) },
@@ -52,7 +57,12 @@ const Game = () => {
     const killedEnemies = enemies.filter((enemy) => !res.some((e) => e.id === enemy.id));
 
     const newEffectPosition = killedEnemies.map((enemy) => {
-      const pos = computePosition(enemy.createdPos, enemy.createdAt, enemy.direction);
+      const pos = computePosition(
+        enemy.createdPos,
+        enemy.createdAt,
+        enemy.direction,
+        timeDiffFix ?? 0
+      );
       return [pos.x - ENEMY_HALF_WIDTH, pos.y - ENEMY_HALF_WIDTH];
     });
     setEffectPosition((prev) => [...prev.slice(-10), newEffectPosition]);
@@ -71,6 +81,15 @@ const Game = () => {
     setBullets(res);
   };
 
+  const fetchDiff = async () => {
+    const frontTIme = Date.now();
+
+    const res = await apiClient.diff.$get();
+
+    setTimeDiffFix(res - frontTIme);
+  };
+
+  //ANCHOR - effect
   useEffect(() => {
     const cancelId = requestAnimationFrame(async () => {
       await Promise.all([fetchPlayers(), fetchEnemies(), fetchBullets()]);
@@ -100,6 +119,11 @@ const Game = () => {
     redirectToLobby();
   }, [router, displayPosition]);
 
+  useEffect(() => {
+    fetchDiff();
+  });
+
+  //ANCHOR - return
   return (
     <div className={styles.canvasContainer}>
       <Stage
@@ -125,7 +149,12 @@ const Game = () => {
         </Layer>
         <Layer>
           {bullets.map((bullet) => (
-            <Bullet displayPosition={displayPosition ?? 0} bullet={bullet} key={bullet.id} />
+            <Bullet
+              displayPosition={displayPosition ?? 0}
+              bullet={bullet}
+              timeDiffFix={timeDiffFix ?? 0}
+              key={bullet.id}
+            />
           ))}
         </Layer>
         <Layer>
@@ -143,7 +172,12 @@ const Game = () => {
         </Layer>
         <Layer>
           {enemies.map((enemy) => (
-            <Enemy displayPosition={displayPosition ?? 0} enemy={enemy} key={enemy.id} />
+            <Enemy
+              displayPosition={displayPosition ?? 0}
+              enemy={enemy}
+              timeDiffFix={timeDiffFix ?? 0}
+              key={enemy.id}
+            />
           ))}
         </Layer>
         <Layer>

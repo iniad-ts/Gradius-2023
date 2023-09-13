@@ -9,15 +9,16 @@ import useImage from 'use-image';
 type Props = {
   displayPosition: number;
   bullet: BulletModel;
+  timeDiffFix: number;
 };
 
-export const Bullet = ({ displayPosition, bullet }: Props) => {
+export const Bullet = ({ displayPosition, bullet, timeDiffFix }: Props) => {
   const [bulletImage1] = useImage(staticPath.images.entity.bullet_red_png);
   const [bulletImage2] = useImage(staticPath.images.entity.bullet_blue_png);
 
   const images = [bulletImage1, bulletImage2];
 
-  const pos = computePosition(bullet.createdPos, bullet.createdAt, bullet.direction);
+  const pos = computePosition(bullet.createdPos, bullet.createdAt, bullet.direction, timeDiffFix);
 
   const ownerType = useMemo(() => {
     return bullet.side === 'left' ? 0 : 1;
