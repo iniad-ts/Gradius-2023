@@ -50,13 +50,13 @@ const Game = () => {
   const fetchEnemies = async () => {
     const res = await apiClient.enemy.$get();
     const killedEnemies = enemies.filter((enemy) => !res.some((e) => e.id === enemy.id));
-    // if (killedEnemies.length > 0) {
+
     const newEffectPosition = killedEnemies.map((enemy) => {
       const pos = computePosition(enemy.createdPos, enemy.createdAt, enemy.direction);
       return [pos.x - ENEMY_HALF_WIDTH, pos.y - ENEMY_HALF_WIDTH];
     });
     setEffectPosition((prev) => [...prev.slice(-10), newEffectPosition]);
-    // }
+
     setEnemies(res);
   };
 
