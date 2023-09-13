@@ -11,6 +11,7 @@ import { enemyRepository } from '$/repository/enemyRepository';
 import { gameRepository } from '$/repository/gameRepository';
 import { playerRepository } from '$/repository/playerRepository';
 import { computePosition } from '$/service/computePositions';
+import { userIdParser } from '$/service/idParsers';
 import { playerUseCase } from './playerUsecase';
 
 type EntityModel = PlayerModel | EnemyModel | BulletModel;
@@ -142,12 +143,18 @@ const checkCollisions = async () => {
     });
   });
 
+  const deleteBulletAndAddScore = (entity: BulletModel) => {
+    bulletRepository.delete(entity.id);
+    playerUseCase.addScore(userIdParser.parse(entity.shooterId), 150);
+    console.log('kill!');
+  };
+
   await Promise.all(
     collisions.map((entity) => {
       if ('score' in entity) {
         return playerUseCase.addScore(entity.id, -100);
       } else if ('side' in entity) {
-        return bulletRepository.delete(entity.id);
+        return deleteBulletAndAddScore(entity);
       } else {
         return enemyRepository.delete(entity.id);
       }
