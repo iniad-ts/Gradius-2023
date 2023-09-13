@@ -1,5 +1,6 @@
 import {
   BULLET_RADIUS,
+  DISPLAY_COUNT,
   ENEMY_HALF_WIDTH,
   PLAYER_HALF_WIDTH,
   SCREEN_HEIGHT,
@@ -8,7 +9,6 @@ import {
 import type { BulletModel, EnemyModel, PlayerModel } from '$/commonTypesWithClient/models';
 import { bulletRepository } from '$/repository/bulletRepository';
 import { enemyRepository } from '$/repository/enemyRepository';
-import { gameRepository } from '$/repository/gameRepository';
 import { playerRepository } from '$/repository/playerRepository';
 import { computePosition } from '$/service/computePositions';
 import { userIdParser } from '$/service/idParsers';
@@ -124,9 +124,7 @@ const checkCollisions = async () => {
     bulletRepository.findAll(),
   ]).then(([players, enemies, bullets]) => [...players, ...enemies, ...bullets]);
 
-  const displayNumber = await gameRepository.find().then((games) => games?.displayNumber ?? 1);
-
-  const dividedEntities = await divide(entities, displayNumber);
+  const dividedEntities = await divide(entities, DISPLAY_COUNT);
 
   const collisions = dividedEntities.flatMap((entities) => {
     return entities.flatMap((entity1) => {

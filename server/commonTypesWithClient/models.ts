@@ -1,4 +1,4 @@
-import type { BulletId, EnemyId, GameId, TaskId, UserId } from './branded';
+import type { BulletId, EnemyId, TaskId, UserId } from './branded';
 
 export type UserModel = {
   id: UserId;
@@ -12,11 +12,6 @@ export type TaskModel = {
   label: string;
   done: boolean;
   created: number;
-};
-
-export type GameModel = {
-  id: GameId;
-  displayNumber: number;
 };
 
 export type PlayerModel = {

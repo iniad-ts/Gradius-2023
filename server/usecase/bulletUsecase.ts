@@ -1,7 +1,11 @@
-import { PLAYER_HALF_WIDTH, SCREEN_HEIGHT, SCREEN_WIDTH } from '$/commonConstantsWithClient';
+import {
+  DISPLAY_COUNT,
+  PLAYER_HALF_WIDTH,
+  SCREEN_HEIGHT,
+  SCREEN_WIDTH,
+} from '$/commonConstantsWithClient';
 import type { UserId } from '$/commonTypesWithClient/branded';
 import { bulletRepository } from '$/repository/bulletRepository';
-import { gameRepository } from '$/repository/gameRepository';
 import { playerRepository } from '$/repository/playerRepository';
 import { computePosition } from '$/service/computePositions';
 import { bulletIdParser } from '$/service/idParsers';
@@ -53,13 +57,12 @@ export const bulletUseCase = {
 
   update: async () => {
     const currentBulletList = await bulletRepository.findAll();
-    const displayNumber = (await gameRepository.find().then((game) => game?.displayNumber)) ?? 1;
 
     const outOfDisplay = (pos: { x: number; y: number }) => {
       const terms = [
         pos.x < 0,
         pos.y < 0,
-        pos.x > displayNumber * SCREEN_WIDTH,
+        pos.x > DISPLAY_COUNT * SCREEN_WIDTH,
         pos.y > SCREEN_HEIGHT,
       ];
 

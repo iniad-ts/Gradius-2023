@@ -106,16 +106,6 @@ const Game = () => {
   }, []);
 
   useEffect(() => {
-    const redirectToLobby = async () => {
-      const res = await apiClient.config.$get();
-      if (Number(displayPosition) >= (res ?? 1)) {
-        router.push('/game');
-      }
-    };
-    redirectToLobby();
-  }, [router, displayPosition]);
-
-  useEffect(() => {
     fetchDiff();
   }, []);
 
