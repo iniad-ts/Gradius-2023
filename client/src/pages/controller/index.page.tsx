@@ -25,14 +25,21 @@ const Home = () => {
 
   const [moveIntervalId, setMoveIntervalId] = useState<NodeJS.Timeout[]>([]);
   const moveDirection = useRef<MoveTo>({ x: 0, y: 0 });
-
   const [shootIntervalId, setShootIntervalId] = useState<NodeJS.Timeout[]>([]);
-
   const router = useRouter();
-
   const MOVE_INTERVAL_TIME = 20;
-  const SHOOT_INTERVAL_TIME = 50;
-
+  const SHOOT_INTERVAL_TIME = 1000;
+  const [shootBoolean, setShootBoolean] = useState(true);
+  const shootBullet = async () => {
+    if (shootBoolean) {
+      await apiClient.bullet.$post({
+        body: {
+          userId,
+        },
+      });
+      setShootBoolean(false);
+    }
+  };
   const getUserId = useCallback(async () => {
     const localStorageUserId = getUserIdFromLocalStorage();
     if (!(playerStatus?.isPlaying ?? true)) return;
@@ -42,18 +49,15 @@ const Home = () => {
     }
     setUserId(localStorageUserId);
   }, [router, playerStatus?.isPlaying]);
-
   const fetchPlayerStatus = useCallback(async () => {
     const res = await apiClient.player.control.$get({ query: { userId } });
     if (res === null) return;
     setPlayerStatus(res);
   }, [userId]);
-
   const startShoot = async (e: TouchEvent<HTMLButtonElement> | MouseEvent<HTMLButtonElement>) => {
     const target = e.target as HTMLElement;
     const button = target.tagName === 'BUTTON' ? target : target.parentElement;
     button?.classList.add(styles.buttonActive);
-
     const shootIntervalId = setInterval(async () => {
       await apiClient.bullet.$post({
         body: {
@@ -63,23 +67,19 @@ const Home = () => {
     }, SHOOT_INTERVAL_TIME);
     setShootIntervalId((prev) => [...prev, shootIntervalId]);
   };
-
   const stopShoot = (e: TouchEvent<HTMLButtonElement> | MouseEvent<HTMLButtonElement>) => {
     const target = e.target as HTMLElement;
     const button = target.tagName === 'BUTTON' ? target : target.parentElement;
     button?.classList.remove(styles.buttonActive);
-
     shootIntervalId.forEach((id) => clearInterval(id));
     setShootIntervalId([]);
   };
-
   const handelMove = (e: IJoystickUpdateEvent) => {
     moveDirection.current = {
       x: e.x ?? 0,
       y: (e.y ?? 0) * -1,
     };
   };
-
   const startMove = () => {
     const moveIntervalId = setInterval(async () => {
       await apiClient.player.control.$post({
@@ -91,13 +91,11 @@ const Home = () => {
     }, MOVE_INTERVAL_TIME);
     setMoveIntervalId((prev) => [...prev, moveIntervalId]);
   };
-
   const stopMove = () => {
     moveDirection.current = { x: 0, y: 0 };
     moveIntervalId.forEach((id) => clearInterval(id));
     setMoveIntervalId([]);
   };
-
   const joystickSize = useMemo(() => {
     const aspectRatio = windowsize.width / windowsize.height;
     if (aspectRatio > 3 / 4) {
@@ -106,22 +104,26 @@ const Home = () => {
       return windowsize.width * 0.5 * 0.64;
     }
   }, [windowsize]);
-
+  useEffect(() => {
+    const bulletInterval = setInterval(() => {
+      setShootBoolean(true);
+    }, SHOOT_INTERVAL_TIME);
+    return () => {
+      clearInterval(bulletInterval);
+    };
+  }, [shootBoolean]);
   useEffect(() => {
     const userIdIntervalId = setInterval(() => {
       getUserId();
     }, 2000);
-
     const playerStatusIntervalId = setInterval(() => {
       fetchPlayerStatus();
     }, 500);
-
     return () => {
       clearInterval(userIdIntervalId);
       clearInterval(playerStatusIntervalId);
     };
   }, [getUserId, fetchPlayerStatus]);
-
   useEffect(() => {
     const handleResize = () => {
       setWindowsize({
@@ -129,13 +131,11 @@ const Home = () => {
         height: window.innerHeight,
       });
     };
-
     window.addEventListener('resize', handleResize);
     return () => {
       window.removeEventListener('resize', handleResize);
     };
   }, []);
-
   useEffect(() => {
     document.body.addEventListener(
       'touchstart',
@@ -182,6 +182,8 @@ const Home = () => {
       </div>
       <button
         className={styles.button}
+        onClick={shootBullet} //PCでクリックイベント
+        onTouchEndCapture={shootBullet} //スマホでクリックイベント
         onTouchStart={startShoot}
         onTouchEnd={stopShoot}
         onTouchCancel={stopShoot}

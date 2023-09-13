@@ -143,6 +143,7 @@
     grid-column: 2;
     width: 64%;
     height: 64%;
+    cursor: pointer;
   }
 
   .button > div {
