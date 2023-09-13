@@ -52,17 +52,19 @@ const Game = () => {
     });
 
     const currentEnemyIds = new Set(res.enemies.map((e) => e.id));
-    const killedEnemies = enemies.filter((enemy) => !currentEnemyIds.has(enemy.id));
+    const killedEnemies = enemies.filter(
+      (enemy) =>
+        !currentEnemyIds.has(enemy.id) &&
+        (enemy.pos.x > 1920 * (displayPosition ?? 0) ||
+          enemy.pos.x < 1920 * ((displayPosition ?? 0) + 1))
+    );
 
-    if (killedEnemies.length > 0) {
-      killedEnemies.forEach((enemy) => {
-        const pos = enemy.pos;
-        setEffectPosition((prev) => [
-          ...prev,
-          [{ x: pos.x - ENEMY_HALF_WIDTH, y: pos.y - ENEMY_HALF_WIDTH }],
-        ]);
-      });
-    }
+    const newEffectPosition = killedEnemies.map((enemy) => {
+      return { x: enemy.pos.x - ENEMY_HALF_WIDTH, y: enemy.pos.y - ENEMY_HALF_WIDTH };
+    });
+
+    setEffectPosition((prev) => [...prev.slice(-10), newEffectPosition]);
+
     setPlayers(res.players);
     setEnemies(res.enemies);
     setBullets(res.bullets);

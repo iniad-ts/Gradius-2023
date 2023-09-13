@@ -1,4 +1,5 @@
 import {
+  BULLET_RADIUS,
   DISPLAY_COUNT,
   PLAYER_HALF_WIDTH,
   SCREEN_HEIGHT,
@@ -83,9 +84,13 @@ export const bulletUseCase = {
   getBulletsByDisplay: async (displayNumber: number): Promise<BulletModelWithPos[]> => {
     const bullets = await bulletRepository.findAll();
 
-    const getBulletsByDisplay = bullets.map(entityChangeWithPos).filter((bullet) => {
-      return Math.floor(bullet.pos.x / SCREEN_WIDTH) === displayNumber;
-    }) as BulletModelWithPos[];
+    const getBulletsByDisplay = bullets
+      .map(entityChangeWithPos)
+      .filter(
+        (bullet) =>
+          bullet.pos.x + BULLET_RADIUS > SCREEN_WIDTH * displayNumber &&
+          bullet.pos.x - BULLET_RADIUS < SCREEN_WIDTH * (displayNumber + 1)
+      ) as BulletModelWithPos[];
 
     return getBulletsByDisplay;
   },

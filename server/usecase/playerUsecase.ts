@@ -1,5 +1,10 @@
 import { randomUUID } from 'crypto';
-import { DISPLAY_COUNT, SCREEN_HEIGHT, SCREEN_WIDTH } from '../commonConstantsWithClient';
+import {
+  DISPLAY_COUNT,
+  PLAYER_HALF_WIDTH,
+  SCREEN_HEIGHT,
+  SCREEN_WIDTH,
+} from '../commonConstantsWithClient';
 import type { UserId } from '../commonTypesWithClient/branded';
 import type { PlayerModel } from '../commonTypesWithClient/models';
 import { playerRepository } from '../repository/playerRepository';
@@ -83,7 +88,10 @@ export const playerUseCase = {
 
   getPlayersByDisplay: async (displayNumber: number) => {
     const isInDisplay = (posX: number, displayNumber: number) => {
-      return Math.floor(posX / SCREEN_WIDTH) === displayNumber;
+      return (
+        posX + PLAYER_HALF_WIDTH > SCREEN_WIDTH * displayNumber &&
+        posX - PLAYER_HALF_WIDTH < SCREEN_WIDTH * (displayNumber + 1)
+      );
     };
     const players = await playerRepository.findAll();
 

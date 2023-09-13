@@ -1,4 +1,9 @@
-import { DISPLAY_COUNT, SCREEN_HEIGHT, SCREEN_WIDTH } from '$/commonConstantsWithClient';
+import {
+  DISPLAY_COUNT,
+  ENEMY_HALF_WIDTH,
+  SCREEN_HEIGHT,
+  SCREEN_WIDTH,
+} from '$/commonConstantsWithClient';
 import type { EnemyModel, EnemyModelWithPos } from '$/commonTypesWithClient/models';
 import { enemyRepository } from '$/repository/enemyRepository';
 import { computePosition } from '$/service/computePositions';
@@ -83,9 +88,13 @@ export const enemyUseCase = {
 
   getEnemiesByDisplay: async (displayNumber: number): Promise<EnemyModelWithPos[]> => {
     const enemies = await enemyRepository.findAll();
-    const getEnemiesByDisplay = enemies.map(entityChangeWithPos).filter((enemy) => {
-      return Math.floor(enemy.pos.x / SCREEN_WIDTH) === displayNumber;
-    }) as EnemyModelWithPos[];
+    const getEnemiesByDisplay = enemies
+      .map(entityChangeWithPos)
+      .filter(
+        (enemy) =>
+          enemy.pos.x + ENEMY_HALF_WIDTH > SCREEN_WIDTH * displayNumber &&
+          enemy.pos.x - ENEMY_HALF_WIDTH < SCREEN_WIDTH * (displayNumber + 1)
+      ) as EnemyModelWithPos[];
 
     return getEnemiesByDisplay;
   },
