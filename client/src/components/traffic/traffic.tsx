@@ -1,20 +1,20 @@
 import { useEffect, useState } from 'react';
 import styles from './traffic.module.css';
 
-export const Traffic = ({
-  traffic,
-  width,
-  length,
-}: {
+type props = {
   traffic: number;
   width: number;
   length: number;
-}) => {
+};
+
+export const Traffic = ({ traffic, width, length }: props) => {
   const [traffics, setTraffics] = useState([0]);
   const [update, setUpdate] = useState(true);
+
   useEffect(() => {
     if (update) setTraffics([...traffics.slice(-length + 1), traffic]);
   }, [setTraffics, traffic, traffics, update, length]);
+
   return (
     <div className={styles.container} style={{ width }}>
       <div

@@ -7,16 +7,12 @@ import Boom from 'src/components/Effect/Boom';
 import { Bullet } from 'src/components/Entity/Bullet';
 import { Enemy } from 'src/components/Entity/Enemy';
 import { Player } from 'src/components/Entity/Player';
+import type { Pos, WindowSize } from 'src/types/types';
 import { staticPath } from 'src/utils/$path';
 import { apiClient } from 'src/utils/apiClient';
 import { computePosition } from 'src/utils/computePosition';
 import useImage from 'use-image';
 import styles from './index.module.css';
-
-type WindowSize = {
-  width: number;
-  height: number;
-};
 
 const Game = () => {
   const router = useRouter();
@@ -36,7 +32,7 @@ const Game = () => {
   const [timeDiffFix, setTimeDiffFix] = useState<number>();
 
   //TODO: もし、これ以外のエフェクトを追加する場合は、それぞれのエフェクトを区別する型を作成する
-  const [effectPosition, setEffectPosition] = useState<number[][][]>([[[]]]);
+  const [effectPosition, setEffectPosition] = useState<Pos[][]>([[]]);
   const [windowSize, setWindowSize] = useState<WindowSize>({
     width: window.innerWidth,
     height: window.innerHeight,
@@ -63,7 +59,7 @@ const Game = () => {
         enemy.direction,
         timeDiffFix ?? 0
       );
-      return [pos.x - ENEMY_HALF_WIDTH, pos.y - ENEMY_HALF_WIDTH];
+      return { x: pos.x - ENEMY_HALF_WIDTH, y: pos.y - ENEMY_HALF_WIDTH };
     });
     setEffectPosition((prev) => [...prev.slice(-10), newEffectPosition]);
 

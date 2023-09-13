@@ -1,7 +1,4 @@
-type Pos = {
-  x: number;
-  y: number;
-};
+import type { Pos } from 'src/types/types';
 
 export const computePosition = (
   createdPos: Pos,

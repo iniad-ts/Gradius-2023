@@ -6,14 +6,10 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Joystick } from 'react-joystick-component';
 import type { IJoystickUpdateEvent } from 'react-joystick-component/build/lib/Joystick';
 import GameClear from 'src/components/GameClear/GameClear';
+import type { Pos } from 'src/types/types';
 import { apiClient } from 'src/utils/apiClient';
 import { getUserIdFromLocalStorage, logoutWithLocalStorage } from 'src/utils/loginWithLocalStorage';
 import styles from './index.module.css';
-
-type MoveTo = {
-  x: number;
-  y: number;
-};
 
 const Home = () => {
   const [windowsize, setWindowsize] = useState<{ width: number; height: number }>({
@@ -24,7 +20,7 @@ const Home = () => {
   const [playerStatus, setPlayerStatus] = useState<PlayerModel>();
 
   const [moveIntervalId, setMoveIntervalId] = useState<NodeJS.Timeout[]>([]);
-  const moveDirection = useRef<MoveTo>({ x: 0, y: 0 });
+  const moveDirection = useRef<Pos>({ x: 0, y: 0 });
   const [shootIntervalId, setShootIntervalId] = useState<NodeJS.Timeout[]>([]);
   const router = useRouter();
   const MOVE_INTERVAL_TIME = 20;

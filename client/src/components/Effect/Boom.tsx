@@ -1,12 +1,13 @@
 import { ENEMY_HALF_WIDTH, SCREEN_WIDTH } from 'commonConstantsWithClient';
 import { useEffect, useState } from 'react';
 import { Image } from 'react-konva';
+import type { Pos } from 'src/types/types';
 import { staticPath } from 'src/utils/$path';
 import useImage from 'use-image';
 
 type Props = {
   displayPosition: number;
-  position: number[];
+  position: Pos;
 };
 
 const Boom = ({ displayPosition, position }: Props) => {
@@ -31,8 +32,8 @@ const Boom = ({ displayPosition, position }: Props) => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
   const relativePos = {
-    x: position[0] - displayPosition * SCREEN_WIDTH,
-    y: position[1],
+    x: position.x - displayPosition * SCREEN_WIDTH,
+    y: position.y,
   };
 
   useEffect(() => {
