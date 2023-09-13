@@ -76,7 +76,7 @@ const divide = async (entities: EntityModel[], displayNumber: number) => {
 };
 
 const entityType = (entity: EntityModel) => {
-  if ('pos' in entity) {
+  if (!('createdPos' in entity)) {
     return 'player';
   } else if ('side' in entity) {
     return 'bullet';
