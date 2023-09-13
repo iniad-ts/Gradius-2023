@@ -70,10 +70,6 @@ const Game = () => {
     const res = await apiClient.bullet.$get({
       query: { displayNumber: Number(displayPosition) },
     });
-    if (res.length > bullets.length) {
-      const audio = new Audio(staticPath.sounds.shot_mp3);
-      audio.play();
-    }
     setBullets(res);
   };
 
