@@ -117,7 +117,7 @@ const Game = () => {
 
   useEffect(() => {
     fetchDiff();
-  },[]);
+  }, []);
 
   //ANCHOR - return
   return (
