@@ -7,16 +7,12 @@ import Boom from 'src/components/Effect/Boom';
 import { Bullet } from 'src/components/Entity/Bullet';
 import { Enemy } from 'src/components/Entity/Enemy';
 import { Player } from 'src/components/Entity/Player';
+import type { Pos, WindowSize } from 'src/types/types';
 import { staticPath } from 'src/utils/$path';
 import { apiClient } from 'src/utils/apiClient';
 import { computePosition } from 'src/utils/computePosition';
 import useImage from 'use-image';
 import styles from './index.module.css';
-
-type WindowSize = {
-  width: number;
-  height: number;
-};
 
 const Game = () => {
   const router = useRouter();
@@ -28,11 +24,15 @@ const Game = () => {
     }
   }
 
+  //ANCHOR - state
   const [players, setPlayers] = useState<PlayerModel[]>([]);
   const [enemies, setEnemies] = useState<EnemyModel[]>([]);
   const [bullets, setBullets] = useState<BulletModel[]>([]);
+
+  const [timeDiffFix, setTimeDiffFix] = useState<number>();
+
   //TODO: もし、これ以外のエフェクトを追加する場合は、それぞれのエフェクトを区別する型を作成する
-  const [effectPosition, setEffectPosition] = useState<number[][]>([]);
+  const [effectPosition, setEffectPosition] = useState<Pos[][]>([[]]);
   const [windowSize, setWindowSize] = useState<WindowSize>({
     width: window.innerWidth,
     height: window.innerHeight,
@@ -40,6 +40,7 @@ const Game = () => {
 
   const [backgroundImage] = useImage(staticPath.images.odaiba_jpg);
 
+  //ANCHOR - fetch
   const fetchPlayers = async () => {
     const res = await apiClient.player.$get({
       query: { displayNumber: Number(displayPosition) },
@@ -50,15 +51,18 @@ const Game = () => {
   const fetchEnemies = async () => {
     const res = await apiClient.enemy.$get();
     const killedEnemies = enemies.filter((enemy) => !res.some((e) => e.id === enemy.id));
-    if (killedEnemies.length > 0) {
-      killedEnemies.forEach((enemy) => {
-        const pos = computePosition(enemy.createdPos, enemy.createdAt, enemy.direction);
-        setEffectPosition((prev) => [
-          ...prev,
-          [pos.x - ENEMY_HALF_WIDTH, pos.y - ENEMY_HALF_WIDTH],
-        ]);
-      });
-    }
+
+    const newEffectPosition = killedEnemies.map((enemy) => {
+      const pos = computePosition(
+        enemy.createdPos,
+        enemy.createdAt,
+        enemy.direction,
+        timeDiffFix ?? 0
+      );
+      return { x: pos.x - ENEMY_HALF_WIDTH, y: pos.y - ENEMY_HALF_WIDTH };
+    });
+    setEffectPosition((prev) => [...prev.slice(-10), newEffectPosition]);
+
     setEnemies(res);
   };
 
@@ -73,6 +77,15 @@ const Game = () => {
     setBullets(res);
   };
 
+  const fetchDiff = async () => {
+    const frontTime = Date.now();
+
+    const res = await apiClient.diff.$get();
+
+    setTimeDiffFix(res - frontTime);
+  };
+
+  //ANCHOR - effect
   useEffect(() => {
     const cancelId = requestAnimationFrame(async () => {
       await Promise.all([fetchPlayers(), fetchEnemies(), fetchBullets()]);
@@ -102,6 +115,11 @@ const Game = () => {
     redirectToLobby();
   }, [router, displayPosition]);
 
+  useEffect(() => {
+    fetchDiff();
+  }, []);
+
+  //ANCHOR - return
   return (
     <div className={styles.canvasContainer}>
       <Stage
@@ -127,7 +145,12 @@ const Game = () => {
         </Layer>
         <Layer>
           {bullets.map((bullet) => (
-            <Bullet displayPosition={displayPosition ?? 0} bullet={bullet} key={bullet.id} />
+            <Bullet
+              displayPosition={displayPosition ?? 0}
+              bullet={bullet}
+              timeDiffFix={timeDiffFix ?? 0}
+              key={bullet.id}
+            />
           ))}
         </Layer>
         <Layer>
@@ -145,11 +168,16 @@ const Game = () => {
         </Layer>
         <Layer>
           {enemies.map((enemy) => (
-            <Enemy displayPosition={displayPosition ?? 0} enemy={enemy} key={enemy.id} />
+            <Enemy
+              displayPosition={displayPosition ?? 0}
+              enemy={enemy}
+              timeDiffFix={timeDiffFix ?? 0}
+              key={enemy.id}
+            />
           ))}
         </Layer>
         <Layer>
-          {effectPosition.map((position, index) => (
+          {effectPosition.flat().map((position, index) => (
             <Boom displayPosition={displayPosition ?? 0} position={position} key={index} />
           ))}
         </Layer>

@@ -1,17 +1,13 @@
 import { useQRCode } from 'next-qrcode';
 import { useEffect, useState } from 'react';
+import type { WindowSize } from 'src/types/types';
 import { apiClient } from 'src/utils/apiClient';
 import styles from './index.module.css';
-
-type Size = {
-  width: number;
-  height: number;
-};
 
 const QRCode = () => {
   const [ip, setIp] = useState<string>('');
   const [isSimple, setIsSimple] = useState<boolean>(true);
-  const [windowSize, setWindowSize] = useState<Size>({
+  const [windowSize, setWindowSize] = useState<WindowSize>({
     width: window.innerWidth,
     height: window.innerHeight,
   });
