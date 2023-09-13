@@ -32,7 +32,7 @@ const Game = () => {
   const [enemies, setEnemies] = useState<EnemyModel[]>([]);
   const [bullets, setBullets] = useState<BulletModel[]>([]);
   //TODO: もし、これ以外のエフェクトを追加する場合は、それぞれのエフェクトを区別する型を作成する
-  const [effectPosition, setEffectPosition] = useState<number[][]>([]);
+  const [effectPosition, setEffectPosition] = useState<number[][][]>([[[]]]);
   const [windowSize, setWindowSize] = useState<WindowSize>({
     width: window.innerWidth,
     height: window.innerHeight,
@@ -50,15 +50,13 @@ const Game = () => {
   const fetchEnemies = async () => {
     const res = await apiClient.enemy.$get();
     const killedEnemies = enemies.filter((enemy) => !res.some((e) => e.id === enemy.id));
-    if (killedEnemies.length > 0) {
-      killedEnemies.forEach((enemy) => {
-        const pos = computePosition(enemy.createdPos, enemy.createdAt, enemy.direction);
-        setEffectPosition((prev) => [
-          ...prev,
-          [pos.x - ENEMY_HALF_WIDTH, pos.y - ENEMY_HALF_WIDTH],
-        ]);
-      });
-    }
+    // if (killedEnemies.length > 0) {
+    const newEffectPosition = killedEnemies.map((enemy) => {
+      const pos = computePosition(enemy.createdPos, enemy.createdAt, enemy.direction);
+      return [pos.x - ENEMY_HALF_WIDTH, pos.y - ENEMY_HALF_WIDTH];
+    });
+    setEffectPosition((prev) => [...prev.slice(-10), newEffectPosition]);
+    // }
     setEnemies(res);
   };
 
@@ -149,7 +147,7 @@ const Game = () => {
           ))}
         </Layer>
         <Layer>
-          {effectPosition.map((position, index) => (
+          {effectPosition.flat().map((position, index) => (
             <Boom displayPosition={displayPosition ?? 0} position={position} key={index} />
           ))}
         </Layer>
