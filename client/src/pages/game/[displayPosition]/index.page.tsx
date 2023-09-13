@@ -78,11 +78,11 @@ const Game = () => {
   };
 
   const fetchDiff = async () => {
-    const frontTIme = Date.now();
+    const frontTime = Date.now();
 
     const res = await apiClient.diff.$get();
 
-    setTimeDiffFix(res - frontTIme);
+    setTimeDiffFix(res - frontTime);
   };
 
   //ANCHOR - effect
