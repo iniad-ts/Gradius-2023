@@ -10,6 +10,7 @@ const Login = () => {
   const [name, setName] = useState<string>('');
   const [playersPlaying, setPlayersPlaying] = useState<PlayerModel[]>([]);
   const [playersDead, setPlayersDead] = useState<PlayerModel[]>([]);
+  const [check, setCheck] = useState<boolean>();
 
   const router = useRouter();
 
@@ -24,11 +25,26 @@ const Login = () => {
     setName(e.target.value);
   };
 
-  const login = async () => {
+  const login = useCallback(async () => {
     const player: PlayerModel = await apiClient.player.$post({ body: { name } });
     loginWithLocalStorage(player.id);
     router.push('/controller');
-  };
+  }, [name, router]);
+
+  const checkOrientation = useCallback(() => {
+    if (window.innerWidth > window.innerHeight && name !== '') {
+      login();
+    } else if (name !== '') {
+      setCheck(false);
+      const container = document.querySelector('.container');
+      container?.classList.add('blur');
+      const titleCard = document.querySelector('.titlecard') as HTMLElement | null;
+
+      if (titleCard) {
+        titleCard.style.display = 'none';
+      }
+    }
+  }, [name, login]);
 
   const fetchPlayers = async () => {
     //一時的にdisplayNumber:0で固定
@@ -47,6 +63,16 @@ const Login = () => {
   }, [playersDead]);
 
   useEffect(() => {
+    window.addEventListener('resize', checkOrientation);
+    window.addEventListener('orientationchange', checkOrientation);
+
+    return () => {
+      window.removeEventListener('resize', checkOrientation);
+      window.removeEventListener('orientationchange', checkOrientation);
+    };
+  }, [checkOrientation]);
+
+  useEffect(() => {
     redirectToController();
   }, [redirectToController]);
 
@@ -59,30 +85,35 @@ const Login = () => {
 
   return (
     <div className={styles.container}>
-      <div className={styles.panel}>
-        <h2>現在のプレイヤー</h2>
-        <p>{playerCount}人</p>
-        <div className={styles.players}>
-          {playersPlaying.slice(0, 10).map((player) => (
-            <div key={player.id}>{player.name}</div>
-          ))}
-        </div>
+      <div>
+        {check !== undefined && check === false && (
+          <div className={styles.alertcard}>
+            <div className={styles.smartphone}>
+              <div className={styles.screen} />
+              <div className={styles.smartPhoneButton} />
+              <div className={styles.speaker} />
+            </div>
+            <p>横画面にしてください</p>
+          </div>
+        )}
       </div>
-      <div className={styles.card}>
-        <h1 className={styles.title}>Gradius</h1>
-        <span />
-        <p className={styles.announcement}>ニックネームを入力してください</p>
-        <input
-          type="text"
-          placeholder="ここに入力"
-          className={styles.input}
-          value={name}
-          onChange={handleInput}
-        />
-        <button className={styles.button} disabled={name === ''} onClick={login}>
-          プレイ
-        </button>
-        <p className={styles.announcement}>※ニックネームはランキングなどに使用されます</p>
+
+      <div>
+        {(check === undefined || check === true) && (
+          <div className={styles.titlecard}>
+            <h1 className={styles.title}>Gradius</h1>
+            <input
+              type="text"
+              placeholder="名前を入力してください"
+              className={styles.input}
+              value={name}
+              onChange={handleInput}
+            />
+            <button className={styles.button} disabled={name === ''} onClick={checkOrientation}>
+              プレイ
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );

@@ -177,7 +177,7 @@ const Home = () => {
         />
       </div>
       <div>
-        Score: {playerStatus?.score} <br />
+        スコア: {playerStatus?.score} <br />
         <button onClick={logoutWithLocalStorage}>logout</button>
       </div>
       <button
