@@ -1,4 +1,9 @@
-import { ENEMY_HALF_WIDTH, SCREEN_HEIGHT, SCREEN_WIDTH } from 'commonConstantsWithClient';
+import {
+  DISPLAY_COUNT,
+  ENEMY_HALF_WIDTH,
+  SCREEN_HEIGHT,
+  SCREEN_WIDTH,
+} from 'commonConstantsWithClient';
 import type { BulletModel, EnemyModel, PlayerModel } from 'commonTypesWithClient/models';
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
@@ -107,8 +112,7 @@ const Game = () => {
 
   useEffect(() => {
     const redirectToLobby = async () => {
-      const res = await apiClient.config.$get();
-      if (Number(displayPosition) >= (res ?? 1)) {
+      if (Number(displayPosition) >= DISPLAY_COUNT) {
         router.push('/game');
       }
     };
