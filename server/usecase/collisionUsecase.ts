@@ -37,23 +37,21 @@ const divide = async (entities: EntityModel[], displayNumber: number) => {
   });
 
   const dividedEntitiesByQuad = dividedEntitiesByDisplay
-    .flatMap((entities) => {
-      return [
+    .flatMap((entities) =>
+      [
         entities.filter((entity) => Math.round(entity.pos.y / SCREEN_HEIGHT - 0.1) === 0),
         entities.filter((entity) => Math.round(entity.pos.y / SCREEN_HEIGHT + 0.1) === 1),
-      ].flatMap((entities) => {
-        return [
-          entities.filter(
-            (entity) => Math.round((entity.pos.x % SCREEN_WIDTH) / SCREEN_WIDTH - 0.1) === 0
-          ),
-          entities.filter(
-            (entity) => Math.round((entity.pos.x % SCREEN_WIDTH) / SCREEN_WIDTH + 0.1) === 1
-          ),
-        ];
-      });
-    })
-    .flatMap((entities) => {
-      return [
+      ].flatMap((entities) => [
+        entities.filter(
+          (entity) => Math.round((entity.pos.x % SCREEN_WIDTH) / SCREEN_WIDTH - 0.1) === 0
+        ),
+        entities.filter(
+          (entity) => Math.round((entity.pos.x % SCREEN_WIDTH) / SCREEN_WIDTH + 0.1) === 1
+        ),
+      ])
+    )
+    .flatMap((entities) =>
+      [
         entities.filter(
           (entity) =>
             Math.round((entity.pos.y % (SCREEN_HEIGHT / 2)) / (SCREEN_HEIGHT / 2) - 0.1) === 0
@@ -62,19 +60,17 @@ const divide = async (entities: EntityModel[], displayNumber: number) => {
           (entity) =>
             Math.round((entity.pos.y % (SCREEN_HEIGHT / 2)) / (SCREEN_HEIGHT / 2) + 0.1) === 1
         ),
-      ].flatMap((entities) => {
-        return [
-          entities.filter(
-            (entity) =>
-              Math.round((entity.pos.x % (SCREEN_WIDTH / 2)) / (SCREEN_WIDTH / 2) - 0.1) === 0
-          ),
-          entities.filter(
-            (entity) =>
-              Math.round((entity.pos.x % (SCREEN_WIDTH / 2)) / (SCREEN_WIDTH / 2) + 0.1) === 1
-          ),
-        ];
-      });
-    });
+      ].flatMap((entities) => [
+        entities.filter(
+          (entity) =>
+            Math.round((entity.pos.x % (SCREEN_WIDTH / 2)) / (SCREEN_WIDTH / 2) - 0.1) === 0
+        ),
+        entities.filter(
+          (entity) =>
+            Math.round((entity.pos.x % (SCREEN_WIDTH / 2)) / (SCREEN_WIDTH / 2) + 0.1) === 1
+        ),
+      ])
+    );
 
   return dividedEntitiesByQuad;
 };
