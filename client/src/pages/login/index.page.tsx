@@ -83,7 +83,7 @@ const Login = () => {
       </div>
 
       <div>
-        {(check === true || buttonPressed === false) && (
+        {buttonPressed === false && (
           <div className={styles.titlecard}>
             <h1 className={styles.title}>Gradius</h1>
             <span />
