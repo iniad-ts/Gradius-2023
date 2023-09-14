@@ -6,7 +6,7 @@ export const PLAYER_HALF_WIDTH = 50;
 
 export const ENEMY_HALF_WIDTH = 40;
 
-export const BULLET_RADIUS = 7;
+export const BULLET_RADIUS = 10;
 
 export const SCREEN_WIDTH = 1920;
 

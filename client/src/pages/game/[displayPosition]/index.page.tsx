@@ -44,7 +44,7 @@ const Game = () => {
     height: window.innerHeight,
   });
 
-  const [backgroundImage] = useImage(staticPath.images.odaiba_jpg);
+  const [backgroundImage] = useImage(staticPath.images.space_background_8bit_jpg);
 
   const fetchEntities = async () => {
     const res = await apiClient.entity.$get({
@@ -134,6 +134,7 @@ const Game = () => {
                 y={player.pos.y - 80}
                 text={player.name}
                 fontSize={30}
+                fill={'white'}
               />
               <Player displayPosition={displayPosition ?? 0} player={player} />
             </React.Fragment>

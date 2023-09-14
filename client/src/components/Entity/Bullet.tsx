@@ -11,8 +11,8 @@ type Props = {
 };
 
 export const Bullet = ({ bullet, displayPosition }: Props) => {
-  const [bulletImage1] = useImage(staticPath.images.entity.bullet_red_png);
-  const [bulletImage2] = useImage(staticPath.images.entity.bullet_blue_png);
+  const [bulletImage1] = useImage(staticPath.images.entity.bullet_blue_png);
+  const [bulletImage2] = useImage(staticPath.images.entity.bullet_red_png);
 
   const images = [bulletImage1, bulletImage2];
 

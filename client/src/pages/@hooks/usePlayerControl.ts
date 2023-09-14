@@ -13,7 +13,7 @@ export const usePlayerControl = (userId: UserId) => {
   const moveDirection = useRef<Pos>({ x: 0, y: 0 });
 
   const [shootIntervalId, setShootIntervalId] = useState<NodeJS.Timeout[]>([]);
-  const shootAudio = new Audio(staticPath.sounds.shot_mp3);
+  const shootAudio = new Audio(staticPath.sounds.shoot_mp3);
   const [shootBoolean, setShootBoolean] = useState(true);
   const [isButtonActive, setButtonActive] = useState(false);
 
