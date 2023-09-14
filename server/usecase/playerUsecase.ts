@@ -81,7 +81,7 @@ export const playerUseCase = {
     return await playerRepository.save(updatePlayerInfo);
   },
 
-  getPlayersInDisplay: async (displayNumber: number) => {
+  getPlayersByDisplay: async (displayNumber: number) => {
     const isInDisplay = (posX: number, displayNumber: number) => {
       return Math.floor(posX / SCREEN_WIDTH) === displayNumber;
     };

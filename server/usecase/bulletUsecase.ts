@@ -79,7 +79,7 @@ export const bulletUseCase = {
     );
   },
 
-  getBulletInDisplay: async (displayNumber: number) => {
+  getBulletsByDisplay: async (displayNumber: number) => {
     const bullets = await bulletRepository.findAll();
     const bulletsByDisplayNumber = bullets.filter((bullet) => {
       const pos = computePosition(bullet);

@@ -1,9 +1,4 @@
-import {
-  DISPLAY_COUNT,
-  ENEMY_HALF_WIDTH,
-  SCREEN_HEIGHT,
-  SCREEN_WIDTH,
-} from 'commonConstantsWithClient';
+import { DISPLAY_COUNT, SCREEN_HEIGHT, SCREEN_WIDTH } from 'commonConstantsWithClient';
 import type { BulletModel, EnemyModel, PlayerModel } from 'commonTypesWithClient/models';
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
@@ -15,7 +10,6 @@ import { Player } from 'src/components/Entity/Player';
 import type { Pos, WindowSize } from 'src/types/types';
 import { staticPath } from 'src/utils/$path';
 import { apiClient } from 'src/utils/apiClient';
-import { computePosition } from 'src/utils/computePosition';
 import useImage from 'use-image';
 import styles from './index.module.css';
 
@@ -46,40 +40,49 @@ const Game = () => {
   const [backgroundImage] = useImage(staticPath.images.odaiba_jpg);
 
   //ANCHOR - fetch
-  const fetchPlayers = async () => {
-    const res = await apiClient.player.$get({
+  // const fetchPlayers = async () => {
+  //   const res = await apiClient.player.$get({
+  //     query: { displayNumber: Number(displayPosition) },
+  //   });
+  //   setPlayers(res);
+  // };
+
+  // const fetchEnemies = async () => {
+  //   const res = await apiClient.enemy.$get();
+  //   const killedEnemies = enemies.filter((enemy) => !res.some((e) => e.id === enemy.id));
+
+  //   const newEffectPosition = killedEnemies.map((enemy) => {
+  //     const pos = computePosition(
+  //       enemy.createdPos,
+  //       enemy.createdAt,
+  //       enemy.direction,
+  //       timeDiffFix ?? 0
+  //     );
+  //     return { x: pos.x - ENEMY_HALF_WIDTH, y: pos.y - ENEMY_HALF_WIDTH };
+  //   });
+  //   setEffectPosition((prev) => [...prev.slice(-10), newEffectPosition]);
+
+  //   setEnemies(res);
+  // };
+
+  // const fetchBullets = async () => {
+  //   const res = await apiClient.bullet.$get({
+  //     query: { displayNumber: Number(displayPosition) },
+  //   });
+  //   if (res.length > bullets.length) {
+  //     const audio = new Audio(staticPath.sounds.shot_mp3);
+  //     audio.play();
+  //   }
+  //   setBullets(res);
+  // };
+
+  const fetchEntities = async () => {
+    const res = await apiClient.entity.$get({
       query: { displayNumber: Number(displayPosition) },
     });
-    setPlayers(res);
-  };
-
-  const fetchEnemies = async () => {
-    const res = await apiClient.enemy.$get();
-    const killedEnemies = enemies.filter((enemy) => !res.some((e) => e.id === enemy.id));
-
-    const newEffectPosition = killedEnemies.map((enemy) => {
-      const pos = computePosition(
-        enemy.createdPos,
-        enemy.createdAt,
-        enemy.direction,
-        timeDiffFix ?? 0
-      );
-      return { x: pos.x - ENEMY_HALF_WIDTH, y: pos.y - ENEMY_HALF_WIDTH };
-    });
-    setEffectPosition((prev) => [...prev.slice(-10), newEffectPosition]);
-
-    setEnemies(res);
-  };
-
-  const fetchBullets = async () => {
-    const res = await apiClient.bullet.$get({
-      query: { displayNumber: Number(displayPosition) },
-    });
-    if (res.length > bullets.length) {
-      const audio = new Audio(staticPath.sounds.shot_mp3);
-      audio.play();
-    }
-    setBullets(res);
+    setPlayers(res.players);
+    setEnemies(res.enemies);
+    setBullets(res.bullets);
   };
 
   const fetchDiff = async () => {
@@ -93,7 +96,7 @@ const Game = () => {
   //ANCHOR - effect
   useEffect(() => {
     const cancelId = requestAnimationFrame(async () => {
-      await Promise.all([fetchPlayers(), fetchEnemies(), fetchBullets()]);
+      await fetchEntities();
     });
     return () => cancelAnimationFrame(cancelId);
   });

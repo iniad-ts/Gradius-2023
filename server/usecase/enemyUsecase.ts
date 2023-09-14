@@ -79,4 +79,13 @@ export const enemyUseCase = {
       })
     );
   },
+  getEnemiesByDisplay: async (displayNumber: number): Promise<EnemyModel[]> => {
+    const enemies = await enemyRepository.findAll();
+    const enemiesByDisplayNumber = enemies.filter((enemy) => {
+      const pos = computePosition(enemy);
+      return Math.floor(pos.x / SCREEN_WIDTH) === displayNumber;
+    });
+
+    return enemiesByDisplayNumber;
+  },
 };

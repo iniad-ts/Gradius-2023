@@ -60,3 +60,9 @@ export type BulletModel = {
   side: 'left' | 'right';
   shooterId: string;
 };
+
+export type EntitiesResponse = {
+  bullets: BulletModel[];
+  enemies: EnemyModel[];
+  players: PlayerModel[];
+};
