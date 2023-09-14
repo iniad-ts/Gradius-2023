@@ -1,29 +1,29 @@
 import type { PlayerModel } from 'commonTypesWithClient/models';
 import { useRouter } from 'next/router';
 import type { ChangeEvent } from 'react';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { apiClient } from 'src/utils/apiClient';
 import { getUserIdFromLocalStorage, loginWithLocalStorage } from 'src/utils/loginWithLocalStorage';
 import styles from './index.module.css';
 
 const Login = () => {
+  //ANCHOR - state
   const [name, setName] = useState<string>('');
-  const [playersPlaying, setPlayersPlaying] = useState<PlayerModel[]>([]);
-  const [playersDead, setPlayersDead] = useState<PlayerModel[]>([]);
   const [check, setCheck] = useState<boolean>();
 
   const router = useRouter();
 
+  const handleInput = (e: ChangeEvent<HTMLInputElement>) => {
+    setName(e.target.value);
+  };
+
+  //ANCHOR - callback
   const redirectToController = useCallback(async () => {
     const localStorageUserId = getUserIdFromLocalStorage();
     if (localStorageUserId !== null) {
       return router.push('/controller');
     }
   }, [router]);
-
-  const handleInput = (e: ChangeEvent<HTMLInputElement>) => {
-    setName(e.target.value);
-  };
 
   const login = useCallback(async () => {
     const player: PlayerModel = await apiClient.player.$post({ body: { name } });
@@ -46,22 +46,7 @@ const Login = () => {
     }
   }, [name, login]);
 
-  const fetchPlayers = async () => {
-    //一時的にdisplayNumber:0で固定
-    const res = await apiClient.player.$get({ query: { displayNumber: 0 } });
-    setPlayersPlaying(res.filter((player) => player.isPlaying));
-    setPlayersDead(res.filter((player) => !player.isPlaying));
-  };
-
-  const playerCount = useMemo(() => {
-    return playersPlaying.length;
-  }, [playersPlaying]);
-
-  const playerRanking = useMemo(() => {
-    const sortedPlayers = playersDead.sort((a, b) => b.score - a.score);
-    return sortedPlayers.slice(0, 6);
-  }, [playersDead]);
-
+  //ANCHOR - effect
   useEffect(() => {
     window.addEventListener('resize', checkOrientation);
     window.addEventListener('orientationchange', checkOrientation);
@@ -75,13 +60,6 @@ const Login = () => {
   useEffect(() => {
     redirectToController();
   }, [redirectToController]);
-
-  useEffect(() => {
-    const cancelId = requestAnimationFrame(() => {
-      fetchPlayers();
-    });
-    return () => cancelAnimationFrame(cancelId);
-  }, []);
 
   return (
     <div className={styles.container}>
