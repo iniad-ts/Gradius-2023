@@ -75,7 +75,7 @@ const divide = async (entities: EntityModel[], displayNumber: number) => {
       .filter((entity) => Math.floor(entity.pos.x / SCREEN_WIDTH) === i);
   });
 
-  const inDisplayEntities = (entities: EntityWithPosModel[]) =>
+  const inDisplayEntities = (entities: EntityWithPosModel[], index: number) =>
     [...Array(4)]
       .map((_, y) =>
         entities.filter((entity) =>
@@ -89,8 +89,8 @@ const divide = async (entities: EntityModel[], displayNumber: number) => {
         [...Array(4)].map((_, x) =>
           row.filter((entity) =>
             [
-              entity.pos.x + 100 >= x * (SCREEN_WIDTH / 4),
-              entity.pos.x - 100 <= (x + 1) * (SCREEN_WIDTH / 4),
+              entity.pos.x + 100 >= x * ((SCREEN_WIDTH * (index + 1)) / 4),
+              entity.pos.x - 100 <= (x + 1) * ((SCREEN_WIDTH * (index + 1)) / 4),
             ].every(Boolean)
           )
         )
