@@ -166,7 +166,6 @@ const checkCollisions = async () => {
   const deleteBulletAndAddScore = (entity: BulletModel) => {
     bulletRepository.delete(entity.id);
     playerUseCase.addScore(userIdParser.parse(entity.shooterId), 150);
-    console.log('kill!');
   };
 
   await Promise.all(
