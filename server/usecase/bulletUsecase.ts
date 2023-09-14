@@ -82,9 +82,8 @@ export const bulletUseCase = {
 
   getBulletsByDisplay: async (displayNumber: number): Promise<BulletModelWithPos[]> => {
     const bullets = await bulletRepository.findAll();
-    const filteredBullets = bullets.filter((bullet) => 'side' in bullet);
 
-    const getBulletsByDisplay = filteredBullets.map(entityChangeWithPos).filter((bullet) => {
+    const getBulletsByDisplay = bullets.map(entityChangeWithPos).filter((bullet) => {
       return Math.floor(bullet.pos.x / SCREEN_WIDTH) === displayNumber;
     }) as BulletModelWithPos[];
 

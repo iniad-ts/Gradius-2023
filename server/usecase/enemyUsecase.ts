@@ -80,10 +80,10 @@ export const enemyUseCase = {
       })
     );
   },
+
   getEnemiesByDisplay: async (displayNumber: number): Promise<EnemyModelWithPos[]> => {
     const enemies = await enemyRepository.findAll();
-    const filteredEnemies = enemies.filter((enemy) => 'type' in enemy);
-    const getEnemiesByDisplay = filteredEnemies.map(entityChangeWithPos).filter((enemy) => {
+    const getEnemiesByDisplay = enemies.map(entityChangeWithPos).filter((enemy) => {
       return Math.floor(enemy.pos.x / SCREEN_WIDTH) === displayNumber;
     }) as EnemyModelWithPos[];
 

@@ -7,22 +7,24 @@ import { getUserIdFromLocalStorage, loginWithLocalStorage } from 'src/utils/logi
 import styles from './index.module.css';
 
 const Login = () => {
+  //ANCHOR - state
   const [name, setName] = useState<string>('');
   const [check, setCheck] = useState<boolean>();
   const [buttonPressed, setButtonPressed] = useState<boolean>(false);
 
   const router = useRouter();
 
+  const handleInput = (e: ChangeEvent<HTMLInputElement>) => {
+    setName(e.target.value);
+  };
+
+  //ANCHOR - callback
   const redirectToController = useCallback(async () => {
     const localStorageUserId = getUserIdFromLocalStorage();
     if (localStorageUserId !== null) {
       return router.push('/controller');
     }
   }, [router]);
-
-  const handleInput = (e: ChangeEvent<HTMLInputElement>) => {
-    setName(e.target.value);
-  };
 
   const login = useCallback(async () => {
     const player: PlayerModel = await apiClient.player.$post({ body: { name } });
@@ -50,6 +52,7 @@ const Login = () => {
     checkOrientation();
   };
 
+  //ANCHOR - effect
   useEffect(() => {
     window.addEventListener('resize', checkOrientation);
     window.addEventListener('orientationchange', checkOrientation);
@@ -80,7 +83,7 @@ const Login = () => {
       </div>
 
       <div>
-        {(check === true || buttonPressed === false) && (
+        {buttonPressed === false && (
           <div className={styles.titlecard}>
             <h1 className={styles.title}>Gradius</h1>
             <span />
