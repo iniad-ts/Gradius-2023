@@ -10,7 +10,7 @@ export const getUserIdFromLocalStorage = (): UserId | null => {
 };
 export const loginWithLocalStorage = (userId: UserId) => {
   if (localStorage.getItem('userId') !== null) {
-    alert('すでにログインしています');
+    return;
   }
   localStorage.setItem('userId', userId);
 };

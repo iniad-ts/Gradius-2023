@@ -27,13 +27,15 @@ const Login = () => {
   }, [router]);
 
   const login = useCallback(async () => {
-    const player: PlayerModel = await apiClient.player.$post({ body: { name } });
-    loginWithLocalStorage(player.id);
+    if (getUserIdFromLocalStorage() === null) {
+      const player: PlayerModel = await apiClient.player.$post({ body: { name } });
+      loginWithLocalStorage(player.id);
+    }
     router.push('/controller');
   }, [name, router]);
 
   const checkOrientation = useCallback(() => {
-    if (window.innerWidth > window.innerHeight && buttonPressed) {
+    if (window.innerWidth > window.innerHeight || buttonPressed) {
       login();
     } else if (name !== '') {
       setCheck(false);
