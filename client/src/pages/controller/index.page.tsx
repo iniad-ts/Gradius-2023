@@ -25,7 +25,7 @@ const Home = () => {
     if (!(playerStatus?.isPlaying ?? true)) return;
     if (localStorageUserId === null) {
       alert('ログインがまだ行われておりません');
-      return router.push('/login');
+      return router.replace('/login');
     }
     setUserId(localStorageUserId);
   }, [router, playerStatus?.isPlaying]);
@@ -74,7 +74,9 @@ const Home = () => {
       </div>
       <div>
         スコア: {playerStatus?.score} <br />
-        <button onClick={logoutWithLocalStorage}>logout</button>
+        <button onClick={logoutWithLocalStorage} onTouchEndCapture={logoutWithLocalStorage}>
+          logout
+        </button>
       </div>
       <button
         className={`${styles.button} ${isButtonActive ? styles.buttonActive : ''}`}
