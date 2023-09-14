@@ -1,5 +1,14 @@
-import { DISPLAY_COUNT, SCREEN_HEIGHT, SCREEN_WIDTH } from 'commonConstantsWithClient';
-import type { BulletModel, EnemyModel, PlayerModel } from 'commonTypesWithClient/models';
+import {
+  DISPLAY_COUNT,
+  ENEMY_HALF_WIDTH,
+  SCREEN_HEIGHT,
+  SCREEN_WIDTH,
+} from 'commonConstantsWithClient';
+import type {
+  BulletModelWithPos,
+  EnemyModelWithPos,
+  PlayerModel,
+} from 'commonTypesWithClient/models';
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 import { Image, Layer, Stage, Text } from 'react-konva';
@@ -25,10 +34,8 @@ const Game = () => {
 
   //ANCHOR - state
   const [players, setPlayers] = useState<PlayerModel[]>([]);
-  const [enemies, setEnemies] = useState<EnemyModel[]>([]);
-  const [bullets, setBullets] = useState<BulletModel[]>([]);
-
-  const [timeDiffFix, setTimeDiffFix] = useState<number>();
+  const [enemies, setEnemies] = useState<EnemyModelWithPos[]>([]);
+  const [bullets, setBullets] = useState<BulletModelWithPos[]>([]);
 
   //TODO: もし、これ以外のエフェクトを追加する場合は、それぞれのエフェクトを区別する型を作成する
   const [effectPosition, setEffectPosition] = useState<Pos[][]>([[]]);
@@ -39,58 +46,26 @@ const Game = () => {
 
   const [backgroundImage] = useImage(staticPath.images.odaiba_jpg);
 
-  //ANCHOR - fetch
-  // const fetchPlayers = async () => {
-  //   const res = await apiClient.player.$get({
-  //     query: { displayNumber: Number(displayPosition) },
-  //   });
-  //   setPlayers(res);
-  // };
-
-  // const fetchEnemies = async () => {
-  //   const res = await apiClient.enemy.$get();
-  //   const killedEnemies = enemies.filter((enemy) => !res.some((e) => e.id === enemy.id));
-
-  //   const newEffectPosition = killedEnemies.map((enemy) => {
-  //     const pos = computePosition(
-  //       enemy.createdPos,
-  //       enemy.createdAt,
-  //       enemy.direction,
-  //       timeDiffFix ?? 0
-  //     );
-  //     return { x: pos.x - ENEMY_HALF_WIDTH, y: pos.y - ENEMY_HALF_WIDTH };
-  //   });
-  //   setEffectPosition((prev) => [...prev.slice(-10), newEffectPosition]);
-
-  //   setEnemies(res);
-  // };
-
-  // const fetchBullets = async () => {
-  //   const res = await apiClient.bullet.$get({
-  //     query: { displayNumber: Number(displayPosition) },
-  //   });
-  //   if (res.length > bullets.length) {
-  //     const audio = new Audio(staticPath.sounds.shot_mp3);
-  //     audio.play();
-  //   }
-  //   setBullets(res);
-  // };
-
   const fetchEntities = async () => {
     const res = await apiClient.entity.$get({
       query: { displayNumber: Number(displayPosition) },
     });
+
+    const currentEnemyIds = new Set(res.enemies.map((e) => e.id));
+    const killedEnemies = enemies.filter((enemy) => !currentEnemyIds.has(enemy.id));
+
+    if (killedEnemies.length > 0) {
+      killedEnemies.forEach((enemy) => {
+        const pos = enemy.pos;
+        setEffectPosition((prev) => [
+          ...prev,
+          [{ x: pos.x - ENEMY_HALF_WIDTH, y: pos.y - ENEMY_HALF_WIDTH }],
+        ]);
+      });
+    }
     setPlayers(res.players);
     setEnemies(res.enemies);
     setBullets(res.bullets);
-  };
-
-  const fetchDiff = async () => {
-    const frontTime = Date.now();
-
-    const res = await apiClient.diff.$get();
-
-    setTimeDiffFix(res - frontTime);
   };
 
   //ANCHOR - effect
@@ -122,10 +97,6 @@ const Game = () => {
     redirectToLobby();
   }, [router, displayPosition]);
 
-  useEffect(() => {
-    fetchDiff();
-  }, []);
-
   //ANCHOR - return
   return (
     <div className={styles.canvasContainer}>
@@ -152,12 +123,7 @@ const Game = () => {
         </Layer>
         <Layer>
           {bullets.map((bullet) => (
-            <Bullet
-              displayPosition={displayPosition ?? 0}
-              bullet={bullet}
-              timeDiffFix={timeDiffFix ?? 0}
-              key={bullet.id}
-            />
+            <Bullet displayPosition={displayPosition ?? 0} bullet={bullet} key={bullet.id} />
           ))}
         </Layer>
         <Layer>
@@ -175,12 +141,7 @@ const Game = () => {
         </Layer>
         <Layer>
           {enemies.map((enemy) => (
-            <Enemy
-              displayPosition={displayPosition ?? 0}
-              enemy={enemy}
-              timeDiffFix={timeDiffFix ?? 0}
-              key={enemy.id}
-            />
+            <Enemy displayPosition={displayPosition ?? 0} enemy={enemy} key={enemy.id} />
           ))}
         </Layer>
         <Layer>

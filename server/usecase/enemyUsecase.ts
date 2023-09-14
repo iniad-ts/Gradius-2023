@@ -1,7 +1,8 @@
 import { DISPLAY_COUNT, SCREEN_HEIGHT, SCREEN_WIDTH } from '$/commonConstantsWithClient';
-import type { EnemyModel } from '$/commonTypesWithClient/models';
+import type { EnemyModel, EnemyModelWithPos } from '$/commonTypesWithClient/models';
 import { enemyRepository } from '$/repository/enemyRepository';
 import { computePosition } from '$/service/computePositions';
+import { entityChangeWithPos } from '$/service/entityChangeWithPos';
 import { enemyIdParser } from '$/service/idParsers';
 import { randomUUID } from 'crypto';
 
@@ -79,13 +80,13 @@ export const enemyUseCase = {
       })
     );
   },
-  getEnemiesByDisplay: async (displayNumber: number): Promise<EnemyModel[]> => {
+  getEnemiesByDisplay: async (displayNumber: number): Promise<EnemyModelWithPos[]> => {
     const enemies = await enemyRepository.findAll();
-    const enemiesByDisplayNumber = enemies.filter((enemy) => {
-      const pos = computePosition(enemy);
-      return Math.floor(pos.x / SCREEN_WIDTH) === displayNumber;
-    });
+    const filteredEnemies = enemies.filter((enemy) => 'type' in enemy);
+    const getEnemiesByDisplay = filteredEnemies.map(entityChangeWithPos).filter((enemy) => {
+      return Math.floor(enemy.pos.x / SCREEN_WIDTH) === displayNumber;
+    }) as EnemyModelWithPos[];
 
-    return enemiesByDisplayNumber;
+    return getEnemiesByDisplay;
   },
 };
