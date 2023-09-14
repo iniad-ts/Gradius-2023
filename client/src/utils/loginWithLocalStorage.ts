@@ -8,7 +8,7 @@ export const getUserIdFromLocalStorage = (): UserId | null => {
   }
   return null;
 };
-export const loginWithLocalStorage = async (userId: UserId) => {
+export const loginWithLocalStorage = (userId: UserId) => {
   if (localStorage.getItem('userId') !== null) {
     return;
   }

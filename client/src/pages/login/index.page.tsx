@@ -29,7 +29,7 @@ const Login = () => {
   const login = useCallback(async () => {
     if (getUserIdFromLocalStorage() === null) {
       const player: PlayerModel = await apiClient.player.$post({ body: { name } });
-      await loginWithLocalStorage(player.id);
+      loginWithLocalStorage(player.id);
     }
     router.push('/controller');
   }, [name, router]);
@@ -42,6 +42,7 @@ const Login = () => {
       const container = document.querySelector('.container');
       container?.classList.add('blur');
       const titleCard = document.querySelector('.titlecard') as HTMLElement | null;
+
       if (titleCard) {
         titleCard.style.display = 'none';
       }
@@ -50,7 +51,6 @@ const Login = () => {
 
   const clickButton = () => {
     setButtonPressed(true);
-    console.log(buttonPressed);
     checkOrientation();
   };
 
@@ -97,11 +97,10 @@ const Login = () => {
               value={name}
               onChange={handleInput}
             />
-            <p className={styles.announcement}>※ニックネームはゲームに使用されます</p>
-            <span />
             <button className={styles.button} disabled={name === ''} onClick={clickButton}>
               プレイ
             </button>
+            <p className={styles.announcement}>※ニックネームはゲームに使用されます</p>
           </div>
         )}
       </div>
