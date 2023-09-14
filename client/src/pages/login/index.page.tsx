@@ -27,8 +27,10 @@ const Login = () => {
   }, [router]);
 
   const login = useCallback(async () => {
-    const player: PlayerModel = await apiClient.player.$post({ body: { name } });
-    await loginWithLocalStorage(player.id);
+    if (getUserIdFromLocalStorage() === null) {
+      const player: PlayerModel = await apiClient.player.$post({ body: { name } });
+      await loginWithLocalStorage(player.id);
+    }
     router.push('/controller');
   }, [name, router]);
 
