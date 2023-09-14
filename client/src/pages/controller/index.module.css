@@ -68,11 +68,11 @@
 }
 
 .buttonActive::before {
-  animation: progress-left 0.8s linear infinite;
+  animation: progress-left 1s linear infinite;
 }
 
 .buttonActive::after {
-  animation: progress-right 0.8s linear infinite;
+  animation: progress-right 1s linear infinite;
 }
 
 .button > div {

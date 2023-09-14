@@ -1,12 +1,17 @@
-import { PLAYER_HALF_WIDTH, SCREEN_HEIGHT, SCREEN_WIDTH } from '$/commonConstantsWithClient';
+import {
+  DISPLAY_COUNT,
+  PLAYER_HALF_WIDTH,
+  SCREEN_HEIGHT,
+  SCREEN_WIDTH,
+} from '$/commonConstantsWithClient';
 import type { UserId } from '$/commonTypesWithClient/branded';
 import { bulletRepository } from '$/repository/bulletRepository';
-import { gameRepository } from '$/repository/gameRepository';
 import { playerRepository } from '$/repository/playerRepository';
 import { computePosition } from '$/service/computePositions';
+import { entityChangeWithPos } from '$/service/entityChangeWithPos';
 import { bulletIdParser } from '$/service/idParsers';
 import { randomUUID } from 'crypto';
-import type { BulletModel } from '../commonTypesWithClient/models';
+import type { BulletModel, BulletModelWithPos } from '../commonTypesWithClient/models';
 
 let intervalId: NodeJS.Timeout | null = null;
 const BULLET_UPDATE_INTERVAL = 25;
@@ -53,13 +58,12 @@ export const bulletUseCase = {
 
   update: async () => {
     const currentBulletList = await bulletRepository.findAll();
-    const displayNumber = (await gameRepository.find().then((game) => game?.displayNumber)) ?? 1;
 
     const outOfDisplay = (pos: { x: number; y: number }) => {
       const terms = [
         pos.x < 0,
         pos.y < 0,
-        pos.x > displayNumber * SCREEN_WIDTH,
+        pos.x > DISPLAY_COUNT * SCREEN_WIDTH,
         pos.y > SCREEN_HEIGHT,
       ];
 
@@ -76,12 +80,14 @@ export const bulletUseCase = {
     );
   },
 
-  getBulletInDisplay: async (displayNumber: number) => {
+  getBulletsByDisplay: async (displayNumber: number): Promise<BulletModelWithPos[]> => {
     const bullets = await bulletRepository.findAll();
-    const bulletsByDisplayNumber = bullets.filter((bullet) => {
-      const pos = computePosition(bullet);
-      return Math.floor(pos.x / SCREEN_WIDTH) === displayNumber;
-    });
-    return bulletsByDisplayNumber;
+    const filteredBullets = bullets.filter((bullet) => 'side' in bullet);
+
+    const getBulletsByDisplay = filteredBullets.map(entityChangeWithPos).filter((bullet) => {
+      return Math.floor(bullet.pos.x / SCREEN_WIDTH) === displayNumber;
+    }) as BulletModelWithPos[];
+
+    return getBulletsByDisplay;
   },
 };

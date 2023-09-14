@@ -1,5 +1,7 @@
 export const APP_TITLE = 'next-frourio-starter';
 
+export const DISPLAY_COUNT = 4;
+
 export const PLAYER_HALF_WIDTH = 50;
 
 export const ENEMY_HALF_WIDTH = 40;

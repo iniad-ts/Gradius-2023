@@ -1,8 +1,8 @@
-import { SCREEN_HEIGHT, SCREEN_WIDTH } from '$/commonConstantsWithClient';
-import type { EnemyModel } from '$/commonTypesWithClient/models';
+import { DISPLAY_COUNT, SCREEN_HEIGHT, SCREEN_WIDTH } from '$/commonConstantsWithClient';
+import type { EnemyModel, EnemyModelWithPos } from '$/commonTypesWithClient/models';
 import { enemyRepository } from '$/repository/enemyRepository';
-import { gameRepository } from '$/repository/gameRepository';
 import { computePosition } from '$/service/computePositions';
+import { entityChangeWithPos } from '$/service/entityChangeWithPos';
 import { enemyIdParser } from '$/service/idParsers';
 import { randomUUID } from 'crypto';
 
@@ -37,7 +37,6 @@ export const enemyUseCase = {
 
   create: async (): Promise<EnemyModel | null> => {
     const count = await enemyRepository.count();
-    const displayNumber = (await gameRepository.find().then((game) => game?.displayNumber)) ?? 1;
 
     if (count > 12) return null;
 
@@ -48,7 +47,7 @@ export const enemyUseCase = {
         y: 0,
       },
       createdPos: {
-        x: Math.random() * (SCREEN_WIDTH * displayNumber - 1000) + 500,
+        x: Math.random() * (SCREEN_WIDTH * DISPLAY_COUNT - 1000) + 500,
         y: Math.floor(Math.random() * SCREEN_HEIGHT),
       },
       createdAt: Date.now(),
@@ -60,13 +59,12 @@ export const enemyUseCase = {
 
   update: async () => {
     const currentEnemyList = await enemyRepository.findAll();
-    const displayNumber = (await gameRepository.find().then((game) => game?.displayNumber)) ?? 1;
 
     const outOfDisplay = (pos: { x: number; y: number }) => {
       const terms = [
         pos.x < -100,
         pos.y < 0,
-        pos.x > displayNumber * SCREEN_WIDTH + 100,
+        pos.x > DISPLAY_COUNT * SCREEN_WIDTH + 100,
         pos.y > SCREEN_HEIGHT,
       ];
 
@@ -81,5 +79,14 @@ export const enemyUseCase = {
         }
       })
     );
+  },
+  getEnemiesByDisplay: async (displayNumber: number): Promise<EnemyModelWithPos[]> => {
+    const enemies = await enemyRepository.findAll();
+    const filteredEnemies = enemies.filter((enemy) => 'type' in enemy);
+    const getEnemiesByDisplay = filteredEnemies.map(entityChangeWithPos).filter((enemy) => {
+      return Math.floor(enemy.pos.x / SCREEN_WIDTH) === displayNumber;
+    }) as EnemyModelWithPos[];
+
+    return getEnemiesByDisplay;
   },
 };

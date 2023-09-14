@@ -1,8 +1,7 @@
 import { randomUUID } from 'crypto';
-import { SCREEN_HEIGHT, SCREEN_WIDTH } from '../commonConstantsWithClient';
+import { DISPLAY_COUNT, SCREEN_HEIGHT, SCREEN_WIDTH } from '../commonConstantsWithClient';
 import type { UserId } from '../commonTypesWithClient/branded';
 import type { PlayerModel } from '../commonTypesWithClient/models';
-import { gameRepository } from '../repository/gameRepository';
 import { playerRepository } from '../repository/playerRepository';
 import { userIdParser } from '../service/idParsers';
 
@@ -10,14 +9,12 @@ export type MoveDirection = { x: number; y: number };
 
 export const playerUseCase = {
   create: async (name: string): Promise<PlayerModel> => {
-    const game = await gameRepository.find();
-    const displayNumber = game?.displayNumber ?? 1;
     const [leftCount, rightCount] = await Promise.all([
       playerRepository.countInSide('left'),
       playerRepository.countInSide('right'),
     ]);
     const side = leftCount <= rightCount ? 'left' : 'right';
-    const x = side === 'left' ? 50 : SCREEN_WIDTH * displayNumber - 50;
+    const x = side === 'left' ? 50 : SCREEN_WIDTH * DISPLAY_COUNT - 50;
 
     const playerData: PlayerModel = {
       id: userIdParser.parse(randomUUID()),
@@ -33,7 +30,6 @@ export const playerUseCase = {
   },
 
   move: async (moveDirection: MoveDirection, userId: UserId): Promise<PlayerModel | null> => {
-    const displayNumber = (await gameRepository.find().then((game) => game?.displayNumber)) ?? 1;
     const isOutOfDisplay = (
       pos: { x: number; y: number },
       side: 'left' | 'right',
@@ -52,12 +48,12 @@ export const playerUseCase = {
     const newPos = {
       x: Math.min(
         Math.max(currentPlayer.pos.x + moveDirection.x * 5, 0),
-        SCREEN_WIDTH * displayNumber
+        SCREEN_WIDTH * DISPLAY_COUNT
       ),
       y: Math.min(Math.max(currentPlayer.pos.y + moveDirection.y * 5, 0), SCREEN_HEIGHT),
     };
 
-    if (isOutOfDisplay(newPos, currentPlayer.side, displayNumber)) {
+    if (isOutOfDisplay(newPos, currentPlayer.side, DISPLAY_COUNT)) {
       await playerUseCase.finishGame(currentPlayer);
       return null;
     }
@@ -85,7 +81,7 @@ export const playerUseCase = {
     return await playerRepository.save(updatePlayerInfo);
   },
 
-  getPlayersInDisplay: async (displayNumber: number) => {
+  getPlayersByDisplay: async (displayNumber: number) => {
     const isInDisplay = (posX: number, displayNumber: number) => {
       return Math.floor(posX / SCREEN_WIDTH) === displayNumber;
     };

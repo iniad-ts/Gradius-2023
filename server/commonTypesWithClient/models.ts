@@ -1,4 +1,4 @@
-import type { BulletId, EnemyId, GameId, TaskId, UserId } from './branded';
+import type { BulletId, EnemyId, TaskId, UserId } from './branded';
 
 export type UserModel = {
   id: UserId;
@@ -12,11 +12,6 @@ export type TaskModel = {
   label: string;
   done: boolean;
   created: number;
-};
-
-export type GameModel = {
-  id: GameId;
-  displayNumber: number;
 };
 
 export type PlayerModel = {
@@ -51,6 +46,15 @@ export type EnemyModel = {
   type: number;
 };
 
+export type EnemyModelWithPos = {
+  id: EnemyId;
+  pos: {
+    x: number;
+    y: number;
+  };
+  type: number;
+};
+
 export type BulletModel = {
   id: BulletId;
   direction: {
@@ -64,4 +68,20 @@ export type BulletModel = {
   createdAt: number;
   side: 'left' | 'right';
   shooterId: string;
+};
+
+export type BulletModelWithPos = {
+  id: BulletId;
+  pos: {
+    x: number;
+    y: number;
+  };
+  side: 'left' | 'right';
+  shooterId: string;
+};
+
+export type EntitiesResponse = {
+  bullets: BulletModelWithPos[];
+  enemies: EnemyModelWithPos[];
+  players: PlayerModel[];
 };
