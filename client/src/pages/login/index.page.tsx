@@ -11,6 +11,7 @@ const Login = () => {
   const [playersPlaying, setPlayersPlaying] = useState<PlayerModel[]>([]);
   const [playersDead, setPlayersDead] = useState<PlayerModel[]>([]);
   const [check, setCheck] = useState<boolean>();
+  const [buttonPressed, setButtonPressed] = useState<boolean>(false);
 
   const router = useRouter();
 
@@ -32,7 +33,7 @@ const Login = () => {
   }, [name, router]);
 
   const checkOrientation = useCallback(() => {
-    if (window.innerWidth > window.innerHeight && name !== '') {
+    if (window.innerWidth > window.innerHeight && buttonPressed) {
       login();
     } else if (name !== '') {
       setCheck(false);
@@ -44,13 +45,17 @@ const Login = () => {
         titleCard.style.display = 'none';
       }
     }
-  }, [name, login]);
+  }, [name, login, buttonPressed]);
 
   const fetchPlayers = async () => {
     //一時的にdisplayNumber:0で固定
     const res = await apiClient.player.$get({ query: { displayNumber: 0 } });
     setPlayersPlaying(res.filter((player) => player.isPlaying));
     setPlayersDead(res.filter((player) => !player.isPlaying));
+  };
+  const clickButton = () => {
+    setButtonPressed(true);
+    checkOrientation();
   };
 
   const playerCount = useMemo(() => {
@@ -61,7 +66,6 @@ const Login = () => {
     const sortedPlayers = playersDead.sort((a, b) => b.score - a.score);
     return sortedPlayers.slice(0, 6);
   }, [playersDead]);
-
   useEffect(() => {
     window.addEventListener('resize', checkOrientation);
     window.addEventListener('orientationchange', checkOrientation);
@@ -86,7 +90,7 @@ const Login = () => {
   return (
     <div className={styles.container}>
       <div>
-        {check !== undefined && check === false && (
+        {check === false && buttonPressed === true && (
           <div className={styles.alertcard}>
             <div className={styles.smartphone}>
               <div className={styles.screen} />
@@ -99,7 +103,7 @@ const Login = () => {
       </div>
 
       <div>
-        {(check === undefined || check === true) && (
+        {(check === true || buttonPressed === false) && (
           <div className={styles.titlecard}>
             <h1 className={styles.title}>Gradius</h1>
             <input
@@ -109,7 +113,7 @@ const Login = () => {
               value={name}
               onChange={handleInput}
             />
-            <button className={styles.button} disabled={name === ''} onClick={checkOrientation}>
+            <button className={styles.button} disabled={name === ''} onClick={clickButton}>
               プレイ
             </button>
           </div>
