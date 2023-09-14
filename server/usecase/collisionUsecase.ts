@@ -75,41 +75,28 @@ const divide = async (entities: EntityModel[], displayNumber: number) => {
       .filter((entity) => Math.floor(entity.pos.x / SCREEN_WIDTH) === i);
   });
 
-  const dividedEntitiesByQuad = dividedEntitiesByDisplay
-    .flatMap((entities) =>
-      [
-        entities.filter((entity) => Math.round(entity.pos.y / SCREEN_HEIGHT - 0.1) === 0),
-        entities.filter((entity) => Math.round(entity.pos.y / SCREEN_HEIGHT + 0.1) === 1),
-      ].flatMap((entities) => [
-        entities.filter(
-          (entity) => Math.round((entity.pos.x % SCREEN_WIDTH) / SCREEN_WIDTH - 0.1) === 0
-        ),
-        entities.filter(
-          (entity) => Math.round((entity.pos.x % SCREEN_WIDTH) / SCREEN_WIDTH + 0.1) === 1
-        ),
-      ])
-    )
-    .flatMap((entities) =>
-      [
-        entities.filter(
-          (entity) =>
-            Math.round((entity.pos.y % (SCREEN_HEIGHT / 2)) / (SCREEN_HEIGHT / 2) - 0.1) === 0
-        ),
-        entities.filter(
-          (entity) =>
-            Math.round((entity.pos.y % (SCREEN_HEIGHT / 2)) / (SCREEN_HEIGHT / 2) + 0.1) === 1
-        ),
-      ].flatMap((entities) => [
-        entities.filter(
-          (entity) =>
-            Math.round((entity.pos.x % (SCREEN_WIDTH / 2)) / (SCREEN_WIDTH / 2) - 0.1) === 0
-        ),
-        entities.filter(
-          (entity) =>
-            Math.round((entity.pos.x % (SCREEN_WIDTH / 2)) / (SCREEN_WIDTH / 2) + 0.1) === 1
-        ),
-      ])
-    );
+  const inDisplayEntities = (entities: EntityWithPosModel[]) =>
+    [...Array(4)]
+      .map((_, y) =>
+        entities.filter((entity) =>
+          [
+            entity.pos.y + 100 >= y * (SCREEN_HEIGHT / 4),
+            entity.pos.y - 100 <= (y + 1) * (SCREEN_HEIGHT / 4),
+          ].every(Boolean)
+        )
+      )
+      .map((row) =>
+        [...Array(4)].map((_, x) =>
+          row.filter((entity) =>
+            [
+              entity.pos.x + 100 >= x * (SCREEN_WIDTH / 4),
+              entity.pos.x - 100 <= (x + 1) * (SCREEN_WIDTH / 4),
+            ].every(Boolean)
+          )
+        )
+      );
+
+  const dividedEntitiesByQuad = dividedEntitiesByDisplay.map(inDisplayEntities);
 
   return dividedEntitiesByQuad;
 };
@@ -124,6 +111,7 @@ const entityType = (entity: EntityModel) => {
   }
 };
 
+//ANCHOR - isCollision
 const isCollision = (target1: EntityWithPosModel, target2: EntityWithPosModel) => {
   const entityRadius = {
     player: PLAYER_HALF_WIDTH,
@@ -150,6 +138,7 @@ const isOtherSide = (target1: EntityWithPosModel, target2: EntityWithPosModel) =
   );
 };
 
+//ANCHOR - checkCollisions
 const checkCollisions = async () => {
   const entities = await Promise.all([
     playerRepository.findAll(),
@@ -157,7 +146,7 @@ const checkCollisions = async () => {
     bulletRepository.findAll(),
   ]).then(([players, enemies, bullets]) => [...players, ...enemies, ...bullets]);
 
-  const dividedEntities: EntityWithPosModel[][] = await divide(entities, DISPLAY_COUNT);
+  const dividedEntities: EntityWithPosModel[][] = (await divide(entities, DISPLAY_COUNT)).flat(2);
 
   const collisions = dividedEntities.flatMap((entities) => {
     return entities.flatMap((entity1) => {
