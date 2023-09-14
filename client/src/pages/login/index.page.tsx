@@ -86,9 +86,11 @@ const Login = () => {
         {(check === true || buttonPressed === false) && (
           <div className={styles.titlecard}>
             <h1 className={styles.title}>Gradius</h1>
+            <span />
+            <p className={styles.announcement}>ニックネームを入力してください</p>
             <input
               type="text"
-              placeholder="名前を入力してください"
+              placeholder="ここに入力"
               className={styles.input}
               value={name}
               onChange={handleInput}
@@ -96,6 +98,7 @@ const Login = () => {
             <button className={styles.button} disabled={name === ''} onClick={clickButton}>
               プレイ
             </button>
+            <p className={styles.announcement}>※ニックネームはゲームに使用されます</p>
           </div>
         )}
       </div>

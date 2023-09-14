@@ -30,7 +30,7 @@
   grid-template-rows: repeat(6, 1fr);
   align-items: end;
   justify-items: center;
-  width: 100svmin;
+  width: 120svmin;
   aspect-ratio: 16 / 9;
   background-color: #fff2;
   border: solid 0.4svmin #fff2;
@@ -135,7 +135,7 @@
 .announcement {
   height: 100%;
   margin: 0 auto;
-  font-size: calc(92svmin / 30);
+  font-size: calc(92svmin / 20);
   line-height: calc(92svmin / 16 * 9 / 6);
   color: transparent;
   color: #fff;
@@ -149,10 +149,11 @@
 .input {
   display: block;
   grid-row: 4;
-  width: 64%;
+  width: 67%;
   height: 80%;
   padding: 0 1svmin;
-  font-size: 1.6svmin;
+  font-family: monospace;
+  font-size: 4.9svmin; 
   color: #fff;
   background-color: #0000;
   border: solid 0.2svmin #fff;
