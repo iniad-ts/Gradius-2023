@@ -18,7 +18,6 @@ const Home = () => {
   });
   const [userId, setUserId] = useState<UserId>('' as UserId);
   const [playerStatus, setPlayerStatus] = useState<PlayerModel>();
-
   const [moveIntervalId, setMoveIntervalId] = useState<NodeJS.Timeout[]>([]);
   const moveDirection = useRef<Pos>({ x: 0, y: 0 });
   const [shootIntervalId, setShootIntervalId] = useState<NodeJS.Timeout[]>([]);
@@ -26,6 +25,11 @@ const Home = () => {
   const MOVE_INTERVAL_TIME = 20;
   const SHOOT_INTERVAL_TIME = 1000;
   const [shootBoolean, setShootBoolean] = useState(true);
+  const vibration = (time: number) => {
+    if (typeof window.navigator.vibrate === 'function') {
+      window.navigator.vibrate(time);
+    }
+  };
   const shootBullet = async () => {
     if (shootBoolean) {
       await apiClient.bullet.$post({
@@ -61,6 +65,7 @@ const Home = () => {
         },
       });
     }, SHOOT_INTERVAL_TIME);
+    vibration(100);
     setShootIntervalId((prev) => [...prev, shootIntervalId]);
   };
   const stopShoot = (e: TouchEvent<HTMLButtonElement> | MouseEvent<HTMLButtonElement>) => {
@@ -192,5 +197,4 @@ const Home = () => {
     </div>
   );
 };
-
 export default Home;
