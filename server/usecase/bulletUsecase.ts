@@ -1,14 +1,7 @@
-import {
-  BULLET_RADIUS,
-  DISPLAY_COUNT,
-  PLAYER_HALF_WIDTH,
-  SCREEN_HEIGHT,
-  SCREEN_WIDTH,
-} from '$/commonConstantsWithClient';
+import { BULLET_RADIUS, PLAYER_HALF_WIDTH, SCREEN_WIDTH } from '$/commonConstantsWithClient';
 import type { UserId } from '$/commonTypesWithClient/branded';
 import { bulletRepository } from '$/repository/bulletRepository';
 import { playerRepository } from '$/repository/playerRepository';
-import { computePosition } from '$/service/computePositions';
 import { entityChangeWithPos } from '$/service/entityChangeWithPos';
 import { bulletIdParser } from '$/service/idParsers';
 import { randomUUID } from 'crypto';
@@ -58,27 +51,7 @@ export const bulletUseCase = {
   },
 
   update: async () => {
-    const currentBulletList = await bulletRepository.findAll();
-
-    const outOfDisplay = (pos: { x: number; y: number }) => {
-      const terms = [
-        pos.x < 0,
-        pos.y < 0,
-        pos.x > DISPLAY_COUNT * SCREEN_WIDTH,
-        pos.y > SCREEN_HEIGHT,
-      ];
-
-      return terms.some(Boolean);
-    };
-
-    await Promise.all(
-      currentBulletList
-        .filter((bullet) => {
-          const pos = computePosition(bullet);
-          return outOfDisplay(pos);
-        })
-        .map(bulletUseCase.delete)
-    );
+    await bulletRepository.deleteByCreatedTime();
   },
 
   getBulletsByDisplay: async (displayNumber: number): Promise<BulletModelWithPos[]> => {
