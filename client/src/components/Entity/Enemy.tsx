@@ -1,32 +1,28 @@
 import { ENEMY_HALF_WIDTH, SCREEN_WIDTH } from 'commonConstantsWithClient';
-import type { EnemyModel } from 'commonTypesWithClient/models';
+import type { EnemyModelWithPos } from 'commonTypesWithClient/models';
 import { useMemo } from 'react';
 import { Image } from 'react-konva';
 import { staticPath } from 'src/utils/$path';
-import { computePosition } from 'src/utils/computePosition';
 import useImage from 'use-image';
 
 type Props = {
+  enemy: EnemyModelWithPos;
   displayPosition: number;
-  enemy: EnemyModel;
-  timeDiffFix: number;
 };
 
-export const Enemy = ({ displayPosition, enemy, timeDiffFix }: Props) => {
+export const Enemy = ({ displayPosition, enemy }: Props) => {
   const [enemyImage1] = useImage(staticPath.images.entity.ufo_1_png);
   const [enemyImage2] = useImage(staticPath.images.entity.ufo_2_png);
   const [enemyImage3] = useImage(staticPath.images.entity.ufo_3_png);
 
   const images = [enemyImage1, enemyImage2, enemyImage3];
 
-  const pos = computePosition(enemy.createdPos, enemy.createdAt, enemy.direction, timeDiffFix);
-
   const relativePos = useMemo(() => {
     return {
-      x: pos.x - ENEMY_HALF_WIDTH - displayPosition * SCREEN_WIDTH,
-      y: pos.y - ENEMY_HALF_WIDTH,
+      x: enemy.pos.x - ENEMY_HALF_WIDTH - displayPosition * SCREEN_WIDTH,
+      y: enemy.pos.y - ENEMY_HALF_WIDTH,
     };
-  }, [displayPosition, pos]);
+  }, [displayPosition, enemy]);
 
   return (
     <Image

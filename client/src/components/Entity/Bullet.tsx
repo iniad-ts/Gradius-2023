@@ -1,24 +1,20 @@
 import { BULLET_RADIUS, SCREEN_WIDTH } from 'commonConstantsWithClient';
-import type { BulletModel } from 'commonTypesWithClient/models';
+import type { BulletModelWithPos } from 'commonTypesWithClient/models';
 import { useMemo } from 'react';
 import { Image } from 'react-konva';
 import { staticPath } from 'src/utils/$path';
-import { computePosition } from 'src/utils/computePosition';
 import useImage from 'use-image';
 
 type Props = {
+  bullet: BulletModelWithPos;
   displayPosition: number;
-  bullet: BulletModel;
-  timeDiffFix: number;
 };
 
-export const Bullet = ({ displayPosition, bullet, timeDiffFix }: Props) => {
+export const Bullet = ({ bullet, displayPosition }: Props) => {
   const [bulletImage1] = useImage(staticPath.images.entity.bullet_red_png);
   const [bulletImage2] = useImage(staticPath.images.entity.bullet_blue_png);
 
   const images = [bulletImage1, bulletImage2];
-
-  const pos = computePosition(bullet.createdPos, bullet.createdAt, bullet.direction, timeDiffFix);
 
   const ownerType = useMemo(() => {
     return bullet.side === 'left' ? 0 : 1;
@@ -26,10 +22,10 @@ export const Bullet = ({ displayPosition, bullet, timeDiffFix }: Props) => {
 
   const relativePos = useMemo(() => {
     return {
-      x: pos.x - BULLET_RADIUS - displayPosition * SCREEN_WIDTH,
-      y: pos.y - BULLET_RADIUS,
+      x: bullet.pos.x - BULLET_RADIUS - displayPosition * SCREEN_WIDTH,
+      y: bullet.pos.y - BULLET_RADIUS,
     };
-  }, [pos, displayPosition]);
+  }, [bullet, displayPosition]);
 
   return (
     <Image
