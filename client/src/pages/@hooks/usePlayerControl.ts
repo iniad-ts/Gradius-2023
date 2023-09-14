@@ -16,11 +16,19 @@ export const usePlayerControl = (userId: UserId) => {
   const shootAudio = new Audio(staticPath.sounds.shot_mp3);
   const [shootBoolean, setShootBoolean] = useState(true);
   const [isButtonActive, setButtonActive] = useState(false);
-
+  const vibration = (time: number) => {
+    if (typeof window.navigator.vibrate === 'function') {
+      navigator.vibrate(time);
+    }
+  };
   const shootBullet = async () => {
     if (shootBoolean) {
+      // 振動を発生させる
+      vibration(80);
+
       const audio = shootAudio.cloneNode() as HTMLAudioElement;
       audio.play();
+
       await apiClient.bullet.$post({
         body: {
           userId,
@@ -32,15 +40,21 @@ export const usePlayerControl = (userId: UserId) => {
 
   const startShoot = async () => {
     setButtonActive(true);
+
     const shootIntervalId = setInterval(async () => {
+      // 振動を発生させる
+      vibration(80);
+
       const audio = shootAudio.cloneNode() as HTMLAudioElement;
       audio.play();
+
       await apiClient.bullet.$post({
         body: {
           userId,
         },
       });
     }, SHOOT_INTERVAL_TIME);
+
     setShootIntervalId((prev) => [...prev, shootIntervalId]);
   };
 

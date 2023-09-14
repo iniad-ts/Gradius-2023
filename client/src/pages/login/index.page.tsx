@@ -81,6 +81,7 @@ const Login = () => {
   }, [redirectToController]);
 
   useEffect(() => {
+    console.log('初回読み込み');
     const cancelId = requestAnimationFrame(() => {
       fetchPlayers();
     });
@@ -103,7 +104,7 @@ const Login = () => {
       </div>
 
       <div>
-        {(check === true || buttonPressed === false) && (
+        {buttonPressed === false && (
           <div className={styles.titlecard}>
             <h1 className={styles.title}>Gradius</h1>
             <input
