@@ -132,7 +132,7 @@ const Game = () => {
               <Text
                 x={player.pos.x - SCREEN_WIDTH * (displayPosition ?? 0)}
                 y={player.pos.y - 80}
-                text={player.name}
+                text={player.name.slice(0, 8)}
                 fontSize={30}
                 fill={'white'}
               />
