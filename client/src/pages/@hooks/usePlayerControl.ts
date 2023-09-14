@@ -16,6 +16,7 @@ export const usePlayerControl = (userId: UserId) => {
   const shootAudio = new Audio(staticPath.sounds.shot_mp3);
   const [shootBoolean, setShootBoolean] = useState(true);
   const [isButtonActive, setButtonActive] = useState(false);
+  //振動させる関数
   const vibration = (time: number) => {
     if (typeof window.navigator.vibrate === 'function') {
       navigator.vibrate(time);
@@ -23,7 +24,6 @@ export const usePlayerControl = (userId: UserId) => {
   };
   const shootBullet = async () => {
     if (shootBoolean) {
-      // 振動を発生させる
       vibration(80);
 
       const audio = shootAudio.cloneNode() as HTMLAudioElement;
@@ -42,7 +42,6 @@ export const usePlayerControl = (userId: UserId) => {
     setButtonActive(true);
 
     const shootIntervalId = setInterval(async () => {
-      // 振動を発生させる
       vibration(80);
 
       const audio = shootAudio.cloneNode() as HTMLAudioElement;
