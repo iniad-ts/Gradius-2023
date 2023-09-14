@@ -10,6 +10,7 @@ const Login = () => {
   //ANCHOR - state
   const [name, setName] = useState<string>('');
   const [check, setCheck] = useState<boolean>();
+  const [buttonPressed, setButtonPressed] = useState<boolean>(false);
 
   const router = useRouter();
 
@@ -32,7 +33,7 @@ const Login = () => {
   }, [name, router]);
 
   const checkOrientation = useCallback(() => {
-    if (window.innerWidth > window.innerHeight && name !== '') {
+    if (window.innerWidth > window.innerHeight && buttonPressed) {
       login();
     } else if (name !== '') {
       setCheck(false);
@@ -44,7 +45,12 @@ const Login = () => {
         titleCard.style.display = 'none';
       }
     }
-  }, [name, login]);
+  }, [name, login, buttonPressed]);
+
+  const clickButton = () => {
+    setButtonPressed(true);
+    checkOrientation();
+  };
 
   //ANCHOR - effect
   useEffect(() => {
@@ -64,7 +70,7 @@ const Login = () => {
   return (
     <div className={styles.container}>
       <div>
-        {check !== undefined && check === false && (
+        {check === false && buttonPressed === true && (
           <div className={styles.alertcard}>
             <div className={styles.smartphone}>
               <div className={styles.screen} />
@@ -77,7 +83,7 @@ const Login = () => {
       </div>
 
       <div>
-        {(check === undefined || check === true) && (
+        {(check === true || buttonPressed === false) && (
           <div className={styles.titlecard}>
             <h1 className={styles.title}>Gradius</h1>
             <input
@@ -87,7 +93,7 @@ const Login = () => {
               value={name}
               onChange={handleInput}
             />
-            <button className={styles.button} disabled={name === ''} onClick={checkOrientation}>
+            <button className={styles.button} disabled={name === ''} onClick={clickButton}>
               プレイ
             </button>
           </div>
