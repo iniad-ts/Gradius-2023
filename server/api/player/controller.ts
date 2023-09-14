@@ -7,7 +7,11 @@ export default defineController(() => ({
     body: (await playerUseCase.getPlayersByDisplay(query.displayNumber)) ?? [],
   }),
   post: async ({ body }) => ({
-    status: 200,
+    status: 201,
     body: await playerUseCase.create(body.name),
+  }),
+  delete: async ({ body }) => ({
+    status: 204,
+    body: await playerUseCase.delete(body.userId),
   }),
 }));

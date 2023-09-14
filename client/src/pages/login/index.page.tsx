@@ -1,15 +1,13 @@
 import type { PlayerModel } from 'commonTypesWithClient/models';
 import { useRouter } from 'next/router';
 import type { ChangeEvent } from 'react';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { apiClient } from 'src/utils/apiClient';
 import { getUserIdFromLocalStorage, loginWithLocalStorage } from 'src/utils/loginWithLocalStorage';
 import styles from './index.module.css';
 
 const Login = () => {
   const [name, setName] = useState<string>('');
-  const [playersPlaying, setPlayersPlaying] = useState<PlayerModel[]>([]);
-  const [playersDead, setPlayersDead] = useState<PlayerModel[]>([]);
   const [check, setCheck] = useState<boolean>();
   const [buttonPressed, setButtonPressed] = useState<boolean>(false);
 
@@ -28,44 +26,30 @@ const Login = () => {
 
   const login = useCallback(async () => {
     const player: PlayerModel = await apiClient.player.$post({ body: { name } });
-    loginWithLocalStorage(player.id);
+    await loginWithLocalStorage(player.id);
     router.push('/controller');
   }, [name, router]);
 
   const checkOrientation = useCallback(() => {
-    if (window.innerWidth > window.innerHeight && buttonPressed) {
+    if (window.innerWidth > window.innerHeight || buttonPressed) {
       login();
     } else if (name !== '') {
       setCheck(false);
       const container = document.querySelector('.container');
       container?.classList.add('blur');
       const titleCard = document.querySelector('.titlecard') as HTMLElement | null;
-
       if (titleCard) {
         titleCard.style.display = 'none';
       }
     }
   }, [name, login, buttonPressed]);
 
-  const fetchPlayers = async () => {
-    //一時的にdisplayNumber:0で固定
-    const res = await apiClient.player.$get({ query: { displayNumber: 0 } });
-    setPlayersPlaying(res.filter((player) => player.isPlaying));
-    setPlayersDead(res.filter((player) => !player.isPlaying));
-  };
   const clickButton = () => {
     setButtonPressed(true);
+    console.log(buttonPressed);
     checkOrientation();
   };
 
-  const playerCount = useMemo(() => {
-    return playersPlaying.length;
-  }, [playersPlaying]);
-
-  const playerRanking = useMemo(() => {
-    const sortedPlayers = playersDead.sort((a, b) => b.score - a.score);
-    return sortedPlayers.slice(0, 6);
-  }, [playersDead]);
   useEffect(() => {
     window.addEventListener('resize', checkOrientation);
     window.addEventListener('orientationchange', checkOrientation);
@@ -79,13 +63,6 @@ const Login = () => {
   useEffect(() => {
     redirectToController();
   }, [redirectToController]);
-
-  useEffect(() => {
-    const cancelId = requestAnimationFrame(() => {
-      fetchPlayers();
-    });
-    return () => cancelAnimationFrame(cancelId);
-  }, []);
 
   return (
     <div className={styles.container}>
@@ -115,10 +92,11 @@ const Login = () => {
               value={name}
               onChange={handleInput}
             />
+            <p className={styles.announcement}>※ニックネームはゲームに使用されます</p>
+            <span />
             <button className={styles.button} disabled={name === ''} onClick={clickButton}>
               プレイ
             </button>
-            <p className={styles.announcement}>※ニックネームはゲームに使用されます</p>
           </div>
         )}
       </div>

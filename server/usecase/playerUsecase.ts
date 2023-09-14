@@ -93,4 +93,7 @@ export const playerUseCase = {
 
     return playersInDisplay;
   },
+  delete: async (userId: UserId) => {
+    await playerRepository.delete(userId);
+  },
 };

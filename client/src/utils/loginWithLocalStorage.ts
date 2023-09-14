@@ -1,5 +1,6 @@
 import type { UserId } from 'commonTypesWithClient/branded';
 import { userIdParser } from './../../../server/service/idParsers';
+import { apiClient } from './apiClient';
 
 export const getUserIdFromLocalStorage = (): UserId | null => {
   const userId = localStorage.getItem('userId');
@@ -8,9 +9,10 @@ export const getUserIdFromLocalStorage = (): UserId | null => {
   }
   return null;
 };
-export const loginWithLocalStorage = (userId: UserId) => {
+export const loginWithLocalStorage = async (userId: UserId) => {
   if (localStorage.getItem('userId') !== null) {
-    alert('すでにログインしています');
+    await apiClient.player.delete({ body: { userId } });
+    return;
   }
   localStorage.setItem('userId', userId);
 };
