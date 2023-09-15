@@ -3,7 +3,7 @@ import {
   ALLOW_MOVE_RANGE_MOVE_SPEED,
   DISPLAY_COUNT,
   SCREEN_WIDTH,
-} from '$/commonConstantsWithClient';
+} from '../commonConstantsWithClient';
 import type { PlayerModel } from '../commonTypesWithClient/models';
 import { diffToBaseTimeSec } from './diffToBaseTimeSec';
 import { minMax } from './minMax';
