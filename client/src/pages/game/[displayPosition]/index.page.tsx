@@ -12,7 +12,7 @@ import type {
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 import { Image, Layer, Stage, Text } from 'react-konva';
-import Boom from 'src/components/Effect/Boom';
+import Bomb from 'src/components/Effect/Bomb';
 import { Bullet } from 'src/components/Entity/Bullet';
 import { Enemy } from 'src/components/Entity/Enemy';
 import { Player } from 'src/components/Entity/Player';
@@ -38,7 +38,7 @@ const Game = () => {
   const [bullets, setBullets] = useState<BulletModelWithPos[]>([]);
 
   //TODO: もし、これ以外のエフェクトを追加する場合は、それぞれのエフェクトを区別する型を作成する
-  const [effectPosition, setEffectPosition] = useState<Pos[][]>([[]]);
+  const [BombEffectPosition, setBombEffectPosition] = useState<Pos[][]>([[]]);
   const [windowSize, setWindowSize] = useState<WindowSize>({
     width: window.innerWidth,
     height: window.innerHeight,
@@ -63,7 +63,7 @@ const Game = () => {
       return { x: enemy.pos.x - ENEMY_HALF_WIDTH, y: enemy.pos.y - ENEMY_HALF_WIDTH };
     });
 
-    setEffectPosition((prev) => [...prev.slice(-10), newEffectPosition]);
+    setBombEffectPosition((prev) => [...prev.slice(-10), newEffectPosition]);
 
     setPlayers(res.players);
     setEnemies(res.enemies);
@@ -148,8 +148,8 @@ const Game = () => {
           ))}
         </Layer>
         <Layer>
-          {effectPosition.flat().map((position, index) => (
-            <Boom displayPosition={displayPosition ?? 0} position={position} key={index} />
+          {BombEffectPosition.flat().map((position, index) => (
+            <Bomb displayPosition={displayPosition ?? 0} position={position} key={index} />
           ))}
         </Layer>
       </Stage>
