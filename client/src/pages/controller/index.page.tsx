@@ -4,6 +4,7 @@ import { useRouter } from 'next/router';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Joystick } from 'react-joystick-component';
 import GameClear from 'src/components/GameClear/GameClear';
+import { staticPath } from 'src/utils/$path';
 import { apiClient } from 'src/utils/apiClient';
 import { getUserIdFromLocalStorage, logoutWithLocalStorage } from 'src/utils/loginWithLocalStorage';
 import { usePlayerControl } from '../@hooks/usePlayerControl';
@@ -20,6 +21,8 @@ const Home = () => {
     usePlayerControl(userId);
   const [playerStatus, setPlayerStatus] = useState<PlayerModel>();
 
+  const damageAudio = useMemo(() => new Audio(staticPath.sounds.damage_mp3), []);
+
   const getUserId = useCallback(async () => {
     const localStorageUserId = getUserIdFromLocalStorage();
     if (!(playerStatus?.isPlaying ?? true)) return;
@@ -33,8 +36,12 @@ const Home = () => {
   const fetchPlayerStatus = useCallback(async () => {
     const res = await apiClient.player.control.$get({ query: { userId } });
     if (res === null) return;
+    if (playerStatus && res.score < playerStatus.score) {
+      damageAudio.play();
+    }
+
     setPlayerStatus(res);
-  }, [userId]);
+  }, [userId, playerStatus, setPlayerStatus, damageAudio]);
 
   const joystickSize = useMemo(() => {
     const aspectRatio = windowSize.width / windowSize.height;
