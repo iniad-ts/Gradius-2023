@@ -4,6 +4,7 @@ import {
   SCREEN_HEIGHT,
   SCREEN_WIDTH,
 } from 'commonConstantsWithClient';
+import type { UserId } from 'commonTypesWithClient/branded';
 import type {
   BulletModelWithPos,
   EnemyModelWithPos,
@@ -39,6 +40,8 @@ const Game = () => {
 
   //TODO: もし、これ以外のエフェクトを追加する場合は、それぞれのエフェクトを区別する型を作成する
   const [BombEffectPosition, setBombEffectPosition] = useState<Pos[][]>([[]]);
+  const [damagedPlayerIds, setDamagedPlayerIds] = useState<Set<UserId>>(new Set());
+
   const [windowSize, setWindowSize] = useState<WindowSize>({
     width: window.innerWidth,
     height: window.innerHeight,
@@ -46,12 +49,8 @@ const Game = () => {
 
   const [backgroundImage] = useImage(staticPath.images.space_background_8bit_jpg);
 
-  const fetchEntities = async () => {
-    const res = await apiClient.entity.$get({
-      query: { displayNumber: Number(displayPosition) },
-    });
-
-    const currentEnemyIds = new Set(res.enemies.map((e) => e.id));
+  const checkBombEffect = (resEnemies: EnemyModelWithPos[]) => {
+    const currentEnemyIds = new Set(resEnemies.map((e) => e.id));
     const killedEnemies = enemies.filter(
       (enemy) =>
         !currentEnemyIds.has(enemy.id) &&
@@ -64,6 +63,25 @@ const Game = () => {
     });
 
     setBombEffectPosition((prev) => [...prev.slice(-10), newEffectPosition]);
+  };
+
+  const checkDamageEffect = (resPlayers: PlayerModel[]) => {
+    const damagedPlayers = resPlayers.filter((resPlayer) => {
+      const prevPlayer = players.find((player) => player.id === resPlayer.id);
+      return prevPlayer && prevPlayer.score > resPlayer.score;
+    });
+
+    const newDamagedPlayerIds = new Set(damagedPlayers.map((player) => player.id));
+
+    setDamagedPlayerIds(newDamagedPlayerIds);
+  };
+
+  const fetchEntities = async () => {
+    const res = await apiClient.entity.$get({
+      query: { displayNumber: Number(displayPosition) },
+    });
+    checkBombEffect(res.enemies);
+    checkDamageEffect(res.players);
 
     setPlayers(res.players);
     setEnemies(res.enemies);
@@ -138,7 +156,11 @@ const Game = () => {
                 fontSize={30}
                 fill={'white'}
               />
-              <Player displayPosition={displayPosition ?? 0} player={player} />
+              <Player
+                displayPosition={displayPosition ?? 0}
+                player={player}
+                isDamaged={damagedPlayerIds.has(player.id)}
+              />
             </React.Fragment>
           ))}
         </Layer>
