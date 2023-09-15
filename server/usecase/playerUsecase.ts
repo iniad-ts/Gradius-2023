@@ -1,10 +1,7 @@
+import { computeAllowedMoveX } from '$/service/computeAllowedMoveX';
+import { minMax } from '$/service/minMax';
 import { randomUUID } from 'crypto';
-import {
-  DISPLAY_COUNT,
-  PLAYER_HALF_WIDTH,
-  SCREEN_HEIGHT,
-  SCREEN_WIDTH,
-} from '../commonConstantsWithClient';
+import { DISPLAY_COUNT, SCREEN_HEIGHT, SCREEN_WIDTH } from '../commonConstantsWithClient';
 import type { UserId } from '../commonTypesWithClient/branded';
 import type { PlayerModel } from '../commonTypesWithClient/models';
 import { playerRepository } from '../repository/playerRepository';
@@ -29,13 +26,53 @@ export const playerUseCase = {
       Items: [],
       side,
       isPlaying: true,
+      startedAt: Date.now(),
     };
 
     return await playerRepository.save(playerData);
   },
 
   move: async (moveDirection: MoveDirection, userId: UserId): Promise<PlayerModel | null> => {
-    const isOutOfDisplay = (
+    const currentPlayer = await playerRepository.find(userId);
+
+    if (currentPlayer === null) return null;
+
+    const newPos = {
+      x: minMax(
+        Math.max(currentPlayer.pos.x + moveDirection.x * 5),
+        0,
+        SCREEN_WIDTH * DISPLAY_COUNT
+      ),
+      y: Math.min(Math.max(currentPlayer.pos.y + moveDirection.y * 5, 0), SCREEN_HEIGHT),
+    };
+
+    const allowedPos = {
+      ...newPos,
+      x: computeAllowedMoveX({ ...currentPlayer, pos: newPos }),
+    };
+    const updatePlayerInfo: PlayerModel = {
+      ...currentPlayer,
+      pos: allowedPos,
+    };
+    return await playerRepository.save(updatePlayerInfo);
+  },
+
+  addScore: async (userId: UserId, score: number): Promise<PlayerModel | null> => {
+    const currentPlayer = await playerRepository.find(userId);
+    if (currentPlayer === null) return null;
+    return await playerRepository.saveScore(userId, currentPlayer.score + score);
+  },
+
+  finishGame: async (currentPlayerInfo: PlayerModel) => {
+    const updatePlayerInfo: PlayerModel = {
+      ...currentPlayerInfo,
+      isPlaying: false,
+    };
+    return await playerRepository.save(updatePlayerInfo);
+  },
+
+  getPlayersByDisplay: async (displayNumber?: number) => {
+    const isOutOfGameDisplay = (
       pos: { x: number; y: number },
       side: 'left' | 'right',
       displayNumber: number
@@ -47,58 +84,40 @@ export const playerUseCase = {
       return terms.some(Boolean);
     };
 
-    const currentPlayer = await playerRepository.find(userId);
-    if (currentPlayer === null) return null;
-
-    const newPos = {
-      x: Math.min(
-        Math.max(currentPlayer.pos.x + moveDirection.x * 5, 0),
-        SCREEN_WIDTH * DISPLAY_COUNT
-      ),
-      y: Math.min(Math.max(currentPlayer.pos.y + moveDirection.y * 5, 0), SCREEN_HEIGHT),
+    const isInThisDisplay = (posX: number, displayNumber: number) => {
+      return Math.floor(posX / SCREEN_WIDTH) === displayNumber;
     };
 
-    if (isOutOfDisplay(newPos, currentPlayer.side, DISPLAY_COUNT)) {
-      await playerUseCase.finishGame(currentPlayer);
-      return null;
-    }
-    const updatePlayerInfo: PlayerModel = {
-      ...currentPlayer,
-      pos: newPos,
-    };
-
-    return await playerRepository.save(updatePlayerInfo);
-  },
-
-  addScore: async (userId: UserId, score: number): Promise<PlayerModel | null> => {
-    const currentPlayer = await playerRepository.find(userId);
-    if (currentPlayer === null) return null;
-
-    return await playerRepository.saveScore(userId, currentPlayer.score + score);
-  },
-
-  finishGame: async (currentPlayerInfo: PlayerModel) => {
-    const updatePlayerInfo: PlayerModel = {
-      ...currentPlayerInfo,
-      isPlaying: false,
-    };
-
-    return await playerRepository.save(updatePlayerInfo);
-  },
-
-  getPlayersByDisplay: async (displayNumber: number) => {
-    const isInDisplay = (posX: number, displayNumber: number) => {
-      return (
-        posX + PLAYER_HALF_WIDTH > SCREEN_WIDTH * displayNumber &&
-        posX - PLAYER_HALF_WIDTH < SCREEN_WIDTH * (displayNumber + 1)
-      );
-    };
     const players = await playerRepository.findAll();
 
-    const playersInDisplay = players.filter((player) => {
-      return isInDisplay(player.pos.x, displayNumber) && player.isPlaying;
-    });
+    const computeScroll = (player: PlayerModel) => {
+      if (player.isPlaying === false) return player;
+      const newPlayer = {
+        ...player,
+        pos: {
+          ...player.pos,
+          x: computeAllowedMoveX(player),
+        },
+      };
+      return newPlayer;
+    };
 
+    const playersInDisplay = players.reduce((prev, curr) => {
+      if (
+        curr.isPlaying === false ||
+        (displayNumber !== undefined && !isInThisDisplay(curr.pos.x, displayNumber))
+      ) {
+        return [...prev];
+      }
+
+      const newPlayer = computeScroll(curr);
+
+      if (isOutOfGameDisplay(newPlayer.pos, newPlayer.side, DISPLAY_COUNT)) {
+        playerUseCase.finishGame(curr);
+        return [...prev];
+      }
+      return [...prev, newPlayer];
+    }, [] as PlayerModel[]);
     return playersInDisplay;
   },
 };
