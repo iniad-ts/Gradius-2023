@@ -57,8 +57,8 @@ const Boom = ({ displayPosition, position }: Props) => {
       image={boomImages[currentImageIndex]}
       x={relativePos.x}
       y={relativePos.y}
-      width={ENEMY_HALF_WIDTH * 2 * 1.2}
-      height={ENEMY_HALF_WIDTH * 2 * 1.2}
+      width={ENEMY_HALF_WIDTH * 1.8}
+      height={ENEMY_HALF_WIDTH * 1.8}
     />
   );
 };

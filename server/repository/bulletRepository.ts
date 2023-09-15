@@ -41,22 +41,33 @@ export const bulletRepository = {
   },
 
   find: async (bulletId: BulletId): Promise<BulletModel | null> => {
-    const bullet = await prismaClient.bullet.findUnique({
+    const prismaBullet = await prismaClient.bullet.findUnique({
       where: {
         bulletId,
       },
     });
-    return bullet !== null ? toBulletModel(bullet) : null;
+    return prismaBullet !== null ? toBulletModel(prismaBullet) : null;
   },
 
   findAll: async (): Promise<BulletModel[]> => {
-    const bullets = await prismaClient.bullet.findMany();
-    return bullets.map(toBulletModel);
+    const prismaBullet = await prismaClient.bullet.findMany();
+    return prismaBullet.map(toBulletModel);
   },
 
   delete: async (bulletId: BulletId) => {
     await prismaClient.bullet.deleteMany({
       where: { bulletId },
+    });
+  },
+
+  deleteByCreatedTime: async () => {
+    const DELETE_TIME_SEC = 5;
+
+    const boarderTime = new Date();
+    boarderTime.setSeconds(boarderTime.getSeconds() - DELETE_TIME_SEC);
+
+    await prismaClient.bullet.deleteMany({
+      where: { createdAt: { lt: boarderTime } },
     });
   },
 };
