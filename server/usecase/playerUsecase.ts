@@ -1,5 +1,5 @@
-import { computeAllowedMoveX } from '$/service/computeAllowedMoveX';
-import { minMax } from '$/service/minMax';
+import { computeAllowedMoveX } from '../service/computeAllowedMoveX';
+import { minMax } from '../service/minMax';
 import { randomUUID } from 'crypto';
 import { DISPLAY_COUNT, SCREEN_HEIGHT, SCREEN_WIDTH } from '../commonConstantsWithClient';
 import type { UserId } from '../commonTypesWithClient/branded';
