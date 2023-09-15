@@ -8,7 +8,7 @@ export const entityUseCase = {
     const [bullets, enemies, players] = await Promise.all([
       bulletUseCase.getBulletsByDisplay(displayNumber),
       enemyUseCase.getEnemiesByDisplay(displayNumber),
-      playerUseCase.getPlayersByDisplay(),
+      playerUseCase.getPlayersByDisplay(displayNumber),
     ]);
 
     return {
