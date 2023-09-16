@@ -10,7 +10,6 @@ import type { BulletId, EnemyId } from '$/commonTypesWithClient/branded';
 import type { BulletModel, EnemyModel, PlayerModel } from '$/commonTypesWithClient/models';
 import { bulletRepository } from '$/repository/bulletRepository';
 import { enemyRepository } from '$/repository/enemyRepository';
-import { playerRepository } from '$/repository/playerRepository';
 import { computePosition } from '$/service/computePositions';
 import { userIdParser } from '$/service/idParsers';
 import { playerUseCase } from './playerUsecase';
@@ -141,7 +140,7 @@ const isOtherSide = (target1: EntityWithPosModel, target2: EntityWithPosModel) =
 //ANCHOR - checkCollisions
 const checkCollisions = async () => {
   const entities = await Promise.all([
-    playerRepository.findAll(),
+    playerUseCase.getPlayersAll(),
     enemyRepository.findAll(),
     bulletRepository.findAll(),
   ]).then(([players, enemies, bullets]) => [...players, ...enemies, ...bullets]);

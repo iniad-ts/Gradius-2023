@@ -29,6 +29,7 @@ const toPlayerModel = (prismaPlayer: Player): PlayerModel => ({
       .parse(prismaPlayer.Item) ?? undefined,
   side: z.enum(['left', 'right']).parse(prismaPlayer.side),
   isPlaying: z.boolean().parse(prismaPlayer.isPlaying),
+  startedAt: prismaPlayer.startedAt.getTime(),
 });
 
 export const playerRepository = {
@@ -53,6 +54,7 @@ export const playerRepository = {
         y: player.pos.y,
         side: player.side,
         isPlaying: player.isPlaying,
+        startedAt: new Date(player.startedAt),
       },
     });
 

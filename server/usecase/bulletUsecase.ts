@@ -2,8 +2,10 @@ import { BULLET_RADIUS, PLAYER_HALF_WIDTH, SCREEN_WIDTH } from '$/commonConstant
 import type { UserId } from '$/commonTypesWithClient/branded';
 import { bulletRepository } from '$/repository/bulletRepository';
 import { playerRepository } from '$/repository/playerRepository';
+import { computeAllowedMoveX } from '$/service/computeAllowedMoveX';
 import { entityChangeWithPos } from '$/service/entityChangeWithPos';
 import { bulletIdParser } from '$/service/idParsers';
+import { sideToDirectionX } from '$/service/sideToDirectionX';
 import { randomUUID } from 'crypto';
 import type { BulletModel, BulletModelWithPos } from '../commonTypesWithClient/models';
 
@@ -31,11 +33,12 @@ export const bulletUseCase = {
     const newBullet: BulletModel = {
       id: bulletIdParser.parse(randomUUID()),
       direction: {
-        x: shooterInfo.side === 'left' ? 1 : -1,
+        x: sideToDirectionX(shooterInfo.side),
         y: 0,
       },
       createdPos: {
-        x: shooterInfo.pos.x + PLAYER_HALF_WIDTH * (shooterInfo.side === 'left' ? 1 : -1),
+        x:
+          computeAllowedMoveX(shooterInfo) + PLAYER_HALF_WIDTH * sideToDirectionX(shooterInfo.side),
         y: shooterInfo.pos.y,
       },
       createdAt: Date.now(),
