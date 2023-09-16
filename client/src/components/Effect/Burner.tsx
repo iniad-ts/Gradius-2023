@@ -42,7 +42,7 @@ const Burner = ({ displayPosition, position, side }: Props) => {
       setCurrentImageIndex((prevIndex) => prevIndex + 1);
     };
 
-    const intervalId = setInterval(updateBurnerImage, 500);
+    const intervalId = setInterval(updateBurnerImage, 100);
 
     return () => {
       clearInterval(intervalId);
