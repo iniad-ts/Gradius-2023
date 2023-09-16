@@ -68,7 +68,7 @@ const Game = () => {
   const checkDamageEffect = (resPlayers: PlayerModel[]) => {
     const damagedPlayers = resPlayers.filter((resPlayer) => {
       const prevPlayer = players.find((player) => player.id === resPlayer.id);
-      return prevPlayer && prevPlayer.score > resPlayer.score;
+      return prevPlayer !== undefined && prevPlayer.score > resPlayer.score;
     });
 
     const newDamagedPlayerIds = new Set(damagedPlayers.map((player) => player.id));
