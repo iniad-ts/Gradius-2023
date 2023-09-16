@@ -15,14 +15,16 @@ const isOutOfGameDisplay = (
   displayNumber: number
 ) => {
   const terms = [
-    side === 'left' && pos.x >= SCREEN_WIDTH * displayNumber,
+    side === 'left' && pos.x >= SCREEN_WIDTH * displayNumber - 1,
     side === 'right' && pos.x <= 0,
   ];
   return terms.some(Boolean);
 };
 
 const isInThisDisplay = (posX: number, displayNumber: number) => {
-  return Math.floor(posX / SCREEN_WIDTH) === displayNumber;
+  const lowerBound = SCREEN_WIDTH * displayNumber;
+  const upperBound = SCREEN_WIDTH * (displayNumber + 1);
+  return posX >= lowerBound && posX < upperBound;
 };
 
 const computeScroll = (player: PlayerModel) => {
