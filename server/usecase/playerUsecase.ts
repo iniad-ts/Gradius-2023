@@ -107,14 +107,14 @@ const getPlayers = async (displayNumber?: number) => {
   };
 
   const playersInDisplay = players.reduce((prev, curr) => {
-    if (
-      curr.isPlaying === false ||
-      (displayNumber !== undefined && !isInThisDisplay(curr.pos.x, displayNumber))
-    ) {
+    if (curr.isPlaying === false) {
       return [...prev];
     }
 
     const newPlayer = computeScroll(curr);
+    if (displayNumber !== undefined && !isInThisDisplay(newPlayer.pos.x, displayNumber)) {
+      return [...prev];
+    }
 
     if (isOutOfGameDisplay(newPlayer.pos, newPlayer.side, DISPLAY_COUNT)) {
       playerUseCase.finishGame(curr);

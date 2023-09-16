@@ -1,9 +1,9 @@
-import { ENEMY_HALF_WIDTH, SCREEN_WIDTH } from 'commonConstantsWithClient';
 import type { EnemyModelWithPos } from 'commonTypesWithClient/models';
 import { useMemo } from 'react';
 import { Image } from 'react-konva';
 import { staticPath } from 'src/utils/$path';
 import useImage from 'use-image';
+import { ENEMY_HALF_WIDTH, SCREEN_WIDTH } from '../../../../server/commonConstantsWithClient';
 
 type Props = {
   enemy: EnemyModelWithPos;

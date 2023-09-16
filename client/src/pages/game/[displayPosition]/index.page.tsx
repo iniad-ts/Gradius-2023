@@ -1,9 +1,3 @@
-import {
-  DISPLAY_COUNT,
-  ENEMY_HALF_WIDTH,
-  SCREEN_HEIGHT,
-  SCREEN_WIDTH,
-} from 'commonConstantsWithClient';
 import type {
   BulletModelWithPos,
   EnemyModelWithPos,
@@ -20,6 +14,12 @@ import type { Pos, WindowSize } from 'src/types/types';
 import { staticPath } from 'src/utils/$path';
 import { apiClient } from 'src/utils/apiClient';
 import useImage from 'use-image';
+import {
+  DISPLAY_COUNT,
+  ENEMY_HALF_WIDTH,
+  SCREEN_HEIGHT,
+  SCREEN_WIDTH,
+} from '../../../../../server/commonConstantsWithClient';
 import styles from './index.module.css';
 
 const Game = () => {
