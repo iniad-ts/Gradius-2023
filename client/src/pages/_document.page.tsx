@@ -1,6 +1,6 @@
+import { APP_TITLE } from 'commonConstantsWithClient';
 import { Head, Html, Main, NextScript } from 'next/document';
 import { GA_ID } from 'src/utils/gtag';
-import { APP_TITLE } from '../../../server/commonConstantsWithClient';
 
 function Document() {
   return (

@@ -1,9 +1,9 @@
+import { ENEMY_HALF_WIDTH, SCREEN_WIDTH } from 'commonConstantsWithClient';
 import { useEffect, useState } from 'react';
 import { Image } from 'react-konva';
 import type { Pos } from 'src/types/types';
 import { staticPath } from 'src/utils/$path';
 import useImage from 'use-image';
-import { ENEMY_HALF_WIDTH, SCREEN_WIDTH } from '../../../../server/commonConstantsWithClient';
 
 type Props = {
   displayPosition: number;

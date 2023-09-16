@@ -1,5 +1,5 @@
+import { DISPLAY_COUNT } from 'commonConstantsWithClient';
 import { useRouter } from 'next/router';
-import { DISPLAY_COUNT } from '../../../../server/commonConstantsWithClient';
 import styles from './index.module.css';
 
 const Game = () => {
