@@ -92,6 +92,11 @@ const Home = () => {
         <button onClick={logoutWithLocalStorage} onTouchEndCapture={logoutWithLocalStorage}>
           logout
         </button>
+        <button
+          onClick={useAccelerationItem} //PCでクリックイベント
+        >
+          <div>加速</div>
+        </button>
       </div>
       <button
         className={`${styles.button} ${isButtonActive ? styles.buttonActive : ''}`}
@@ -105,11 +110,6 @@ const Home = () => {
         onMouseLeave={stopShoot}
       >
         <div>🚀</div>
-      </button>
-      <button
-        onClick={useAccelerationItem} //PCでクリックイベント
-      >
-        <div>加速</div>
       </button>
     </div>
   );
