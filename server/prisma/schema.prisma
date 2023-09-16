@@ -15,7 +15,7 @@ model Task {
 }
 
 model Player {
-  userId    String  @id
+  userId    String   @id
   name      String
   x         Int
   y         Int
@@ -24,6 +24,7 @@ model Player {
   side      String
   isPlaying Boolean
   speed     Int
+  startedAt DateTime
 }
 
 model Enemy {

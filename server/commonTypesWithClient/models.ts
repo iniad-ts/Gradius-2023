@@ -31,6 +31,7 @@ export type PlayerModel = {
   side: 'left' | 'right';
   isPlaying: boolean;
   speed: number;
+  startedAt: number;
 };
 
 export type EnemyModel = {
