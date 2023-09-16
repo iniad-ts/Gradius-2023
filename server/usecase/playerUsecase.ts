@@ -29,6 +29,7 @@ export const playerUseCase = {
       Items: [],
       side,
       isPlaying: true,
+      speed: 5,
     };
 
     return await playerRepository.save(playerData);
@@ -52,10 +53,13 @@ export const playerUseCase = {
 
     const newPos = {
       x: Math.min(
-        Math.max(currentPlayer.pos.x + moveDirection.x * 5, 0),
+        Math.max(currentPlayer.pos.x + moveDirection.x * currentPlayer.speed, 0),
         SCREEN_WIDTH * DISPLAY_COUNT
       ),
-      y: Math.min(Math.max(currentPlayer.pos.y + moveDirection.y * 5, 0), SCREEN_HEIGHT),
+      y: Math.min(
+        Math.max(currentPlayer.pos.y + moveDirection.y * currentPlayer.speed, 0),
+        SCREEN_HEIGHT
+      ),
     };
 
     if (isOutOfDisplay(newPos, currentPlayer.side, DISPLAY_COUNT)) {
@@ -100,5 +104,46 @@ export const playerUseCase = {
     });
 
     return playersInDisplay;
+  },
+  useitem: async (userId: UserId, itemId: string) => {
+    interface ItemHandlers {
+      [key: string]: (player: PlayerModel) => Promise<void>;
+    }
+    const itemHandler: ItemHandlers = {
+      speed: async (player: PlayerModel) => {
+        try {
+          // 15秒間スピードアップ
+          const updatePlayerInfo: PlayerModel = {
+            ...player,
+            speed: 10,
+          };
+          console.log('speed up', updatePlayerInfo.speed);
+          await playerRepository.save(updatePlayerInfo);
+
+          setTimeout(async () => {
+            try {
+              const currentPlayer = await playerRepository.find(player.id);
+              if (currentPlayer === null) return null;
+              const updatePlayerInfo: PlayerModel = {
+                ...currentPlayer,
+                speed: 5,
+              };
+              console.log('speed down');
+              await playerRepository.save(updatePlayerInfo);
+            } catch (error) {
+              console.error('速度のリセットに失敗しました:', error);
+            }
+          }, 15000);
+        } catch (error) {
+          console.error('スピードアップに失敗しました:', error);
+        }
+      },
+    };
+
+    const currentPlayer = await playerRepository.find(userId);
+    if (currentPlayer === null) return null;
+    const handler = itemHandler[itemId];
+    if (handler === undefined) return null;
+    return await handler(currentPlayer);
   },
 };

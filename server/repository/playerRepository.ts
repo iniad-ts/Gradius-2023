@@ -29,6 +29,7 @@ const toPlayerModel = (prismaPlayer: Player): PlayerModel => ({
       .parse(prismaPlayer.Item) ?? undefined,
   side: z.enum(['left', 'right']).parse(prismaPlayer.side),
   isPlaying: z.boolean().parse(prismaPlayer.isPlaying),
+  speed: z.number().parse(prismaPlayer.speed),
 });
 
 export const playerRepository = {
@@ -43,6 +44,7 @@ export const playerRepository = {
         x: player.pos.x,
         y: player.pos.y,
         isPlaying: player.isPlaying,
+        speed: player.speed,
       },
       create: {
         userId: player.id,
@@ -53,6 +55,7 @@ export const playerRepository = {
         y: player.pos.y,
         side: player.side,
         isPlaying: player.isPlaying,
+        speed: player.speed,
       },
     });
 
