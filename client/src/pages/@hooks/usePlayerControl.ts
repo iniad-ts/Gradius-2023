@@ -37,6 +37,15 @@ export const usePlayerControl = (userId: UserId) => {
       setShootBoolean(false);
     }
   };
+  //TODO 仮置き:将来的には「アイテム使用ボタン」みたいな実装に切り替える
+  const useAccelerationItem = async () => {
+    await apiClient.player.item.$post({
+      body: {
+        userId,
+        itemId: 'speed',
+      },
+    });
+  };
 
   const startShoot = async () => {
     setButtonActive(true);
@@ -130,6 +139,7 @@ export const usePlayerControl = (userId: UserId) => {
     stopShoot,
     handelMove,
     shootBullet,
+    useAccelerationItem,
     isButtonActive,
   };
 };

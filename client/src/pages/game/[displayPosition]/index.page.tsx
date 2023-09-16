@@ -140,11 +140,13 @@ const Game = () => {
                 fill={'white'}
               />
               <Player displayPosition={displayPosition ?? 0} player={player} />
-              <Burner
-                displayPosition={displayPosition ?? 0}
-                position={player.pos}
-                side={player.side}
-              />
+              {player.speed >= 10 && (
+                <Burner
+                  displayPosition={displayPosition ?? 0}
+                  position={player.pos}
+                  side={player.side}
+                />
+              )}
             </React.Fragment>
           ))}
         </Layer>

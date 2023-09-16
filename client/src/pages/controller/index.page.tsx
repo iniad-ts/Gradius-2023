@@ -16,8 +16,16 @@ const Home = () => {
 
   const [userId, setUserId] = useState<UserId>('' as UserId);
 
-  const { startMove, stopMove, startShoot, stopShoot, handelMove, shootBullet, isButtonActive } =
-    usePlayerControl(userId);
+  const {
+    startMove,
+    stopMove,
+    startShoot,
+    stopShoot,
+    handelMove,
+    shootBullet,
+    isButtonActive,
+    useAccelerationItem,
+  } = usePlayerControl(userId);
   const [playerStatus, setPlayerStatus] = useState<PlayerModel>();
 
   const getUserId = useCallback(async () => {
@@ -90,6 +98,11 @@ const Home = () => {
         onMouseLeave={stopShoot}
       >
         <div>🚀</div>
+      </button>
+      <button
+        onClick={useAccelerationItem} //PCでクリックイベント
+      >
+        <div>加速</div>
       </button>
     </div>
   );
