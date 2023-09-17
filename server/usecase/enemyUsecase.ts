@@ -41,9 +41,20 @@ export const enemyUseCase = {
   },
 
   create: async (): Promise<EnemyModel | null> => {
-    const count = await enemyRepository.count();
+    const enemies = await enemyRepository.findAll();
 
-    if (count > 12) return null;
+    const count: [number, number, number] = [0, 0, 0];
+
+    const countByType = () => {
+      enemies.forEach((enemy) => {
+        if (count[enemy.type - 1] === undefined) return;
+        count[enemy.type]++;
+      });
+    };
+
+    countByType();
+
+    if (count[0] > 12) return null;
 
     const newEnemy = await enemyRepository.create({
       id: enemyIdParser.parse(randomUUID()),
@@ -56,7 +67,7 @@ export const enemyUseCase = {
         y: Math.floor(Math.random() * SCREEN_HEIGHT),
       },
       createdAt: Date.now(),
-      type: Math.floor(Math.random() * 3),
+      type: 0,
     });
 
     return newEnemy;
