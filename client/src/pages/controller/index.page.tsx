@@ -4,6 +4,7 @@ import { useRouter } from 'next/router';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Joystick } from 'react-joystick-component';
 import GameClear from 'src/components/GameClear/GameClear';
+import ItemButton from 'src/components/item/ItemButton';
 import { staticPath } from 'src/utils/$path';
 import { apiClient } from 'src/utils/apiClient';
 import { getUserIdFromLocalStorage, logoutWithLocalStorage } from 'src/utils/loginWithLocalStorage';
@@ -17,16 +18,8 @@ const Home = () => {
 
   const [userId, setUserId] = useState<UserId>('' as UserId);
 
-  const {
-    startMove,
-    stopMove,
-    startShoot,
-    stopShoot,
-    handelMove,
-    shootBullet,
-    isButtonActive,
-    useAccelerationItem,
-  } = usePlayerControl(userId);
+  const { startMove, stopMove, startShoot, stopShoot, handelMove, shootBullet, isButtonActive } =
+    usePlayerControl(userId);
   const [playerStatus, setPlayerStatus] = useState<PlayerModel>();
 
   const damageAudio = useMemo(() => new Audio(staticPath.sounds.damage_mp3), []);
@@ -73,7 +66,7 @@ const Home = () => {
     };
   }, [getUserId, fetchPlayerStatus]);
 
-  if (!(playerStatus?.isPlaying ?? true)) return <GameClear />;
+  // if (!(playerStatus?.isPlaying ?? true)) return <GameClear />;
 
   return (
     <div className={styles.controller}>
@@ -87,18 +80,15 @@ const Home = () => {
           stop={stopMove}
         />
       </div>
+
       <div>
-        スコア: {playerStatus?.score} <br />
+        スコア: {playerStatus?.score}
         <button onClick={logoutWithLocalStorage} onTouchEndCapture={logoutWithLocalStorage}>
           logout
         </button>
-        <button
-          onClick={useAccelerationItem} //PCでクリックイベント
-          onTouchEndCapture={useAccelerationItem} //スマホでクリックイベント
-        >
-          <div>加速</div>
-        </button>
+        <ItemButton items={playerStatus?.Items} userId={userId} />
       </div>
+
       <button
         className={`${styles.button} ${isButtonActive ? styles.buttonActive : ''}`}
         onClick={shootBullet} //PCでクリックイベント

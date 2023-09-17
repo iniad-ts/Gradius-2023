@@ -1,3 +1,4 @@
+import type { Item } from 'commonConstantsWithClient/item';
 import type { UserId } from 'commonTypesWithClient/branded';
 import { useEffect, useRef, useState } from 'react';
 import type { IJoystickUpdateEvent } from 'react-joystick-component/build/lib/Joystick';
@@ -37,12 +38,12 @@ export const usePlayerControl = (userId: UserId) => {
       setShootBoolean(false);
     }
   };
-  //TODO 仮置き:将来的には「アイテム使用ボタン」みたいな実装に切り替える
-  const useAccelerationItem = async () => {
+  const handleUseItem = async (items: Item[]) => {
+    if (items.length === 0) return;
     await apiClient.player.item.$post({
       body: {
         userId,
-        itemId: 'speed',
+        items,
       },
     });
   };
@@ -139,7 +140,7 @@ export const usePlayerControl = (userId: UserId) => {
     stopShoot,
     handelMove,
     shootBullet,
-    useAccelerationItem,
+    handleUseItem,
     isButtonActive,
   };
 };
