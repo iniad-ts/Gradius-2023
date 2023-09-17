@@ -1,17 +1,17 @@
+import { randomUUID } from 'crypto';
 import {
   DEFAULT_PLAYER_MOVE_SPEED,
   DISPLAY_COUNT,
   SCREEN_HEIGHT,
   SCREEN_WIDTH,
   SPEED_BOOST_DURATION_MS,
-} from '$/commonConstantsWithClient';
-import { minMax } from '$/service/minMax';
-import { randomUUID } from 'crypto';
+} from '../commonConstantsWithClient';
 import type { UserId } from '../commonTypesWithClient/branded';
 import type { PlayerModel } from '../commonTypesWithClient/models';
 import { playerRepository } from '../repository/playerRepository';
 import { computeAllowedMoveX } from '../service/computeAllowedMoveX';
 import { userIdParser } from '../service/idParsers';
+import { minMax } from '../service/minMax';
 
 export type MoveDirection = { x: number; y: number };
 
