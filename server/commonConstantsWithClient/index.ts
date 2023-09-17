@@ -11,3 +11,9 @@ export const BULLET_RADIUS = 10;
 export const SCREEN_WIDTH = 1920;
 
 export const SCREEN_HEIGHT = 1080;
+
+export const ALLOW_MOVE_RANGE_MOVE_SPEED = 50;
+
+export const ALLOW_MOVE_RANGE_HALF_WIDTH = 500;
+
+export const PLAYER_MOVE_SPEED = 5;

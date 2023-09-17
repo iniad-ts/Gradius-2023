@@ -7,6 +7,79 @@
   height: 100svh;
 }
 
+.alertcard {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 3;
+  display: flex;
+  flex-direction: column; 
+  gap: 20px; 
+  align-items: center; 
+  justify-content: center; 
+  background-color: rgb(255 255 255 / 30%);
+  backdrop-filter: blur(0.8svmin);
+}
+
+.screen {
+  position: absolute;
+  top: 25svmin;
+  left: 50%;
+  width: 23svmin;
+  height: 40svmin;
+  background-color: #00000043;
+  border: 0.3svmin solid #000;
+  transform: translate(-50%, -50%);
+}
+
+.smartphone {
+  position: relative;
+  width: 25svmin;
+  height: 50svmin;
+  overflow: hidden;
+  border: 0.3svmin solid #000;
+  border-radius: 2svmin;
+  box-shadow: 0 0 2svmin rgb(0 0 0 / 50%);
+  animation: rotate-to-landscape 4s infinite alternate;
+}
+
+.smartPhoneButton {
+  position: absolute;
+  bottom: 1.5svmin;
+  left: 50%;
+  width: 4svmin;
+  height: 1svmin;
+  border: 0.3svmin solid #000;
+  border-radius: 1svmin;
+  transform: translateX(-50%);
+}
+
+.speaker {
+  position: absolute;
+  top: 2svmin;
+  left: 50%;
+  width: 15svmin;
+  height: 1svmin;
+  border: 0.3svmin solid #000;
+  border-radius: 1svmin;
+  transform: translateX(-50%);
+}
+
+@keyframes rotate-to-landscape {
+  0%,
+  100% {
+    opacity: 0.5;
+    transform: rotate(0deg);
+  }
+
+  50% {
+    opacity: 1;
+    transform: rotate(-90deg);
+  }
+}
+
 .joystick > div {
   box-sizing: content-box;
   border: 0.2vmin solid #bbb;

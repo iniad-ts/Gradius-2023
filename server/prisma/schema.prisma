@@ -15,7 +15,7 @@ model Task {
 }
 
 model Player {
-  userId    String  @id
+  userId    String   @id
   name      String
   x         Int
   y         Int
@@ -23,6 +23,7 @@ model Player {
   Item      Json?
   side      String
   isPlaying Boolean
+  startedAt DateTime
 }
 
 model Enemy {

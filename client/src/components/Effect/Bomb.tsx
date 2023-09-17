@@ -10,7 +10,7 @@ type Props = {
   position: Pos;
 };
 
-const Boom = ({ displayPosition, position }: Props) => {
+const Bomb = ({ displayPosition, position }: Props) => {
   const imagePaths = [
     staticPath.images.Effect.boom.boom1_png,
     staticPath.images.Effect.boom.boom2_png,
@@ -20,14 +20,14 @@ const Boom = ({ displayPosition, position }: Props) => {
     staticPath.images.Effect.boom.boom6_png,
   ];
 
-  const [boomImage1] = useImage(imagePaths[0]);
-  const [boomImage2] = useImage(imagePaths[1]);
-  const [boomImage3] = useImage(imagePaths[2]);
-  const [boomImage4] = useImage(imagePaths[3]);
-  const [boomImage5] = useImage(imagePaths[4]);
-  const [boomImage6] = useImage(imagePaths[5]);
+  const [bombImage1] = useImage(imagePaths[0]);
+  const [bombImage2] = useImage(imagePaths[1]);
+  const [bombImage3] = useImage(imagePaths[2]);
+  const [bombImage4] = useImage(imagePaths[3]);
+  const [bombImage5] = useImage(imagePaths[4]);
+  const [bombImage6] = useImage(imagePaths[5]);
 
-  const boomImages = [boomImage1, boomImage2, boomImage3, boomImage4, boomImage5, boomImage6];
+  const bombImages = [bombImage1, bombImage2, bombImage3, bombImage4, bombImage5, bombImage6];
 
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
@@ -37,24 +37,24 @@ const Boom = ({ displayPosition, position }: Props) => {
   };
 
   useEffect(() => {
-    const updateBoomImage = () => {
-      if (currentImageIndex + 1 === boomImages.length) {
+    const updateBombImage = () => {
+      if (currentImageIndex + 1 === bombImages.length) {
         clearInterval(intervalId);
         return;
       }
       setCurrentImageIndex((prevIndex) => prevIndex + 1);
     };
 
-    const intervalId = setInterval(updateBoomImage, 75);
+    const intervalId = setInterval(updateBombImage, 75);
 
     return () => {
       clearInterval(intervalId);
     };
-  }, [boomImages.length, currentImageIndex]);
+  }, [bombImages.length, currentImageIndex]);
 
   return (
     <Image
-      image={boomImages[currentImageIndex]}
+      image={bombImages[currentImageIndex]}
       x={relativePos.x}
       y={relativePos.y}
       width={ENEMY_HALF_WIDTH * 1.8}
@@ -63,4 +63,4 @@ const Boom = ({ displayPosition, position }: Props) => {
   );
 };
 
-export default Boom;
+export default Bomb;
