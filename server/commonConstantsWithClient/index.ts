@@ -16,4 +16,6 @@ export const ALLOW_MOVE_RANGE_MOVE_SPEED = 50;
 
 export const ALLOW_MOVE_RANGE_HALF_WIDTH = 200;
 
-export const PLAYER_MOVE_SPEED = 5;
+export const DEFAULT_PLAYER_MOVE_SPEED = 5;
+
+export const SPEED_BOOST_DURATION_MS = 15000;

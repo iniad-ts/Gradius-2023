@@ -29,7 +29,7 @@ const toPlayerModel = (prismaPlayer: Player): PlayerModel => ({
       .parse(prismaPlayer.Item) ?? undefined,
   side: z.enum(['left', 'right']).parse(prismaPlayer.side),
   isPlaying: z.boolean().parse(prismaPlayer.isPlaying),
-  speed: z.number().parse(prismaPlayer.speed),
+  speed: z.number().min(0).parse(prismaPlayer.speed),
   startedAt: prismaPlayer.startedAt.getTime(),
 });
 

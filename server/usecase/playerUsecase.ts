@@ -1,5 +1,12 @@
+import {
+  DEFAULT_PLAYER_MOVE_SPEED,
+  DISPLAY_COUNT,
+  SCREEN_HEIGHT,
+  SCREEN_WIDTH,
+  SPEED_BOOST_DURATION_MS,
+} from '$/commonConstantsWithClient';
+import { minMax } from '$/service/minMax';
 import { randomUUID } from 'crypto';
-import { DISPLAY_COUNT, SCREEN_HEIGHT, SCREEN_WIDTH } from '../commonConstantsWithClient';
 import type { UserId } from '../commonTypesWithClient/branded';
 import type { PlayerModel } from '../commonTypesWithClient/models';
 import { playerRepository } from '../repository/playerRepository';
@@ -25,7 +32,7 @@ export const playerUseCase = {
       Items: [],
       side,
       isPlaying: true,
-      speed: 5,
+      speed: DEFAULT_PLAYER_MOVE_SPEED,
       startedAt: Date.now(),
     };
 
@@ -38,12 +45,14 @@ export const playerUseCase = {
     if (currentPlayer === null) return null;
 
     const newPos = {
-      x: Math.min(
-        Math.max(currentPlayer.pos.x + moveDirection.x * currentPlayer.speed, 0),
+      x: minMax(
+        currentPlayer.pos.x + moveDirection.x * currentPlayer.speed,
+        0,
         SCREEN_WIDTH * DISPLAY_COUNT
       ),
-      y: Math.min(
-        Math.max(currentPlayer.pos.y + moveDirection.y * currentPlayer.speed, 0),
+      y: minMax(
+        Math.max(currentPlayer.pos.y + moveDirection.y * currentPlayer.speed),
+        0,
         SCREEN_HEIGHT
       ),
     };
@@ -68,7 +77,7 @@ export const playerUseCase = {
           // 15秒間スピードアップ
           const updatePlayerInfo: PlayerModel = {
             ...player,
-            speed: 10,
+            speed: DEFAULT_PLAYER_MOVE_SPEED * 2,
           };
           console.log('speed up', updatePlayerInfo.speed);
           await playerRepository.save(updatePlayerInfo);
@@ -79,14 +88,14 @@ export const playerUseCase = {
               if (currentPlayer === null) return null;
               const updatePlayerInfo: PlayerModel = {
                 ...currentPlayer,
-                speed: 5,
+                speed: DEFAULT_PLAYER_MOVE_SPEED,
               };
               console.log('speed down');
               await playerRepository.save(updatePlayerInfo);
             } catch (error) {
               console.error('速度のリセットに失敗しました:', error);
             }
-          }, 15000);
+          }, SPEED_BOOST_DURATION_MS);
         } catch (error) {
           console.error('スピードアップに失敗しました:', error);
         }

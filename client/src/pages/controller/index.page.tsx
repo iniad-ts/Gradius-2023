@@ -94,6 +94,7 @@ const Home = () => {
         </button>
         <button
           onClick={useAccelerationItem} //PCでクリックイベント
+          onTouchEndCapture={useAccelerationItem} //スマホでクリックイベント
         >
           <div>加速</div>
         </button>
