@@ -72,7 +72,7 @@ const Login = () => {
   return (
     <div className={styles.container}>
       <div>
-        {check === false && buttonPressed === true && (
+        {check === false && buttonPressed && (
           <div className={styles.alertcard}>
             <div className={styles.smartphone}>
               <div className={styles.screen} />
