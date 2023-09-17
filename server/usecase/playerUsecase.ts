@@ -12,6 +12,7 @@ import { playerRepository } from '../repository/playerRepository';
 import { computeAllowedMoveX } from '../service/computeAllowedMoveX';
 import { userIdParser } from '../service/idParsers';
 import { minMax } from '../service/minMax';
+import { itemsData, type Item } from './../commonConstantsWithClient/item';
 
 export type MoveDirection = { x: number; y: number };
 
@@ -67,17 +68,17 @@ export const playerUseCase = {
     };
     return await playerRepository.save(updatePlayerInfo);
   },
-  useitem: async (userId: UserId, itemId: string) => {
+  useitem: async (userId: UserId, items: Item[]) => {
     interface ItemHandlers {
       [key: string]: (player: PlayerModel) => Promise<void>;
     }
     const itemHandler: ItemHandlers = {
       speed: async (player: PlayerModel) => {
         try {
-          // 15秒間スピードアップ
           const updatePlayerInfo: PlayerModel = {
             ...player,
             speed: DEFAULT_PLAYER_MOVE_SPEED * 2,
+            Items: (player.Items ?? []).slice(1),
           };
           console.log('speed up', updatePlayerInfo.speed);
           await playerRepository.save(updatePlayerInfo);
@@ -104,7 +105,7 @@ export const playerUseCase = {
 
     const currentPlayer = await playerRepository.find(userId);
     if (currentPlayer === null) return null;
-    const handler = itemHandler[itemId];
+    const handler = itemHandler[items[0].name];
     if (handler === undefined) return null;
     return await handler(currentPlayer);
   },
@@ -113,6 +114,16 @@ export const playerUseCase = {
     const currentPlayer = await playerRepository.find(userId);
     if (currentPlayer === null) return null;
     return await playerRepository.saveScore(userId, currentPlayer.score + score);
+  },
+  addItem: async (userId: UserId): Promise<PlayerModel | null> => {
+    const currentPlayer = await playerRepository.find(userId);
+    if (currentPlayer === null) return null;
+    const currentItems = currentPlayer.Items ?? [];
+
+    return await playerRepository.saveItem(userId, [
+      ...currentItems,
+      itemsData[Math.floor(Math.random() * itemsData.length)],
+    ]);
   },
 
   finishGame: async (currentPlayerInfo: PlayerModel) => {

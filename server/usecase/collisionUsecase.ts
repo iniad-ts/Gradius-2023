@@ -15,7 +15,6 @@ import { userIdParser } from '$/service/idParsers';
 import { playerUseCase } from './playerUsecase';
 
 type EntityModel = PlayerModel | EnemyModel | BulletModel;
-
 type EntityWithPosModel =
   | PlayerModel
   | {
@@ -162,9 +161,12 @@ const checkCollisions = async () => {
     });
   });
 
-  const deleteBulletAndAddScore = (entity: BulletModel) => {
+  const handleHitBullet = (entity: BulletModel) => {
     bulletRepository.delete(entity.id);
     playerUseCase.addScore(userIdParser.parse(entity.shooterId), 150);
+    if (Math.random() < 0.1) {
+      playerUseCase.addItem(userIdParser.parse(entity.shooterId));
+    }
   };
 
   await Promise.all(
@@ -172,7 +174,7 @@ const checkCollisions = async () => {
       if ('score' in entity) {
         return playerUseCase.addScore(entity.id, -100);
       } else if ('side' in entity) {
-        return deleteBulletAndAddScore(entity);
+        return handleHitBullet(entity);
       } else {
         return enemyRepository.delete(entity.id);
       }
