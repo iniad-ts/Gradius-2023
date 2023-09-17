@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Line } from 'react-konva';
+import { Circle, Line } from 'react-konva';
 import type { Pos } from 'src/types/types';
 
 type MeteorModel = {
@@ -38,6 +38,7 @@ export const FreedomMeteor = () => {
   return (
     <React.Fragment>
       <Line points={free} stroke="#fff" strokeWidth={2} />
+      <Circle x={a2} y={b2} radius={6 - Math.abs((600 - (time % 1000)) / 100)} fill="#fff" />
     </React.Fragment>
   );
 };
