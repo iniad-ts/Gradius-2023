@@ -9,7 +9,7 @@ import styles from './index.module.css';
 const Login = () => {
   //ANCHOR - state
   const [name, setName] = useState<string>('');
-  const [check, setCheck] = useState<boolean>();
+  const [check, setCheck] = useState<boolean>(true);
   const [buttonPressed, setButtonPressed] = useState<boolean>(false);
 
   const router = useRouter();
@@ -72,7 +72,7 @@ const Login = () => {
   return (
     <div className={styles.container}>
       <div>
-        {check === false && buttonPressed && (
+        {!check && buttonPressed && (
           <div className={styles.alertcard}>
             <div className={styles.smartphone}>
               <div className={styles.screen} />
@@ -85,7 +85,7 @@ const Login = () => {
       </div>
 
       <div>
-        {buttonPressed === false && (
+        {!buttonPressed && (
           <div className={styles.titlecard}>
             <h1 className={styles.title}>Gradius</h1>
             <span />
