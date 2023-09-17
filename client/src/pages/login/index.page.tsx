@@ -35,7 +35,7 @@ const Login = () => {
   }, [name, router]);
 
   const checkOrientation = useCallback(() => {
-    if (window.innerWidth > window.innerHeight || buttonPressed) {
+    if (window.innerWidth > window.innerHeight && buttonPressed) {
       login();
     } else if (name !== '') {
       setCheck(false);
