@@ -86,3 +86,33 @@ export type EntitiesResponse = {
   enemies: EnemyModelWithPos[];
   players: PlayerModel[];
 };
+
+export type EntityModelWithPos = {
+  pos: {
+    x: number;
+    y: number;
+  };
+  id: EnemyId;
+  direction: {
+    x: number;
+    y: number;
+  };
+  createdPos: {
+    x: number;
+    y: number;
+  };
+  createdAt: number;
+  type: number;
+};
+
+export type MoveModel = {
+  (ENEMY_MOVE_SPEED: number): {
+    moves: ((time: number) => {
+      x: number;
+      y: number;
+    })[];
+    MOVE_LOOP_DURATION_MS: number;
+    STEP_DURATION_MS: number;
+    TIME_TABLE: number[];
+  };
+};
