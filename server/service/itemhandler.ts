@@ -13,7 +13,6 @@ export const itemHandler: ItemHandlers = {
         speed: DEFAULT_PLAYER_MOVE_SPEED * 2,
         Items: (player.Items ?? []).slice(1),
       };
-      console.log('speed up', updatePlayerInfo.speed);
       await playerRepository.save(updatePlayerInfo);
 
       setTimeout(async () => {
@@ -24,7 +23,6 @@ export const itemHandler: ItemHandlers = {
             ...currentPlayer,
             speed: DEFAULT_PLAYER_MOVE_SPEED,
           };
-          console.log('speed down');
           await playerRepository.save(updatePlayerInfo);
         } catch (error) {
           console.error('速度のリセットに失敗しました:', error);
