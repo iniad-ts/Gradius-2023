@@ -139,7 +139,7 @@ const isOtherSide = (target1: EntityWithPosModel, target2: EntityWithPosModel) =
 //ANCHOR - checkCollisions
 const checkCollisions = async () => {
   const entities = await Promise.all([
-    playerUseCase.getPlayersAll(),
+    playerUseCase.getAllPlayers(),
     enemyRepository.findAll(),
     bulletRepository.findAll(),
   ]).then(([players, enemies, bullets]) => [...players, ...enemies, ...bullets]);
