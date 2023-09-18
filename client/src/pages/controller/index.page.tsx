@@ -66,7 +66,7 @@ const Home = () => {
     };
   }, [getUserId, fetchPlayerStatus]);
 
-  // if (!(playerStatus?.isPlaying ?? true)) return <GameClear />;
+  if (!(playerStatus?.isPlaying ?? true)) return <GameClear />;
 
   return (
     <div className={styles.controller}>
