@@ -1,6 +1,13 @@
-import type { BulletModel, EnemyModel, PlayerModel } from '$/commonTypesWithClient/models';
+import type {
+  BulletModel,
+  EnemyModel,
+  EnemyModelWithPos,
+  PlayerModel,
+} from '$/commonTypesWithClient/models';
 
-export const computePosition = (entity: PlayerModel | EnemyModel | BulletModel) => {
+export const computePosition = (
+  entity: PlayerModel | EnemyModelWithPos | EnemyModel | BulletModel
+) => {
   if ('pos' in entity) return entity.pos;
 
   const now = Date.now();
