@@ -7,9 +7,9 @@ import {
 import type { EnemyModel, EnemyModelWithPos } from '$/commonTypesWithClient/models';
 import { enemyRepository } from '$/repository/enemyRepository';
 import { computePosition } from '$/service/computePositions';
-import { type2EnemyMove } from '$/service/type2EnemyMove';
 import { entityChangeWithPos } from '$/service/entityChangeWithPos';
 import { enemyIdParser } from '$/service/idParsers';
+import { type2EnemyMove } from '$/service/type2EnemyMove';
 import { randomUUID } from 'crypto';
 
 const updateIntervalId: NodeJS.Timeout[] = [];
