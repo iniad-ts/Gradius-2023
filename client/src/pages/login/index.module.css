@@ -62,7 +62,7 @@
   border: 0.3svmin solid #000;
   border-radius: 2svmin;
   box-shadow: 0 0 2svmin rgb(0 0 0 / 50%);
-  animation: rotate-animation 4s infinite;
+  animation: rotateToLandscape 4s infinite alternate;
 }
 
 .screen {
@@ -153,7 +153,7 @@
   height: 80%;
   padding: 0 1svmin;
   font-family: monospace;
-  font-size: 4.9svmin; 
+  font-size: 4.9svmin;
   color: #fff;
   background-color: #0000;
   border: solid 0.2svmin #fff;
