@@ -1,6 +1,9 @@
-import { DEFAULT_PLAYER_MOVE_SPEED, SPEED_BOOST_DURATION_MS } from '../commonConstantsWithClient';
-import type { PlayerModel } from '../commonTypesWithClient/models';
-import { playerRepository } from '../repository/playerRepository';
+import type { PlayerModel } from 'commonTypesWithClient/models';
+import {
+  DEFAULT_PLAYER_MOVE_SPEED,
+  SPEED_BOOST_DURATION_MS,
+} from '../../commonConstantsWithClient';
+import { playerRepository } from '../../repository/playerRepository';
 
 interface ItemHandlers {
   [key: string]: (player: PlayerModel) => Promise<void>;

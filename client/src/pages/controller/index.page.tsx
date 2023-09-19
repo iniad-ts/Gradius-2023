@@ -1,9 +1,12 @@
+/* eslint-disable complexity */
+//TODO: 仕様が定まり次第、リファクタリングする
 import type { UserId } from 'commonTypesWithClient/branded';
 import type { PlayerModel } from 'commonTypesWithClient/models';
 import { useRouter } from 'next/router';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Joystick } from 'react-joystick-component';
 import GameClear from 'src/components/GameClear/GameClear';
+import { Loading } from 'src/components/Loading/Loading';
 import ItemButton from 'src/components/item/ItemButton';
 import { staticPath } from 'src/utils/$path';
 import { apiClient } from 'src/utils/apiClient';
@@ -19,9 +22,21 @@ const Home = () => {
 
   const [userId, setUserId] = useState<UserId>('' as UserId);
 
-  const { startMove, stopMove, startShoot, stopShoot, handelMove, shootBullet, isButtonActive } =
-    usePlayerControl(userId);
+  const {
+    startMove,
+    stopMove,
+    startShoot,
+    stopShoot,
+    handelMove,
+    shootBullet,
+    handleUseItem,
+    isButtonActive,
+  } = usePlayerControl(userId);
   const [playerStatus, setPlayerStatus] = useState<PlayerModel>();
+  const handleItemButtonClick = (player: PlayerModel) => {
+    if (player.Items === undefined || player.Items.length === 0) return;
+    handleUseItem(player.Items);
+  };
 
   const damageAudio = useMemo(() => new Audio(staticPath.sounds.damage_mp3), []);
 
@@ -69,6 +84,7 @@ const Home = () => {
   }, [getUserId, fetchPlayerStatus, windowSize]);
 
   if (!(playerStatus?.isPlaying ?? true)) return <GameClear />;
+  if (playerStatus === undefined) return <Loading visible={true} />;
 
   return (
     <div className={styles.controller}>
@@ -99,7 +115,10 @@ const Home = () => {
             <button onClick={logoutWithLocalStorage} onTouchEndCapture={logoutWithLocalStorage}>
               logout
             </button>
-            <ItemButton items={playerStatus?.Items} userId={userId} />
+            <ItemButton
+              handleUseItem={() => handleItemButtonClick(playerStatus)}
+              items={playerStatus.Items ?? []}
+            />
           </div>
 
           <button

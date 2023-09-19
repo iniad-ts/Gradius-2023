@@ -12,6 +12,7 @@ import { bulletRepository } from '$/repository/bulletRepository';
 import { enemyRepository } from '$/repository/enemyRepository';
 import { computePosition } from '$/service/computePositions';
 import { userIdParser } from '$/service/idParsers';
+import { itemDraw } from '$/service/item/itemDraw';
 import { playerUseCase } from './playerUsecase';
 
 type EntityModel = PlayerModel | EnemyModel | BulletModel;
@@ -165,7 +166,7 @@ const checkCollisions = async () => {
     bulletRepository.delete(entity.id);
     playerUseCase.addScore(userIdParser.parse(entity.shooterId), 150);
     if (Math.random() < 0.1) {
-      playerUseCase.addItem(userIdParser.parse(entity.shooterId));
+      playerUseCase.addItem(userIdParser.parse(entity.shooterId), itemDraw());
     }
   };
 

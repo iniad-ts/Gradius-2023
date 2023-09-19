@@ -1,26 +1,20 @@
 import type { Item } from 'commonConstantsWithClient/item';
-import type { UserId } from 'commonTypesWithClient/branded';
-import { usePlayerControl } from 'src/pages/@hooks/usePlayerControl';
 import styles from './itemButton.module.css';
 
-const ItemButton = ({ items, userId }: { items: Item[] | undefined; userId: UserId }) => {
-  const { handleUseItem } = usePlayerControl(userId);
+//親からhandleItemButtonClickを受け取る
+type ItemButtonProps = {
+  handleUseItem: () => void;
+  items: Item[];
+};
 
-  if (items === undefined) return;
-
-  const handleClick = (items: Item[]) => {
-    if (items.length === 0) return;
-    handleUseItem(items);
-  };
-
+const ItemButton = ({ handleUseItem, items }: ItemButtonProps) => {
+  //TODO:
   return (
-    <div style={{ display: 'flex', justifyContent: 'center' }}>
-      {items.length > 1 && (
-        <button className={styles.nextItem}>
-          <div>{items.length > 1 ? items[1].id : ''}</div>
-        </button>
-      )}
-      <button className={styles.item} onClick={() => handleClick(items)}>
+    <div className={styles.container}>
+      <button className={styles.nextItem}>
+        <div>{items.length > 1 ? items[1].id : ''}</div>
+      </button>
+      <button className={styles.item} onClick={() => handleUseItem()}>
         <div>{items.length > 0 ? items[0].id : ''}</div>
       </button>
     </div>

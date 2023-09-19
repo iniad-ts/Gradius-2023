@@ -1,3 +1,4 @@
+import { itemHandler } from '$/service/item/itemhandler';
 import { randomUUID } from 'crypto';
 import {
   DEFAULT_PLAYER_MOVE_SPEED,
@@ -10,9 +11,8 @@ import type { PlayerModel } from '../commonTypesWithClient/models';
 import { playerRepository } from '../repository/playerRepository';
 import { computeAllowedMoveX } from '../service/computeAllowedMoveX';
 import { userIdParser } from '../service/idParsers';
-import { itemHandler } from '../service/itemhandler';
 import { minMax } from '../service/minMax';
-import { itemsData, type Item } from './../commonConstantsWithClient/item';
+import { type Item } from './../commonConstantsWithClient/item';
 
 export type MoveDirection = { x: number; y: number };
 
@@ -81,11 +81,7 @@ export const playerUseCase = {
         0,
         SCREEN_WIDTH * DISPLAY_COUNT
       ),
-      y: minMax(
-        Math.max(currentPlayer.pos.y + moveDirection.y * currentPlayer.speed),
-        0,
-        SCREEN_HEIGHT
-      ),
+      y: Math.min(Math.max(currentPlayer.pos.y + moveDirection.y * 5, 0), SCREEN_HEIGHT),
     };
 
     const allowedPos = {
@@ -111,15 +107,12 @@ export const playerUseCase = {
     if (currentPlayer === null) return null;
     return await playerRepository.saveScore(userId, currentPlayer.score + score);
   },
-  addItem: async (userId: UserId): Promise<PlayerModel | null> => {
+  addItem: async (userId: UserId, item: Item): Promise<PlayerModel | null> => {
     const currentPlayer = await playerRepository.find(userId);
     if (currentPlayer === null) return null;
     const currentItems = currentPlayer.Items ?? [];
 
-    return await playerRepository.saveItem(userId, [
-      ...currentItems,
-      itemsData[Math.floor(Math.random() * itemsData.length)],
-    ]);
+    return await playerRepository.saveItem(userId, [...currentItems, item]);
   },
 
   finishGame: async (currentPlayerInfo: PlayerModel) => {

@@ -1,5 +1,5 @@
-import type { Item } from '$../../../commonConstantsWithClient/item';
 import type { DefineMethods } from 'aspida';
+import type { Item } from '../../../commonConstantsWithClient/item';
 import type { UserId } from './../../../commonTypesWithClient/branded';
 
 export type Methods = DefineMethods<{
