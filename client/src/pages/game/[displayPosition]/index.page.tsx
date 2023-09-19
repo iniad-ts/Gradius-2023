@@ -16,6 +16,8 @@ import { Image, Layer, Stage, Text } from 'react-konva';
 import Bomb from 'src/components/Effect/Bomb';
 import Burner from 'src/components/Effect/Burner';
 
+import { FreedomMeteor } from 'src/components/Effect/FreedomMeteor';
+import { Meteor } from 'src/components/Effect/Meteor';
 import { Bullet } from 'src/components/Entity/Bullet';
 import { Enemy } from 'src/components/Entity/Enemy';
 import { Player } from 'src/components/Entity/Player';
@@ -142,6 +144,12 @@ const Game = () => {
             y={0}
             opacity={0.8}
           />
+        </Layer>
+        <Layer>
+          <Meteor displayPosition={displayPosition ?? 0} />
+        </Layer>
+        <Layer>
+          <FreedomMeteor />
         </Layer>
         <Layer>
           {bullets.map((bullet) => (
