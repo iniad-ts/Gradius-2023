@@ -1,4 +1,3 @@
-import { itemHandler } from '$/service/item/itemhandler';
 import { randomUUID } from 'crypto';
 import {
   DEFAULT_PLAYER_MOVE_SPEED,
@@ -11,6 +10,7 @@ import type { PlayerModel } from '../commonTypesWithClient/models';
 import { playerRepository } from '../repository/playerRepository';
 import { computeAllowedMoveX } from '../service/computeAllowedMoveX';
 import { userIdParser } from '../service/idParsers';
+import { itemHandler } from '../service/item/itemHandler';
 import { minMax } from '../service/minMax';
 import { type Item } from './../commonConstantsWithClient/item';
 
