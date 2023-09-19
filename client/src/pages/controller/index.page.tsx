@@ -99,7 +99,7 @@ const Home = () => {
             <button onClick={logoutWithLocalStorage} onTouchEndCapture={logoutWithLocalStorage}>
               logout
             </button>
-        <ItemButton items={playerStatus?.Items} userId={userId} />
+            <ItemButton items={playerStatus?.Items} userId={userId} />
           </div>
 
           <button
