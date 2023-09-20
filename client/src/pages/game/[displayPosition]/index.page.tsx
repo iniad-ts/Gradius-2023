@@ -56,6 +56,9 @@ const Game = () => {
 
   const [backgroundImage] = useImage(staticPath.images.space_background_8bit_jpg);
 
+  const nowTime = Date.now();
+
+  //ANCHOR - check
   const checkBombEffect = (resEnemies: EnemyModelWithPos[]) => {
     const currentEnemyIds = new Set(resEnemies.map((e) => e.id));
     const killedEnemies = enemies.filter(
@@ -83,6 +86,7 @@ const Game = () => {
     setDamagedPlayerIds(newDamagedPlayerIds);
   };
 
+  //ANCHOR - fetch
   const fetchEntities = async () => {
     const res = await apiClient.entity.$get({
       query: { displayNumber: Number(displayPosition) },
@@ -149,19 +153,24 @@ const Game = () => {
           />
         </Layer>
         <Layer>
-          <Meteor displayPosition={displayPosition ?? 0} />
+          <Meteor displayPosition={displayPosition ?? 0} nowTime={nowTime} />
         </Layer>
         <Layer>
           <FreedomMeteor />
         </Layer>
         <Layer>
           {[...Array(5)].map((_, i) => (
-            <Star key={i} />
+            <Star nowTime={nowTime} key={i} />
           ))}
         </Layer>
         <Layer>
           {bullets.map((bullet) => (
-            <Bullet displayPosition={displayPosition ?? 0} bullet={bullet} key={bullet.id} />
+            <Bullet
+              displayPosition={displayPosition ?? 0}
+              bullet={bullet}
+              key={bullet.id}
+              nowTime={nowTime}
+            />
           ))}
         </Layer>
         <Layer>

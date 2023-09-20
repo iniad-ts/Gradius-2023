@@ -10,10 +10,10 @@ type MeteorModel = {
   color: string;
 };
 
-export const Star = () => {
-  const [star, setStar] = useState<MeteorModel | null>(null);
+type prop = { nowTime: number };
 
-  const time = Date.now();
+export const Star = ({ nowTime }: prop) => {
+  const [star, setStar] = useState<MeteorModel | null>(null);
 
   useEffect(() => {
     if (star === null) {
@@ -50,7 +50,8 @@ export const Star = () => {
       radius={5}
       fill={star.color}
       opacity={
-        1 - Math.abs(star.duration - ((time - star.createdAt) % star.duration) * 2) / star.duration
+        1 -
+        Math.abs(star.duration - ((nowTime - star.createdAt) % star.duration) * 2) / star.duration
       }
     />
   );
