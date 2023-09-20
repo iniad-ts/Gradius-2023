@@ -160,7 +160,7 @@ const Game = () => {
         </Layer>
         <Layer>
           {[...Array(5)].map((_, i) => (
-            <Star key={i} />
+            <Star nowTime={nowTime} key={i} />
           ))}
         </Layer>
         <Layer>
