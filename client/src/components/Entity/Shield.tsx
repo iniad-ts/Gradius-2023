@@ -18,14 +18,7 @@ export const Shield = ({ x, y, displayPosition }: Props) => {
 
   return (
     <>
-      <Circle
-        x={relativePos.x + 10}
-        y={relativePos.y}
-        radius={75}
-        opacity={1.0}
-        stroke="blue"
-        strokeWidth={20}
-      />
+      <Circle x={relativePos.x + 10} y={relativePos.y} radius={75} opacity={0.3} fill="blue" />
     </>
   );
 };

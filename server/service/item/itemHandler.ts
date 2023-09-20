@@ -1,6 +1,7 @@
 import type { PlayerModel } from 'commonTypesWithClient/models';
 import {
   DEFAULT_PLAYER_MOVE_SPEED,
+  SHIELD_DURATION_MS,
   SPEED_BOOST_DURATION_MS,
 } from '../../commonConstantsWithClient';
 import { playerRepository } from '../../repository/playerRepository';
@@ -60,7 +61,7 @@ export const itemHandler: ItemHandlers = {
         } catch (error) {
           console.error('シールドのリセットに失敗しました:', error);
         }
-      }, SPEED_BOOST_DURATION_MS);
+      }, SHIELD_DURATION_MS);
     } catch (error) {
       console.error('シールドに失敗しました:', error);
     }
