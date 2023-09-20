@@ -1,4 +1,4 @@
-import { BULLET_RADIUS, SCREEN_WIDTH } from 'commonConstantsWithClient';
+import { SCREEN_WIDTH } from 'commonConstantsWithClient';
 import { useMemo } from 'react';
 import { Circle } from 'react-konva';
 
@@ -11,8 +11,8 @@ type Props = {
 export const Shield = ({ x, y, displayPosition }: Props) => {
   const relativePos = useMemo(() => {
     return {
-      x: x - BULLET_RADIUS - displayPosition * SCREEN_WIDTH,
-      y: y - BULLET_RADIUS,
+      x: x - 75 - displayPosition * SCREEN_WIDTH,
+      y: y - 75,
     };
   }, [x, y, displayPosition]);
 
