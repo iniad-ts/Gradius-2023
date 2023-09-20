@@ -3,11 +3,17 @@ import { useRouter } from 'next/router';
 import type { ChangeEvent } from 'react';
 import { useCallback, useEffect, useState } from 'react';
 import { apiClient } from 'src/utils/apiClient';
-import { getUserIdFromLocalStorage, loginWithLocalStorage } from 'src/utils/loginWithLocalStorage';
+import {
+  getUserIdFromLocalStorage,
+  loginWithLocalStorage,
+  logoutWithLocalStorage,
+} from 'src/utils/loginWithLocalStorage';
 import styles from './index.module.css';
 
 const Login = () => {
   const [name, setName] = useState<string>('');
+  const [player, setPlayer] = useState<PlayerModel>();
+
   const router = useRouter();
 
   const handleInput = (e: ChangeEvent<HTMLInputElement>) => {
@@ -22,11 +28,20 @@ const Login = () => {
   }, [router]);
 
   const login = useCallback(async () => {
-    if (getUserIdFromLocalStorage() === null) {
-      const player: PlayerModel = await apiClient.player.$post({ body: { name } });
-      loginWithLocalStorage(player.id);
+    const userId = getUserIdFromLocalStorage();
+    if (userId === null) {
+      const resPlayer = await apiClient.player.$post({ body: { name } });
+      setPlayer(resPlayer);
+      loginWithLocalStorage(resPlayer.id);
+    } else {
+      const resPlayer = await apiClient.player.control.$get({ query: { userId } });
+      if (resPlayer === null) {
+        logoutWithLocalStorage();
+        return;
+      }
+      setPlayer(resPlayer);
     }
-    router.push('/controller');
+    setTimeout(() => router.push('/controller'), 5000);
   }, [name, router]);
 
   useEffect(() => {
@@ -35,22 +50,26 @@ const Login = () => {
 
   return (
     <div className={styles.container}>
-      <div className={styles.titlecard}>
-        <h1 className={styles.title}>Gradius</h1>
-        <span />
-        <p className={styles.announcement}>ニックネームを入力してください</p>
-        <input
-          type="text"
-          placeholder="ここに入力"
-          className={styles.input}
-          value={name}
-          onChange={handleInput}
-        />
-        <button className={styles.button} disabled={name === ''} onClick={login}>
-          プレイ
-        </button>
-        <p className={styles.announcement}>※ニックネームはゲームに使用されます</p>
-      </div>
+      {player === undefined ? (
+        <div className={styles.titlecard}>
+          <h1 className={styles.title}>Gradius</h1>
+          <span />
+          <p className={styles.announcement}>ニックネームを入力してください</p>
+          <input
+            type="text"
+            placeholder="ここに入力"
+            className={styles.input}
+            value={name}
+            onChange={handleInput}
+          />
+          <button className={styles.button} disabled={name === ''} onClick={login}>
+            プレイ
+          </button>
+          <p className={styles.announcement}>※ニックネームはゲームに使用されます</p>
+        </div>
+      ) : (
+        <>{/*あなたはどっちですよコンポーネント*/}</>
+      )}
     </div>
   );
 };
