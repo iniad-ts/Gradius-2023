@@ -1,6 +1,6 @@
 import type { PointerEvent } from 'react';
 import { useRef } from 'react';
-import styles from './Joystivk.module.css';
+import styles from './Joystick.module.css';
 
 export type JoystickUpdateEvent = {
   type: 'move' | 'stop' | 'start';
