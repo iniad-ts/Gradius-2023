@@ -1,6 +1,6 @@
 import type { DefineMethods } from 'aspida';
 import type { UserId } from '../../commonTypesWithClient/branded';
-import type { BulletModel, BulletModelWithPos } from '../../commonTypesWithClient/models';
+import type { BulletModelWithPos } from '../../commonTypesWithClient/models';
 
 export type Methods = DefineMethods<{
   get: {
@@ -13,6 +13,5 @@ export type Methods = DefineMethods<{
     reqBody: {
       userId: UserId;
     };
-    resBody: BulletModel | null;
   };
 }>;

@@ -5,6 +5,7 @@ import { playerRepository } from '$/repository/playerRepository';
 import { computeAllowedMoveX } from '$/service/computeAllowedMoveX';
 import { entityChangeWithPos } from '$/service/entityChangeWithPos';
 import { bulletIdParser } from '$/service/idParsers';
+import { shootType } from '$/service/shootType';
 import { sideToDirectionX } from '$/service/sideToDirectionX';
 import { randomUUID } from 'crypto';
 import type { BulletModel, BulletModelWithPos } from '../commonTypesWithClient/models';
@@ -47,6 +48,16 @@ export const bulletUseCase = {
     };
 
     return await bulletRepository.create(newBullet);
+  },
+
+  shoot: async (shooterId: UserId): Promise<void> => {
+    const shooterInfo = await playerRepository.find(shooterId);
+    if (shooterInfo === null) return;
+    if (shooterInfo.usingItem === 'burst') {
+      await shootType.burst(shooterId);
+      return;
+    }
+    await shootType.normal(shooterId);
   },
 
   delete: async (bulletModel: BulletModel) => {

@@ -11,4 +11,8 @@ export const itemsData: Item[] = [
     id: '2',
     name: 'shield',
   },
+  {
+    id: '3',
+    name: 'burst',
+  },
 ];
