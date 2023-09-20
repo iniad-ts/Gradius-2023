@@ -25,7 +25,7 @@ export const Star = () => {
       });
       setTimeout(() => setStar(null), duration);
     }
-  }, [setStar, star]);
+  }, [star]);
 
   if (star === null) return false;
 
