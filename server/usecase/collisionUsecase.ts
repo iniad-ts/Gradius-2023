@@ -27,20 +27,17 @@ const checkCollisions = async () => {
 
   const dividedEntities: EntityModel[][] = await divideTo16InDisplayArray(entities, DISPLAY_COUNT);
 
-  const collisions = dividedEntities.flatMap((entities) => {
-    return entities.flatMap((entity1) => {
-      return entities
-        .filter((entity2) => {
-          const terms = [
-            entity1.id !== entity2.id,
-            isOtherSide(entity1, entity2),
-            isCollision(entity1, entity2),
-          ];
-          return terms.every(Boolean);
-        })
-        .flatMap((entity2) => [entity1, entity2]);
-    });
-  });
+  const collisions = dividedEntities.flatMap((oneSectionInEnemies) =>
+    oneSectionInEnemies.flatMap((entity1) => {
+      const collisionEntities = oneSectionInEnemies.filter(
+        (entity2) =>
+          entity1.id !== entity2.id &&
+          isOtherSide(entity1, entity2) &&
+          isCollision(entity1, entity2)
+      );
+      return collisionEntities.map((entity2): [EntityModel, EntityModel] => [entity1, entity2]);
+    })
+  );
 
   const handleHitBullet = (entity: BulletModelWithPos) => {
     bulletRepository.delete(entity.id);
@@ -50,15 +47,20 @@ const checkCollisions = async () => {
     }
   };
 
+  const handleEntity = (entity: EntityModel) => {
+    if ('score' in entity) {
+      return playerUseCase.addScore(entity.id, -100);
+    } else if ('side' in entity) {
+      return handleHitBullet(entity);
+    } else {
+      return enemyRepository.delete(entity.id);
+    }
+  };
+
   await Promise.all(
-    collisions.map((entity) => {
-      if ('score' in entity) {
-        return playerUseCase.addScore(entity.id, -100);
-      } else if ('side' in entity) {
-        return handleHitBullet(entity);
-      } else {
-        return enemyRepository.delete(entity.id);
-      }
+    collisions.map(([entity1, entity2]) => {
+      handleEntity(entity1);
+      handleEntity(entity2);
     })
   );
 };
