@@ -2,8 +2,8 @@ import type { UserId } from 'commonTypesWithClient/branded';
 import type { PlayerModel } from 'commonTypesWithClient/models';
 import { useRouter } from 'next/router';
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { Joystick } from 'react-joystick-component';
 import GameClear from 'src/components/GameClear/GameClear';
+import { Joystick } from 'src/components/Joystick/Joystick';
 import { staticPath } from 'src/utils/$path';
 import { apiClient } from 'src/utils/apiClient';
 import { getUserIdFromLocalStorage, logoutWithLocalStorage } from 'src/utils/loginWithLocalStorage';
@@ -82,16 +82,7 @@ const Home = () => {
         </div>
       ) : (
         <>
-          <div className={styles.joystick}>
-            <Joystick
-              size={joystickSize}
-              baseColor="#eee"
-              stickColor="#d7d7d7"
-              start={startMove}
-              move={handelMove}
-              stop={stopMove}
-            />
-          </div>
+          <Joystick size={joystickSize} />
           <div>
             スコア: {playerStatus?.score} <br />
             <button onClick={logoutWithLocalStorage} onTouchEndCapture={logoutWithLocalStorage}>

@@ -1,6 +1,6 @@
 .controller {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: 2fr 1fr 2fr;
   align-items: center;
   justify-items: center;
   width: 100vw;
@@ -15,10 +15,10 @@
   left: 0;
   z-index: 3;
   display: flex;
-  flex-direction: column; 
-  gap: 20px; 
-  align-items: center; 
-  justify-content: center; 
+  flex-direction: column;
+  gap: 20px;
+  align-items: center;
+  justify-content: center;
   background-color: rgb(255 255 255 / 30%);
   backdrop-filter: blur(0.8svmin);
 }
@@ -78,17 +78,6 @@
     opacity: 1;
     transform: rotate(-90deg);
   }
-}
-
-.joystick > div {
-  box-sizing: content-box;
-  border: 0.2vmin solid #bbb;
-  box-shadow: 0 0 2vmin 0 #9994, inset 0 0 0 1vmin #fff;
-}
-
-.joystick > div > button {
-  outline: 0;
-  box-shadow: 0 0 2vmin 0 #9994;
 }
 
 .button {
