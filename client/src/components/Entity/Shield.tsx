@@ -11,14 +11,22 @@ type Props = {
 export const Shield = ({ x, y, displayPosition }: Props) => {
   const relativePos = useMemo(() => {
     return {
-      x: x - 75 - displayPosition * SCREEN_WIDTH,
-      y: y - 75,
+      x: x - displayPosition * SCREEN_WIDTH,
+      y,
     };
   }, [x, y, displayPosition]);
 
   return (
     <>
-      <Circle x={relativePos.x + 10} y={relativePos.y} radius={75} opacity={0.3} fill="blue" />
+      <Circle
+        x={relativePos.x}
+        y={relativePos.y}
+        radius={75}
+        opacity={0.3}
+        fill="lightblue"
+        stroke="blue"
+        strokeWidth={8}
+      />
     </>
   );
 };
