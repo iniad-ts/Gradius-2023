@@ -11,10 +11,12 @@ interface ItemHandlers {
 export const itemHandler: ItemHandlers = {
   speed: async (player: PlayerModel) => {
     try {
+      if (player.usingItem !== null) return;
       const updatePlayerInfo: PlayerModel = {
         ...player,
         speed: DEFAULT_PLAYER_MOVE_SPEED * 2,
         Items: (player.Items ?? []).slice(1),
+        usingItem: 'speed',
       };
       await playerRepository.save(updatePlayerInfo);
 
@@ -25,6 +27,7 @@ export const itemHandler: ItemHandlers = {
           const updatePlayerInfo: PlayerModel = {
             ...currentPlayer,
             speed: DEFAULT_PLAYER_MOVE_SPEED,
+            usingItem: null,
           };
           await playerRepository.save(updatePlayerInfo);
         } catch (error) {
@@ -33,6 +36,33 @@ export const itemHandler: ItemHandlers = {
       }, SPEED_BOOST_DURATION_MS);
     } catch (error) {
       console.error('スピードアップに失敗しました:', error);
+    }
+  },
+  shield: async (player: PlayerModel) => {
+    try {
+      if (player.usingItem !== null) return;
+      const updatePlayerInfo: PlayerModel = {
+        ...player,
+        Items: (player.Items ?? []).slice(1),
+        usingItem: 'shield',
+      };
+      await playerRepository.save(updatePlayerInfo);
+
+      setTimeout(async () => {
+        try {
+          const currentPlayer = await playerRepository.find(player.id);
+          if (currentPlayer === null) return null;
+          const updatePlayerInfo: PlayerModel = {
+            ...currentPlayer,
+            usingItem: null,
+          };
+          await playerRepository.save(updatePlayerInfo);
+        } catch (error) {
+          console.error('シールドのリセットに失敗しました:', error);
+        }
+      }, SPEED_BOOST_DURATION_MS);
+    } catch (error) {
+      console.error('シールドに失敗しました:', error);
     }
   },
 };

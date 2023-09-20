@@ -65,6 +65,7 @@ export const playerUseCase = {
       isPlaying: true,
       speed: DEFAULT_PLAYER_MOVE_SPEED,
       startedAt: Date.now(),
+      usingItem: null,
     };
 
     return await playerRepository.save(playerData);

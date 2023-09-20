@@ -11,6 +11,7 @@ import { Star } from 'src/components/Effect/Star';
 import { Bullet } from 'src/components/Entity/Bullet';
 import { Enemy } from 'src/components/Entity/Enemy';
 import { Player } from 'src/components/Entity/Player';
+import Shield from 'src/components/Entity/Shield';
 import { useDisplay } from 'src/pages/@hooks/useDisplay';
 import { useWindowSize } from 'src/pages/@hooks/useWindowSize';
 import { staticPath } from 'src/utils/$path';
@@ -26,6 +27,8 @@ const Game = () => {
       displayPosition = parsed;
     }
   }
+
+  const displayPositionNumber = displayPosition ?? 0;
 
   const [backgroundImage] = useImage(staticPath.images.space_background_8bit_jpg);
 
@@ -71,7 +74,7 @@ const Game = () => {
           />
         </Layer>
         <Layer>
-          <Meteor displayPosition={displayPosition ?? 0} nowTime={nowTime} />
+          <Meteor displayPosition={displayPositionNumber} nowTime={nowTime} />
         </Layer>
         <Layer>
           <FreedomMeteor />
@@ -84,7 +87,7 @@ const Game = () => {
         <Layer>
           {bullets.map((bullet) => (
             <Bullet
-              displayPosition={displayPosition ?? 0}
+              displayPosition={displayPositionNumber}
               bullet={bullet}
               key={bullet.id}
               nowTime={nowTime}
@@ -95,20 +98,23 @@ const Game = () => {
           {players.map((player) => (
             <React.Fragment key={player.id}>
               <Text
-                x={player.pos.x - SCREEN_WIDTH * (displayPosition ?? 0)}
+                x={player.pos.x - SCREEN_WIDTH * displayPositionNumber}
                 y={player.pos.y - 80}
                 text={player.name.slice(0, 8)}
                 fontSize={30}
                 fill={'white'}
               />
               <Player
-                displayPosition={displayPosition ?? 0}
+                displayPosition={displayPositionNumber}
                 player={player}
                 isDamaged={damagedPlayerIds.has(player.id)}
               />
+              {player.usingItem === 'shield' && (
+                <Shield x={player.pos.x} y={player.pos.y} displayPosition={displayPositionNumber} />
+              )}
               {player.speed >= 10 && (
                 <Burner
-                  displayPosition={displayPosition ?? 0}
+                  displayPosition={displayPositionNumber}
                   position={player.pos}
                   side={player.side}
                 />
@@ -118,12 +124,12 @@ const Game = () => {
         </Layer>
         <Layer>
           {enemies.map((enemy) => (
-            <Enemy displayPosition={displayPosition ?? 0} enemy={enemy} key={enemy.id} />
+            <Enemy displayPosition={displayPositionNumber} enemy={enemy} key={enemy.id} />
           ))}
         </Layer>
         <Layer>
           {BombEffectPosition.flat().map((position, index) => (
-            <Bomb displayPosition={displayPosition ?? 0} position={position} key={index} />
+            <Bomb displayPosition={displayPositionNumber} position={position} key={index} />
           ))}
         </Layer>
       </Stage>
