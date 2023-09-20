@@ -23,6 +23,7 @@ model Player {
   Item      Json?
   side      String
   isPlaying Boolean
+  speed     Int
   startedAt DateTime
 }
 

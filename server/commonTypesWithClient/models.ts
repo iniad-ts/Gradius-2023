@@ -30,6 +30,7 @@ export type PlayerModel = {
     | undefined;
   side: 'left' | 'right';
   isPlaying: boolean;
+  speed: number;
   startedAt: number;
 };
 

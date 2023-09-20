@@ -1,3 +1,4 @@
+import type { Item } from 'commonConstantsWithClient/item';
 import type { UserId } from 'commonTypesWithClient/branded';
 import { useEffect, useRef, useState } from 'react';
 import type { IJoystickUpdateEvent } from 'react-joystick-component/build/lib/Joystick';
@@ -36,6 +37,15 @@ export const usePlayerControl = (userId: UserId) => {
       });
       setShootBoolean(false);
     }
+  };
+  const handleUseItem = async (items: Item[]) => {
+    if (items.length === 0) return;
+    await apiClient.player.item.$post({
+      body: {
+        userId,
+        items,
+      },
+    });
   };
 
   const startShoot = async () => {
@@ -130,6 +140,7 @@ export const usePlayerControl = (userId: UserId) => {
     stopShoot,
     handelMove,
     shootBullet,
+    handleUseItem,
     isButtonActive,
   };
 };
