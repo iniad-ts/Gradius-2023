@@ -49,6 +49,7 @@ const checkCollisions = async () => {
 
   const handleEntity = (entity: EntityModel) => {
     if ('score' in entity) {
+      if (entity.usingItem === 'shield') return;
       return playerUseCase.addScore(entity.id, -100);
     } else if ('side' in entity) {
       return handleHitBullet(entity);

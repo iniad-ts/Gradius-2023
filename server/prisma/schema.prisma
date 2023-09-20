@@ -25,6 +25,7 @@ model Player {
   isPlaying Boolean
   speed     Int
   startedAt DateTime
+  usingItem String?
 }
 
 model Enemy {

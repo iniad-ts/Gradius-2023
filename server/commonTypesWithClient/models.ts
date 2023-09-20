@@ -32,6 +32,7 @@ export type PlayerModel = {
   isPlaying: boolean;
   speed: number;
   startedAt: number;
+  usingItem: string | null;
 };
 
 export type EnemyModel = {
