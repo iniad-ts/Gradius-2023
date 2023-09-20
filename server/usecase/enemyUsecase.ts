@@ -161,17 +161,19 @@ export const enemyUseCase = {
   getEnemiesByDisplay: async (displayNumber: number): Promise<EnemyModelWithPos[]> => {
     const enemies = await enemyRepository.findAll();
     const getEnemiesByDisplay = enemies
-      .map((enemy) => (enemy.type === 0 ? entityChangeWithPos(enemy) : type2EnemyMove(enemy)))
+      .map((enemy) =>
+        enemy.type === 0 ? (entityChangeWithPos(enemy) as EnemyModelWithPos) : type2EnemyMove(enemy)
+      )
       .filter(
         (enemy) =>
           enemy.pos.x + ENEMY_HALF_WIDTH > SCREEN_WIDTH * displayNumber &&
           enemy.pos.x - ENEMY_HALF_WIDTH < SCREEN_WIDTH * (displayNumber + 1)
-      ) as EnemyModelWithPos[];
+      );
 
     return getEnemiesByDisplay;
   },
 
-  getEnemiesAll: async () => {
+  getAllEnemies: async () => {
     const enemies = await enemyRepository.findAll();
     const enemiesWithPos = enemies.map((enemy) =>
       enemy.type === 0 ? entityChangeWithPos(enemy) : type2EnemyMove(enemy)
