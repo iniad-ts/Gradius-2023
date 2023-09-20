@@ -1,11 +1,12 @@
 import { SCREEN_WIDTH } from '$/commonConstantsWithClient';
 import type { EnemyModel, EnemyModelWithPos, MoveModel } from '$/commonTypesWithClient/models';
 import { loop } from './type2Moves/loop';
+import { squareMove } from './type2Moves/square';
 import { zigzagMove } from './type2Moves/zigzag';
 
 const ENEMY_MOVE_SPEED = 500;
 
-const movesList: MoveModel[] = [zigzagMove, loop];
+const movesList: ((ENEMY_MOVE_SPEED: number) => MoveModel)[] = [zigzagMove, loop, squareMove];
 
 export const type2EnemyMove = (enemy: EnemyModel): EnemyModelWithPos => {
   const displayNum = Math.floor(enemy.createdPos.x / SCREEN_WIDTH);

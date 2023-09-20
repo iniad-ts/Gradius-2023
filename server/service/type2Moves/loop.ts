@@ -1,4 +1,6 @@
-export const loop = (ENEMY_MOVE_SPEED: number) => {
+import type { MoveModel } from '$/commonTypesWithClient/models';
+
+export const loop = (ENEMY_MOVE_SPEED: number): MoveModel => {
   const moves = [
     (time: number) => {
       const centerX = -875;
