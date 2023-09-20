@@ -6,35 +6,21 @@ import {
   SCREEN_HEIGHT,
   SCREEN_WIDTH,
 } from '$/commonConstantsWithClient';
-import type { BulletId, EnemyId } from '$/commonTypesWithClient/branded';
-import type { BulletModel, EnemyModel, PlayerModel } from '$/commonTypesWithClient/models';
+import type { BulletId } from '$/commonTypesWithClient/branded';
+import type { BulletModel, EnemyModelWithPos, PlayerModel } from '$/commonTypesWithClient/models';
 import { bulletRepository } from '$/repository/bulletRepository';
 import { enemyRepository } from '$/repository/enemyRepository';
 import { computePosition } from '$/service/computePositions';
 import { userIdParser } from '$/service/idParsers';
 import { itemDraw } from '$/service/item/itemDraw';
+import { enemyUseCase } from './enemyUsecase';
 import { playerUseCase } from './playerUsecase';
 
-type EntityModel = PlayerModel | EnemyModel | BulletModel;
+type EntityModel = PlayerModel | EnemyModelWithPos | BulletModel;
+
 type EntityWithPosModel =
   | PlayerModel
-  | {
-      pos: {
-        x: number;
-        y: number;
-      };
-      id: EnemyId;
-      direction: {
-        x: number;
-        y: number;
-      };
-      createdPos: {
-        x: number;
-        y: number;
-      };
-      createdAt: number;
-      type: number;
-    }
+  | EnemyModelWithPos
   | {
       pos: {
         x: number;
@@ -141,7 +127,7 @@ const isOtherSide = (target1: EntityWithPosModel, target2: EntityWithPosModel) =
 const checkCollisions = async () => {
   const entities = await Promise.all([
     playerUseCase.getAllPlayers(),
-    enemyRepository.findAll(),
+    enemyUseCase.getEnemiesAll(),
     bulletRepository.findAll(),
   ]).then(([players, enemies, bullets]) => [...players, ...enemies, ...bullets]);
 
