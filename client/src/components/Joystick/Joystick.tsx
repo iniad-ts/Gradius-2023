@@ -20,14 +20,6 @@ type JoystickProps = {
   start?: (event: JoystickUpdateEvent) => void;
 };
 
-type JoystickCoordinates = {
-  relativeX: number;
-  relativeY: number;
-  axisX: number;
-  axisY: number;
-  distance: number;
-};
-
 export const Joystick = ({
   size = 128,
   stickSize = size * 0.64,
@@ -41,7 +33,8 @@ export const Joystick = ({
   const baseRef = useRef<HTMLDivElement>(null);
   const stickRef = useRef<HTMLButtonElement>(null);
   const parentRect = useRef<DOMRect>(new DOMRect());
-  const isDruggingRef = useRef(false);
+  const isDruggingRef = useRef<boolean>(false);
+  const pointerId = useRef<number>(0);
 
   const radius = size / 2;
 
@@ -72,19 +65,20 @@ export const Joystick = ({
     move({
       type: 'move',
       x: (relativeX * 2) / size,
-      y: (relativeY * 2) / size,
+      y: (-relativeY * 2) / size,
       distance,
     });
   };
 
   const pointerMove = (e: globalThis.PointerEvent) => {
-    if (!isDruggingRef.current) return;
+    if (!isDruggingRef.current || e.pointerId !== pointerId.current) return;
     e.preventDefault();
 
     updatePos(e);
   };
 
-  const pointerUp = () => {
+  const pointerUp = (e: globalThis.PointerEvent) => {
+    if (e.pointerId !== pointerId.current) return;
     isDruggingRef.current = false;
 
     if (stickRef.current !== null) {
@@ -108,6 +102,7 @@ export const Joystick = ({
     if (disabled || stickRef.current === null) return;
 
     isDruggingRef.current = true;
+    pointerId.current = e.pointerId;
 
     parentRect.current = baseRef.current?.getBoundingClientRect() ?? parentRect.current;
 
