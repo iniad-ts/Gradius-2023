@@ -14,8 +14,12 @@ export const ShootButton = ({ userId }: Props) => {
   const shootAudio = new Audio(staticPath.sounds.shoot_mp3);
 
   const vibration = (time: number) => {
-    if (typeof window.navigator.vibrate === 'function') {
-      navigator.vibrate(time);
+    try {
+      if (typeof window.navigator.vibrate === 'function') {
+        navigator.vibrate(time);
+      }
+    } catch (e) {
+      console.log(e);
     }
   };
 

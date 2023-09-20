@@ -23,7 +23,9 @@ const Home = () => {
   const getUserId = useCallback(async () => {
     const localStorageUserId = getUserIdFromLocalStorage();
     if (localStorageUserId === null) {
-      router.push('/login');
+      router.replace('/login').then(() => {
+        window.location.reload();
+      });
       return;
     }
     setUserId(localStorageUserId);
