@@ -12,10 +12,10 @@ type Props = {
 export const Joystick = ({ userId }: Props) => {
   const baseRef = useRef<HTMLDivElement>(null);
   const stickRef = useRef<HTMLButtonElement>(null);
-  const parentRect = useRef<DOMRect>(new DOMRect());
-  const isDruggingRef = useRef<boolean>(false);
-  const pointerId = useRef<number>(0);
 
+  let parentRect = new DOMRect();
+  let isDrugging = false;
+  let pointerId = 0;
   let moveIntervalIds: NodeJS.Timeout[] = [];
   let moveDirection: Pos = { x: 0, y: 0 };
 
@@ -23,8 +23,8 @@ export const Joystick = ({ userId }: Props) => {
     if (baseRef.current === null) return { relativeX: 0, relativeY: 0 };
 
     const radius = baseRef.current.clientHeight / 2;
-    const relativeX = absoluteX - parentRect.current?.left - radius;
-    const relativeY = absoluteY - parentRect.current?.top - radius;
+    const relativeX = absoluteX - parentRect.left - radius;
+    const relativeY = absoluteY - parentRect.top - radius;
 
     const distance = Math.hypot(relativeX, relativeY);
 
@@ -50,15 +50,15 @@ export const Joystick = ({ userId }: Props) => {
   };
 
   const pointerMove = (e: globalThis.PointerEvent) => {
-    if (!isDruggingRef.current || e.pointerId !== pointerId.current) return;
+    if (!isDrugging || e.pointerId !== pointerId) return;
     e.preventDefault();
 
     updatePos(e);
   };
 
   const pointerUp = (e: globalThis.PointerEvent) => {
-    if (e.pointerId !== pointerId.current) return;
-    isDruggingRef.current = false;
+    if (e.pointerId !== pointerId) return;
+    isDrugging = false;
 
     if (stickRef.current !== null) {
       stickRef.current.style.transform = 'translate3d(0, 0, 0)';
@@ -74,12 +74,12 @@ export const Joystick = ({ userId }: Props) => {
   };
 
   const pointerDown = (e: PointerEvent<HTMLDivElement>) => {
-    if (stickRef.current === null) return;
+    if (stickRef.current === null || baseRef.current === null) return;
 
-    isDruggingRef.current = true;
-    pointerId.current = e.pointerId;
+    isDrugging = true;
+    pointerId = e.pointerId;
 
-    parentRect.current = baseRef.current?.getBoundingClientRect() ?? parentRect.current;
+    parentRect = baseRef.current.getBoundingClientRect();
 
     window.addEventListener('pointerup', pointerUp);
     window.addEventListener('pointercancel', pointerUp);
