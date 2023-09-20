@@ -41,7 +41,7 @@ const createStrongEnemies = async (counts: Count[]) => {
             },
             createdPos: {
               x: 1835 + SCREEN_WIDTH * displayNum,
-              y: Math.random() >= 0.5 ? 0 : 580,
+              y: Math.random() >= 0.5 ? 500 : 580,
             },
             createdAt: Date.now(),
             type: 1,
