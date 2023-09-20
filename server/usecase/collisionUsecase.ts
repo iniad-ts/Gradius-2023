@@ -12,6 +12,7 @@ import { bulletRepository } from '$/repository/bulletRepository';
 import { enemyRepository } from '$/repository/enemyRepository';
 import { computePosition } from '$/service/computePositions';
 import { userIdParser } from '$/service/idParsers';
+import { itemDraw } from '$/service/item/itemDraw';
 import { enemyUseCase } from './enemyUsecase';
 import { playerUseCase } from './playerUsecase';
 
@@ -147,9 +148,12 @@ const checkCollisions = async () => {
     });
   });
 
-  const deleteBulletAndAddScore = (entity: BulletModel) => {
+  const handleHitBullet = (entity: BulletModel) => {
     bulletRepository.delete(entity.id);
     playerUseCase.addScore(userIdParser.parse(entity.shooterId), 150);
+    if (Math.random() < 0.1) {
+      playerUseCase.addItem(userIdParser.parse(entity.shooterId), itemDraw());
+    }
   };
 
   await Promise.all(
@@ -157,7 +161,7 @@ const checkCollisions = async () => {
       if ('score' in entity) {
         return playerUseCase.addScore(entity.id, -100);
       } else if ('side' in entity) {
-        return deleteBulletAndAddScore(entity);
+        return handleHitBullet(entity);
       } else {
         return enemyRepository.delete(entity.id);
       }
