@@ -20,18 +20,14 @@ const ENEMY_CREATE_INTERVAL = 1000;
 
 const TYPE0_ENEMY_LIMIT = 12;
 const TYPE1_ENEMY_LIMIT = 6;
-const TYPE2_ENEMY_LIMIT = 6;
+const TYPE2_ENEMY_LIMIT = 0;
 
 type Count = [number, number, number];
 
 const createStrongEnemies = async (counts: Count[]) => {
   await Promise.all(
-    counts.map(
-      (count, displayNum) =>
-        //  [
-        // Promise.all(
-        //   [...Array(TYPE1_ENEMY_LIMIT - count[1])].map(async () => {
-        //     return
+    counts.map((count, displayNum) => {
+      if (TYPE1_ENEMY_LIMIT - count[1] > 0) {
         enemyRepository
           .create({
             id: enemyIdParser.parse(randomUUID()),
@@ -46,31 +42,26 @@ const createStrongEnemies = async (counts: Count[]) => {
             createdAt: Date.now(),
             type: 1,
           })
-          .catch((error) => console.error(error))
-      // }
-    )
-    // ),
-    // Promise.all(
-    //   [...Array(TYPE2_ENEMY_LIMIT - count[2])].map(async () => {
-    //     return enemyRepository
-    //       .create({
-    //         id: enemyIdParser.parse(randomUUID()),
-    //         direction: {
-    //           x: 0,
-    //           y: 0,
-    //         },
-    //         createdPos: {
-    //           x: 1835 + SCREEN_WIDTH * displayNum,
-    //           y: Math.random() >= 0.5 ? 0 : 540,
-    //         },
-    //         createdAt: Date.now(),
-    //         type: 2,
-    //       })
-    //       .catch((error) => console.error(error));
-    //   })
-    // ),
-    // ])
-    // .flat(1)
+          .catch((error) => console.error(error));
+      }
+      if (TYPE2_ENEMY_LIMIT - count[2] > 0) {
+        enemyRepository
+          .create({
+            id: enemyIdParser.parse(randomUUID()),
+            direction: {
+              x: 0,
+              y: 0,
+            },
+            createdPos: {
+              x: 1835 + SCREEN_WIDTH * displayNum,
+              y: Math.random() >= 0.5 ? 500 : 580,
+            },
+            createdAt: Date.now(),
+            type: 2,
+          })
+          .catch((error) => console.error(error));
+      }
+    })
   );
 };
 
