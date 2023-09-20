@@ -1,6 +1,6 @@
 import type { PlayerModel } from '../commonTypesWithClient/models';
 
 export const diffToBaseTimeSec = (player: PlayerModel) => {
-  const nowTIme = Date.now();
-  return (nowTIme - player.startedAt) / 1000;
+  const nowTime = Date.now();
+  return (nowTime - player.startedAt) / 1000;
 };
