@@ -108,13 +108,8 @@ export type EntityModelWithPos = {
 };
 
 export type MoveModel = {
-  (ENEMY_MOVE_SPEED: number): {
-    moves: ((time: number) => {
-      x: number;
-      y: number;
-    })[];
-    MOVE_LOOP_DURATION_MS: number;
-    STEP_DURATION_MS: number;
-    TIME_TABLE: number[];
-  };
+  moves: ((time: number) => { x: number; y: number })[];
+  MOVE_LOOP_DURATION_MS: number;
+  TIME_TABLE: number[];
+  STEP_DURATION_MS: number;
 };

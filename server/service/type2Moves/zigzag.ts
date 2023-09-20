@@ -1,4 +1,6 @@
-export const zigzagMove = (ENEMY_MOVE_SPEED: number) => {
+import type { MoveModel } from '$/commonTypesWithClient/models';
+
+export const zigzagMove = (ENEMY_MOVE_SPEED: number): MoveModel => {
   const moves = [
     (time: number) => {
       return { x: -ENEMY_MOVE_SPEED * time, y: ENEMY_MOVE_SPEED * time };
