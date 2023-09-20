@@ -19,7 +19,7 @@ export const ShootButton = ({ userId }: Props) => {
         navigator.vibrate(time);
       }
     } catch (e) {
-      console.log(e);
+      console.error(e);
     }
   };
 
