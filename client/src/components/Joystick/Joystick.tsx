@@ -1,5 +1,5 @@
 import type { PointerEvent } from 'react';
-import { useRef, useState } from 'react';
+import { useRef } from 'react';
 import styles from './Joystivk.module.css';
 
 export type JoystickUpdateEvent = {
@@ -40,10 +40,8 @@ export const Joystick = ({
 }: JoystickProps) => {
   const baseRef = useRef<HTMLDivElement>(null);
   const stickRef = useRef<HTMLButtonElement>(null);
-  const pointerId = useRef<number>();
   const parentRect = useRef<DOMRect>(new DOMRect());
-
-  const [coordinates, setCoordinates] = useState<JoystickCoordinates>();
+  const isDruggingRef = useRef(false);
 
   const radius = size / 2;
 
@@ -65,13 +63,9 @@ export const Joystick = ({
   const updatePos = (e: PointerEvent<HTMLDivElement> | globalThis.PointerEvent) => {
     const { relativeX, relativeY, distance } = relativePos(e.clientX, e.clientY);
 
-    setCoordinates({
-      relativeX,
-      relativeY,
-      distance: Math.min((distance / (size / 2)) * 100),
-      axisX: e.clientX - parentRect.current.left,
-      axisY: e.clientY - parentRect.current.top,
-    });
+    if (stickRef.current !== null) {
+      stickRef.current.style.transform = `translate3d(${relativeX}px, ${relativeY}px, 0)`;
+    }
 
     if (move === undefined) return;
 
@@ -84,21 +78,21 @@ export const Joystick = ({
   };
 
   const pointerMove = (e: globalThis.PointerEvent) => {
+    if (!isDruggingRef.current) return;
     e.preventDefault();
-    if (e.pointerId !== pointerId.current) return;
 
     updatePos(e);
   };
 
-  const pointerUp = (e: globalThis.PointerEvent) => {
-    if (e.pointerId !== pointerId.current) return;
+  const pointerUp = () => {
+    isDruggingRef.current = false;
 
-    setCoordinates(undefined);
+    if (stickRef.current !== null) {
+      stickRef.current.style.transform = 'translate3d(0, 0, 0)';
+    }
 
     window.removeEventListener('pointerup', pointerUp);
     window.removeEventListener('pointermove', pointerMove);
-
-    pointerId.current = undefined;
 
     if (stop === undefined) return;
 
@@ -112,14 +106,15 @@ export const Joystick = ({
 
   const pointerDown = (e: PointerEvent<HTMLDivElement>) => {
     if (disabled || stickRef.current === null) return;
-    updatePos(e);
+
+    isDruggingRef.current = true;
 
     parentRect.current = baseRef.current?.getBoundingClientRect() ?? parentRect.current;
 
     window.addEventListener('pointerup', pointerUp);
     window.addEventListener('pointermove', pointerMove);
-    pointerId.current = e.pointerId;
-    stickRef.current.setPointerCapture(e.pointerId);
+
+    updatePos(e);
 
     if (start !== undefined) {
       start({
@@ -149,11 +144,6 @@ export const Joystick = ({
             width: stickSize,
             height: stickSize,
             backgroundColor: stickColor,
-            transform: `translate3d(
-              ${coordinates?.relativeX ?? 0}px,
-              ${coordinates?.relativeY ?? 0}px,
-              0
-            )`,
           }}
           className={styles.stick}
         />
