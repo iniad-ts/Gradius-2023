@@ -2,7 +2,7 @@ import type { PointerEvent } from 'react';
 import { useRef, useState } from 'react';
 import styles from './Joystivk.module.css';
 
-type JoystickUpdateEvent = {
+export type JoystickUpdateEvent = {
   type: 'move' | 'stop' | 'start';
   x: number | null;
   y: number | null;
@@ -31,8 +31,8 @@ type JoystickCoordinates = {
 export const Joystick = ({
   size = 128,
   stickSize = size * 0.64,
-  baseColor = '#fafafa',
-  stickColor = '#eee',
+  baseColor = '#eee',
+  stickColor = '#d7d7d7',
   disabled = false,
   move,
   start,

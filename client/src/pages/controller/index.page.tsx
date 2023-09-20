@@ -82,7 +82,7 @@ const Home = () => {
         </div>
       ) : (
         <>
-          <Joystick size={joystickSize} />
+          <Joystick size={joystickSize} start={startMove} move={handelMove} stop={stopMove} />
           <div>
             スコア: {playerStatus?.score} <br />
             <button onClick={logoutWithLocalStorage} onTouchEndCapture={logoutWithLocalStorage}>

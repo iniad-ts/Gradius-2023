@@ -1,6 +1,6 @@
 import type { UserId } from 'commonTypesWithClient/branded';
 import { useEffect, useRef, useState } from 'react';
-import type { IJoystickUpdateEvent } from 'react-joystick-component/build/lib/Joystick';
+import type { JoystickUpdateEvent } from 'src/components/Joystick/Joystick';
 import type { Pos } from 'src/types/types';
 import { staticPath } from 'src/utils/$path';
 import { apiClient } from 'src/utils/apiClient';
@@ -63,7 +63,7 @@ export const usePlayerControl = (userId: UserId) => {
     setShootIntervalId([]);
   };
 
-  const handelMove = (e: IJoystickUpdateEvent) => {
+  const handelMove = (e: JoystickUpdateEvent) => {
     moveDirection.current = {
       x: e.x ?? 0,
       y: (e.y ?? 0) * -1,

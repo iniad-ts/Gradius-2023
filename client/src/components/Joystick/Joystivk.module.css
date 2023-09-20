@@ -7,10 +7,13 @@
 }
 
 .base {
+  box-sizing: content-box;
   display: flex;
   align-items: center;
   justify-content: center;
+  border: 0.2vmin solid #bbb;
   border-radius: 50%;
+  box-shadow: 0 0 2vmin 0 #9994, inset 0 0 0 1vmin #fff;
 }
 
 .stick {
@@ -22,7 +25,4 @@
   cursor: move;
   border: 0;
   border-radius: 50%;
-  transition-timing-function: ease;
-  transition-duration: 0.1s;
-  transition-property: transform;
 }
