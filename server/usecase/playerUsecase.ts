@@ -1,11 +1,18 @@
 import { randomUUID } from 'crypto';
-import { DISPLAY_COUNT, SCREEN_HEIGHT, SCREEN_WIDTH } from '../commonConstantsWithClient';
+import {
+  DEFAULT_PLAYER_MOVE_SPEED,
+  DISPLAY_COUNT,
+  SCREEN_HEIGHT,
+  SCREEN_WIDTH,
+} from '../commonConstantsWithClient';
 import type { UserId } from '../commonTypesWithClient/branded';
 import type { PlayerModel } from '../commonTypesWithClient/models';
 import { playerRepository } from '../repository/playerRepository';
 import { computeAllowedMoveX } from '../service/computeAllowedMoveX';
 import { userIdParser } from '../service/idParsers';
+import { itemHandler } from '../service/item/itemHandler';
 import { minMax } from '../service/minMax';
+import { type Item } from './../commonConstantsWithClient/item';
 
 export type MoveDirection = { x: number; y: number };
 
@@ -56,6 +63,7 @@ export const playerUseCase = {
       Items: [],
       side,
       isPlaying: true,
+      speed: DEFAULT_PLAYER_MOVE_SPEED,
       startedAt: Date.now(),
     };
 
@@ -69,7 +77,7 @@ export const playerUseCase = {
 
     const newPos = {
       x: minMax(
-        Math.max(currentPlayer.pos.x + moveDirection.x * 5),
+        currentPlayer.pos.x + moveDirection.x * currentPlayer.speed,
         0,
         SCREEN_WIDTH * DISPLAY_COUNT
       ),
@@ -86,11 +94,25 @@ export const playerUseCase = {
     };
     return await playerRepository.save(updatePlayerInfo);
   },
+  useitem: async (userId: UserId, items: Item[]) => {
+    const currentPlayer = await playerRepository.find(userId);
+    if (currentPlayer === null) return null;
+    const handler = itemHandler[items[0].name];
+    if (handler === undefined) return null;
+    return await handler(currentPlayer);
+  },
 
   addScore: async (userId: UserId, score: number): Promise<PlayerModel | null> => {
     const currentPlayer = await playerRepository.find(userId);
     if (currentPlayer === null) return null;
     return await playerRepository.saveScore(userId, currentPlayer.score + score);
+  },
+  addItem: async (userId: UserId, item: Item): Promise<PlayerModel | null> => {
+    const currentPlayer = await playerRepository.find(userId);
+    if (currentPlayer === null) return null;
+    const currentItems = currentPlayer.Items ?? [];
+
+    return await playerRepository.saveItem(userId, [...currentItems, item]);
   },
 
   finishGame: async (currentPlayerInfo: PlayerModel) => {

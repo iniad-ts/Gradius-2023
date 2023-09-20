@@ -8,9 +8,10 @@ import useImage from 'use-image';
 type Props = {
   bullet: BulletModelWithPos;
   displayPosition: number;
+  nowTime: number;
 };
 
-export const Bullet = ({ bullet, displayPosition }: Props) => {
+export const Bullet = ({ bullet, displayPosition, nowTime }: Props) => {
   const [bulletImage1] = useImage(staticPath.images.entity.bullet_blue_png);
   const [bulletImage2] = useImage(staticPath.images.entity.bullet_red_png);
 
@@ -27,6 +28,11 @@ export const Bullet = ({ bullet, displayPosition }: Props) => {
     };
   }, [bullet, displayPosition]);
 
+  const opacity = () =>
+    (Math.cos(((Math.max(4, nowTime - (bullet.createdAt + 4000)) - 4) / 100) * Math.PI) + 1) / 2;
+  //TODO - この4000という数字が何かよくわからないので要検証
+  //おそらく通信のラグだが、4000msもあると思えん
+
   return (
     <Image
       image={images[ownerType]}
@@ -34,6 +40,7 @@ export const Bullet = ({ bullet, displayPosition }: Props) => {
       height={BULLET_RADIUS * 2}
       x={relativePos.x}
       y={relativePos.y}
+      opacity={opacity()}
     />
   );
 };
