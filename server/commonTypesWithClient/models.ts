@@ -114,3 +114,5 @@ export type MoveModel = {
   TIME_TABLE: number[];
   STEP_DURATION_MS: number;
 };
+
+export type EntityModel = PlayerModel | EnemyModelWithPos | BulletModelWithPos;

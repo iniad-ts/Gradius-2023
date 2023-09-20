@@ -20,18 +20,14 @@ const ENEMY_CREATE_INTERVAL = 1000;
 
 const TYPE0_ENEMY_LIMIT = 12;
 const TYPE1_ENEMY_LIMIT = 6;
-const TYPE2_ENEMY_LIMIT = 6;
+const TYPE2_ENEMY_LIMIT = 0;
 
 type Count = [number, number, number];
 
 const createStrongEnemies = async (counts: Count[]) => {
   await Promise.all(
-    counts.map(
-      (count, displayNum) =>
-        //  [
-        // Promise.all(
-        //   [...Array(TYPE1_ENEMY_LIMIT - count[1])].map(async () => {
-        //     return
+    counts.map((count, displayNum) => {
+      if (TYPE1_ENEMY_LIMIT - count[1] > 0) {
         enemyRepository
           .create({
             id: enemyIdParser.parse(randomUUID()),
@@ -41,36 +37,31 @@ const createStrongEnemies = async (counts: Count[]) => {
             },
             createdPos: {
               x: 1835 + SCREEN_WIDTH * displayNum,
-              y: Math.random() >= 0.5 ? 0 : 580,
+              y: Math.random() >= 0.5 ? 500 : 580,
             },
             createdAt: Date.now(),
             type: 1,
           })
-          .catch((error) => console.error(error))
-      // }
-    )
-    // ),
-    // Promise.all(
-    //   [...Array(TYPE2_ENEMY_LIMIT - count[2])].map(async () => {
-    //     return enemyRepository
-    //       .create({
-    //         id: enemyIdParser.parse(randomUUID()),
-    //         direction: {
-    //           x: 0,
-    //           y: 0,
-    //         },
-    //         createdPos: {
-    //           x: 1835 + SCREEN_WIDTH * displayNum,
-    //           y: Math.random() >= 0.5 ? 0 : 540,
-    //         },
-    //         createdAt: Date.now(),
-    //         type: 2,
-    //       })
-    //       .catch((error) => console.error(error));
-    //   })
-    // ),
-    // ])
-    // .flat(1)
+          .catch((error) => console.error(error));
+      }
+      if (TYPE2_ENEMY_LIMIT - count[2] > 0) {
+        enemyRepository
+          .create({
+            id: enemyIdParser.parse(randomUUID()),
+            direction: {
+              x: 0,
+              y: 0,
+            },
+            createdPos: {
+              x: 1835 + SCREEN_WIDTH * displayNum,
+              y: Math.random() >= 0.5 ? 500 : 580,
+            },
+            createdAt: Date.now(),
+            type: 2,
+          })
+          .catch((error) => console.error(error));
+      }
+    })
   );
 };
 
@@ -161,17 +152,19 @@ export const enemyUseCase = {
   getEnemiesByDisplay: async (displayNumber: number): Promise<EnemyModelWithPos[]> => {
     const enemies = await enemyRepository.findAll();
     const getEnemiesByDisplay = enemies
-      .map((enemy) => (enemy.type === 0 ? entityChangeWithPos(enemy) : type2EnemyMove(enemy)))
+      .map((enemy) =>
+        enemy.type === 0 ? (entityChangeWithPos(enemy) as EnemyModelWithPos) : type2EnemyMove(enemy)
+      )
       .filter(
         (enemy) =>
           enemy.pos.x + ENEMY_HALF_WIDTH > SCREEN_WIDTH * displayNumber &&
           enemy.pos.x - ENEMY_HALF_WIDTH < SCREEN_WIDTH * (displayNumber + 1)
-      ) as EnemyModelWithPos[];
+      );
 
     return getEnemiesByDisplay;
   },
 
-  getEnemiesAll: async () => {
+  getAllEnemies: async () => {
     const enemies = await enemyRepository.findAll();
     const enemiesWithPos = enemies.map((enemy) =>
       enemy.type === 0 ? entityChangeWithPos(enemy) : type2EnemyMove(enemy)
