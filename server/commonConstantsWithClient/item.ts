@@ -4,15 +4,15 @@ export interface Item {
 }
 export const itemsData: Item[] = [
   {
-    id: '1',
+    id: '🔥',
     name: 'speed',
   },
   {
-    id: '2',
+    id: '🛡️',
     name: 'shield',
   },
   {
-    id: '3',
+    id: '…',
     name: 'burst',
   },
 ];
