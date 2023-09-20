@@ -8,10 +8,10 @@ type MeteorModel = {
   duration: number;
 };
 
-export const Star = () => {
-  const [star, setStar] = useState<MeteorModel | null>(null);
+type prop = { nowTime: number };
 
-  const time = Date.now();
+export const Star = ({ nowTime }: prop) => {
+  const [star, setStar] = useState<MeteorModel | null>(null);
 
   useEffect(() => {
     if (star === null) {
@@ -33,7 +33,7 @@ export const Star = () => {
     <Circle
       x={star.pos.x}
       y={star.pos.y}
-      radius={6 - Math.abs((600 - (time % star.duration)) / 100)}
+      radius={6 - Math.abs((600 - (nowTime % star.duration)) / 100)}
       fill="#fff"
     />
   );
