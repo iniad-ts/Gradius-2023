@@ -16,6 +16,7 @@ import { Image, Layer, Stage, Text } from 'react-konva';
 import Bomb from 'src/components/Effect/Bomb';
 import { FreedomMeteor } from 'src/components/Effect/FreedomMeteor';
 import { Meteor } from 'src/components/Effect/Meteor';
+import { Star } from 'src/components/Effect/Star';
 import { Bullet } from 'src/components/Entity/Bullet';
 import { Enemy } from 'src/components/Entity/Enemy';
 import { Player } from 'src/components/Entity/Player';
@@ -148,6 +149,11 @@ const Game = () => {
         </Layer>
         <Layer>
           <FreedomMeteor />
+        </Layer>
+        <Layer>
+          {[...Array(5)].map((_, i) => (
+            <Star key={i} />
+          ))}
         </Layer>
         <Layer>
           {bullets.map((bullet) => (
