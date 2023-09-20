@@ -11,6 +11,16 @@ interface ItemHandlers {
 }
 export const itemHandler: ItemHandlers = {
   speed: async (player: PlayerModel) => {
+    const resetSpeedEffect = async () => {
+      const currentPlayer = await playerRepository.find(player.id);
+      if (currentPlayer === null) return null;
+      const updatePlayerInfo: PlayerModel = {
+        ...currentPlayer,
+        speed: DEFAULT_PLAYER_MOVE_SPEED,
+        usingItem: null,
+      };
+      await playerRepository.save(updatePlayerInfo);
+    };
     try {
       if (player.usingItem !== null) return;
       const updatePlayerInfo: PlayerModel = {
@@ -23,23 +33,29 @@ export const itemHandler: ItemHandlers = {
 
       setTimeout(async () => {
         try {
-          const currentPlayer = await playerRepository.find(player.id);
-          if (currentPlayer === null) return null;
-          const updatePlayerInfo: PlayerModel = {
-            ...currentPlayer,
-            speed: DEFAULT_PLAYER_MOVE_SPEED,
-            usingItem: null,
-          };
-          await playerRepository.save(updatePlayerInfo);
+          resetSpeedEffect();
         } catch (error) {
-          console.error('速度のリセットに失敗しました:', error);
+          console.error('リセットに失敗しました:', error);
+          setTimeout(async () => {
+            resetSpeedEffect();
+          }, 500);
         }
       }, SPEED_BOOST_DURATION_MS);
     } catch (error) {
-      console.error('スピードアップに失敗しました:', error);
+      console.error('アイテムの使用に失敗しました:', error);
     }
   },
   shield: async (player: PlayerModel) => {
+    const resetShieldEffect = async () => {
+      const currentPlayer = await playerRepository.find(player.id);
+      if (currentPlayer === null) return null;
+      const updatePlayerInfo: PlayerModel = {
+        ...currentPlayer,
+        usingItem: null,
+      };
+      await playerRepository.save(updatePlayerInfo);
+    };
+
     try {
       if (player.usingItem !== null) return;
       const updatePlayerInfo: PlayerModel = {
@@ -51,19 +67,16 @@ export const itemHandler: ItemHandlers = {
 
       setTimeout(async () => {
         try {
-          const currentPlayer = await playerRepository.find(player.id);
-          if (currentPlayer === null) return null;
-          const updatePlayerInfo: PlayerModel = {
-            ...currentPlayer,
-            usingItem: null,
-          };
-          await playerRepository.save(updatePlayerInfo);
+          resetShieldEffect();
         } catch (error) {
           console.error('シールドのリセットに失敗しました:', error);
+          setTimeout(async () => {
+            resetShieldEffect();
+          }, 500);
         }
       }, SHIELD_DURATION_MS);
     } catch (error) {
-      console.error('シールドに失敗しました:', error);
+      console.error('アイテムの使用に失敗しました:', error);
     }
   },
 };
