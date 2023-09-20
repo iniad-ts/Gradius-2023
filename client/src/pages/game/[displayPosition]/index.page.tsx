@@ -14,6 +14,8 @@ import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 import { Image, Layer, Stage, Text } from 'react-konva';
 import Bomb from 'src/components/Effect/Bomb';
+import Burner from 'src/components/Effect/Burner';
+
 import { FreedomMeteor } from 'src/components/Effect/FreedomMeteor';
 import { Meteor } from 'src/components/Effect/Meteor';
 import { Star } from 'src/components/Effect/Star';
@@ -175,6 +177,13 @@ const Game = () => {
                 player={player}
                 isDamaged={damagedPlayerIds.has(player.id)}
               />
+              {player.speed >= 10 && (
+                <Burner
+                  displayPosition={displayPosition ?? 0}
+                  position={player.pos}
+                  side={player.side}
+                />
+              )}
             </React.Fragment>
           ))}
         </Layer>
