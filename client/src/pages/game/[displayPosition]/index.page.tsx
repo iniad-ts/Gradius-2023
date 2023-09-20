@@ -1,3 +1,5 @@
+/* eslint-disable max-lines */
+//TODO - リファクタリングして行数圧縮
 import {
   DISPLAY_COUNT,
   ENEMY_HALF_WIDTH,
