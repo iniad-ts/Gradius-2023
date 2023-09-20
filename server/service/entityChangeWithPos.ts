@@ -17,6 +17,7 @@ export const entityChangeWithPos = (
       id: entity.id,
       pos,
       side: entity.side,
+      createdAt: entity.createdAt,
       shooterId: entity.shooterId,
     } as BulletModelWithPos;
   else

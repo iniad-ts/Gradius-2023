@@ -78,6 +78,7 @@ export type BulletModelWithPos = {
     x: number;
     y: number;
   };
+  createdAt: number;
   side: 'left' | 'right';
   shooterId: string;
 };
