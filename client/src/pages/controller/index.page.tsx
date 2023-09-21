@@ -20,7 +20,7 @@ const Home = () => {
 
   const damageAudio = useMemo(() => new Audio(staticPath.sounds.damage_mp3), []);
 
-  const getUserId = useCallback(async () => {
+  const getUserId = useCallback(() => {
     const localStorageUserId = getUserIdFromLocalStorage();
     if (localStorageUserId === null) {
       router.push('/login');
@@ -46,7 +46,7 @@ const Home = () => {
   useEffect(() => {
     const getUserIdIntervalId = setInterval(async () => {
       if (player?.isPlaying === false) return;
-      await getUserId();
+      getUserId();
     }, 1000);
 
     return () => {
