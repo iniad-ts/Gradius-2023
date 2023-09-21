@@ -1,7 +1,7 @@
 import { DISPLAY_COUNT, SCREEN_HEIGHT, SCREEN_WIDTH } from 'commonConstantsWithClient';
 import { useRouter } from 'next/router';
 import React, { useEffect } from 'react';
-import { Image, Layer, Stage, Text } from 'react-konva';
+import { Group, Image, Layer, Stage, Text } from 'react-konva';
 import Bomb from 'src/components/Effect/Bomb';
 import Burner from 'src/components/Effect/Burner';
 
@@ -64,73 +64,73 @@ const Game = () => {
         }}
       >
         <Layer>
-          <Image
-            image={backgroundImage}
-            width={SCREEN_WIDTH}
-            height={SCREEN_HEIGHT}
-            x={0}
-            y={0}
-            opacity={0.8}
-          />
-        </Layer>
-        <Layer>
-          <Meteor displayPosition={displayPositionNumber} nowTime={nowTime} />
-        </Layer>
-        <Layer>
-          <FreedomMeteor />
-        </Layer>
-        <Layer>
-          {[...Array(5)].map((_, i) => (
-            <Star nowTime={nowTime} key={i} />
-          ))}
-        </Layer>
-        <Layer>
-          {bullets.map((bullet) => (
-            <Bullet
-              displayPosition={displayPositionNumber}
-              bullet={bullet}
-              key={bullet.id}
-              nowTime={nowTime}
+          <Group>
+            <Image
+              image={backgroundImage}
+              width={SCREEN_WIDTH}
+              height={SCREEN_HEIGHT}
+              x={0}
+              y={0}
+              opacity={0.8}
             />
-          ))}
+            <Meteor displayPosition={displayPositionNumber} nowTime={nowTime} />
+            <FreedomMeteor />
+            {[...Array(5)].map((_, i) => (
+              <Star nowTime={nowTime} key={i} />
+            ))}
+          </Group>
         </Layer>
         <Layer>
-          {players.map((player) => (
-            <React.Fragment key={player.id}>
-              <Text
-                x={player.pos.x - SCREEN_WIDTH * displayPositionNumber}
-                y={player.pos.y - 80}
-                text={player.name.slice(0, 8)}
-                fontSize={30}
-                fill={'white'}
-              />
-              <Player
+          <Group>
+            {bullets.map((bullet) => (
+              <Bullet
                 displayPosition={displayPositionNumber}
-                player={player}
-                isDamaged={damagedPlayerIds.has(player.id)}
+                bullet={bullet}
+                key={bullet.id}
+                nowTime={nowTime}
               />
-              {player.usingItem === 'shield' && (
-                <Shield x={player.pos.x} y={player.pos.y} displayPosition={displayPositionNumber} />
-              )}
-              {player.speed >= 10 && (
-                <Burner
-                  displayPosition={displayPositionNumber}
-                  position={player.pos}
-                  side={player.side}
+            ))}
+            {players.map((player) => (
+              <React.Fragment key={player.id}>
+                <Text
+                  x={player.pos.x - SCREEN_WIDTH * displayPositionNumber}
+                  y={player.pos.y - 80}
+                  text={player.name.slice(0, 8)}
+                  fontSize={30}
+                  fill={'white'}
                 />
-              )}
-            </React.Fragment>
-          ))}
+                <Player
+                  displayPosition={displayPositionNumber}
+                  player={player}
+                  isDamaged={damagedPlayerIds.has(player.id)}
+                />
+                {player.usingItem === 'shield' && (
+                  <Shield
+                    x={player.pos.x}
+                    y={player.pos.y}
+                    displayPosition={displayPositionNumber}
+                  />
+                )}
+                {player.speed >= 10 && (
+                  <Burner
+                    displayPosition={displayPositionNumber}
+                    position={player.pos}
+                    side={player.side}
+                  />
+                )}
+              </React.Fragment>
+            ))}
+          </Group>
         </Layer>
         <Layer>
-          {enemies.map((enemy) => (
-            <Enemy displayPosition={displayPositionNumber} enemy={enemy} key={enemy.id} />
-          ))}
-        </Layer>
-        <Layer>
-          {BombEffectPosition.flat().map((position, index) => (
-            <Bomb displayPosition={displayPositionNumber} position={position} key={index} />
-          ))}
+          <Group>
+            {enemies.map((enemy) => (
+              <Enemy displayPosition={displayPositionNumber} enemy={enemy} key={enemy.id} />
+            ))}
+            {BombEffectPosition.flat().map((position, index) => (
+              <Bomb displayPosition={displayPositionNumber} position={position} key={index} />
+            ))}
+          </Group>
         </Layer>
       </Stage>
     </div>
