@@ -11,6 +11,7 @@
 }
 
 .card {
+  position: relative;
   display: flex;
   flex-direction: column;
   gap: 2svmin;
@@ -18,6 +19,7 @@
   justify-content: center;
   width: 80%;
   height: 80%;
+  overflow: hidden;
   background-color: #4c627797;
   border: solid 0.4svmin #c3d0da;
   border-radius: 4svmin;
@@ -25,20 +27,33 @@
 }
 
 .title {
+  position: relative;
+  z-index: 2;
   font-family: Audiowide, cursive;
   font-size: 6rem;
   color: transparent;
+  pointer-events: none;
+  touch-action: none;
+  user-select: none;
   background-image: linear-gradient(135deg, rgb(2 13 171), #3a0070);
   filter: drop-shadow(0 0 0.4rem #fff);
   background-clip: text;
 }
 
 .text {
+  position: relative;
+  z-index: 2;
   font-size: 1.6rem;
   color: #fff;
+  text-shadow: 0 0 0.2rem #000;
+  pointer-events: none;
+  touch-action: none;
+  user-select: none;
 }
 
 .input {
+  position: relative;
+  z-index: 2;
   display: block;
   padding: 0.4rem 0.8rem;
   clip-path: polygon(
@@ -63,6 +78,8 @@
 }
 
 .button {
+  position: relative;
+  z-index: 2;
   display: block;
   padding: 0.4rem 0.8rem;
   font-family: 'DotGothic16', sans-serif;
@@ -77,4 +94,23 @@
 .button:active {
   box-shadow: 0 0 0 #222;
   transform: translate(0.1rem, 0.1rem);
+}
+
+.spaceship {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  z-index: 1;
+  width: 80svmin;
+  pointer-events: none;
+  touch-action: none;
+  user-select: none;
+  filter: blur(1svmin);
+  opacity: 0.4;
+  transform: rotate(-30deg);
+}
+
+.spaceship > img {
+  display: block;
+  width: 100%;
 }

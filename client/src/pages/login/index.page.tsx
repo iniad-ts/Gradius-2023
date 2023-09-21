@@ -3,6 +3,7 @@ import { useRouter } from 'next/router';
 import type { ChangeEvent } from 'react';
 import { useCallback, useEffect, useState } from 'react';
 import { Confirm } from 'src/components/Confirm/Confirm';
+import { staticPath } from 'src/utils/$path';
 import { apiClient } from 'src/utils/apiClient';
 import { getUserIdFromLocalStorage, loginWithLocalStorage } from 'src/utils/loginWithLocalStorage';
 import styles from './index.module.css';
@@ -61,6 +62,9 @@ const Login = () => {
         <button className={styles.button} disabled={name === ''} onClick={login}>
           プレイ
         </button>
+        <div className={styles.spaceship}>
+          <img src={staticPath.images.entity.blue_spaceship_png} />
+        </div>
       </div>
     </div>
   );
