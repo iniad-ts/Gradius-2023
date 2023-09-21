@@ -44,8 +44,8 @@ export const Joystick = ({ userId }: Props) => {
     }
 
     moveDirection = {
-      x: relativeX,
-      y: -relativeY,
+      x: relativeX / 200,
+      y: relativeY / 200,
     };
   };
 

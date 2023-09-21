@@ -8,6 +8,7 @@
     "dev:aspida": "aspida --watch",
     "dev:path": "pathpida --ignorePath ../.gitignore -s -w",
     "build": "npm run generate && next build",
+    "start": "next start",
     "generate": "run-p generate:*",
     "generate:aspida": "aspida",
     "generate:path": "pathpida --ignorePath ../.gitignore -s",
