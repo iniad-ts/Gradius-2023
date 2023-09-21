@@ -1,0 +1,125 @@
+.titleCard {
+  position: relative;
+  display: grid;
+  flex-shrink: 0;
+  grid-template-rows: repeat(12, 1fr);
+  align-items: end;
+  justify-items: center;
+  width: 120svmin;
+  aspect-ratio: 16 / 9;
+  background-color: #2228;
+  border: solid 0.4svmin #fff2;
+  border-radius: 2svmin;
+  backdrop-filter: blur(0.8svmin);
+  animation-name: fade-in;
+  animation-duration: 500ms;
+}
+
+@keyframes fade-in {
+  0% {
+    background-color: #fff2;
+  }
+
+  100% {
+    background-color: #2228;
+  }
+}
+
+.title {
+  grid-row: 2;
+  height: 100%;
+  font-size: calc(92svmin / 16 * 9 / 7);
+  line-height: calc(92svmin / 16 * 9 / 6);
+  color: transparent;
+  background-image: linear-gradient(135deg, #fff, #c7daf7);
+  background-clip: text;
+}
+
+.announcement {
+  height: 100%;
+  margin: 0 auto;
+  font-size: calc(92svmin / 20);
+  line-height: calc(92svmin / 16 * 9 / 6);
+  color: transparent;
+  color: #fff;
+  text-align: center;
+}
+
+.roulette {
+  position: relative;
+  grid-row: 4/8;
+  height: 100%;
+  aspect-ratio: 10/9;
+}
+
+.redPlayer {
+  position: absolute;
+  display: flex;
+  width: 100%;
+  height: 100%;
+  background-image: url('../../../public/images/entity/red-spaceship.png');
+  background-size: 100%;
+}
+
+.bluePlayer {
+  position: absolute;
+  display: flex;
+  width: 100%;
+  height: 100%;
+  background-image: url('../../../public/images/entity/blue-spaceship.png');
+  background-size: 100%;
+}
+
+.rightSIdeAnimationL {
+  animation: right-side;
+}
+
+@keyframes right-side {
+  0% {
+    left: 100px;
+  }
+
+  100% {
+    left: 0%;
+  }
+}
+
+.leftSideAnimation {
+  animation: left-side;
+}
+
+@keyframes left-side {
+  0% {
+    left: 0;
+  }
+
+  100% {
+    left: -100px;
+  }
+}
+
+.button {
+  display: block;
+  grid-row: 10/12;
+  width: 24%;
+  height: 64%;
+  font-size: 1.4svmin;
+  font-weight: bold;
+  color: #fff;
+  cursor: pointer;
+  background-image: linear-gradient(135deg, #2965ce, #74d3f2);
+  background-size: 200%;
+  border: 0;
+  border-radius: 1svmin;
+  transition-timing-function: ease-in-out, ease-in, ease-in-out;
+  transition-duration: 0.2s, 0.1s, 0.2s;
+  transition-property: background-position, transform, opacity;
+}
+
+.button:hover {
+  background-position: right;
+}
+
+.button:active {
+  transform: scale(0.95);
+}
