@@ -35,61 +35,25 @@ export const shootType = {
     const shooterInfo = await playerRepository.find(shooterId);
     if (shooterInfo === null) return null;
 
-    const newBullets: BulletModel[] = [
-      {
-        id: bulletIdParser.parse(randomUUID()),
-        direction: {
-          x: sideToDirectionX(shooterInfo.side),
-          y: 0,
-        },
-        createdPos: {
-          x:
-            computeAllowedMoveX(shooterInfo) +
-            PLAYER_HALF_WIDTH * sideToDirectionX(shooterInfo.side),
-          y: shooterInfo.pos.y,
-        },
-        createdAt: Date.now(),
-        side: shooterInfo.side,
-        shooterId,
+    const newBullets = [0, 50, 100].map((addx) => ({
+      id: bulletIdParser.parse(randomUUID()),
+      direction: {
+        x: sideToDirectionX(shooterInfo.side),
+        y: 0,
       },
-      {
-        id: bulletIdParser.parse(randomUUID()),
-        direction: {
-          x: sideToDirectionX(shooterInfo.side),
-          y: 0,
-        },
-        createdPos: {
-          x:
-            computeAllowedMoveX(shooterInfo) +
-            PLAYER_HALF_WIDTH * sideToDirectionX(shooterInfo.side) +
-            50 * sideToDirectionX(shooterInfo.side),
-          y: shooterInfo.pos.y,
-        },
-        createdAt: Date.now(),
-        side: shooterInfo.side,
-        shooterId,
+      createdPos: {
+        x:
+          computeAllowedMoveX(shooterInfo) +
+          PLAYER_HALF_WIDTH * sideToDirectionX(shooterInfo.side) +
+          addx * sideToDirectionX(shooterInfo.side),
+        y: shooterInfo.pos.y,
       },
-      {
-        id: bulletIdParser.parse(randomUUID()),
-        direction: {
-          x: sideToDirectionX(shooterInfo.side),
-          y: 0,
-        },
-        createdPos: {
-          x:
-            computeAllowedMoveX(shooterInfo) +
-            PLAYER_HALF_WIDTH * sideToDirectionX(shooterInfo.side) +
-            100 * sideToDirectionX(shooterInfo.side),
-          y: shooterInfo.pos.y,
-        },
-        createdAt: Date.now(),
-        side: shooterInfo.side,
-        shooterId,
-      },
-    ];
-    newBullets.forEach(async (bullet) => {
-      await bulletRepository.create(bullet);
-    });
+      createdAt: Date.now(),
+      side: shooterInfo.side,
+      shooterId,
+    }));
+
+    Promise.all(newBullets.map((bullet) => bulletRepository.create(bullet)));
     return newBullets;
   },
 };
