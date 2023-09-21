@@ -1,12 +1,9 @@
-import { BULLET_RADIUS, PLAYER_HALF_WIDTH, SCREEN_WIDTH } from '$/commonConstantsWithClient';
+import { BULLET_RADIUS, SCREEN_WIDTH } from '$/commonConstantsWithClient';
 import type { UserId } from '$/commonTypesWithClient/branded';
 import { bulletRepository } from '$/repository/bulletRepository';
 import { playerRepository } from '$/repository/playerRepository';
-import { computeAllowedMoveX } from '$/service/computeAllowedMoveX';
 import { entityChangeWithPos } from '$/service/entityChangeWithPos';
-import { bulletIdParser } from '$/service/idParsers';
-import { sideToDirectionX } from '$/service/sideToDirectionX';
-import { randomUUID } from 'crypto';
+import { shootType } from '$/service/shootType';
 import type { BulletModel, BulletModelWithPos } from '../commonTypesWithClient/models';
 
 let intervalId: NodeJS.Timeout | null = null;
@@ -26,27 +23,14 @@ export const bulletUseCase = {
     }
   },
 
-  create: async (shooterId: UserId): Promise<BulletModel | null> => {
+  shoot: async (shooterId: UserId): Promise<void> => {
     const shooterInfo = await playerRepository.find(shooterId);
-    if (shooterInfo === null) return null;
-
-    const newBullet: BulletModel = {
-      id: bulletIdParser.parse(randomUUID()),
-      direction: {
-        x: sideToDirectionX(shooterInfo.side),
-        y: 0,
-      },
-      createdPos: {
-        x:
-          computeAllowedMoveX(shooterInfo) + PLAYER_HALF_WIDTH * sideToDirectionX(shooterInfo.side),
-        y: shooterInfo.pos.y,
-      },
-      createdAt: Date.now(),
-      side: shooterInfo.side,
-      shooterId,
-    };
-
-    return await bulletRepository.create(newBullet);
+    if (shooterInfo === null) return;
+    if (shooterInfo.usingItem === 'burst') {
+      await shootType.burst(shooterId);
+      return;
+    }
+    await shootType.normal(shooterId);
   },
 
   delete: async (bulletModel: BulletModel) => {

@@ -17,7 +17,3 @@ export const ALLOW_MOVE_RANGE_MOVE_SPEED = 50;
 export const ALLOW_MOVE_RANGE_HALF_WIDTH = 500;
 
 export const DEFAULT_PLAYER_MOVE_SPEED = 5;
-
-export const SPEED_BOOST_DURATION_MS = 15000;
-
-export const SHIELD_DURATION_MS = 5000;
